@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "organisation-management" {
     sid    = "AllowOrganisationManagement"
     effect = "Allow"
     actions = [
-      # Note that this doesn't destructive permissions for AWS Organizations
+      # Note that this doesn't grant any destructive permissions for AWS Organizations
       "organizations:ListRoots",
       "organizations:ListDelegatedServicesForAccount",
       "organizations:DescribeAccount",
