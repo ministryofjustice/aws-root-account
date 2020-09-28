@@ -27,17 +27,40 @@ EOF
 
 data "aws_iam_policy_document" "organisation-management" {
   statement {
-    sid    = "DenyAllApartFromOrganisationManagement"
-    effect = "Deny"
-    not_actions = [
-      # Note that this doesn't allow the account to delete Organisational Units
+    sid    = "AllowOrganisationManagement"
+    effect = "Allow"
+    actions = [
+      # Note that this doesn't grant any destructive permissions for AWS Organizations
+      "organizations:ListRoots",
+      "organizations:ListDelegatedServicesForAccount",
+      "organizations:DescribeAccount",
+      "organizations:UntagResource",
+      "organizations:CreateAccount",
+      "organizations:DescribePolicy",
+      "organizations:ListChildren",
+      "organizations:TagResource",
+      "organizations:ListCreateAccountStatus",
       "organizations:DescribeOrganization",
       "organizations:DescribeOrganizationalUnit",
-      "organizations:CreateOrganizationalUnit",
-      "organizations:UpdateOrganizationalUnit",
-      "organizations:CreateAccount",
       "organizations:MoveAccount",
-      "iam:CreateServiceLinkedRole"
+      "organizations:DescribeHandshake",
+      "organizations:DescribeCreateAccountStatus",
+      "organizations:ListPoliciesForTarget",
+      "organizations:DescribeEffectivePolicy",
+      "organizations:ListTargetsForPolicy",
+      "organizations:ListTagsForResource",
+      "organizations:ListAWSServiceAccessForOrganization",
+      "organizations:ListPolicies",
+      "organizations:ListDelegatedAdministrators",
+      "organizations:ListAccountsForParent",
+      "organizations:ListHandshakesForOrganization",
+      "organizations:ListHandshakesForAccount",
+      "organizations:ListAccounts",
+      "organizations:UpdateOrganizationalUnit",
+      "iam:CreateServiceLinkedRole",
+      "organizations:ListParents",
+      "organizations:ListOrganizationalUnitsForParent",
+      "organizations:CreateOrganizationalUnit"
     ]
     resources = [
       "arn:aws:organizations:::*"
