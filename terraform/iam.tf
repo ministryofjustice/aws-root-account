@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "organisation-management" {
       "organizations:CreateOrganizationalUnit"
     ]
     resources = [
-      "arn:aws:organizations:::*"
+      "*"
     ]
   }
 }
