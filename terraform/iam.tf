@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
 resource "aws_iam_policy" "terraform-organisation-management-policy" {
   name        = "TerraformOrganisationManagementPolicy"
   description = "A policy that allows the Modernisation Platform to manage organisations"
-  policy      = data.aws_iam_policy_document.organisation-management.json
+  policy      = data.aws_iam_policy_document.terraform-organisation-management.json
 }
 
 # Individual IAM user for the Modernisation Platform
