@@ -40,6 +40,19 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
       "*"
     ]
   }
+
+  statement {
+    sid = "AllowAccessToModernisationPlatformS3Bucket"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:PutObjectAcl"
+    ]
+    resources = [
+      "arn:aws:s3:::modernisation-platform-terraform-state/*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "terraform-organisation-management-policy" {
