@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
   }
 
   statement {
-    sid = "AllowAccessToModernisationPlatformS3Bucket"
+    sid    = "AllowAccessToModernisationPlatformS3Bucket"
     effect = "Allow"
     actions = [
       "s3:GetObject",
