@@ -1,66 +1,40 @@
-data "aws_organizations_organization" "org" {}
-
-locals {
-  account_ids = {
-    for account in data.aws_organizations_organization.org.accounts :
-    lower(account.email) => account.id
-  }
-}
-
-resource "aws_iam_role" "terraform-modernisation-platform-organisation-management-role" {
-  name               = "ModernisationPlatformOrganisationManagementRole"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${local.account_ids["aws+modernisation-platform@digital.justice.gov.uk"]}:root"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-}
-
-data "aws_iam_policy_document" "organisation-management" {
+data "aws_iam_policy_document" "terraform-organisation-management" {
   statement {
     sid    = "AllowOrganisationManagement"
     effect = "Allow"
     actions = [
       # Note that this doesn't grant any destructive permissions for AWS Organizations
-      "organizations:ListRoots",
-      "organizations:ListDelegatedServicesForAccount",
-      "organizations:DescribeAccount",
-      "organizations:UntagResource",
+      "iam:CreateServiceLinkedRole",
       "organizations:CreateAccount",
-      "organizations:DescribePolicy",
-      "organizations:ListChildren",
-      "organizations:TagResource",
-      "organizations:ListCreateAccountStatus",
+      "organizations:CreateOrganizationalUnit",
+      "organizations:DescribeAccount",
+      "organizations:DescribeCreateAccountStatus",
+      "organizations:DescribeEffectivePolicy",
+      "organizations:DescribeHandshake",
       "organizations:DescribeOrganization",
       "organizations:DescribeOrganizationalUnit",
-      "organizations:MoveAccount",
-      "organizations:DescribeHandshake",
-      "organizations:DescribeCreateAccountStatus",
-      "organizations:ListPoliciesForTarget",
-      "organizations:DescribeEffectivePolicy",
-      "organizations:ListTargetsForPolicy",
-      "organizations:ListTagsForResource",
-      "organizations:ListAWSServiceAccessForOrganization",
-      "organizations:ListPolicies",
-      "organizations:ListDelegatedAdministrators",
-      "organizations:ListAccountsForParent",
-      "organizations:ListHandshakesForOrganization",
-      "organizations:ListHandshakesForAccount",
+      "organizations:DescribePolicy",
       "organizations:ListAccounts",
-      "organizations:UpdateOrganizationalUnit",
-      "iam:CreateServiceLinkedRole",
-      "organizations:ListParents",
+      "organizations:ListAccountsForParent",
+      "organizations:ListAWSServiceAccessForOrganization",
+      "organizations:ListChildren",
+      "organizations:ListCreateAccountStatus",
+      "organizations:ListDelegatedAdministrators",
+      "organizations:ListDelegatedServicesForAccount",
+      "organizations:ListHandshakesForAccount",
+      "organizations:ListHandshakesForOrganization",
       "organizations:ListOrganizationalUnitsForParent",
-      "organizations:CreateOrganizationalUnit"
+      "organizations:ListParents",
+      "organizations:ListPolicies",
+      "organizations:ListPoliciesForTarget",
+      "organizations:ListRoots",
+      "organizations:ListTagsForResource",
+      "organizations:ListTargetsForPolicy",
+      "organizations:MoveAccount",
+      "organizations:TagResource",
+      "organizations:UntagResource",
+      "organizations:UpdateOrganizationalUnit",
+      "sts:*"
     ]
     resources = [
       "*"
@@ -71,10 +45,16 @@ data "aws_iam_policy_document" "organisation-management" {
 resource "aws_iam_policy" "terraform-organisation-management-policy" {
   name        = "TerraformOrganisationManagementPolicy"
   description = "A policy that allows the Modernisation Platform to manage organisations"
-  policy      = data.aws_iam_policy_document.organisation-management.json
+  policy      = data.aws_iam_policy_document.terraform-organisation-management.json
 }
 
-resource "aws_iam_role_policy_attachment" "terraform-organisation-management-attachment" {
-  role       = aws_iam_role.terraform-modernisation-platform-organisation-management-role.name
+# Individual IAM user for the Modernisation Platform
+resource "aws_iam_user" "terraform-organisation-management-user" {
+  name          = "ModernisationPlatformOrganisationManagement"
+  force_destroy = true
+}
+
+resource "aws_iam_user_policy_attachment" "terraform-organisation-management-attachment" {
+  user       = aws_iam_user.terraform-organisation-management-user.name
   policy_arn = aws_iam_policy.terraform-organisation-management-policy.arn
 }
