@@ -24,6 +24,12 @@ data "aws_iam_policy_document" "opg_operator" {
     actions   = ["sso-directory:*"]
     resources = ["*"]
   }
+  statement {
+    sid       = "AllowIAMManagement"
+    effect    = "Allow"
+    actions   = ["iam:*"]
+    resources = ["*"]
+  }
 }
 
 
