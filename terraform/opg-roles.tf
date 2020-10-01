@@ -18,6 +18,12 @@ data "aws_iam_policy_document" "opg_operator" {
     actions   = ["sso:*"]
     resources = ["*"]
   }
+  statement {
+    sid       = "AllowSSODirectoryAccess"
+    effect    = "Allow"
+    actions   = ["sso-directory:*"]
+    resources = ["*"]
+  }
 }
 
 
