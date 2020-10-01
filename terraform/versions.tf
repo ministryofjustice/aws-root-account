@@ -4,5 +4,9 @@ terraform {
     aws = {
       source = "hashicorp/aws"
     }
+    auth0 = {
+      source = "alexkappa/auth0"
+      version = "0.15.2"
+    }
   }
 }

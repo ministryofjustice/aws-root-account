@@ -1,0 +1,3 @@
+module "sso" {
+    source = "./sso"
+}
