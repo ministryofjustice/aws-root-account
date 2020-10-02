@@ -1,10 +1,10 @@
 resource "aws_iam_user" "ci" {
-  name     = "ci"
+  name = "ci"
 }
 
 resource "aws_iam_user_policy" "ci" {
-  policy   = data.aws_iam_policy_document.ci.json
-  user     = aws_iam_user.ci.id
+  policy = data.aws_iam_policy_document.ci.json
+  user   = aws_iam_user.ci.id
 }
 
 data "aws_iam_policy_document" "ci" {
@@ -26,13 +26,13 @@ module "ci" {
 
 data "aws_iam_policy_document" "ci" {
   statement {
-    sid       = "DenyIAMUserCreation"
-    effect    = "Deny"
-    actions   = [
+    sid    = "DenyIAMUserCreation"
+    effect = "Deny"
+    actions = [
       "iam:CreateAccessKey",
       "iam:CreateLoginProfile",
       "iam:ChangePassword"
-      ]
+    ]
     resources = ["*"]
   }
 }
