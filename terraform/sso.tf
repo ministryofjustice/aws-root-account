@@ -1,5 +1,5 @@
 module "sso" {
-  source                     = "https://github.com/ministryofjustice/moj-terraform-aws-sso"
+  source                     = "github.com/ministryofjustice/moj-terraform-aws-sso"
   auth0_tenant_domain        = "ministryofjustice.eu.auth0.com"
   auth0_client_id            = local.auth0_saml.client_id
   auth0_client_secret        = local.auth0_saml.client_secret
