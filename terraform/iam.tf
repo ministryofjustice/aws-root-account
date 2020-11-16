@@ -58,7 +58,10 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
 
   statement {
     effect    = "Allow"
-    actions   = ["s3:PutObject"]
+    actions   = [
+      "s3:PutObject",
+      "s3:PutObjectAcl"
+    ]
     resources = ["arn:aws:s3:::modernisation-platform-terraform-state/*"]
 
     condition {
