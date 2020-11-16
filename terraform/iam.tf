@@ -57,8 +57,8 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
   }
 
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:PutObject",
       "s3:PutObjectAcl"
     ]
