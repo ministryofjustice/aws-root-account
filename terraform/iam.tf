@@ -41,17 +41,34 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
     ]
   }
 
+  # Allow access to the bucket from the MoJ root account
+  # Policy extrapolated from:
+  # https://www.terraform.io/docs/backends/types/s3.html#s3-bucket-permissions
   statement {
-    sid    = "AllowAccessToModernisationPlatformS3Bucket"
+    effect    = "Allow"
+    actions   = ["s3:ListBucket"]
+    resources = ["arn:aws:s3:::modernisation-platform-terraform-state"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetObject"]
+    resources = ["arn:aws:s3:::modernisation-platform-terraform-state/*"]
+  }
+
+  statement {
     effect = "Allow"
     actions = [
-      "s3:GetObject",
       "s3:PutObject",
       "s3:PutObjectAcl"
     ]
-    resources = [
-      "arn:aws:s3:::modernisation-platform-terraform-state/*"
-    ]
+    resources = ["arn:aws:s3:::modernisation-platform-terraform-state/*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
+    }
   }
 }
 
