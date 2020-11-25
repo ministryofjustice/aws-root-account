@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 locals {
   root_account = {
     business-unit = "Platforms"
@@ -5,4 +7,5 @@ locals {
     is-production = true
     owner         = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
   }
+  caller_identity = data.aws_caller_identity.current
 }
