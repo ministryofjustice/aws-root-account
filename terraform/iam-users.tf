@@ -87,6 +87,6 @@ resource "aws_iam_user" "user" {
 
 resource "aws_iam_user_group_membership" "group_memberships" {
   for_each = local.all_iam_users_and_groups
-  user = aws_iam_user.user[each.key].name
-  groups = each.value
+  user     = aws_iam_user.user[each.key].name
+  groups   = each.value
 }
