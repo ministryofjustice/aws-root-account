@@ -78,13 +78,7 @@ resource "aws_iam_policy" "terraform-organisation-management-policy" {
   policy      = data.aws_iam_policy_document.terraform-organisation-management.json
 }
 
-# Individual IAM user for the Modernisation Platform
-resource "aws_iam_user" "terraform-organisation-management-user" {
-  name          = "ModernisationPlatformOrganisationManagement"
-  force_destroy = true
-}
-
 resource "aws_iam_user_policy_attachment" "terraform-organisation-management-attachment" {
-  user       = aws_iam_user.terraform-organisation-management-user.name
+  user       = aws_iam_user.user["ModernisationPlatformOrganisationManagement"].name
   policy_arn = aws_iam_policy.terraform-organisation-management-policy.arn
 }
