@@ -1,3 +1,7 @@
+resource "aws_iam_account_alias" "default" {
+  account_alias = "mojmaster"
+}
+
 data "aws_iam_policy_document" "terraform-organisation-management" {
   statement {
     sid    = "AllowOrganisationManagement"
