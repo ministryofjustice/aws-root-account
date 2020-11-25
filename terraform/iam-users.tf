@@ -1,8 +1,5 @@
 locals {
   all_iam_users_and_groups = {
-    "AliceCudmore" = [
-      aws_iam_group.billing_full_access.name
-    ]
     "AnthonyBishop" = [
       aws_iam_group.aws_organisations_service_admins.name,
       aws_iam_group.billing_full_access.name
@@ -48,9 +45,6 @@ locals {
     "SabluMiah" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name
-    ]
-    "SarahRees" = [
-      aws_iam_group.billing_full_access.name
     ]
     "SeanBusby" = [
       aws_iam_group.admins.name,

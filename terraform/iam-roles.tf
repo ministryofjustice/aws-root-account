@@ -84,4 +84,7 @@ resource "aws_iam_role" "lambda-iam-generate-report-role" {
   ]
 }
 EOF
+
+  tags = {}
+  path = "/service-role/"
 }
