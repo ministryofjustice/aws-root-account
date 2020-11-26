@@ -16,6 +16,11 @@ resource "aws_organizations_account" "opg-digi-deps-prod" {
   }
 }
 
+resource "aws_organizations_account" "opg-digi-deps-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-digi-deps-prod.id
+}
+
 resource "aws_organizations_account" "opg-digi-deps-dev" {
   name      = "OPG Digi Deps Dev"
   email     = local.account_emails["OPG Digi Deps Dev"][0]
@@ -33,6 +38,11 @@ resource "aws_organizations_account" "opg-digi-deps-dev" {
   }
 }
 
+resource "aws_organizations_account" "opg-digi-deps-dev" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-digi-deps-dev.id
+}
+
 resource "aws_organizations_account" "opg-digi-deps-preprod" {
   name      = "OPG Digi Deps Preprod"
   email     = local.account_emails["OPG Digi Deps Preprod"][0]
@@ -48,4 +58,9 @@ resource "aws_organizations_account" "opg-digi-deps-preprod" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_account" "opg-digi-deps-preprod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-digi-deps-preprod.id
 }

@@ -16,6 +16,11 @@ resource "aws_organizations_account" "parliamentary-questions" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "parliamentary-questions" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.parliamentary-questions.id
+}
+
 resource "aws_organizations_account" "cloud-networks-psn" {
   name      = "Cloud Networks PSN"
   email     = local.account_emails["Cloud Networks PSN"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "cloud-networks-psn" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "cloud-networks-psn" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.cloud-networks-psn.id
 }
 
 resource "aws_organizations_account" "moj-digital-services" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "moj-digital-services" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-digital-services" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-digital-services.id
+}
+
 resource "aws_organizations_account" "platforms-non-production" {
   name      = "platforms-non-production"
   email     = local.account_emails["platforms-non-production"][0]
@@ -65,6 +80,11 @@ resource "aws_organizations_account" "platforms-non-production" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "platforms-non-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.platforms-non-production.id
 }
 
 resource "aws_organizations_account" "network-architecture" {
@@ -84,6 +104,11 @@ resource "aws_organizations_account" "network-architecture" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "network-architecture" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.network-architecture.id
+}
+
 resource "aws_organizations_account" "moj-peoplefinder" {
   name      = "MoJ PeopleFinder"
   email     = local.account_emails["MoJ PeopleFinder"][0]
@@ -99,6 +124,11 @@ resource "aws_organizations_account" "moj-peoplefinder" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-peoplefinder" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-peoplefinder.id
 }
 
 resource "aws_organizations_account" "moj-cla" {
@@ -118,6 +148,11 @@ resource "aws_organizations_account" "moj-cla" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-cla" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-cla.id
+}
+
 resource "aws_organizations_account" "patterns" {
   name      = "Patterns"
   email     = local.account_emails["Patterns"][0]
@@ -133,4 +168,9 @@ resource "aws_organizations_account" "patterns" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "patterns" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.patterns.id
 }

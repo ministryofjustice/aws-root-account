@@ -16,6 +16,11 @@ resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-d
   }
 }
 
+resource "aws_organizations_policy_attachment" "electronic-monitoring-monitoring-mapping-dev" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-monitoring-mapping-dev.id
+}
+
 resource "aws_organizations_account" "electronic-monitoring-shared-logging" {
   name      = "Electronic Monitoring Shared Logging"
   email     = local.account_emails["Electronic Monitoring Shared Logging"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "electronic-monitoring-shared-logging" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "electronic-monitoring-shared-logging" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-shared-logging.id
 }
 
 resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-pre-prod" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-pre
   }
 }
 
+resource "aws_organizations_policy_attachment" "electronic-monitoring-tagging-hardware-pre-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-tagging-hardware-pre-prod.id
+}
+
 resource "aws_organizations_account" "electronic-monitoring-shared-networking-non-prod" {
   name      = "Electronic Monitoring Shared Networking (non-prod)"
   email     = local.account_emails["Electronic Monitoring Shared Networking (non-prod)"][0]
@@ -65,6 +80,11 @@ resource "aws_organizations_account" "electronic-monitoring-shared-networking-no
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "electronic-monitoring-shared-networking-non-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-shared-networking-non-prod.id
 }
 
 resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-prod" {
@@ -84,6 +104,11 @@ resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-pro
   }
 }
 
+resource "aws_organizations_policy_attachment" "electronic-monitoring-tagging-hardware-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-tagging-hardware-prod.id
+}
+
 resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-pre-prod" {
   name      = "Electronic Monitoring Monitoring&Mapping Pre-Prod"
   email     = local.account_emails["Electronic Monitoring Monitoring&Mapping Pre-Prod"][0]
@@ -99,6 +124,11 @@ resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-p
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "electronic-monitoring-monitoring-mapping-pre-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-monitoring-mapping-pre-prod.id
 }
 
 resource "aws_organizations_account" "electronic-monitoring-identity-access-management" {
@@ -118,6 +148,11 @@ resource "aws_organizations_account" "electronic-monitoring-identity-access-mana
   }
 }
 
+resource "aws_organizations_policy_attachment" "electronic-monitoring-identity-access-management" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-identity-access-management.id
+}
+
 resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-test" {
   name      = "Electronic Monitoring Monitoring&Mapping Test"
   email     = local.account_emails["Electronic Monitoring Monitoring&Mapping Test"][0]
@@ -133,6 +168,11 @@ resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-t
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "electronic-monitoring-monitoring-mapping-test" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-monitoring-mapping-test.id
 }
 
 resource "aws_organizations_account" "electronic-monitoring-shared-networking" {
@@ -152,6 +192,11 @@ resource "aws_organizations_account" "electronic-monitoring-shared-networking" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "electronic-monitoring-shared-networking" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-shared-networking.id
+}
+
 resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-test" {
   name      = "Electronic Monitoring Tagging Hardware Test"
   email     = local.account_emails["Electronic Monitoring Tagging Hardware Test"][0]
@@ -167,6 +212,11 @@ resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-tes
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "electronic-monitoring-tagging-hardware-test" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-tagging-hardware-test.id
 }
 
 resource "aws_organizations_account" "electronic-monitoring-protective-monitoring" {
@@ -186,6 +236,11 @@ resource "aws_organizations_account" "electronic-monitoring-protective-monitorin
   }
 }
 
+resource "aws_organizations_policy_attachment" "electronic-monitoring-protective-monitoring" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-protective-monitoring.id
+}
+
 resource "aws_organizations_account" "electronic-monitoring-archive-query-service" {
   name      = "Electronic Monitoring Archive & Query Service"
   email     = local.account_emails["Electronic Monitoring Archive & Query Service"][0]
@@ -203,6 +258,11 @@ resource "aws_organizations_account" "electronic-monitoring-archive-query-servic
   }
 }
 
+resource "aws_organizations_policy_attachment" "electronic-monitoring-archive-query-service" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-archive-query-service.id
+}
+
 resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-prod" {
   name      = "Electronic Monitoring Monitoring&Mapping Prod"
   email     = local.account_emails["Electronic Monitoring Monitoring&Mapping Prod"][0]
@@ -218,4 +278,9 @@ resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-p
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "electronic-monitoring-monitoring-mapping-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-monitoring-mapping-prod.id
 }

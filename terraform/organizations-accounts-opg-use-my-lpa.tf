@@ -16,6 +16,11 @@ resource "aws_organizations_account" "opg-use-my-lpa-production" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "opg-use-my-lpa-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-use-my-lpa-production.id
+}
+
 resource "aws_organizations_account" "opg-use-my-lpa-preproduction" {
   name      = "OPG Use My LPA Preproduction"
   email     = local.account_emails["OPG Use My LPA Preproduction"][0]
@@ -33,6 +38,11 @@ resource "aws_organizations_account" "opg-use-my-lpa-preproduction" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "opg-use-my-lpa-preproduction" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-use-my-lpa-preproduction.id
+}
+
 resource "aws_organizations_account" "opg-use-my-lpa-development" {
   name      = "OPG Use My LPA Development"
   email     = local.account_emails["OPG Use My LPA Development"][0]
@@ -48,4 +58,9 @@ resource "aws_organizations_account" "opg-use-my-lpa-development" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "opg-use-my-lpa-development" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-use-my-lpa-development.id
 }

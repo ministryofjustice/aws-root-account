@@ -15,6 +15,11 @@ resource "aws_organizations_account" "moj-opg-identity-closed-0" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-opg-identity-closed-0" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-identity-closed-0.id
+}
+
 resource "aws_organizations_account" "moj-opg-identity-closed-2" {
   name      = "MoJ OPG Identity"
   email     = local.account_emails["MoJ OPG Identity"][1]
@@ -30,6 +35,11 @@ resource "aws_organizations_account" "moj-opg-identity-closed-2" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-opg-identity-closed-2" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-identity-closed-2.id
 }
 
 resource "aws_organizations_account" "money-to-prisoners-closed" {
@@ -49,6 +59,11 @@ resource "aws_organizations_account" "money-to-prisoners-closed" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "money-to-prisoners-closed" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.money-to-prisoners-closed.id
+}
+
 resource "aws_organizations_account" "moj-security-closed" {
   name      = "MoJ-Security"
   email     = local.account_emails["MoJ-Security"][0]
@@ -64,4 +79,9 @@ resource "aws_organizations_account" "moj-security-closed" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-security-closed" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-security-closed.id
 }

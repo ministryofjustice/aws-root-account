@@ -16,6 +16,11 @@ resource "aws_organizations_account" "hmpps-victim-case-management-system-produc
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-victim-case-management-system-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-victim-case-management-system-production.id
+}
+
 resource "aws_organizations_account" "hmpps-victim-case-management-system-integration" {
   name      = "HMPPS Victim Case Management System Integration"
   email     = local.account_emails["HMPPS Victim Case Management System Integration"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "hmpps-victim-case-management-system-integr
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "hmpps-victim-case-management-system-integration" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-victim-case-management-system-integration.id
 }
 
 resource "aws_organizations_account" "hmpps-victim-case-management-system-performance" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "hmpps-victim-case-management-system-perfor
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-victim-case-management-system-performance" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-victim-case-management-system-performance.id
+}
+
 resource "aws_organizations_account" "hmpps-victim-case-management-system-test" {
   name      = "HMPPS Victim Case Management System Test"
   email     = local.account_emails["HMPPS Victim Case Management System Test"][0]
@@ -65,6 +80,11 @@ resource "aws_organizations_account" "hmpps-victim-case-management-system-test" 
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "hmpps-victim-case-management-system-test" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-victim-case-management-system-test.id
 }
 
 resource "aws_organizations_account" "vcms-non-prod" {
@@ -84,6 +104,11 @@ resource "aws_organizations_account" "vcms-non-prod" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "vcms-non-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.vcms-non-prod.id
+}
+
 resource "aws_organizations_account" "hmpps-victim-case-management-system-pre-production" {
   name      = "HMPPS Victim Case Management System Pre Production"
   email     = local.account_emails["HMPPS Victim Case Management System Pre Production"][0]
@@ -99,6 +124,11 @@ resource "aws_organizations_account" "hmpps-victim-case-management-system-pre-pr
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "hmpps-victim-case-management-system-pre-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-victim-case-management-system-pre-production.id
 }
 
 resource "aws_organizations_account" "hmpps-victim-case-management-system-stage" {
@@ -118,3 +148,7 @@ resource "aws_organizations_account" "hmpps-victim-case-management-system-stage"
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-victim-case-management-system-stage" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-victim-case-management-system-stage.id
+}

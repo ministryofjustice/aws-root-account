@@ -15,3 +15,8 @@ resource "aws_organizations_account" "cica" {
     ]
   }
 }
+
+resource "aws_organizations_policy_attachment" "cica" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.cica.id
+}

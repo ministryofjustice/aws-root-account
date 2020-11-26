@@ -16,6 +16,11 @@ resource "aws_organizations_account" "youth-justice-framework-dev" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "youth-justice-framework-dev" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.youth-justice-framework-dev.id
+}
+
 resource "aws_organizations_account" "youth-justice-framework-management" {
   name      = "Youth Justice Framework Management"
   email     = local.account_emails["Youth Justice Framework Management"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "youth-justice-framework-management" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "youth-justice-framework-management" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.youth-justice-framework-management.id
 }
 
 resource "aws_organizations_account" "youth-justice-framework-pre-prod" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "youth-justice-framework-pre-prod" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "youth-justice-framework-pre-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.youth-justice-framework-pre-prod.id
+}
+
 resource "aws_organizations_account" "youth-justice-framework-juniper" {
   name      = "Youth Justice Framework Juniper"
   email     = local.account_emails["Youth Justice Framework Juniper"][0]
@@ -65,6 +80,11 @@ resource "aws_organizations_account" "youth-justice-framework-juniper" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "youth-justice-framework-juniper" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.youth-justice-framework-juniper.id
 }
 
 resource "aws_organizations_account" "youth-justice-framework-prod" {
@@ -84,6 +104,11 @@ resource "aws_organizations_account" "youth-justice-framework-prod" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "youth-justice-framework-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.youth-justice-framework-prod.id
+}
+
 resource "aws_organizations_account" "youth-justice-framework-monitoring" {
   name      = "Youth Justice Framework Monitoring"
   email     = local.account_emails["Youth Justice Framework Monitoring"][0]
@@ -99,6 +124,11 @@ resource "aws_organizations_account" "youth-justice-framework-monitoring" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "youth-justice-framework-monitoring" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.youth-justice-framework-monitoring.id
 }
 
 resource "aws_organizations_account" "youth-justice-framework-eng-tools" {
@@ -118,6 +148,11 @@ resource "aws_organizations_account" "youth-justice-framework-eng-tools" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "youth-justice-framework-eng-tools" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.youth-justice-framework-eng-tools.id
+}
+
 resource "aws_organizations_account" "youth-justice-framework-sandpit" {
   name      = "Youth Justice Framework Sandpit"
   email     = local.account_emails["Youth Justice Framework Sandpit"][0]
@@ -133,4 +168,9 @@ resource "aws_organizations_account" "youth-justice-framework-sandpit" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "youth-justice-framework-sandpit" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.youth-justice-framework-sandpit.id
 }
