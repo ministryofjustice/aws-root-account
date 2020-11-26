@@ -16,6 +16,11 @@ resource "aws_organizations_account" "moj-opg-management" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-opg-management" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-management.id
+}
+
 resource "aws_organizations_account" "opg-shared" {
   name      = "opg-shared"
   email     = local.account_emails["opg-shared"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "opg-shared" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "opg-shared" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-shared.id
 }
 
 resource "aws_organizations_account" "moj-opg-shared-production" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "moj-opg-shared-production" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-opg-shared-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-shared-production.id
+}
+
 resource "aws_organizations_account" "opg-backups" {
   name      = "OPG Backups"
   email     = local.account_emails["OPG Backups"][0]
@@ -65,6 +80,11 @@ resource "aws_organizations_account" "opg-backups" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "opg-backups" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-backups.id
 }
 
 resource "aws_organizations_account" "moj-opg-identity" {
@@ -84,6 +104,11 @@ resource "aws_organizations_account" "moj-opg-identity" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-opg-identity" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-identity.id
+}
+
 resource "aws_organizations_account" "moj-opg-shared-development" {
   name      = "MoJ OPG Shared Development"
   email     = local.account_emails["MoJ OPG Shared Development"][0]
@@ -101,6 +126,11 @@ resource "aws_organizations_account" "moj-opg-shared-development" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-opg-shared-development" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-shared-development.id
+}
+
 resource "aws_organizations_account" "moj-opg-sandbox" {
   name      = "MoJ OPG Sandbox"
   email     = local.account_emails["MoJ OPG Sandbox"][0]
@@ -116,4 +146,9 @@ resource "aws_organizations_account" "moj-opg-sandbox" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-opg-sandbox" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-sandbox.id
 }

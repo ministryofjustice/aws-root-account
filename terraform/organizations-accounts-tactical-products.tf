@@ -16,6 +16,11 @@ resource "aws_organizations_account" "tp-hmcts" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "tp-hmcts" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.tp-hmcts.id
+}
+
 resource "aws_organizations_account" "tacticalproducts" {
   name      = "tacticalproducts"
   email     = local.account_emails["tacticalproducts"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "tacticalproducts" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "tacticalproducts" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.tacticalproducts.id
 }
 
 resource "aws_organizations_account" "tp-alb" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "tp-alb" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "tp-alb" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.tp-alb.id
+}
+
 resource "aws_organizations_account" "moj-intranet" {
   name      = "MOJ Intranet"
   email     = local.account_emails["MOJ Intranet"][0]
@@ -65,6 +80,11 @@ resource "aws_organizations_account" "moj-intranet" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-intranet" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-intranet.id
 }
 
 resource "aws_organizations_account" "ministry-of-justice-courtfinder-prod" {
@@ -84,6 +104,11 @@ resource "aws_organizations_account" "ministry-of-justice-courtfinder-prod" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "ministry-of-justice-courtfinder-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.ministry-of-justice-courtfinder-prod.id
+}
+
 resource "aws_organizations_account" "tp-hq" {
   name      = "TP-HQ"
   email     = local.account_emails["TP-HQ"][0]
@@ -101,6 +126,11 @@ resource "aws_organizations_account" "tp-hq" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "tp-hq" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.tp-hq.id
+}
+
 resource "aws_organizations_account" "moj-info-services-dev" {
   name      = "MoJ Info Services Dev"
   email     = local.account_emails["MoJ Info Services Dev"][0]
@@ -116,4 +146,9 @@ resource "aws_organizations_account" "moj-info-services-dev" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-info-services-dev" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-info-services-dev.id
 }

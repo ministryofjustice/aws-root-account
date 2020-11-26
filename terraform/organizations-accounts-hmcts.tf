@@ -16,6 +16,11 @@ resource "aws_organizations_account" "hmcts-fee-remissions" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmcts-fee-remissions" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmcts-fee-remissions.id
+}
+
 resource "aws_organizations_account" "manchester-traffic-dev" {
   name      = "Manchester Traffic Dev"
   email     = local.account_emails["Manchester Traffic Dev"][0]
@@ -33,6 +38,11 @@ resource "aws_organizations_account" "manchester-traffic-dev" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "manchester-traffic-dev" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.manchester-traffic-dev.id
+}
+
 resource "aws_organizations_account" "get-help-with-child-arrangements" {
   name      = "Get help with child arrangements"
   email     = local.account_emails["Get help with child arrangements"][0]
@@ -48,4 +58,9 @@ resource "aws_organizations_account" "get-help-with-child-arrangements" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "get-help-with-child-arrangements" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.get-help-with-child-arrangements.id
 }

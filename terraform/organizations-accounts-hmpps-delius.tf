@@ -16,6 +16,11 @@ resource "aws_organizations_account" "alfresco-non-prod" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "alfresco-non-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.alfresco-non-prod.id
+}
+
 resource "aws_organizations_account" "hmpps-delius-training" {
   name      = "HMPPS Delius Training"
   email     = local.account_emails["HMPPS Delius Training"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "hmpps-delius-training" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "hmpps-delius-training" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-training.id
 }
 
 resource "aws_organizations_account" "hmpps-delius-mis-test" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "hmpps-delius-mis-test" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-delius-mis-test" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-mis-test.id
+}
+
 resource "aws_organizations_account" "delius-new-tech-non-prod" {
   name      = "Delius New Tech non-prod"
   email     = local.account_emails["Delius New Tech non-prod"][0]
@@ -65,6 +80,11 @@ resource "aws_organizations_account" "delius-new-tech-non-prod" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "delius-new-tech-non-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.delius-new-tech-non-prod.id
 }
 
 resource "aws_organizations_account" "hmpps-delius-training-test" {
@@ -84,6 +104,11 @@ resource "aws_organizations_account" "hmpps-delius-training-test" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-delius-training-test" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-training-test.id
+}
+
 resource "aws_organizations_account" "hmpps-delius-pre-production" {
   name      = "HMPPS Delius Pre Production"
   email     = local.account_emails["HMPPS Delius Pre Production"][0]
@@ -99,6 +124,11 @@ resource "aws_organizations_account" "hmpps-delius-pre-production" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "hmpps-delius-pre-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-pre-production.id
 }
 
 resource "aws_organizations_account" "hmpps-delius-po-test" {
@@ -118,6 +148,11 @@ resource "aws_organizations_account" "hmpps-delius-po-test" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-delius-po-test" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-po-test.id
+}
+
 resource "aws_organizations_account" "hmpps-delius-mis-non-prod" {
   name      = "HMPPS Delius MIS non prod"
   email     = local.account_emails["HMPPS Delius MIS non prod"][0]
@@ -133,6 +168,11 @@ resource "aws_organizations_account" "hmpps-delius-mis-non-prod" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "hmpps-delius-mis-non-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-mis-non-prod.id
 }
 
 resource "aws_organizations_account" "hmpps-delius-po-test-1" {
@@ -152,6 +192,11 @@ resource "aws_organizations_account" "hmpps-delius-po-test-1" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-delius-po-test-1" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-po-test-1.id
+}
+
 resource "aws_organizations_account" "delius-core-non-prod" {
   name      = "Delius Core non-prod"
   email     = local.account_emails["Delius Core non-prod"][0]
@@ -167,6 +212,11 @@ resource "aws_organizations_account" "delius-core-non-prod" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "delius-core-non-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.delius-core-non-prod.id
 }
 
 resource "aws_organizations_account" "probation-management-non-prod" {
@@ -186,6 +236,11 @@ resource "aws_organizations_account" "probation-management-non-prod" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "probation-management-non-prod" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.probation-management-non-prod.id
+}
+
 resource "aws_organizations_account" "hmpps-delius-stage" {
   name      = "HMPPS Delius Stage"
   email     = local.account_emails["HMPPS Delius Stage"][0]
@@ -201,6 +256,11 @@ resource "aws_organizations_account" "hmpps-delius-stage" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "hmpps-delius-stage" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-stage.id
 }
 
 resource "aws_organizations_account" "hmpps-delius-test" {
@@ -220,6 +280,11 @@ resource "aws_organizations_account" "hmpps-delius-test" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-delius-test" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-test.id
+}
+
 resource "aws_organizations_account" "hmpps-delius-po-test-2" {
   name      = "HMPPS Delius PO Test 2"
   email     = local.account_emails["HMPPS Delius PO Test 2"][0]
@@ -237,6 +302,11 @@ resource "aws_organizations_account" "hmpps-delius-po-test-2" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "hmpps-delius-po-test-2" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-po-test-2.id
+}
+
 resource "aws_organizations_account" "hmpps-delius-performance" {
   name      = "HMPPS Delius Performance"
   email     = local.account_emails["HMPPS Delius Performance"][0]
@@ -252,4 +322,9 @@ resource "aws_organizations_account" "hmpps-delius-performance" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "hmpps-delius-performance" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.hmpps-delius-performance.id
 }

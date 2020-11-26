@@ -16,6 +16,11 @@ resource "aws_organizations_account" "moj-opg-sirius-production" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-opg-sirius-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-sirius-production.id
+}
+
 resource "aws_organizations_account" "moj-opg-sirius-development" {
   name      = "MoJ OPG Sirius Development"
   email     = local.account_emails["MoJ OPG Sirius Development"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "moj-opg-sirius-development" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-opg-sirius-development" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-sirius-development.id
 }
 
 resource "aws_organizations_account" "opg-sirius-dev" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "opg-sirius-dev" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "opg-sirius-dev" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-sirius-dev.id
+}
+
 resource "aws_organizations_account" "moj-opg-sirius-preproduction" {
   name      = "MoJ OPG Sirius Preproduction"
   email     = local.account_emails["MoJ OPG Sirius Preproduction"][0]
@@ -65,6 +80,11 @@ resource "aws_organizations_account" "moj-opg-sirius-preproduction" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-opg-sirius-preproduction" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-sirius-preproduction.id
 }
 
 resource "aws_organizations_account" "opg-sirius-backup" {
@@ -84,6 +104,11 @@ resource "aws_organizations_account" "opg-sirius-backup" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "opg-sirius-backup" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-sirius-backup.id
+}
+
 resource "aws_organizations_account" "opg-sirius-production" {
   name      = "OPG Sirius Production"
   email     = local.account_emails["OPG Sirius Production"][0]
@@ -99,4 +124,9 @@ resource "aws_organizations_account" "opg-sirius-production" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "opg-sirius-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-sirius-production.id
 }

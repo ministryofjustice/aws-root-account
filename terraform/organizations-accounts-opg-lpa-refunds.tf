@@ -16,6 +16,11 @@ resource "aws_organizations_account" "opg-refund-develop" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "opg-refund-develop" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-refund-develop.id
+}
+
 resource "aws_organizations_account" "opg-refund-production" {
   name      = "opg-refund-production"
   email     = local.account_emails["opg-refund-production"][0]
@@ -31,6 +36,11 @@ resource "aws_organizations_account" "opg-refund-production" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "opg-refund-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.opg-refund-production.id
 }
 
 resource "aws_organizations_account" "moj-opg-lpa-refunds-development" {
@@ -50,6 +60,11 @@ resource "aws_organizations_account" "moj-opg-lpa-refunds-development" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-opg-lpa-refunds-development" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-lpa-refunds-development.id
+}
+
 resource "aws_organizations_account" "moj-opg-lpa-refunds-preproduction" {
   name      = "MOJ OPG LPA Refunds Preproduction"
   email     = local.account_emails["MOJ OPG LPA Refunds Preproduction"][0]
@@ -67,6 +82,11 @@ resource "aws_organizations_account" "moj-opg-lpa-refunds-preproduction" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "moj-opg-lpa-refunds-preproduction" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-lpa-refunds-preproduction.id
+}
+
 resource "aws_organizations_account" "moj-opg-lpa-refunds-production" {
   name      = "MOJ OPG LPA Refunds Production"
   email     = local.account_emails["MOJ OPG LPA Refunds Production"][0]
@@ -82,4 +102,9 @@ resource "aws_organizations_account" "moj-opg-lpa-refunds-production" {
       role_name
     ]
   }
+}
+
+resource "aws_organizations_policy_attachment" "moj-opg-lpa-refunds-production" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-opg-lpa-refunds-production.id
 }
