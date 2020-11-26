@@ -62,6 +62,7 @@ locals {
   }
 }
 
+# IAM User
 resource "aws_iam_user" "user" {
   for_each = local.all_iam_users_and_groups
   name     = each.key
@@ -79,8 +80,52 @@ resource "aws_iam_user" "user" {
   } : {}
 }
 
+# IAM User Group Memberships
 resource "aws_iam_user_group_membership" "group_memberships" {
   for_each = local.all_iam_users_and_groups
   user     = aws_iam_user.user[each.key].name
   groups   = each.value
+}
+
+# IAM User direct policy attachments
+# In the future these should be a group policy attachment, rather than directly attached to users
+
+## IAM Change Password
+resource "aws_iam_user_policy_attachment" "iam-change-password" {
+  for_each = toset([
+    aws_iam_user.user["AnthonyBishop"].name,
+    aws_iam_user.user["CeriBuck"].name,
+    aws_iam_user.user["JakeMulley"].name,
+    aws_iam_user.user["JasonBirchall"].name,
+    aws_iam_user.user["LeahCios"].name,
+    aws_iam_user.user["PaulWyborn"].name,
+    aws_iam_user.user["RohanSalunkhe"].name,
+    aws_iam_user.user["SabluMiah"].name,
+    aws_iam_user.user["SeanBusby"].name,
+    aws_iam_user.user["SteveMarshall"].name
+  ])
+  user       = each.value
+  policy_arn = "arn:aws:iam::aws:policy/IAMUserChangePassword"
+}
+
+## AdministratorAccess
+resource "aws_iam_user_policy_attachment" "administrator-access" {
+  for_each = toset([
+    aws_iam_user.user["JakeMulley"].name,
+    aws_iam_user.user["SteveMarshall"].name
+  ])
+  user       = each.value
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
+## terraform-organisation-management-policy
+resource "aws_iam_user_policy_attachment" "terraform-organisation-management-attachment" {
+  user       = aws_iam_user.user["ModernisationPlatformOrganisationManagement"].name
+  policy_arn = aws_iam_policy.terraform-organisation-management-policy.arn
+}
+
+## aws-readonly-billing-access-policy
+resource "aws_iam_user_policy_attachment" "aws-readonly-billing-access-policy" {
+  user       = aws_iam_user.user["claim-crown-court-defence"].name
+  policy_arn = aws_iam_policy.aws-readonly-billing-access-policy.arn
 }

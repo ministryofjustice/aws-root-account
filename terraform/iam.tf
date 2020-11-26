@@ -16,8 +16,3 @@ resource "aws_iam_account_password_policy" "default" {
   require_symbols                = true
   require_uppercase_characters   = true
 }
-
-resource "aws_iam_user_policy_attachment" "terraform-organisation-management-attachment" {
-  user       = aws_iam_user.user["ModernisationPlatformOrganisationManagement"].name
-  policy_arn = aws_iam_policy.terraform-organisation-management-policy.arn
-}
