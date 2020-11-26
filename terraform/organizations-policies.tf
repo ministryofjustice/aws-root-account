@@ -6,9 +6,9 @@
 
 # Alexa business deny
 resource "aws_organizations_policy" "alexa-business-deny" {
-  name = "Alexa business deny"
+  name        = "Alexa business deny"
   description = "Alexa business deny"
-  type = "SERVICE_CONTROL_POLICY"
+  type        = "SERVICE_CONTROL_POLICY"
 
   content = <<CONTENT
 {
@@ -31,9 +31,9 @@ CONTENT
 
 # DenyCloudTrailDeleteStopUpdatePolicy
 resource "aws_organizations_policy" "deny-cloudtrail-delete-stop-update-policy" {
-  name = "DenyCloudTrailDeleteStopUpdatePolicy"
+  name        = "DenyCloudTrailDeleteStopUpdatePolicy"
   description = "Denies changes to CloudTrail"
-  type = "SERVICE_CONTROL_POLICY"
+  type        = "SERVICE_CONTROL_POLICY"
 
   content = <<CONTENT
 {
