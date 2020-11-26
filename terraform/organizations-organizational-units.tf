@@ -15,10 +15,55 @@ resource "aws_organizations_organizational_unit" "opg" {
   parent_id = aws_organizations_organization.default.roots[0].id
 }
 
+resource "aws_organizations_organizational_unit" "opg-lpa-refunds" {
+  name      = "LPA Refunds"
+  parent_id = aws_organizations_organizational_unit.opg.id
+}
+
+resource "aws_organizations_organizational_unit" "opg-sirius" {
+  name      = "Sirius"
+  parent_id = aws_organizations_organizational_unit.opg.id
+}
+
+resource "aws_organizations_organizational_unit" "opg-digideps" {
+  name      = "DigiDeps"
+  parent_id = aws_organizations_organizational_unit.opg.id
+}
+
+resource "aws_organizations_organizational_unit" "opg-make-an-lpa" {
+  name      = "Make An LPA"
+  parent_id = aws_organizations_organizational_unit.opg.id
+}
+
+resource "aws_organizations_organizational_unit" "opg-digicop" {
+  name      = "DigiCop"
+  parent_id = aws_organizations_organizational_unit.opg.id
+}
+
+resource "aws_organizations_organizational_unit" "opg-use-my-lpa" {
+  name      = "Use My LPA"
+  parent_id = aws_organizations_organizational_unit.opg.id
+}
+
 # HMPPS
 resource "aws_organizations_organizational_unit" "hmpps" {
   name      = "HMPPS"
   parent_id = aws_organizations_organization.default.roots[0].id
+}
+
+resource "aws_organizations_organizational_unit" "hmpps-vcms" {
+  name      = "VCMS"
+  parent_id = aws_organizations_organizational_unit.hmpps.id
+}
+
+resource "aws_organizations_organizational_unit" "hmpps-delius" {
+  name      = "Delius"
+  parent_id = aws_organizations_organizational_unit.hmpps.id
+}
+
+resource "aws_organizations_organizational_unit" "hmpps-electronic-monitoring" {
+  name      = "Electronic Monitoring"
+  parent_id = aws_organizations_organizational_unit.hmpps.id
 }
 
 # YJB
@@ -43,6 +88,18 @@ resource "aws_organizations_organizational_unit" "central-digital" {
 resource "aws_organizations_organizational_unit" "platforms-and-architecture" {
   name      = "Platforms & Architecture"
   parent_id = aws_organizations_organization.default.roots[0].id
+}
+
+resource "aws_organizations_organizational_unit" "platforms-and-architecture-cloud-platform" {
+  name      = "Cloud Platform"
+  parent_id = aws_organizations_organizational_unit.platforms-and-architecture.id
+}
+
+# There are more OUs within the Modernisation Platform, but they are managed elsewhere
+# See: https://github.com/ministryofjustice/modernisation-platform
+resource "aws_organizations_organizational_unit" "platforms-and-architecture-modernisation-platform" {
+  name      = "Modernisation Platform"
+  parent_id = aws_organizations_organizational_unit.platforms-and-architecture.id
 }
 
 # Security Engineering
