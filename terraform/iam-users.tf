@@ -101,16 +101,6 @@ resource "aws_iam_user_policy_attachment" "iam-change-password" {
   policy_arn = "arn:aws:iam::aws:policy/IAMUserChangePassword"
 }
 
-## AdministratorAccess
-resource "aws_iam_user_policy_attachment" "administrator-access" {
-  for_each = toset([
-    aws_iam_user.user["JakeMulley"].name,
-    aws_iam_user.user["SteveMarshall"].name
-  ])
-  user       = each.value
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
 ## terraform-organisation-management-policy
 resource "aws_iam_user_policy_attachment" "terraform-organisation-management-attachment" {
   user       = aws_iam_user.user["ModernisationPlatformOrganisationManagement"].name
