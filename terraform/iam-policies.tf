@@ -1,29 +1,3 @@
-resource "aws_iam_policy" "artifact_full_access" {
-  name        = "Artifact_access_Full"
-  description = "Allow access to AWS Artifact"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "artifact:Get"
-            ],
-            "Resource": [
-                "arn:aws:artifact:::report-package/Certifications and Attestations/SOC/*",
-                "arn:aws:artifact:::report-package/Certifications and Attestations/PCI/*",
-                "arn:aws:artifact:::report-package/Certifications and Attestations/ISO/*",
-                "arn:aws:artifact:::report-package/Alignment Documents/Healthcare/*",
-                "arn:aws:artifact:::report-package/Certifications and Attestations/PSN/*"
-            ]
-        }
-    ]
-}
-EOF
-}
-
 resource "aws_iam_policy" "aws-readonly-billing-access-policy" {
   name        = "aws-readonly-billing-access-policy"
   description = "This policy provides readonly access to AWS Billing Service - Cost Explorer, Billing Data"
@@ -109,22 +83,6 @@ resource "aws_iam_policy" "billing-full-access" {
             ]
         }
     ]
-}
-EOF
-}
-
-resource "aws_iam_policy" "iam-readonly-assume-role-policy" {
-  name        = "IAMReadOnlyAssumeRolePolicy"
-  description = "A policy that allows IAM Read Only access to Target Account Resources"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": {
-        "Action": "sts:AssumeRole",
-        "Resource": "arn:aws:iam::*:role/IAMReadOnlyAccessRole",
-        "Effect": "Allow"
-    }
 }
 EOF
 }

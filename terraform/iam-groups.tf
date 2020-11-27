@@ -9,17 +9,6 @@ resource "aws_iam_group_policy_attachment" "admins_administratoraccess" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-# IAM group: Artifact
-resource "aws_iam_group" "artifacts" {
-  name = "Artifact"
-}
-
-# Attach custom policy to the Artifact group
-resource "aws_iam_group_policy_attachment" "artfiact_artifact_full_access" {
-  group      = aws_iam_group.artifacts.name
-  policy_arn = aws_iam_policy.artifact_full_access.arn
-}
-
 # IAM group: AWSOrganisationsAdmin
 resource "aws_iam_group" "aws_organisations_service_admins" {
   name = "AWSOrganisationsAdmin"
@@ -46,15 +35,4 @@ resource "aws_iam_group" "billing_full_access" {
 resource "aws_iam_group_policy_attachment" "billing_full_access_policy" {
   group      = aws_iam_group.billing_full_access.name
   policy_arn = aws_iam_policy.billing-full-access.arn
-}
-
-# IAM group: IAMReadOnlyGroup
-resource "aws_iam_group" "iam_read_only_group" {
-  name = "IAMReadOnlyGroup"
-}
-
-# Attach custom policy to the IAMReadOnlyGroup group
-resource "aws_iam_group_policy_attachment" "iam_read_only_group_policy" {
-  group      = aws_iam_group.iam_read_only_group.name
-  policy_arn = aws_iam_policy.iam-readonly-assume-role-policy.arn
 }
