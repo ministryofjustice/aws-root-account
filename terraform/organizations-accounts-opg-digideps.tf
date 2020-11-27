@@ -16,7 +16,7 @@ resource "aws_organizations_account" "opg-digi-deps-prod" {
   }
 }
 
-resource "aws_organizations_account" "opg-digi-deps-prod" {
+resource "aws_organizations_policy_attachment" "opg-digi-deps-prod" {
   policy_id = "p-FullAWSAccess"
   target_id = aws_organizations_account.opg-digi-deps-prod.id
 }
@@ -38,7 +38,7 @@ resource "aws_organizations_account" "opg-digi-deps-dev" {
   }
 }
 
-resource "aws_organizations_account" "opg-digi-deps-dev" {
+resource "aws_organizations_policy_attachment" "opg-digi-deps-dev" {
   policy_id = "p-FullAWSAccess"
   target_id = aws_organizations_account.opg-digi-deps-dev.id
 }
@@ -60,7 +60,7 @@ resource "aws_organizations_account" "opg-digi-deps-preprod" {
   }
 }
 
-resource "aws_organizations_account" "opg-digi-deps-preprod" {
+resource "aws_organizations_policy_attachment" "opg-digi-deps-preprod" {
   policy_id = "p-FullAWSAccess"
   target_id = aws_organizations_account.opg-digi-deps-preprod.id
 }

@@ -7,9 +7,6 @@ locals {
     "CeriBuck" = [
       aws_iam_group.billing_full_access.name
     ]
-    "Christine.Elliott" = [
-      aws_iam_group.billing_full_access.name
-    ]
     "claim-crown-court-defence" = []
     "JakeMulley" = [
       aws_iam_group.admins.name,
@@ -37,9 +34,6 @@ locals {
       aws_iam_group.aws_organisations_service_admins.name
     ]
     "PSPI" = [
-      aws_iam_group.billing_full_access.name
-    ]
-    "RohanSalunkhe" = [
       aws_iam_group.billing_full_access.name
     ]
     "SabluMiah" = [
@@ -99,7 +93,6 @@ resource "aws_iam_user_policy_attachment" "iam-change-password" {
     aws_iam_user.user["JasonBirchall"].name,
     aws_iam_user.user["LeahCios"].name,
     aws_iam_user.user["PaulWyborn"].name,
-    aws_iam_user.user["RohanSalunkhe"].name,
     aws_iam_user.user["SabluMiah"].name,
     aws_iam_user.user["SeanBusby"].name,
     aws_iam_user.user["SteveMarshall"].name
