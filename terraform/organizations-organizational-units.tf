@@ -78,6 +78,11 @@ resource "aws_organizations_organizational_unit" "laa" {
   parent_id = aws_organizations_organization.default.roots[0].id
 }
 
+resource "aws_organizations_policy_attachment" "laa" {
+  policy_id = aws_organizations_policy.deny-cloudtrail-delete-stop-update-policy.id
+  target_id = aws_organizations_organizational_unit.laa.id
+}
+
 # Central Digital
 resource "aws_organizations_organizational_unit" "central-digital" {
   name      = "Central Digital"
