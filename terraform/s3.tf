@@ -29,6 +29,46 @@ resource "aws_s3_bucket_public_access_block" "aws-root-account-terraform-state" 
 resource "aws_s3_bucket" "moj-cur-reports" {
   bucket = "moj-cur-reports"
   acl    = "private"
+
+  versioning {
+    enabled = true
+  }
+}
+
+resource "aws_s3_bucket_policy" "moj-cur-reports-bucket-policy" {
+  bucket = aws_s3_bucket.moj-cur-reports.bucket
+
+  # 386209384616 is owned and maintained by AWS themselves, to enable
+  # upwards reporting of billing.
+  policy = <<POLICY
+{
+  "Id": "Policy1335892530063",
+  "Statement": [
+    {
+      "Action": [
+        "s3:GetBucketAcl",
+        "s3:GetBucketPolicy"
+      ],
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::386209384616:root"
+      },
+      "Resource": "${aws_s3_bucket.moj-cur-reports.arn}",
+      "Sid": "Stmt1335892150622"
+    },
+    {
+      "Action": "s3:PutObject",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::386209384616:root"
+      },
+      "Resource": "${aws_s3_bucket.moj-cur-reports.arn}/*",
+      "Sid": "Stmt1335892526596"
+    }
+  ],
+  "Version": "2008-10-17"
+}
+POLICY
 }
 
 # S3 buckets in Ireland
