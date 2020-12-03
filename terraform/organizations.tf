@@ -1,5 +1,6 @@
 resource "aws_organizations_organization" "default" {
   aws_service_access_principals = [
+    "reporting.trustedadvisor.amazonaws.com",
     "sso.amazonaws.com"
   ]
   enabled_policy_types = [
