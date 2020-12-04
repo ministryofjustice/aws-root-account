@@ -24,6 +24,11 @@ resource "aws_iam_service_linked_role" "trustedadvisor" {
   description      = "Access for the AWS Trusted Advisor Service to help reduce cost, increase performance, and improve security of your AWS environment."
 }
 
+resource "aws_iam_service_linked_role" "trustedadvisor-reporting" {
+  aws_service_name = "reporting.trustedadvisor.amazonaws.com"
+  description      = "Service Linked Role assumed by Trusted Advisor for multi account reporting."
+}
+
 # Other roles
 ## IAM ReadOnly Access Role
 resource "aws_iam_role" "iam-read-only-access-role" {
