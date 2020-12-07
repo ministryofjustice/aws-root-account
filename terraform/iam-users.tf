@@ -9,7 +9,6 @@ locals {
       aws_iam_group.billing_full_access.name,
       aws_iam_group.iam_user_change_password.name
     ]
-    "claim-crown-court-defence" = []
     "JakeMulley" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
@@ -74,10 +73,7 @@ resource "aws_iam_user" "user" {
   force_destroy = each.key == "ModernisationPlatformOrganisationManagement" ? true : false
 
   ## and this needs to be updated to tag all accounts with specifics
-  tags = each.key == "claim-crown-court-defence" ? {
-    Agency = "crimebillingonline"
-    Owner  = "claim-crown-court-defence"
-  } : {}
+  tags = {}
 }
 
 # IAM User Group Memberships
@@ -94,10 +90,4 @@ resource "aws_iam_user_group_membership" "group_memberships" {
 resource "aws_iam_user_policy_attachment" "terraform-organisation-management-attachment" {
   user       = aws_iam_user.user["ModernisationPlatformOrganisationManagement"].name
   policy_arn = aws_iam_policy.terraform-organisation-management-policy.arn
-}
-
-## aws-readonly-billing-access-policy
-resource "aws_iam_user_policy_attachment" "aws-readonly-billing-access-policy" {
-  user       = aws_iam_user.user["claim-crown-court-defence"].name
-  policy_arn = aws_iam_policy.aws-readonly-billing-access-policy.arn
 }
