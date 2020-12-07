@@ -39,9 +39,6 @@ locals {
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name
     ]
-    "PSPI" = [
-      aws_iam_group.billing_full_access.name
-    ]
     "SabluMiah" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
