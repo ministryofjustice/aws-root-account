@@ -2,23 +2,28 @@ locals {
   all_iam_users_and_groups = {
     "AnthonyBishop" = [
       aws_iam_group.aws_organisations_service_admins.name,
-      aws_iam_group.billing_full_access.name
+      aws_iam_group.billing_full_access.name,
+      aws_iam_group.iam_user_change_password.name
     ]
     "CeriBuck" = [
-      aws_iam_group.billing_full_access.name
+      aws_iam_group.billing_full_access.name,
+      aws_iam_group.iam_user_change_password.name
     ]
     "claim-crown-court-defence" = []
     "JakeMulley" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
-      aws_iam_group.billing_full_access.name
+      aws_iam_group.billing_full_access.name,
+      aws_iam_group.iam_user_change_password.name
     ]
     "JasonBirchall" = [
       aws_iam_group.admins.name,
-      aws_iam_group.aws_organisations_service_admins.name
+      aws_iam_group.aws_organisations_service_admins.name,
+      aws_iam_group.iam_user_change_password.name
     ]
     "LeahCios" = [
-      aws_iam_group.billing_full_access.name
+      aws_iam_group.billing_full_access.name,
+      aws_iam_group.iam_user_change_password.name
     ]
     "MaxLakanu" = [
       aws_iam_group.billing_full_access.name
@@ -27,7 +32,8 @@ locals {
     "PaulWyborn" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
-      aws_iam_group.billing_full_access.name
+      aws_iam_group.billing_full_access.name,
+      aws_iam_group.iam_user_change_password.name
     ]
     "Poornima.Krishnasamy" = [
       aws_iam_group.admins.name,
@@ -38,12 +44,14 @@ locals {
     ]
     "SabluMiah" = [
       aws_iam_group.admins.name,
-      aws_iam_group.aws_organisations_service_admins.name
+      aws_iam_group.aws_organisations_service_admins.name,
+      aws_iam_group.iam_user_change_password.name
     ]
     "SeanBusby" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
-      aws_iam_group.billing_full_access.name
+      aws_iam_group.billing_full_access.name,
+      aws_iam_group.iam_user_change_password.name
     ]
     "SidElangovan" = [
       aws_iam_group.admins.name
@@ -51,7 +59,8 @@ locals {
     "SteveMarshall" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
-      aws_iam_group.billing_full_access.name
+      aws_iam_group.billing_full_access.name,
+      aws_iam_group.iam_user_change_password.name
     ]
   }
 }
@@ -83,23 +92,6 @@ resource "aws_iam_user_group_membership" "group_memberships" {
 
 # IAM User direct policy attachments
 # In the future these should be a group policy attachment, rather than directly attached to users
-
-## IAM Change Password
-resource "aws_iam_user_policy_attachment" "iam-change-password" {
-  for_each = toset([
-    aws_iam_user.user["AnthonyBishop"].name,
-    aws_iam_user.user["CeriBuck"].name,
-    aws_iam_user.user["JakeMulley"].name,
-    aws_iam_user.user["JasonBirchall"].name,
-    aws_iam_user.user["LeahCios"].name,
-    aws_iam_user.user["PaulWyborn"].name,
-    aws_iam_user.user["SabluMiah"].name,
-    aws_iam_user.user["SeanBusby"].name,
-    aws_iam_user.user["SteveMarshall"].name
-  ])
-  user       = each.value
-  policy_arn = "arn:aws:iam::aws:policy/IAMUserChangePassword"
-}
 
 ## terraform-organisation-management-policy
 resource "aws_iam_user_policy_attachment" "terraform-organisation-management-attachment" {
