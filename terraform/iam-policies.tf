@@ -1,36 +1,3 @@
-resource "aws_iam_policy" "aws-readonly-billing-access-policy" {
-  name        = "aws-readonly-billing-access-policy"
-  description = "This policy provides readonly access to AWS Billing Service - Cost Explorer, Billing Data"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "aws-portal:ViewUsage",
-                "aws-portal:ViewBilling",
-                "ce:Get*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Deny",
-            "Action": [
-                "aws-portal:*Account",
-                "aws-portal:*Budget",
-                "aws-portal:ModifyBilling",
-                "aws-portal:*Payment*",
-                "iam:*"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-EOF
-}
-
 resource "aws_iam_policy" "aws-organisations-admin" {
   name        = "AWSOrganisationsAdmin"
   description = ""
