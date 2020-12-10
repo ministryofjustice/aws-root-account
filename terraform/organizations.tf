@@ -1,6 +1,7 @@
 resource "aws_organizations_organization" "default" {
   aws_service_access_principals = [
     "compute-optimizer.amazonaws.com",
+    "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "sso.amazonaws.com"
   ]
