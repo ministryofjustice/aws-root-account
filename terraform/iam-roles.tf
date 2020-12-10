@@ -4,6 +4,10 @@ resource "aws_iam_service_linked_role" "organizations" {
   description      = "Service-linked role used by AWS Organizations to enable integration of other AWS services with Organizations."
 }
 
+resource "aws_iam_service_linked_role" "resource-access-manager" {
+  aws_service_name = "ram.amazonaws.com"
+}
+
 resource "aws_iam_service_linked_role" "securityhub" {
   aws_service_name = "securityhub.amazonaws.com"
   description      = "A service-linked role required for AWS Security Hub to access your resources."
