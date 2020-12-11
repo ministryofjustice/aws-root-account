@@ -3,10 +3,6 @@
 # rather than rely on this in the future.
 data "aws_organizations_organization" "root" {}
 
-# output "account_ids" {
-#   value = local.account_emails
-# }
-
 locals {
   account_emails = {
     for account in data.aws_organizations_organization.root.accounts :
