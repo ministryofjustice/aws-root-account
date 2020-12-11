@@ -1,7 +1,7 @@
 locals {
   tags-hmpps-em = {
     business-unit = "HMPPS"
-    application = "Electronic Monitoring"
+    application   = "Electronic Monitoring"
   }
 }
 
