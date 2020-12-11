@@ -7,5 +7,6 @@ locals {
     is-production = true
     owner         = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
   }
-  caller_identity = data.aws_caller_identity.current
+  caller_identity   = data.aws_caller_identity.current
+  github_repository = "github.com/ministryofjustice/aws-root-account/blob/main/terraform"
 }
