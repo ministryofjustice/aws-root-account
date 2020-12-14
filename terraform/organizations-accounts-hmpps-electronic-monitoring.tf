@@ -1,3 +1,10 @@
+locals {
+  tags-hmpps-em = {
+    business-unit = "HMPPS"
+    application   = "Electronic Monitoring"
+  }
+}
+
 # HMPPS OU: Electronic Monitoring
 resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-dev" {
   name      = "Electronic Monitoring Monitoring&Mapping Dev"
@@ -14,6 +21,8 @@ resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-d
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-monitoring-mapping-dev" {
@@ -36,6 +45,8 @@ resource "aws_organizations_account" "electronic-monitoring-shared-logging" {
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-shared-logging" {
@@ -58,6 +69,8 @@ resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-pre
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-tagging-hardware-pre-prod" {
@@ -80,6 +93,8 @@ resource "aws_organizations_account" "electronic-monitoring-shared-networking-no
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-shared-networking-non-prod" {
@@ -102,6 +117,8 @@ resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-pro
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-tagging-hardware-prod" {
@@ -124,6 +141,8 @@ resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-p
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-monitoring-mapping-pre-prod" {
@@ -146,6 +165,8 @@ resource "aws_organizations_account" "electronic-monitoring-identity-access-mana
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-identity-access-management" {
@@ -168,6 +189,8 @@ resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-t
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-monitoring-mapping-test" {
@@ -190,6 +213,8 @@ resource "aws_organizations_account" "electronic-monitoring-shared-networking" {
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-shared-networking" {
@@ -212,6 +237,8 @@ resource "aws_organizations_account" "electronic-monitoring-tagging-hardware-tes
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-tagging-hardware-test" {
@@ -234,6 +261,8 @@ resource "aws_organizations_account" "electronic-monitoring-protective-monitorin
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-protective-monitoring" {
@@ -256,6 +285,8 @@ resource "aws_organizations_account" "electronic-monitoring-archive-query-servic
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-archive-query-service" {
@@ -278,9 +309,35 @@ resource "aws_organizations_account" "electronic-monitoring-monitoring-mapping-p
       role_name
     ]
   }
+
+  tags = local.tags-hmpps-em
 }
 
 resource "aws_organizations_policy_attachment" "electronic-monitoring-monitoring-mapping-prod" {
   policy_id = "p-FullAWSAccess"
   target_id = aws_organizations_account.electronic-monitoring-monitoring-mapping-prod.id
+}
+
+resource "aws_organizations_account" "electronic-monitoring-infrastructure-dev" {
+  name      = "Electronic Monitoring Infrastructure Dev"
+  email     = local.account_emails["Electronic Monitoring Infrastructure Dev"][0]
+  parent_id = aws_organizations_organizational_unit.hmpps-electronic-monitoring.id
+
+  lifecycle {
+    # If any of these attributes are changed, it attempts to destroy and recreate the account,
+    # so we should ignore the changes to prevent this from happening.
+    ignore_changes = [
+      name,
+      email,
+      iam_user_access_to_billing,
+      role_name
+    ]
+  }
+
+  tags = local.tags-hmpps-em
+}
+
+resource "aws_organizations_policy_attachment" "electronic-monitoring-infrastructure-dev" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.electronic-monitoring-infrastructure-dev.id
 }
