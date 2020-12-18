@@ -3,6 +3,10 @@ resource "aws_iam_service_linked_role" "compute-optimizer" {
   aws_service_name = "compute-optimizer.amazonaws.com"
 }
 
+resource "aws_iam_service_linked_role" "guardduty" {
+  aws_service_name = "guardduty.amazonaws.com"
+}
+
 resource "aws_iam_service_linked_role" "organizations" {
   aws_service_name = "organizations.amazonaws.com"
   description      = "Service-linked role used by AWS Organizations to enable integration of other AWS services with Organizations."
