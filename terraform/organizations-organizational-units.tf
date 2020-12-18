@@ -1,3 +1,14 @@
+# Organisation Management accounts
+resource "aws_organizations_organizational_unit" "organisation-management" {
+  name      = "Organisation Management"
+  parent_id = aws_organizations_organization.default.roots[0].id
+}
+
+resource "aws_organizations_policy_attachment" "organisation-management-ou-full-access" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_organizational_unit.organisation-management.id
+}
+
 # Closed accounts
 resource "aws_organizations_organizational_unit" "closed-accounts" {
   name      = "Closed accounts"
