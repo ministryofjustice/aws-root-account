@@ -1,7 +1,7 @@
 # Analytics Platform OU
 resource "aws_organizations_account" "analytical-platform-development" {
   name      = "Analytical Platform Development"
-  email     = local.account_emails["Analytical Platform Development"][0]
+  email     = local.aws_account_email_addresses["Analytical Platform Development"][0]
   parent_id = aws_organizations_organizational_unit.analytics-platform.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "analytical-platform-development"
 
 resource "aws_organizations_account" "analytics-platform-development" {
   name      = "Analytics Platform Development"
-  email     = local.account_emails["Analytics Platform Development"][0]
+  email     = local.aws_account_email_addresses["Analytics Platform Development"][0]
   parent_id = aws_organizations_organizational_unit.analytics-platform.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "analytics-platform-development" 
 
 resource "aws_organizations_account" "analytical-platform-landing" {
   name      = "Analytical Platform Landing"
-  email     = local.account_emails["Analytical Platform Landing"][0]
+  email     = local.aws_account_email_addresses["Analytical Platform Landing"][0]
   parent_id = aws_organizations_organizational_unit.analytics-platform.id
 
   lifecycle {
@@ -67,7 +67,7 @@ resource "aws_organizations_policy_attachment" "analytical-platform-landing" {
 
 resource "aws_organizations_account" "analytical-platform-production" {
   name      = "Analytical Platform Production"
-  email     = local.account_emails["Analytical Platform Production"][0]
+  email     = local.aws_account_email_addresses["Analytical Platform Production"][0]
   parent_id = aws_organizations_organizational_unit.analytics-platform.id
 
   lifecycle {
@@ -89,7 +89,7 @@ resource "aws_organizations_policy_attachment" "analytical-platform-production" 
 
 resource "aws_organizations_account" "analytical-platform-data-engineering" {
   name      = "Analytical Platform Data Engineering"
-  email     = local.account_emails["Analytical Platform Data Engineering"][0]
+  email     = local.aws_account_email_addresses["Analytical Platform Data Engineering"][0]
   parent_id = aws_organizations_organizational_unit.analytics-platform.id
 
   lifecycle {
@@ -111,7 +111,7 @@ resource "aws_organizations_policy_attachment" "analytical-platform-data-enginee
 
 resource "aws_organizations_account" "moj-analytics-platform" {
   name      = "MoJ Analytics Platform"
-  email     = local.account_emails["MoJ Analytics Platform"][0]
+  email     = local.aws_account_email_addresses["MoJ Analytics Platform"][0]
   parent_id = aws_organizations_organizational_unit.analytics-platform.id
 
   lifecycle {

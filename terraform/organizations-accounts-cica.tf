@@ -7,7 +7,7 @@ locals {
 
 resource "aws_organizations_account" "cica" {
   name      = "CICA"
-  email     = local.account_emails["CICA"][0]
+  email     = local.aws_account_email_addresses["CICA"][0]
   parent_id = aws_organizations_organizational_unit.cica.id
 
   lifecycle {
@@ -31,7 +31,7 @@ resource "aws_organizations_policy_attachment" "cica" {
 
 resource "aws_organizations_account" "cica-development" {
   name      = "CICA Development"
-  email     = local.account_emails["CICA Development"][0]
+  email     = local.aws_account_email_addresses["CICA Development"][0]
   parent_id = aws_organizations_organizational_unit.cica.id
 
   lifecycle {
@@ -55,7 +55,7 @@ resource "aws_organizations_policy_attachment" "cica-development" {
 
 resource "aws_organizations_account" "cica-test-verify" {
   name      = "CICA Test & Verify"
-  email     = local.account_emails["CICA Test & Verify"][0]
+  email     = local.aws_account_email_addresses["CICA Test & Verify"][0]
   parent_id = aws_organizations_organizational_unit.cica.id
 
   lifecycle {
@@ -79,7 +79,7 @@ resource "aws_organizations_policy_attachment" "cica-test-verify" {
 
 resource "aws_organizations_account" "cica-uat" {
   name      = "CICA UAT"
-  email     = local.account_emails["CICA UAT"][0]
+  email     = local.aws_account_email_addresses["CICA UAT"][0]
   parent_id = aws_organizations_organizational_unit.cica.id
 
   lifecycle {

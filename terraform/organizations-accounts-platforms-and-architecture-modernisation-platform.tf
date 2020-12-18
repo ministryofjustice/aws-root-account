@@ -10,7 +10,7 @@ locals {
 
 resource "aws_organizations_account" "modernisation-platform" {
   name      = "Modernisation Platform"
-  email     = local.account_emails["Modernisation Platform"][0]
+  email     = local.aws_account_email_addresses["Modernisation Platform"][0]
   parent_id = aws_organizations_organizational_unit.platforms-and-architecture-modernisation-platform.id
 
   lifecycle {

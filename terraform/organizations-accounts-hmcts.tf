@@ -1,7 +1,7 @@
 # HMCTS OU
 resource "aws_organizations_account" "hmcts-fee-remissions" {
   name      = "HMCTS Fee Remissions"
-  email     = local.account_emails["HMCTS Fee Remissions"][0]
+  email     = local.aws_account_email_addresses["HMCTS Fee Remissions"][0]
   parent_id = aws_organizations_organizational_unit.hmcts.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "hmcts-fee-remissions" {
 
 resource "aws_organizations_account" "manchester-traffic-dev" {
   name      = "Manchester Traffic Dev"
-  email     = local.account_emails["Manchester Traffic Dev"][0]
+  email     = local.aws_account_email_addresses["Manchester Traffic Dev"][0]
   parent_id = aws_organizations_organizational_unit.hmcts.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "manchester-traffic-dev" {
 
 resource "aws_organizations_account" "get-help-with-child-arrangements" {
   name      = "Get help with child arrangements"
-  email     = local.account_emails["Get help with child arrangements"][0]
+  email     = local.aws_account_email_addresses["Get help with child arrangements"][0]
   parent_id = aws_organizations_organizational_unit.hmcts.id
 
   lifecycle {

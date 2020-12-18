@@ -31,7 +31,7 @@ data "aws_secretsmanager_secret_version" "aws_saml" {
   secret_id = aws_secretsmanager_secret.aws_saml.id
 }
 
-# Email addresses for AWS accounts.
+# Email addresses for AWS accounts
 # There is a manually added "template" key for templating email addresses for new accounts configured in this account,
 # so you can do:
 # `email = replace(local.aws_account_email_addresses_template, "{email}", "account-name")`
@@ -43,11 +43,22 @@ resource "aws_secretsmanager_secret" "aws_account_email_addresses" {
   tags        = local.root_account
 }
 
+# We can get all account emails to update the secret, regardless of if they're in Terraform or clickopsed;
+# and keep the list up to date with (new) templated email addresses.
+data "aws_organizations_organization" "root" {}
+
+locals {
+  configured_aws_account_email_addresses = {
+    for account in data.aws_organizations_organization.root.accounts :
+    account.name => account.email...
+  }
+}
+
 resource "aws_secretsmanager_secret_version" "aws_account_email_addresses" {
   secret_id = aws_secretsmanager_secret.aws_account_email_addresses.id
   secret_string = jsonencode(
     merge(
-      local.account_emails,
+      local.configured_aws_account_email_addresses,
       local.aws_account_email_addresses
     )
   )
