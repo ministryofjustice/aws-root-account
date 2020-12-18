@@ -3,7 +3,8 @@ resource "aws_organizations_organization" "default" {
     "compute-optimizer.amazonaws.com",
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
-    "sso.amazonaws.com"
+    "sso.amazonaws.com",
+    "storage-lens.s3.amazonaws.com"
   ]
   enabled_policy_types = [
     "SERVICE_CONTROL_POLICY"
