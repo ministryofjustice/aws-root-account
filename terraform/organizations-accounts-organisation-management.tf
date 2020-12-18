@@ -29,6 +29,11 @@ resource "aws_organizations_account" "organisation-logging" {
   )
 }
 
+resource "aws_organizations_policy_attachment" "organisation-logging" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.organisation-logging.id
+}
+
 # Organisation security account
 resource "aws_organizations_account" "organisation-security" {
   name      = "organisation-security"
@@ -51,4 +56,9 @@ resource "aws_organizations_account" "organisation-security" {
       component = "Security"
     }
   )
+}
+
+resource "aws_organizations_policy_attachment" "organisation-security" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.organisation-security.id
 }
