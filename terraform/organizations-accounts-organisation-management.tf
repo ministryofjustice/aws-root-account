@@ -1,7 +1,11 @@
 locals {
   tags-organisation-management = {
-    business-unit = "Platforms"
-    application   = "Organisation Management"
+    application            = "Organisation Management"
+    business-unit          = "Platforms"
+    infrastructure-support = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
+    is-production          = true
+    owner                  = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
+    source-code            = "github.com/ministryofjustice/aws-root-account"
   }
 }
 

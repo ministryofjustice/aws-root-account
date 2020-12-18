@@ -3,6 +3,10 @@ resource "aws_iam_service_linked_role" "compute-optimizer" {
   aws_service_name = "compute-optimizer.amazonaws.com"
 }
 
+resource "aws_iam_service_linked_role" "guardduty" {
+  aws_service_name = "guardduty.amazonaws.com"
+}
+
 resource "aws_iam_service_linked_role" "organizations" {
   aws_service_name = "organizations.amazonaws.com"
   description      = "Service-linked role used by AWS Organizations to enable integration of other AWS services with Organizations."
@@ -20,6 +24,10 @@ resource "aws_iam_service_linked_role" "securityhub" {
 resource "aws_iam_service_linked_role" "sso" {
   aws_service_name = "sso.amazonaws.com"
   description      = "Service-linked role used by AWS SSO to manage AWS resources, including IAM roles, policies and SAML IdP on your behalf."
+}
+
+resource "aws_iam_service_linked_role" "storage-lens" {
+  aws_service_name = "storage-lens.s3.amazonaws.com"
 }
 
 resource "aws_iam_service_linked_role" "support" {
