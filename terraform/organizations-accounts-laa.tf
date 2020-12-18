@@ -1,7 +1,7 @@
 # LAA OU
 resource "aws_organizations_account" "laa-test" {
   name      = "LAA Test"
-  email     = local.account_emails["LAA Test"][0]
+  email     = local.aws_account_email_addresses["LAA Test"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "laa-test" {
 
 resource "aws_organizations_account" "laa-uat" {
   name      = "LAA UAT"
-  email     = local.account_emails["LAA UAT"][0]
+  email     = local.aws_account_email_addresses["LAA UAT"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "laa-uat" {
 
 resource "aws_organizations_account" "aws-laa" {
   name      = "AWS LAA"
-  email     = local.account_emails["AWS LAA"][0]
+  email     = local.aws_account_email_addresses["AWS LAA"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {
@@ -67,7 +67,7 @@ resource "aws_organizations_policy_attachment" "aws-laa" {
 
 resource "aws_organizations_account" "laa-staging" {
   name      = "LAA Staging"
-  email     = local.account_emails["LAA Staging"][0]
+  email     = local.aws_account_email_addresses["LAA Staging"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {
@@ -89,7 +89,7 @@ resource "aws_organizations_policy_attachment" "laa-staging" {
 
 resource "aws_organizations_account" "legal-aid-agency" {
   name      = "Legal Aid Agency"
-  email     = local.account_emails["Legal Aid Agency"][0]
+  email     = local.aws_account_email_addresses["Legal Aid Agency"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {
@@ -111,7 +111,7 @@ resource "aws_organizations_policy_attachment" "legal-aid-agency" {
 
 resource "aws_organizations_account" "laa-development" {
   name      = "LAA Development"
-  email     = local.account_emails["LAA Development"][0]
+  email     = local.aws_account_email_addresses["LAA Development"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {
@@ -133,7 +133,7 @@ resource "aws_organizations_policy_attachment" "laa-development" {
 
 resource "aws_organizations_account" "laa-cloudtrail" {
   name      = "LAA CloudTrail"
-  email     = local.account_emails["LAA CloudTrail"][0]
+  email     = local.aws_account_email_addresses["LAA CloudTrail"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {
@@ -155,7 +155,7 @@ resource "aws_organizations_policy_attachment" "laa-cloudtrail" {
 
 resource "aws_organizations_account" "laa-production" {
   name      = "LAA Production"
-  email     = local.account_emails["LAA Production"][0]
+  email     = local.aws_account_email_addresses["LAA Production"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {
@@ -177,7 +177,7 @@ resource "aws_organizations_policy_attachment" "laa-production" {
 
 resource "aws_organizations_account" "laa-shared-services" {
   name      = "LAA Shared services"
-  email     = local.account_emails["LAA Shared services"][0]
+  email     = local.aws_account_email_addresses["LAA Shared services"][0]
   parent_id = aws_organizations_organizational_unit.laa.id
 
   lifecycle {

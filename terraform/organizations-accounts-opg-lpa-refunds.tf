@@ -1,7 +1,7 @@
 # OPG OU: LPA Refunds
 resource "aws_organizations_account" "opg-refund-develop" {
   name      = "opg-refund-develop"
-  email     = local.account_emails["opg-refund-develop"][0]
+  email     = local.aws_account_email_addresses["opg-refund-develop"][0]
   parent_id = aws_organizations_organizational_unit.opg-lpa-refunds.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "opg-refund-develop" {
 
 resource "aws_organizations_account" "opg-refund-production" {
   name      = "opg-refund-production"
-  email     = local.account_emails["opg-refund-production"][0]
+  email     = local.aws_account_email_addresses["opg-refund-production"][0]
   parent_id = aws_organizations_organizational_unit.opg-lpa-refunds.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "opg-refund-production" {
 
 resource "aws_organizations_account" "moj-opg-lpa-refunds-development" {
   name      = "MOJ OPG LPA Refunds Development"
-  email     = local.account_emails["MOJ OPG LPA Refunds Development"][0]
+  email     = local.aws_account_email_addresses["MOJ OPG LPA Refunds Development"][0]
   parent_id = aws_organizations_organizational_unit.opg-lpa-refunds.id
 
   lifecycle {
@@ -67,7 +67,7 @@ resource "aws_organizations_policy_attachment" "moj-opg-lpa-refunds-development"
 
 resource "aws_organizations_account" "moj-opg-lpa-refunds-preproduction" {
   name      = "MOJ OPG LPA Refunds Preproduction"
-  email     = local.account_emails["MOJ OPG LPA Refunds Preproduction"][0]
+  email     = local.aws_account_email_addresses["MOJ OPG LPA Refunds Preproduction"][0]
   parent_id = aws_organizations_organizational_unit.opg-lpa-refunds.id
 
   lifecycle {
@@ -89,7 +89,7 @@ resource "aws_organizations_policy_attachment" "moj-opg-lpa-refunds-preproductio
 
 resource "aws_organizations_account" "moj-opg-lpa-refunds-production" {
   name      = "MOJ OPG LPA Refunds Production"
-  email     = local.account_emails["MOJ OPG LPA Refunds Production"][0]
+  email     = local.aws_account_email_addresses["MOJ OPG LPA Refunds Production"][0]
   parent_id = aws_organizations_organizational_unit.opg-lpa-refunds.id
 
   lifecycle {
