@@ -22,6 +22,10 @@ resource "aws_iam_service_linked_role" "sso" {
   description      = "Service-linked role used by AWS SSO to manage AWS resources, including IAM roles, policies and SAML IdP on your behalf."
 }
 
+resource "aws_iam_service_linked_role" "storage-lens" {
+  aws_service_name = "storage-lens.s3.amazonaws.com"
+}
+
 resource "aws_iam_service_linked_role" "support" {
   aws_service_name = "support.amazonaws.com"
   description      = "Enables resource access for AWS to provide billing, administrative and support services"
