@@ -1,7 +1,7 @@
 # OPG OU: DigiCop
 resource "aws_organizations_account" "moj-opg-digicop-production" {
   name      = "MoJ OPG DigiCop Production"
-  email     = local.account_emails["MoJ OPG DigiCop Production"][0]
+  email     = local.aws_account_email_addresses["MoJ OPG DigiCop Production"][0]
   parent_id = aws_organizations_organizational_unit.opg-digicop.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "moj-opg-digicop-production" {
 
 resource "aws_organizations_account" "moj-opg-digicop-development" {
   name      = "MoJ OPG DigiCop Development"
-  email     = local.account_emails["MoJ OPG DigiCop Development"][0]
+  email     = local.aws_account_email_addresses["MoJ OPG DigiCop Development"][0]
   parent_id = aws_organizations_organizational_unit.opg-digicop.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "moj-opg-digicop-development" {
 
 resource "aws_organizations_account" "moj-opg-digicop-preproduction" {
   name      = "MoJ OPG DigiCop Preproduction"
-  email     = local.account_emails["MoJ OPG DigiCop Preproduction"][0]
+  email     = local.aws_account_email_addresses["MoJ OPG DigiCop Preproduction"][0]
   parent_id = aws_organizations_organizational_unit.opg-digicop.id
 
   lifecycle {

@@ -8,7 +8,7 @@ locals {
 # Workplace Technology OU
 resource "aws_organizations_account" "workplace-tech-proof-of-concept-development" {
   name      = "Workplace Tech Proof Of Concept Development"
-  email     = local.account_emails["Workplace Tech Proof Of Concept Development"][0]
+  email     = local.aws_account_email_addresses["Workplace Tech Proof Of Concept Development"][0]
   parent_id = aws_organizations_organizational_unit.workplace-technology.id
 
   lifecycle {
@@ -32,7 +32,7 @@ resource "aws_organizations_policy_attachment" "workplace-tech-proof-of-concept-
 
 resource "aws_organizations_account" "wptpoc" {
   name      = "WPTPOC"
-  email     = local.account_emails["WPTPOC"][0]
+  email     = local.aws_account_email_addresses["WPTPOC"][0]
   parent_id = aws_organizations_organizational_unit.workplace-technology.id
 
   lifecycle {
@@ -56,7 +56,7 @@ resource "aws_organizations_policy_attachment" "wptpoc" {
 
 resource "aws_organizations_account" "moj-official-production" {
   name      = "MOJ Official (Production)"
-  email     = local.account_emails["MOJ Official (Production)"][0]
+  email     = local.aws_account_email_addresses["MOJ Official (Production)"][0]
   parent_id = aws_organizations_organizational_unit.workplace-technology.id
 
   lifecycle {
@@ -80,7 +80,7 @@ resource "aws_organizations_policy_attachment" "moj-official-production" {
 
 resource "aws_organizations_account" "moj-official-pre-production" {
   name      = "MOJ Official (Pre-Production)"
-  email     = local.account_emails["MOJ Official (Pre-Production)"][0]
+  email     = local.aws_account_email_addresses["MOJ Official (Pre-Production)"][0]
   parent_id = aws_organizations_organizational_unit.workplace-technology.id
 
   lifecycle {
@@ -104,7 +104,7 @@ resource "aws_organizations_policy_attachment" "moj-official-pre-production" {
 
 resource "aws_organizations_account" "moj-official-development" {
   name      = "MOJ Official (Development)"
-  email     = local.account_emails["MOJ Official (Development)"][0]
+  email     = local.aws_account_email_addresses["MOJ Official (Development)"][0]
   parent_id = aws_organizations_organizational_unit.workplace-technology.id
 
   lifecycle {
@@ -128,7 +128,7 @@ resource "aws_organizations_policy_attachment" "moj-official-development" {
 
 resource "aws_organizations_account" "moj-official-public-key-infrastructure-dev" {
   name      = "MOJ Official (Public Key Infrastructure Dev)"
-  email     = local.account_emails["MOJ Official (Public Key Infrastructure Dev)"][0]
+  email     = local.aws_account_email_addresses["MOJ Official (Public Key Infrastructure Dev)"][0]
   parent_id = aws_organizations_organizational_unit.workplace-technology.id
 
   lifecycle {
@@ -152,7 +152,7 @@ resource "aws_organizations_policy_attachment" "moj-official-public-key-infrastr
 
 resource "aws_organizations_account" "moj-official-public-key-infrastructure" {
   name      = "MOJ Official (Public Key Infrastructure)"
-  email     = local.account_emails["MOJ Official (Public Key Infrastructure)"][0]
+  email     = local.aws_account_email_addresses["MOJ Official (Public Key Infrastructure)"][0]
   parent_id = aws_organizations_organizational_unit.workplace-technology.id
 
   lifecycle {
@@ -176,7 +176,7 @@ resource "aws_organizations_policy_attachment" "moj-official-public-key-infrastr
 
 resource "aws_organizations_account" "moj-official-shared-services" {
   name      = "MOJ Official (Shared Services)"
-  email     = local.account_emails["MOJ Official (Shared Services)"][0]
+  email     = local.aws_account_email_addresses["MOJ Official (Shared Services)"][0]
   parent_id = aws_organizations_organizational_unit.workplace-technology.id
 
   lifecycle {

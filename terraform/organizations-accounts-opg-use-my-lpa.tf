@@ -1,7 +1,7 @@
 # OPG OU: Use My LPA
 resource "aws_organizations_account" "opg-use-my-lpa-production" {
   name      = "OPG Use My LPA Production"
-  email     = local.account_emails["OPG Use My LPA Production"][0]
+  email     = local.aws_account_email_addresses["OPG Use My LPA Production"][0]
   parent_id = aws_organizations_organizational_unit.opg-use-my-lpa.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "opg-use-my-lpa-production" {
 
 resource "aws_organizations_account" "opg-use-my-lpa-preproduction" {
   name      = "OPG Use My LPA Preproduction"
-  email     = local.account_emails["OPG Use My LPA Preproduction"][0]
+  email     = local.aws_account_email_addresses["OPG Use My LPA Preproduction"][0]
   parent_id = aws_organizations_organizational_unit.opg-use-my-lpa.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "opg-use-my-lpa-preproduction" {
 
 resource "aws_organizations_account" "opg-use-my-lpa-development" {
   name      = "OPG Use My LPA Development"
-  email     = local.account_emails["OPG Use My LPA Development"][0]
+  email     = local.aws_account_email_addresses["OPG Use My LPA Development"][0]
   parent_id = aws_organizations_organizational_unit.opg-use-my-lpa.id
 
   lifecycle {

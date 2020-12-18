@@ -1,7 +1,7 @@
 # OPG OU: Sirius
 resource "aws_organizations_account" "moj-opg-sirius-production" {
   name      = "MoJ OPG Sirius Production"
-  email     = local.account_emails["MoJ OPG Sirius Production"][0]
+  email     = local.aws_account_email_addresses["MoJ OPG Sirius Production"][0]
   parent_id = aws_organizations_organizational_unit.opg-sirius.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "moj-opg-sirius-production" {
 
 resource "aws_organizations_account" "moj-opg-sirius-development" {
   name      = "MoJ OPG Sirius Development"
-  email     = local.account_emails["MoJ OPG Sirius Development"][0]
+  email     = local.aws_account_email_addresses["MoJ OPG Sirius Development"][0]
   parent_id = aws_organizations_organizational_unit.opg-sirius.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "moj-opg-sirius-development" {
 
 resource "aws_organizations_account" "opg-sirius-dev" {
   name      = "opg-sirius-dev"
-  email     = local.account_emails["opg-sirius-dev"][0]
+  email     = local.aws_account_email_addresses["opg-sirius-dev"][0]
   parent_id = aws_organizations_organizational_unit.opg-sirius.id
 
   lifecycle {
@@ -67,7 +67,7 @@ resource "aws_organizations_policy_attachment" "opg-sirius-dev" {
 
 resource "aws_organizations_account" "moj-opg-sirius-preproduction" {
   name      = "MoJ OPG Sirius Preproduction"
-  email     = local.account_emails["MoJ OPG Sirius Preproduction"][0]
+  email     = local.aws_account_email_addresses["MoJ OPG Sirius Preproduction"][0]
   parent_id = aws_organizations_organizational_unit.opg-sirius.id
 
   lifecycle {
@@ -89,7 +89,7 @@ resource "aws_organizations_policy_attachment" "moj-opg-sirius-preproduction" {
 
 resource "aws_organizations_account" "opg-sirius-backup" {
   name      = "OPG Sirius Backup"
-  email     = local.account_emails["OPG Sirius Backup"][0]
+  email     = local.aws_account_email_addresses["OPG Sirius Backup"][0]
   parent_id = aws_organizations_organizational_unit.opg-sirius.id
 
   lifecycle {
@@ -111,7 +111,7 @@ resource "aws_organizations_policy_attachment" "opg-sirius-backup" {
 
 resource "aws_organizations_account" "opg-sirius-production" {
   name      = "OPG Sirius Production"
-  email     = local.account_emails["OPG Sirius Production"][0]
+  email     = local.aws_account_email_addresses["OPG Sirius Production"][0]
   parent_id = aws_organizations_organizational_unit.opg-sirius.id
 
   lifecycle {

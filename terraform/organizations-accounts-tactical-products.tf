@@ -1,7 +1,7 @@
 # Tactical Products OU
 resource "aws_organizations_account" "tp-hmcts" {
   name      = "TP-HMCTS"
-  email     = local.account_emails["TP-HMCTS"][0]
+  email     = local.aws_account_email_addresses["TP-HMCTS"][0]
   parent_id = aws_organizations_organizational_unit.tactical-products.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "tp-hmcts" {
 
 resource "aws_organizations_account" "tacticalproducts" {
   name      = "tacticalproducts"
-  email     = local.account_emails["tacticalproducts"][0]
+  email     = local.aws_account_email_addresses["tacticalproducts"][0]
   parent_id = aws_organizations_organizational_unit.tactical-products.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "tacticalproducts" {
 
 resource "aws_organizations_account" "tp-alb" {
   name      = "TP-ALB"
-  email     = local.account_emails["TP-ALB"][0]
+  email     = local.aws_account_email_addresses["TP-ALB"][0]
   parent_id = aws_organizations_organizational_unit.tactical-products.id
 
   lifecycle {
@@ -67,7 +67,7 @@ resource "aws_organizations_policy_attachment" "tp-alb" {
 
 resource "aws_organizations_account" "moj-intranet" {
   name      = "MOJ Intranet"
-  email     = local.account_emails["MOJ Intranet"][0]
+  email     = local.aws_account_email_addresses["MOJ Intranet"][0]
   parent_id = aws_organizations_organizational_unit.tactical-products.id
 
   lifecycle {
@@ -89,7 +89,7 @@ resource "aws_organizations_policy_attachment" "moj-intranet" {
 
 resource "aws_organizations_account" "ministry-of-justice-courtfinder-prod" {
   name      = "Ministry of Justice Courtfinder Prod"
-  email     = local.account_emails["Ministry of Justice Courtfinder Prod"][0]
+  email     = local.aws_account_email_addresses["Ministry of Justice Courtfinder Prod"][0]
   parent_id = aws_organizations_organizational_unit.tactical-products.id
 
   lifecycle {
@@ -111,7 +111,7 @@ resource "aws_organizations_policy_attachment" "ministry-of-justice-courtfinder-
 
 resource "aws_organizations_account" "tp-hq" {
   name      = "TP-HQ"
-  email     = local.account_emails["TP-HQ"][0]
+  email     = local.aws_account_email_addresses["TP-HQ"][0]
   parent_id = aws_organizations_organizational_unit.tactical-products.id
 
   lifecycle {
@@ -133,7 +133,7 @@ resource "aws_organizations_policy_attachment" "tp-hq" {
 
 resource "aws_organizations_account" "moj-info-services-dev" {
   name      = "MoJ Info Services Dev"
-  email     = local.account_emails["MoJ Info Services Dev"][0]
+  email     = local.aws_account_email_addresses["MoJ Info Services Dev"][0]
   parent_id = aws_organizations_organizational_unit.tactical-products.id
 
   lifecycle {

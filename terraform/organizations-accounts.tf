@@ -1,19 +1,7 @@
-# This is a slightly hacky way to get email addresses for already configured accounts.
-# We should store all (including new) account email addresses in AWS Secrets Manager,
-# rather than rely on this in the future.
-data "aws_organizations_organization" "root" {}
-
-locals {
-  account_emails = {
-    for account in data.aws_organizations_organization.root.accounts :
-    account.name => account.email...
-  }
-}
-
 # Accounts that sit within the root OU. This doesn't include the actual root account.
 resource "aws_organizations_account" "bichard7-2020-prototype" {
   name      = "Bichard7 2020 Prototype"
-  email     = local.account_emails["Bichard7 2020 Prototype"][0]
+  email     = local.aws_account_email_addresses["Bichard7 2020 Prototype"][0]
   parent_id = aws_organizations_organization.default.roots[0].id
 
   lifecycle {
@@ -35,7 +23,7 @@ resource "aws_organizations_policy_attachment" "bichard7-2020-prototype" {
 
 resource "aws_organizations_account" "moj-billing-management" {
   name      = "MoJ Billing Management"
-  email     = local.account_emails["MoJ Billing Management"][0]
+  email     = local.aws_account_email_addresses["MoJ Billing Management"][0]
   parent_id = aws_organizations_organization.default.roots[0].id
 
   lifecycle {

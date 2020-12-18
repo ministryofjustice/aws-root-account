@@ -1,7 +1,7 @@
 # HMPPS OU: Delius
 resource "aws_organizations_account" "alfresco-non-prod" {
   name      = "Alfresco non-prod"
-  email     = local.account_emails["Alfresco non-prod"][0] # TODO: Move this into AWS Secrets Manager
+  email     = local.aws_account_email_addresses["Alfresco non-prod"][0] # TODO: Move this into AWS Secrets Manager
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_organizations_policy_attachment" "alfresco-non-prod" {
 
 resource "aws_organizations_account" "hmpps-delius-training" {
   name      = "HMPPS Delius Training"
-  email     = local.account_emails["HMPPS Delius Training"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius Training"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -45,7 +45,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-training" {
 
 resource "aws_organizations_account" "hmpps-delius-mis-test" {
   name      = "HMPPS Delius MIS Test"
-  email     = local.account_emails["HMPPS Delius MIS Test"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius MIS Test"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -67,7 +67,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-mis-test" {
 
 resource "aws_organizations_account" "delius-new-tech-non-prod" {
   name      = "Delius New Tech non-prod"
-  email     = local.account_emails["Delius New Tech non-prod"][0]
+  email     = local.aws_account_email_addresses["Delius New Tech non-prod"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -89,7 +89,7 @@ resource "aws_organizations_policy_attachment" "delius-new-tech-non-prod" {
 
 resource "aws_organizations_account" "hmpps-delius-training-test" {
   name      = "HMPPS Delius Training Test"
-  email     = local.account_emails["HMPPS Delius Training Test"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius Training Test"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -111,7 +111,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-training-test" {
 
 resource "aws_organizations_account" "hmpps-delius-pre-production" {
   name      = "HMPPS Delius Pre Production"
-  email     = local.account_emails["HMPPS Delius Pre Production"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius Pre Production"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -133,7 +133,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-pre-production" {
 
 resource "aws_organizations_account" "hmpps-delius-po-test" {
   name      = "HMPPS Delius PO Test"
-  email     = local.account_emails["HMPPS Delius PO Test"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius PO Test"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -155,7 +155,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-po-test" {
 
 resource "aws_organizations_account" "hmpps-delius-mis-non-prod" {
   name      = "HMPPS Delius MIS non prod"
-  email     = local.account_emails["HMPPS Delius MIS non prod"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius MIS non prod"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -177,7 +177,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-mis-non-prod" {
 
 resource "aws_organizations_account" "hmpps-delius-po-test-1" {
   name      = "HMPPS Delius PO Test 1"
-  email     = local.account_emails["HMPPS Delius PO Test 1"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius PO Test 1"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -199,7 +199,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-po-test-1" {
 
 resource "aws_organizations_account" "delius-core-non-prod" {
   name      = "Delius Core non-prod"
-  email     = local.account_emails["Delius Core non-prod"][0]
+  email     = local.aws_account_email_addresses["Delius Core non-prod"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -221,7 +221,7 @@ resource "aws_organizations_policy_attachment" "delius-core-non-prod" {
 
 resource "aws_organizations_account" "probation-management-non-prod" {
   name      = "Probation Management non-prod"
-  email     = local.account_emails["Probation Management non-prod"][0]
+  email     = local.aws_account_email_addresses["Probation Management non-prod"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -243,7 +243,7 @@ resource "aws_organizations_policy_attachment" "probation-management-non-prod" {
 
 resource "aws_organizations_account" "hmpps-delius-stage" {
   name      = "HMPPS Delius Stage"
-  email     = local.account_emails["HMPPS Delius Stage"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius Stage"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -265,7 +265,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-stage" {
 
 resource "aws_organizations_account" "hmpps-delius-test" {
   name      = "HMPPS Delius Test"
-  email     = local.account_emails["HMPPS Delius Test"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius Test"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -287,7 +287,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-test" {
 
 resource "aws_organizations_account" "hmpps-delius-po-test-2" {
   name      = "HMPPS Delius PO Test 2"
-  email     = local.account_emails["HMPPS Delius PO Test 2"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius PO Test 2"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
@@ -309,7 +309,7 @@ resource "aws_organizations_policy_attachment" "hmpps-delius-po-test-2" {
 
 resource "aws_organizations_account" "hmpps-delius-performance" {
   name      = "HMPPS Delius Performance"
-  email     = local.account_emails["HMPPS Delius Performance"][0]
+  email     = local.aws_account_email_addresses["HMPPS Delius Performance"][0]
   parent_id = aws_organizations_organizational_unit.hmpps-delius.id
 
   lifecycle {
