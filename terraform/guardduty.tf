@@ -42,10 +42,10 @@ resource "aws_guardduty_member" "root-account" {
   # We want to add this account as a member within the Organisation Security account
   provider = aws.organisation-security-eu-west-2
 
-  account_id         = local.caller_identity.account_id
-  detector_id        = aws_guardduty_detector.organisation-security-eu-west-2.id
-  email              = "fake@email.com"
-  invite             = true
+  account_id  = local.caller_identity.account_id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  email       = "fake@email.com"
+  invite      = true
 
   # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
   # as privilege is inferred by the fact that the account is already within Organizations.
@@ -62,10 +62,10 @@ resource "aws_guardduty_member" "organisation-logging" {
   # We want to add this account as a member within the Organisation Security account
   provider = aws.organisation-security-eu-west-2
 
-  account_id         = aws_organizations_account.organisation-logging.id
-  detector_id        = aws_guardduty_detector.organisation-security-eu-west-2.id
-  email              = "fake@email.com"
-  invite             = true
+  account_id  = aws_organizations_account.organisation-logging.id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  email       = "fake@email.com"
+  invite      = true
 
   # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
   # as privilege is inferred by the fact that the account is already within Organizations.
