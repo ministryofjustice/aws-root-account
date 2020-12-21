@@ -38,10 +38,11 @@ resource "aws_guardduty_detector" "organisation-security-eu-west-2" {
 # This is currently done one-by-one as we need to onboard people singularly rather than all at once.
 # In the future we can replace all of this with a for_each
 
+# MOJ root account
 resource "aws_guardduty_member" "root-account" {
-  # We want to add this account as a member within the Organisation Security account
   provider = aws.organisation-security-eu-west-2
 
+  # We want to add this account as a member within the Organisation Security account
   account_id  = local.caller_identity.account_id
   detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
   email       = "fake@email.com"
@@ -58,11 +59,133 @@ resource "aws_guardduty_member" "root-account" {
   }
 }
 
+# organisation-logging account
 resource "aws_guardduty_member" "organisation-logging" {
-  # We want to add this account as a member within the Organisation Security account
   provider = aws.organisation-security-eu-west-2
 
+  # We want to add this account as a member within the Organisation Security account
   account_id  = aws_organizations_account.organisation-logging.id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  email       = "fake@email.com"
+  invite      = true
+
+  # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
+  # as privilege is inferred by the fact that the account is already within Organizations.
+  # However, once a relationship is established, the GuardDuty API returns an email address, so Terraform returns a drift.
+  # Therefore, we can ignore_changes to an email address. You still need to provide one, though, so we use fake@email.com.
+  lifecycle {
+    ignore_changes = [
+      email
+    ]
+  }
+}
+
+# MOJ Official accounts
+resource "aws_guardduty_member" "moj-official-production" {
+  provider = aws.organisation-security-eu-west-2
+
+  # We want to add this account as a member within the Organisation Security account
+  account_id  = aws_organizations_account.moj-official-production.id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  email       = "fake@email.com"
+  invite      = true
+
+  # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
+  # as privilege is inferred by the fact that the account is already within Organizations.
+  # However, once a relationship is established, the GuardDuty API returns an email address, so Terraform returns a drift.
+  # Therefore, we can ignore_changes to an email address. You still need to provide one, though, so we use fake@email.com.
+  lifecycle {
+    ignore_changes = [
+      email
+    ]
+  }
+}
+
+resource "aws_guardduty_member" "moj-official-pre-production" {
+  provider = aws.organisation-security-eu-west-2
+
+  # We want to add this account as a member within the Organisation Security account
+  account_id  = aws_organizations_account.moj-official-pre-production.id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  email       = "fake@email.com"
+  invite      = true
+
+  # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
+  # as privilege is inferred by the fact that the account is already within Organizations.
+  # However, once a relationship is established, the GuardDuty API returns an email address, so Terraform returns a drift.
+  # Therefore, we can ignore_changes to an email address. You still need to provide one, though, so we use fake@email.com.
+  lifecycle {
+    ignore_changes = [
+      email
+    ]
+  }
+}
+
+resource "aws_guardduty_member" "moj-official-development" {
+  provider = aws.organisation-security-eu-west-2
+
+  # We want to add this account as a member within the Organisation Security account
+  account_id  = aws_organizations_account.moj-official-development.id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  email       = "fake@email.com"
+  invite      = true
+
+  # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
+  # as privilege is inferred by the fact that the account is already within Organizations.
+  # However, once a relationship is established, the GuardDuty API returns an email address, so Terraform returns a drift.
+  # Therefore, we can ignore_changes to an email address. You still need to provide one, though, so we use fake@email.com.
+  lifecycle {
+    ignore_changes = [
+      email
+    ]
+  }
+}
+
+resource "aws_guardduty_member" "moj-official-public-key-infrastructure-dev" {
+  provider = aws.organisation-security-eu-west-2
+
+  # We want to add this account as a member within the Organisation Security account
+  account_id  = aws_organizations_account.moj-official-public-key-infrastructure-dev.id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  email       = "fake@email.com"
+  invite      = true
+
+  # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
+  # as privilege is inferred by the fact that the account is already within Organizations.
+  # However, once a relationship is established, the GuardDuty API returns an email address, so Terraform returns a drift.
+  # Therefore, we can ignore_changes to an email address. You still need to provide one, though, so we use fake@email.com.
+  lifecycle {
+    ignore_changes = [
+      email
+    ]
+  }
+}
+
+resource "aws_guardduty_member" "moj-official-public-key-infrastructure" {
+  provider = aws.organisation-security-eu-west-2
+
+  # We want to add this account as a member within the Organisation Security account
+  account_id  = aws_organizations_account.moj-official-public-key-infrastructure.id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  email       = "fake@email.com"
+  invite      = true
+
+  # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
+  # as privilege is inferred by the fact that the account is already within Organizations.
+  # However, once a relationship is established, the GuardDuty API returns an email address, so Terraform returns a drift.
+  # Therefore, we can ignore_changes to an email address. You still need to provide one, though, so we use fake@email.com.
+  lifecycle {
+    ignore_changes = [
+      email
+    ]
+  }
+}
+
+resource "aws_guardduty_member" "moj-official-shared-services" {
+  provider = aws.organisation-security-eu-west-2
+
+  # We want to add this account as a member within the Organisation Security account
+  account_id  = aws_organizations_account.moj-official-shared-services.id
   detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
   email       = "fake@email.com"
   invite      = true
