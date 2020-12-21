@@ -8,7 +8,7 @@
 # - eu-west-2 (guardduty.tf)
 # - eu-west-1 (guardduty-eu-west-1.tf)
 locals {
-  enrolled_into_guardduty = [
+  enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
     aws_organizations_account.modernisation-platform,
     aws_organizations_account.moj-official-development,
@@ -24,7 +24,7 @@ locals {
     aws_organizations_account.moj-opg-shared-production,
     aws_organizations_account.opg-shared,
     aws_organizations_account.organisation-logging
-  ]
+  ], local.modernisation-platform-managed-account-ids)
 }
 
 ##############################
