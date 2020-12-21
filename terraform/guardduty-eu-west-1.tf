@@ -1,32 +1,12 @@
-# Accounts to attach from the AWS Organization
-# This is currently done by adding accounts on a one-by-one basis as
-# we need to onboard people singularly rather than all at once.
-# In the future we can replace all of this with a for_each on a
-# data.aws_organizations_organization.example.accounts[*].id data resource,
-# and auto_enable will be turned on so new accounts won't need to be added here.
-# Any account added here in the meanwhile will have GuardDuty enabled in:
-# - eu-west-2 (guardduty.tf)
-# - eu-west-1 (guardduty-eu-west-1.tf)
-locals {
-  enrolled_into_guardduty = [
-    { id = local.caller_identity.account_id, name = "MoJ root account" },
-    aws_organizations_account.organisation-logging,
-    aws_organizations_account.moj-official-production,
-    aws_organizations_account.moj-official-pre-production,
-    aws_organizations_account.moj-official-development,
-    aws_organizations_account.moj-official-public-key-infrastructure-dev,
-    aws_organizations_account.moj-official-public-key-infrastructure,
-    aws_organizations_account.moj-official-shared-services,
-    aws_organizations_account.modernisation-platform
-  ]
-}
-
 ##############################
-# GuardDuty within eu-west-2 #
+# GuardDuty within eu-west-1 #
 ##############################
 
-# Enable GuardDuty for the default provider region, which is required to delegate a GuardDuty administrator
-resource "aws_guardduty_detector" "default-region" {
+# Enable GuardDuty for eu-west-1 (Ireland)
+resource "aws_guardduty_detector" "eu-west-1" {
+  # Set provider to eu-west-1
+  provider = aws.aws-root-account-eu-west-1
+
   # Set enable to false if you want to suspend GuardDuty.
   # This allows you to keep historical findings rather than removing the resource
   # block, which will destroy all historical findings
@@ -35,19 +15,22 @@ resource "aws_guardduty_detector" "default-region" {
   tags = local.root_account
 }
 
-# Delegate administratorship of GuardDuty to the organisation-security account for the default provider region
-resource "aws_guardduty_organization_admin_account" "default-region-administrator" {
+# Delegate administratorship of GuardDuty to the organisation-security account for the eu-west-1 region
+resource "aws_guardduty_organization_admin_account" "eu-west-1-administrator" {
+  # Set provider to eu-west-1
+  provider = aws.aws-root-account-eu-west-1
+
   depends_on       = [aws_organizations_organization.default]
   admin_account_id = aws_organizations_account.organisation-security.id
 }
 
 ####################################
-# GuardDuty detector for eu-west-2 #
+# GuardDuty detector for eu-west-1 #
 ####################################
 
 # The detector is automatically created by AWS, so we need to import it before Terraform will manage it
-resource "aws_guardduty_detector" "organisation-security-eu-west-2" {
-  provider = aws.organisation-security-eu-west-2
+resource "aws_guardduty_detector" "organisation-security-eu-west-1" {
+  provider = aws.organisation-security-eu-west-1
 
   # Set enable to false if you want to suspend GuardDuty.
   # This allows you to keep historical findings rather than removing the resource
@@ -66,19 +49,22 @@ resource "aws_guardduty_detector" "organisation-security-eu-west-2" {
 }
 
 ################################
-# Member accounts in eu-west-2 #
+# Member accounts in eu-west-1 #
 ################################
 
-resource "aws_guardduty_member" "eu-west-2" {
+# Note: The local used for the for_each is defined in
+# guardduty.tf
+
+resource "aws_guardduty_member" "eu-west-1" {
   for_each = {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
-  provider = aws.organisation-security-eu-west-2
+  provider = aws.organisation-security-eu-west-1
 
   # We want to add these accounts as members within the Organisation Security account
   account_id  = each.value
-  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
+  detector_id = aws_guardduty_detector.organisation-security-eu-west-1.id
   email       = "fake@email.com"
   invite      = true
 
