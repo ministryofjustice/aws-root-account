@@ -10,14 +10,20 @@
 locals {
   enrolled_into_guardduty = [
     { id = local.caller_identity.account_id, name = "MoJ root account" },
-    aws_organizations_account.organisation-logging,
-    aws_organizations_account.moj-official-production,
-    aws_organizations_account.moj-official-pre-production,
+    aws_organizations_account.modernisation-platform,
     aws_organizations_account.moj-official-development,
-    aws_organizations_account.moj-official-public-key-infrastructure-dev,
+    aws_organizations_account.moj-official-pre-production,
+    aws_organizations_account.moj-official-production,
     aws_organizations_account.moj-official-public-key-infrastructure,
+    aws_organizations_account.moj-official-public-key-infrastructure-dev,
     aws_organizations_account.moj-official-shared-services,
-    aws_organizations_account.modernisation-platform
+    aws_organizations_account.moj-opg-identity,
+    aws_organizations_account.moj-opg-management,
+    aws_organizations_account.moj-opg-sandbox,
+    aws_organizations_account.moj-opg-shared-development,
+    aws_organizations_account.moj-opg-shared-production,
+    aws_organizations_account.opg-shared,
+    aws_organizations_account.organisation-logging
   ]
 }
 
