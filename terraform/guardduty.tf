@@ -20,7 +20,6 @@ locals {
     aws_organizations_account.organisation-logging,
     aws_organizations_account.moj-opg-identity,
     aws_organizations_account.moj-opg-management,
-    aws_organizations_account.moj-opg-management,
     aws_organizations_account.moj-opg-sandbox,
     aws_organizations_account.moj-opg-shared-development,
     aws_organizations_account.moj-opg-shared-production,
