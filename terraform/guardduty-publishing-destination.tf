@@ -124,7 +124,11 @@ resource "aws_s3_bucket" "guardduty-bucket" {
     enabled = true
   }
 
-  tags = local.root_account
+  tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+    }
+  )
 }
 
 resource "aws_s3_bucket_policy" "guardduty-bucket-policy" {
@@ -181,5 +185,9 @@ resource "aws_kms_key" "guardduty" {
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.guardduty-kms-key-policy.json
 
-  tags = local.root_account
+  tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+    }
+  )
 }
