@@ -48,6 +48,22 @@ resource "aws_guardduty_detector" "organisation-security-eu-west-1" {
   )
 }
 
+##################################################
+# GuardDuty publishing destination for eu-west-1 #
+##################################################
+
+resource "aws_guardduty_publishing_destination" "eu-west-1" {
+  provider = aws.organisation-security-eu-west-1
+
+  detector_id     = aws_guardduty_detector.organisation-security-eu-west-1.id
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  depends_on = [
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
 ################################
 # Member accounts in eu-west-1 #
 ################################

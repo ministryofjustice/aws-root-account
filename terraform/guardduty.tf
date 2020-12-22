@@ -7,6 +7,9 @@
 # Any account added here in the meanwhile will have GuardDuty enabled in:
 # - eu-west-2 (guardduty.tf)
 # - eu-west-1 (guardduty-eu-west-1.tf)
+#
+# The configuration for the publishing destination is in guardduty-publishing-destination.tf,
+# which has an eu-west-2 bucket that all regional GuardDuty configurations publish to.
 locals {
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
@@ -69,6 +72,22 @@ resource "aws_guardduty_detector" "organisation-security-eu-west-2" {
       component = "Security"
     }
   )
+}
+
+##################################################
+# GuardDuty publishing destination for eu-west-2 #
+##################################################
+
+resource "aws_guardduty_publishing_destination" "eu-west-2" {
+  provider = aws.organisation-security-eu-west-2
+
+  detector_id     = aws_guardduty_detector.organisation-security-eu-west-2.id
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  depends_on = [
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
 }
 
 ################################
