@@ -8,9 +8,9 @@
 
 ## Mandatory tags
 resource "aws_organizations_policy" "mandatory-tags" {
-  name = "mandatory-tags"
+  name        = "mandatory-tags"
   description = "A tag policy for mandatory tags as listed in the MoJ Technical Guidance."
-  type = "TAG_POLICY"
+  type        = "TAG_POLICY"
 
   content = <<CONTENT
 {
@@ -59,9 +59,9 @@ CONTENT
 
 ## Optional tags
 resource "aws_organizations_policy" "optional-tags" {
-  name = "optional-tags"
+  name        = "optional-tags"
   description = "A tag policy for optional tags as listed in the MoJ Technical Guidance."
-  type = "TAG_POLICY"
+  type        = "TAG_POLICY"
 
   content = <<CONTENT
 {
