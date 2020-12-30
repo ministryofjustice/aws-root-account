@@ -26,7 +26,9 @@ locals {
     aws_organizations_account.moj-opg-shared-development,
     aws_organizations_account.moj-opg-shared-production,
     aws_organizations_account.opg-shared,
-    aws_organizations_account.organisation-logging
+    aws_organizations_account.organisation-logging,
+    aws_organizations_account.workplace-tech-proof-of-concept-development,
+    aws_organizations_account.wptpoc
   ], local.modernisation-platform-managed-account-ids)
 }
 
