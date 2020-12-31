@@ -120,7 +120,7 @@ resource "aws_config_configuration_aggregator" "aggregator" {
   account_aggregation_source {
     account_ids = [
       for account in local.enrolled_into_config :
-        account.id
+      account.id
     ]
     regions = ["eu-west-2", "eu-west-1"]
   }
