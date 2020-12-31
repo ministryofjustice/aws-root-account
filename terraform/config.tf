@@ -1,34 +1,21 @@
-##############################
-# Config within eu-west-2    #
-##############################
+# AWS Config IAM role with necessary permissions to send resource changes to
+# an aggregation S3 bucket, configured in config-aggregation.tf within the
+# organisation-security account.
+module "config-iam-role" {
+  source = "./modules/config-iam-role"
 
-# Enable Config for the default provider region
-resource "aws_config_delivery_channel" "default-region" {
-  name           = "AWSConfig"
-  s3_bucket_name = aws_s3_bucket.config-bucket.id
-  sns_topic_arn  = aws_sns_topic.config-sns-topic-eu-west-2.arn
-
-  snapshot_delivery_properties {
-    delivery_frequency = "TwentyFour_Hours"
-  }
-
-  depends_on = [aws_config_configuration_recorder.default-region]
+  s3_bucket_arn = module.config-aggregation-bucket.s3_bucket_arn
+  sns_topic_arns = [
+    module.config-aggregation-sns-eu-west-2.sns_topic_arn
+  ]
 }
 
-resource "aws_config_configuration_recorder" "default-region" {
-  name     = "AWSConfig"
-  role_arn = aws_iam_role.config.arn
+# Enable Config for the default region in the AWS root account
+module "config-default-region" {
+  source = "./modules/config"
 
-  recording_group {
-    all_supported = true
-    # Enable global resource types for the default (home) region
-    # For other regions, you should set it to false to reduce cost and duplication
-    include_global_resource_types = true
-  }
-}
-
-resource "aws_config_configuration_recorder_status" "default-region" {
-  name       = "AWSConfig"
-  is_enabled = true
-  depends_on = [aws_config_delivery_channel.default-region]
+  s3_bucket_name = module.config-aggregation-bucket.s3_bucket_name
+  sns_topic_arn  = module.config-aggregation-sns-eu-west-2.sns_topic_arn
+  iam_role_arn   = module.config-iam-role.role_arn
+  home_region    = "eu-west-2"
 }
