@@ -33,11 +33,13 @@ resource "aws_organizations_policy" "deny-cloudtrail-delete-stop-update-policy" 
   tags = {
     business-unit = "LAA"
     component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "organizations-service-control-policies.tf"])
+    source-code   = join("", [local.github_repository, "/organizations-service-control-policies.tf"])
   }
 }
 
 # Denies operations outside the EU for regional services and us-east-1 for global services
+# and denies the ability to enable and deactivate regions
+#
 # This policy is a more generalised version of the AWS example:
 # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html#examples_general
 #
@@ -46,6 +48,7 @@ resource "aws_organizations_policy" "deny-cloudtrail-delete-stop-update-policy" 
 data "aws_iam_policy_document" "deny-non-eu-non-us-east-1-operations" {
   version = "2012-10-17"
 
+  # Deny operations outside of non-default EU regions
   statement {
     effect    = "Deny"
     actions   = ["*"]
@@ -57,7 +60,6 @@ data "aws_iam_policy_document" "deny-non-eu-non-us-east-1-operations" {
       values = [
         "eu-central-1", # Europe (Frankfurt)
         "eu-north-1",   # Europe (Stockholm)
-        "eu-south-1",   # Europe (Milan)
         "eu-west-1",    # Europe (Ireland)
         "eu-west-2",    # Europe (London)
         "eu-west-3",    # Europe (Paris)
@@ -65,18 +67,29 @@ data "aws_iam_policy_document" "deny-non-eu-non-us-east-1-operations" {
       ]
     }
   }
+
+  # Deny enablement and disactivation of AWS opt-in regions
+  # including: Africa (Cape Town), Asia Pacific (Hong Kong), Europe (Milan), Middle East (Bahrain)
+  statement {
+    effect = "Deny"
+    actions = [
+      "account:DisableRegion",
+      "account:EnableRegion"
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_organizations_policy" "deny-non-eu-non-us-east-1-operations" {
   name        = "Deny non-EU and non-\"us-east-1\" operations"
-  description = "Denies any API calls to non-EU and non-\"us-east-1\" regions. us-east-1 is included here as it hosts global services."
+  description = "Denies any API calls to non-default EU and non-\"us-east-1\" regions, and denies the ability to enable and deactivate opt-in regions. us-east-1 is included here as it hosts global services."
   type        = "SERVICE_CONTROL_POLICY"
   content     = data.aws_iam_policy_document.deny-non-eu-non-us-east-1-operations.json
 
   tags = {
     business-unit = "Platforms"
     component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "organizations-service-control-policies.tf"])
+    source-code   = join("", [local.github_repository, "/organizations-service-control-policies.tf"])
   }
 }
 
