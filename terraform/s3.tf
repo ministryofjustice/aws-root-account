@@ -20,9 +20,19 @@ resource "aws_s3_bucket" "aws-root-account-terraform-state" {
 }
 
 resource "aws_s3_bucket_public_access_block" "aws-root-account-terraform-state" {
-  bucket              = aws_s3_bucket.aws-root-account-terraform-state.id
-  block_public_acls   = true
+  bucket = aws_s3_bucket.aws-root-account-terraform-state.id
+
+  # Block public ACLs
+  block_public_acls = true
+
+  # Block public bucket policies
   block_public_policy = true
+
+  # Ignore public ACLs
+  ignore_public_acls = true
+
+  # Restrict public bucket policies
+  restrict_public_buckets = true
 }
 
 ## S3 bucket for moj-cur-reports

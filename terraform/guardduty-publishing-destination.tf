@@ -131,6 +131,25 @@ resource "aws_s3_bucket" "guardduty-bucket" {
   )
 }
 
+resource "aws_s3_bucket_public_access_block" "guardduty-bucket-public-access-block" {
+  # Set the provider to organisation-security, as that's where we manage GuardDuty
+  provider = aws.organisation-security-eu-west-2
+
+  bucket = aws_s3_bucket.guardduty-bucket.id
+
+  # Block public ACLs
+  block_public_acls = true
+
+  # Block public bucket policies
+  block_public_policy = true
+
+  # Ignore public ACLs
+  ignore_public_acls = true
+
+  # Restrict public bucket policies
+  restrict_public_buckets = true
+}
+
 resource "aws_s3_bucket_policy" "guardduty-bucket-policy" {
   # Set the provider to organisation-security, as that's where we manage GuardDuty
   provider = aws.organisation-security-eu-west-2
