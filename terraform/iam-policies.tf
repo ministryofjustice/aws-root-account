@@ -1,57 +1,43 @@
+# AWS Organisations admin
+data "aws_iam_policy_document" "aws-organisations-admin" {
+  version = "2012-10-17"
+
+  # Allow everything in organizations:*
+  statement {
+    effect    = "Allow"
+    actions   = ["organizations:*"]
+    resources = ["*"]
+  }
+
+  # But deny deletion in organizations:*
+  statement {
+    effect    = "Deny"
+    actions   = ["organizations:Delete*"]
+    resources = ["*"]
+  }
+}
+
 resource "aws_iam_policy" "aws-organisations-admin" {
   name        = "AWSOrganisationsAdmin"
   description = ""
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "Stmt1508750778000",
-            "Effect": "Allow",
-            "Action": [
-                "organizations:*"
-            ],
-            "Resource": [
-                "*"
-            ]
-        },
-        {
-            "Sid": "Stmt1508750117000",
-            "Effect": "Deny",
-            "Action": [
-                "organizations:Delete*"
-            ],
-            "Resource": [
-                "*"
-            ]
-        }
-    ]
+  policy      = data.aws_iam_policy_document.aws-organisations-admin.json
 }
-EOF
+
+# AWS Billing full access
+data "aws_iam_policy_document" "billing-full-access" {
+  version = "2012-10-17"
+
+  statement {
+    effect    = "Allow"
+    actions   = ["aws-portal:*"]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "billing-full-access" {
   name        = "BillingFullAccess"
   description = "Full access to financial / billing information " # Yes, this has an extra place at the end. If you remove it, it will destroy and recreate the resource. But the IAM policy is currently in use directly through clickops, so that also needs to be imported into Terraform.
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "Stmt1509974230000",
-            "Effect": "Allow",
-            "Action": [
-                "aws-portal:*"
-            ],
-            "Resource": [
-                "*"
-            ]
-        }
-    ]
-}
-EOF
+  policy      = data.aws_iam_policy_document.billing-full-access.json
 }
 
 data "aws_iam_policy_document" "terraform-organisation-management" {
