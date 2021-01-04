@@ -66,7 +66,7 @@ data "aws_iam_policy_document" "deny-non-eu-non-us-east-1-operations" {
     }
   }
 
-  # Deny enablement and disactivation of AWS opt-in regions (as of 04/01/2021)
+  # Deny enablement and deactivation of AWS opt-in regions (as of 04/01/2021)
   # including: Africa (Cape Town), Asia Pacific (Hong Kong), Europe (Milan), Middle East (Bahrain)
   statement {
     effect = "Deny"
