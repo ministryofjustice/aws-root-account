@@ -97,3 +97,14 @@ resource "aws_organizations_policy_attachment" "modernisation-platform-regions-s
   policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
   target_id = aws_organizations_account.modernisation-platform.id
 }
+
+# Enrol select Modernisation Platform managed accounts
+resource "aws_organizations_policy_attachment" "modernisation-platform-managed-accounts" {
+  for_each = {
+    for account in local.modernisation-platform-managed-account-ids:
+      account.name => account.id
+      if substr(account.name, 0, 6) == "remote" || substr(account.name, 0, 4) == "core"
+  }
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = each.value
+}
