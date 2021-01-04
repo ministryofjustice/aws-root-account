@@ -1,4 +1,8 @@
 # Service-linked roles
+resource "aws_iam_service_linked_role" "access-analyzer" {
+  aws_service_name = "access-analyzer.amazonaws.com"
+}
+
 resource "aws_iam_service_linked_role" "compute-optimizer" {
   aws_service_name = "compute-optimizer.amazonaws.com"
 }
@@ -47,65 +51,64 @@ resource "aws_iam_service_linked_role" "trustedadvisor-reporting" {
 
 # Other roles
 ## IAM ReadOnly Access Role
-resource "aws_iam_role" "iam-read-only-access-role" {
-  name = "IAMReadOnlyAccessRole"
+data "aws_iam_policy_document" "iam-read-only-access-assume-role" {
+  version = "2012-10-17"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowAssumeIAMReadOnlyAccessRole",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${local.caller_identity.account_id}:root"
-      },
-      "Action": "sts:AssumeRole"
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${local.caller_identity.account_id}:root"]
     }
-  ]
+  }
 }
-EOF
+
+resource "aws_iam_role" "iam-read-only-access-role" {
+  name               = "IAMReadOnlyAccessRole"
+  assume_role_policy = data.aws_iam_policy_document.iam-read-only-access-assume-role.json
 }
 
 ## lambda_basic_execution-test
-resource "aws_iam_role" "lambda_basic_execution-test" {
-  name = "lambda_basic_execution-test"
+data "aws_iam_policy_document" "lambda_basic_execution-test-assume-role" {
+  version = "2012-10-17"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
     }
-  ]
+  }
 }
-EOF
+
+resource "aws_iam_role" "lambda_basic_execution-test" {
+  name               = "lambda_basic_execution-test"
+  assume_role_policy = data.aws_iam_policy_document.lambda_basic_execution-test-assume-role.json
 }
 
 ## lambda-iam-generate-report-role
-resource "aws_iam_role" "lambda-iam-generate-report-role" {
-  name = "lambda-iam-generate-report-role"
+data "aws_iam_policy_document" "lambda-iam-generate-report-role-assume-role" {
+  version = "2012-10-17"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
     }
-  ]
+  }
 }
-EOF
+
+resource "aws_iam_role" "lambda-iam-generate-report-role" {
+  name               = "lambda-iam-generate-report-role"
+  path               = "/service-role/"
+  assume_role_policy = data.aws_iam_policy_document.lambda-iam-generate-report-role-assume-role.json
 
   tags = {}
-  path = "/service-role/"
 }

@@ -1,14 +1,17 @@
 resource "aws_organizations_organization" "default" {
   aws_service_access_principals = [
+    "access-analyzer.amazonaws.com",
     "compute-optimizer.amazonaws.com",
     "guardduty.amazonaws.com",
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "sso.amazonaws.com",
-    "storage-lens.s3.amazonaws.com"
+    "storage-lens.s3.amazonaws.com",
+    "tagpolicies.tag.amazonaws.com"
   ]
   enabled_policy_types = [
-    "SERVICE_CONTROL_POLICY"
+    "SERVICE_CONTROL_POLICY",
+    "TAG_POLICY"
   ]
   feature_set = "ALL"
 }
