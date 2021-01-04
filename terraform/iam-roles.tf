@@ -1,4 +1,8 @@
 # Service-linked roles
+resource "aws_iam_service_linked_role" "access-analyzer" {
+  aws_service_name = "access-analyzer.amazonaws.com"
+}
+
 resource "aws_iam_service_linked_role" "compute-optimizer" {
   aws_service_name = "compute-optimizer.amazonaws.com"
 }
