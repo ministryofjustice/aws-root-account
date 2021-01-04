@@ -13,6 +13,8 @@
 locals {
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
+    aws_organizations_account.cloud-platform-ephemeral-test,
+    aws_organizations_account.cloud-platform-transit-gateways,
     aws_organizations_account.modernisation-platform,
     aws_organizations_account.moj-official-development,
     aws_organizations_account.moj-official-pre-production,
@@ -26,7 +28,8 @@ locals {
     aws_organizations_account.moj-opg-shared-development,
     aws_organizations_account.moj-opg-shared-production,
     aws_organizations_account.opg-shared,
-    aws_organizations_account.organisation-logging
+    aws_organizations_account.organisation-logging,
+    aws_organizations_account.security-operations-development
   ], local.modernisation-platform-managed-account-ids)
 }
 
