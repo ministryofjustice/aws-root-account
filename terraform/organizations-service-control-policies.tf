@@ -37,7 +37,7 @@ resource "aws_organizations_policy" "deny-cloudtrail-delete-stop-update-policy" 
   }
 }
 
-# Denies operations outside the EU for regional services and us-east-1 for global services
+# Denies operations outside selected EU regions for regional services and us-east-1 for global services
 # and denies the ability to enable and deactivate regions
 #
 # This policy is a more generalised version of the AWS example:
@@ -66,7 +66,7 @@ data "aws_iam_policy_document" "deny-non-eu-non-us-east-1-operations" {
     }
   }
 
-  # Deny enablement and disactivation of AWS opt-in regions
+  # Deny enablement and disactivation of AWS opt-in regions (as of 04/01/2021)
   # including: Africa (Cape Town), Asia Pacific (Hong Kong), Europe (Milan), Middle East (Bahrain)
   statement {
     effect = "Deny"
