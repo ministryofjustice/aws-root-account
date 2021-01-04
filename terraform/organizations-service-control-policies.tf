@@ -59,10 +59,8 @@ data "aws_iam_policy_document" "deny-non-eu-non-us-east-1-operations" {
       variable = "aws:RequestedRegion"
       values = [
         "eu-central-1", # Europe (Frankfurt)
-        "eu-north-1",   # Europe (Stockholm)
         "eu-west-1",    # Europe (Ireland)
         "eu-west-2",    # Europe (London)
-        "eu-west-3",    # Europe (Paris)
         "us-east-1",    # US East (N. Virginia) (for global services)
       ]
     }
