@@ -95,15 +95,3 @@ resource "aws_organizations_policy" "optional-tags" {
 }
 CONTENT
 }
-
-# We can test the tag policies on the Modernisation Platform account
-# Note that when you attach a tag policy, it can take 48 hours to evaluate compliance.
-resource "aws_organizations_policy_attachment" "modernisation-platform-mandatory-tags-policy" {
-  policy_id = aws_organizations_policy.mandatory-tags.id
-  target_id = aws_organizations_account.modernisation-platform.id
-}
-
-resource "aws_organizations_policy_attachment" "modernisation-platform-optional-tags-policy" {
-  policy_id = aws_organizations_policy.optional-tags.id
-  target_id = aws_organizations_account.modernisation-platform.id
-}
