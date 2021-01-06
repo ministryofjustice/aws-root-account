@@ -33,6 +33,7 @@ locals {
     aws_organizations_account.moj-opg-sirius-development,
     aws_organizations_account.moj-opg-sirius-preproduction,
     aws_organizations_account.moj-opg-sirius-production,
+    aws_organizations_account.opg-backups,
     aws_organizations_account.opg-digi-deps-dev,
     aws_organizations_account.opg-digi-deps-preprod,
     aws_organizations_account.opg-digi-deps-prod,
