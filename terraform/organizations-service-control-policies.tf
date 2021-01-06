@@ -90,8 +90,3 @@ resource "aws_organizations_policy" "deny-non-eu-non-us-east-1-operations" {
     source-code   = join("", [local.github_repository, "/organizations-service-control-policies.tf"])
   }
 }
-
-resource "aws_organizations_policy_attachment" "modernisation-platform-regions-scp-policy" {
-  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
-  target_id = aws_organizations_account.modernisation-platform.id
-}

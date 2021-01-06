@@ -213,6 +213,12 @@ resource "aws_organizations_policy_attachment" "platforms-and-architecture-moder
   target_id = aws_organizations_organizational_unit.platforms-and-architecture-modernisation-platform.id
 }
 
+# Enrol all accounts within the Modernisation Platform OU (current and future) to the restricted regions policy
+resource "aws_organizations_policy_attachment" "platforms-and-architecture-modernisation-platform-ou-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_organizational_unit.platforms-and-architecture-modernisation-platform.id
+}
+
 # Security Engineering
 resource "aws_organizations_organizational_unit" "security-engineering" {
   name      = "Security Engineering"
