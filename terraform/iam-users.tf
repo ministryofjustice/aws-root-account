@@ -49,9 +49,6 @@ locals {
       aws_iam_group.billing_full_access.name,
       aws_iam_group.iam_user_change_password.name
     ]
-    "SidElangovan" = [
-      aws_iam_group.admins.name
-    ]
     "SteveMarshall" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
