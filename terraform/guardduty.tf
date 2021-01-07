@@ -33,6 +33,7 @@ locals {
     aws_organizations_account.moj-opg-sirius-development,
     aws_organizations_account.moj-opg-sirius-preproduction,
     aws_organizations_account.moj-opg-sirius-production,
+    aws_organizations_account.moj-security,
     aws_organizations_account.opg-backups,
     aws_organizations_account.opg-digi-deps-dev,
     aws_organizations_account.opg-digi-deps-preprod,
@@ -45,7 +46,11 @@ locals {
     aws_organizations_account.opg-use-my-lpa-preproduction,
     aws_organizations_account.opg-use-my-lpa-production,
     aws_organizations_account.organisation-logging,
+    aws_organizations_account.security-engineering,
+    aws_organizations_account.security-logging-platform,
     aws_organizations_account.security-operations-development,
+    aws_organizations_account.security-operations-pre-production,
+    aws_organizations_account.security-operations-production,
     aws_organizations_account.workplace-tech-proof-of-concept-development,
     aws_organizations_account.wptpoc
   ], local.modernisation-platform-managed-account-ids)
