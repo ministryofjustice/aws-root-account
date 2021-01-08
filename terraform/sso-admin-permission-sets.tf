@@ -51,7 +51,7 @@ resource "aws_ssoadmin_permission_set" "opg-viewer" {
   name             = "opg-viewer"
   description      = "Standard viewer role given to all members of OPG Digital"
   instance_arn     = local.sso_instance_arn
-  session_duration = "PT1H"
+  session_duration = "PT2H"
 }
 
 # opg-breakglass
