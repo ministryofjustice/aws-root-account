@@ -54,6 +54,7 @@ locals {
     aws_organizations_account.security-operations-development,
     aws_organizations_account.security-operations-pre-production,
     aws_organizations_account.security-operations-production,
+    aws_organizations_account.tacticalproducts,
     aws_organizations_account.workplace-tech-proof-of-concept-development,
     aws_organizations_account.wptpoc
   ], local.modernisation-platform-managed-account-ids)
