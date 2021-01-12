@@ -15,9 +15,9 @@ We currently manage:
 - [x] [AWS IAM Access Analyzer (Organisational zone of trust)](https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-what-is-access-analyzer.html) ([terraform/iam-access-analyzer.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/iam-access-analyzer.tf))
 - [x] [AWS Organizations: Service Control Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html) ([terraform/organizations-service-control-policies.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-service-control-policies.tf))
 - [x] [AWS Organizations: Tagging Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html) ([terraform/organizations-tag-policies.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-tag-policies.tf))
-- [x] [AWS Resource Access Manager (RAM): Organisational sharing](https://docs.aws.amazon.com/ram/latest/userguide/)) (not available in Terraform)
+- [x] [AWS Resource Access Manager (RAM): Organisational sharing](https://docs.aws.amazon.com/ram/latest/userguide/) (not available in Terraform)
 - [x] [AWS S3 Storage Lens](https://docs.aws.amazon.com/AmazonS3/latest/dev/storage_lens_basics_metrics_recommendations.html) (not available in Terraform)
-- [x] [AWS Single Sign-On (SSO)](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) (not available in Terraform)
+- [x] [AWS Single Sign-On (SSO)](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) ([terraform/sso.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/sso.tf))
 - [x] [AWS Trusted Advisor (Organisational overview)](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-ta.html) (not available in Terraform)
 
 In the future, we will also manage:

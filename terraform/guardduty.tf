@@ -14,6 +14,10 @@ locals {
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
     aws_organizations_account.aws-laa,
+    aws_organizations_account.cica,
+    aws_organizations_account.cica-development,
+    aws_organizations_account.cica-test-verify,
+    aws_organizations_account.cica-uat,
     aws_organizations_account.cloud-platform,
     aws_organizations_account.cloud-platform-ephemeral-test,
     aws_organizations_account.cloud-platform-transit-gateways,
