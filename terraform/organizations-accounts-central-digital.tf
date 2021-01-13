@@ -1,26 +1,4 @@
 # Central Digital OU
-resource "aws_organizations_account" "parliamentary-questions" {
-  name      = "Parliamentary Questions"
-  email     = local.aws_account_email_addresses["Parliamentary Questions"][0]
-  parent_id = aws_organizations_organizational_unit.central-digital.id
-
-  lifecycle {
-    # If any of these attributes are changed, it attempts to destroy and recreate the account,
-    # so we should ignore the changes to prevent this from happening.
-    ignore_changes = [
-      name,
-      email,
-      iam_user_access_to_billing,
-      role_name
-    ]
-  }
-}
-
-resource "aws_organizations_policy_attachment" "parliamentary-questions" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.parliamentary-questions.id
-}
-
 resource "aws_organizations_account" "cloud-networks-psn" {
   name      = "Cloud Networks PSN"
   email     = local.aws_account_email_addresses["Cloud Networks PSN"][0]
@@ -107,28 +85,6 @@ resource "aws_organizations_account" "network-architecture" {
 resource "aws_organizations_policy_attachment" "network-architecture" {
   policy_id = "p-FullAWSAccess"
   target_id = aws_organizations_account.network-architecture.id
-}
-
-resource "aws_organizations_account" "moj-peoplefinder" {
-  name      = "MoJ PeopleFinder"
-  email     = local.aws_account_email_addresses["MoJ PeopleFinder"][0]
-  parent_id = aws_organizations_organizational_unit.central-digital.id
-
-  lifecycle {
-    # If any of these attributes are changed, it attempts to destroy and recreate the account,
-    # so we should ignore the changes to prevent this from happening.
-    ignore_changes = [
-      name,
-      email,
-      iam_user_access_to_billing,
-      role_name
-    ]
-  }
-}
-
-resource "aws_organizations_policy_attachment" "moj-peoplefinder" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-peoplefinder.id
 }
 
 resource "aws_organizations_account" "moj-cla" {

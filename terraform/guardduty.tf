@@ -13,6 +13,12 @@
 locals {
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
+    aws_organizations_account.aws-laa,
+    aws_organizations_account.cica,
+    aws_organizations_account.cica-development,
+    aws_organizations_account.cica-test-verify,
+    aws_organizations_account.cica-uat,
+    aws_organizations_account.cloud-platform,
     aws_organizations_account.cloud-platform-ephemeral-test,
     aws_organizations_account.cloud-platform-transit-gateways,
     aws_organizations_account.electronic-monitoring-identity-access-management,
@@ -24,7 +30,10 @@ locals {
     aws_organizations_account.hmpps-dev,
     aws_organizations_account.hmpps-management,
     aws_organizations_account.hmpps-prod,
+    aws_organizations_account.manchester-traffic-dev,
     aws_organizations_account.modernisation-platform,
+    aws_organizations_account.moj-cla,
+    aws_organizations_account.moj-digital-services,
     aws_organizations_account.moj-official-development,
     aws_organizations_account.moj-official-pre-production,
     aws_organizations_account.moj-official-production,
@@ -55,11 +64,13 @@ locals {
     aws_organizations_account.opg-use-my-lpa-preproduction,
     aws_organizations_account.opg-use-my-lpa-production,
     aws_organizations_account.organisation-logging,
+    aws_organizations_account.patterns,
     aws_organizations_account.security-engineering,
     aws_organizations_account.security-logging-platform,
     aws_organizations_account.security-operations-development,
     aws_organizations_account.security-operations-pre-production,
     aws_organizations_account.security-operations-production,
+    aws_organizations_account.tacticalproducts,
     aws_organizations_account.workplace-tech-proof-of-concept-development,
     aws_organizations_account.wptpoc
   ], local.modernisation-platform-managed-account-ids)
