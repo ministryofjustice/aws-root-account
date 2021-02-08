@@ -1,5 +1,6 @@
 locals {
   teams_to_account_assignments = [
+    # OPG
     {
       github_team    = "opg"
       permission_set = aws_ssoadmin_permission_set.opg-viewer,
@@ -45,6 +46,14 @@ locals {
         aws_organizations_account.opg-use-my-lpa-development,
         aws_organizations_account.opg-use-my-lpa-preproduction,
         aws_organizations_account.opg-use-my-lpa-production
+      ]
+    },
+    # organisation-security
+    {
+      github_team    = "organisation-security-auditor"
+      permission_set = aws_ssoadmin_permission_set.security-audit,
+      accounts = [
+        aws_organizations_account.organisation-security
       ]
     }
   ]
