@@ -65,6 +65,14 @@ locals {
         aws_organizations_account.security-operations-pre-production,
         aws_organizations_account.security-operations-production
       ]
+    },
+    # Cloud Platform (Webops) access
+    {
+      github_team    = "webops"
+      permission_set = aws_ssoadmin_permission_set.administrator-access
+      accounts = [
+        aws_organizations_account.moj-digital-services
+      ]
     }
   ]
   teams_to_account_assignments_association_list = flatten([
