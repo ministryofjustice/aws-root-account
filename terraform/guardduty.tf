@@ -10,9 +10,15 @@
 #
 # The configuration for the publishing destination is in guardduty-publishing-destination.tf,
 # which has an eu-west-2 bucket that all regional GuardDuty configurations publish to.
+
+# resource "aws_organizations_account" "analytics-platform-development" {
+# resource "aws_organizations_account" "analytical-platform-data-engineering" {
 locals {
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
+    aws_organizations_account.analytical-platform-development,
+    aws_organizations_account.analytical-platform-landing,
+    aws_organizations_account.analytical-platform-production,
     aws_organizations_account.aws-laa,
     aws_organizations_account.cica,
     aws_organizations_account.cica-development,
@@ -32,6 +38,7 @@ locals {
     aws_organizations_account.hmpps-prod,
     aws_organizations_account.manchester-traffic-dev,
     aws_organizations_account.modernisation-platform,
+    aws_organizations_account.moj-analytics-platform,
     aws_organizations_account.moj-cla,
     aws_organizations_account.moj-digital-services,
     aws_organizations_account.moj-official-development,

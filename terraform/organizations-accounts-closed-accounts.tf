@@ -85,3 +85,25 @@ resource "aws_organizations_policy_attachment" "parliamentary-questions" {
   policy_id = "p-FullAWSAccess"
   target_id = aws_organizations_account.parliamentary-questions.id
 }
+
+resource "aws_organizations_account" "moj-intranet" {
+  name      = "MOJ Intranet"
+  email     = local.aws_account_email_addresses["MOJ Intranet"][0]
+  parent_id = aws_organizations_organizational_unit.closed-accounts.id
+
+  lifecycle {
+    # If any of these attributes are changed, it attempts to destroy and recreate the account,
+    # so we should ignore the changes to prevent this from happening.
+    ignore_changes = [
+      name,
+      email,
+      iam_user_access_to_billing,
+      role_name
+    ]
+  }
+}
+
+resource "aws_organizations_policy_attachment" "moj-intranet" {
+  policy_id = "p-FullAWSAccess"
+  target_id = aws_organizations_account.moj-intranet.id
+}

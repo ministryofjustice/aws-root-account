@@ -61,8 +61,22 @@ data "aws_iam_policy_document" "deny-non-eu-non-us-east-1-operations" {
         "eu-central-1", # Europe (Frankfurt)
         "eu-west-1",    # Europe (Ireland)
         "eu-west-2",    # Europe (London)
+        "us-west-2",    # US West (Oregon) (for Network Manager)
         "us-east-1",    # US East (N. Virginia) (for global services)
       ]
+    }
+  }
+
+  # Deny anything apart from Network Manager in us-west-2
+  statement {
+    effect      = "Deny"
+    not_actions = ["networkmanager:*"]
+    resources   = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:RequestedRegion"
+      values   = ["us-west-2"]
     }
   }
 
