@@ -219,18 +219,6 @@ resource "aws_organizations_policy_attachment" "platforms-and-architecture-moder
   target_id = aws_organizations_organizational_unit.platforms-and-architecture-modernisation-platform.id
 }
 
-# Enrol all accounts within the Modernisation Platform OU (current and future) to tag policies
-# Note that when you attach a tag policy, it can take 48 hours to evaluate compliance.
-resource "aws_organizations_policy_attachment" "modernisation-platform-mandatory-tags-policy" {
-  policy_id = aws_organizations_policy.mandatory-tags.id
-  target_id = aws_organizations_organizational_unit.platforms-and-architecture-modernisation-platform.id
-}
-
-resource "aws_organizations_policy_attachment" "modernisation-platform-optional-tags-policy" {
-  policy_id = aws_organizations_policy.optional-tags.id
-  target_id = aws_organizations_organizational_unit.platforms-and-architecture-modernisation-platform.id
-}
-
 # Security Engineering
 resource "aws_organizations_organizational_unit" "security-engineering" {
   name      = "Security Engineering"

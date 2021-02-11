@@ -23,6 +23,19 @@ resource "aws_organizations_policy_attachment" "default" {
   target_id = aws_organizations_organization.default.roots[0].id
 }
 
+# Enrol all accounts within the AWS Organization to unenforced tag policies
+# Note that when you attach a tag policy, it can take 48 hours to evaluate compliance
+# See: https://docs.aws.amazon.com/organizations/latest/userguide/attach-tag-policy.html
+resource "aws_organizations_policy_attachment" "mandatory-tags-policy" {
+  policy_id = aws_organizations_policy.mandatory-tags.id
+  target_id = aws_organizations_organization.default.roots[0].id
+}
+
+resource "aws_organizations_policy_attachment" "optional-tags-policy" {
+  policy_id = aws_organizations_policy.optional-tags.id
+  target_id = aws_organizations_organization.default.roots[0].id
+}
+
 # If you're going to create a new account using this Terraform,
 # note that you'll have to import any aws_organizations_policy_attachment resources manually as
 # Terraform will fail to create them (as AWS attaches them on your behalf).
