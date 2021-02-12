@@ -20,6 +20,7 @@ locals {
     aws_organizations_account.analytical-platform-landing,
     aws_organizations_account.analytical-platform-production,
     aws_organizations_account.aws-laa,
+    aws_organizations_account.bichard7-2020-prototype,
     aws_organizations_account.cica,
     aws_organizations_account.cica-development,
     aws_organizations_account.cica-test-verify,
