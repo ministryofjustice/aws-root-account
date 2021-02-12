@@ -66,6 +66,14 @@ locals {
         aws_organizations_account.security-operations-production
       ]
     },
+    # Modernisation Platform landing zone account
+    {
+      github_team    = "modernisation-platform"
+      permission_set = aws_ssoadmin_permission_set.view-only-access
+      accounts = [
+        aws_organizations_account.modernisation-platform
+      ]
+    },
     # Cloud Platform (Webops) access
     {
       github_team    = "webops"
