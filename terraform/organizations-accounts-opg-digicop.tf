@@ -3,6 +3,10 @@ resource "aws_organizations_account" "moj-opg-digicop-production" {
   name      = "MoJ OPG DigiCop Production"
   email     = local.aws_account_email_addresses["MoJ OPG DigiCop Production"][0]
   parent_id = aws_organizations_organizational_unit.opg-digicop.id
+  tags = merge(local.tags-opg, {
+    application   = "Serve Office of the Public Guardian/Serve OPG"
+    is-production = true
+  })
 
   lifecycle {
     # If any of these attributes are changed, it attempts to destroy and recreate the account,
@@ -25,6 +29,9 @@ resource "aws_organizations_account" "moj-opg-digicop-development" {
   name      = "MoJ OPG DigiCop Development"
   email     = local.aws_account_email_addresses["MoJ OPG DigiCop Development"][0]
   parent_id = aws_organizations_organizational_unit.opg-digicop.id
+  tags = merge(local.tags-opg, {
+    application = "Serve Office of the Public Guardian/Serve OPG"
+  })
 
   lifecycle {
     # If any of these attributes are changed, it attempts to destroy and recreate the account,
@@ -47,6 +54,9 @@ resource "aws_organizations_account" "moj-opg-digicop-preproduction" {
   name      = "MoJ OPG DigiCop Preproduction"
   email     = local.aws_account_email_addresses["MoJ OPG DigiCop Preproduction"][0]
   parent_id = aws_organizations_organizational_unit.opg-digicop.id
+  tags = merge(local.tags-opg, {
+    application = "Serve Office of the Public Guardian/Serve OPG"
+  })
 
   lifecycle {
     # If any of these attributes are changed, it attempts to destroy and recreate the account,
