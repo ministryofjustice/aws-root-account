@@ -14,9 +14,11 @@
 locals {
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
+    aws_organizations_account.analytical-platform-data-engineering,
     aws_organizations_account.analytical-platform-development,
     aws_organizations_account.analytical-platform-landing,
     aws_organizations_account.analytical-platform-production,
+    aws_organizations_account.analytics-platform-development,
     aws_organizations_account.aws-laa,
     aws_organizations_account.bichard7-2020-prototype,
     aws_organizations_account.cica,
