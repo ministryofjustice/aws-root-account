@@ -22,8 +22,10 @@ resource "aws_organizations_policy_attachment" "analytical-platform-development"
 }
 
 resource "aws_organizations_account" "analytics-platform-development" {
-  name      = "Analytics Platform Development"
-  email     = local.aws_account_email_addresses["Analytics Platform Development"][0]
+  # Note that this account was renamed from "Analytics Platform Development"
+  # to Analytical Platform Data Engineering Sandbox, to make it clearer.
+  name      = "Analytical Platform Data Engineering Sandbox"
+  email     = local.aws_account_email_addresses["Analytical Platform Data Engineering Sandbox"][0]
   parent_id = aws_organizations_organizational_unit.analytics-platform.id
 
   lifecycle {
