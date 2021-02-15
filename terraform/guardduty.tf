@@ -45,6 +45,8 @@ locals {
     aws_organizations_account.hmpps-dev,
     aws_organizations_account.hmpps-management,
     aws_organizations_account.hmpps-prod,
+    aws_organizations_account.laa-uat,
+    aws_organizations_account.legal-aid-agency,
     aws_organizations_account.manchester-traffic-dev,
     aws_organizations_account.modernisation-platform,
     aws_organizations_account.moj-analytics-platform,
