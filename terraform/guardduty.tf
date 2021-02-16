@@ -45,6 +45,7 @@ locals {
     aws_organizations_account.electronic-monitoring-tagging-hardware-test,
     aws_organizations_account.hmpps-dev,
     aws_organizations_account.hmpps-management,
+    aws_organizations_account.hmpps-performance-hub,
     aws_organizations_account.hmpps-prod,
     aws_organizations_account.laa-uat,
     aws_organizations_account.legal-aid-agency,
