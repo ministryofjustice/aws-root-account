@@ -42,6 +42,7 @@ locals {
     aws_organizations_account.electronic-monitoring-tagging-hardware-pre-prod,
     aws_organizations_account.electronic-monitoring-tagging-hardware-prod,
     aws_organizations_account.electronic-monitoring-tagging-hardware-test,
+    aws_organizations_account.hmpps-co-financing-organisation,
     aws_organizations_account.hmpps-dev,
     aws_organizations_account.hmpps-management,
     aws_organizations_account.hmpps-performance-hub,
