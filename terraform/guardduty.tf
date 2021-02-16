@@ -5,12 +5,11 @@
 # data.aws_organizations_organization.example.accounts[*].id data resource,
 # and auto_enable will be turned on so new accounts won't need to be added here.
 # Any account added here in the meanwhile will have GuardDuty enabled in:
-# - eu-west-2 (guardduty.tf)
-# - eu-west-1 (guardduty-eu-west-1.tf)
-#
+# - eu-west-2
+# - eu-west-1
+
 # The configuration for the publishing destination is in guardduty-publishing-destination.tf,
 # which has an eu-west-2 bucket that all regional GuardDuty configurations publish to.
-
 locals {
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
@@ -105,90 +104,64 @@ locals {
   ], local.modernisation-platform-managed-account-ids)
 }
 
-##############################
-# GuardDuty within eu-west-2 #
-##############################
+##########################
+# GuardDuty in eu-west-2 #
+##########################
+module "guardduty-eu-west-2" {
+  source = "./modules/guardduty"
 
-# Enable GuardDuty for the default provider region, which is required to delegate a GuardDuty administrator
-resource "aws_guardduty_detector" "default-region" {
-  # Set enable to false if you want to suspend GuardDuty.
-  # This allows you to keep historical findings rather than removing the resource
-  # block, which will destroy all historical findings
-  enable = true
+  providers = {
+    aws.root-account            = aws
+    aws.delegated-administrator = aws.organisation-security-eu-west-2
+  }
 
-  tags = local.root_account
-}
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
 
-# Delegate administratorship of GuardDuty to the organisation-security account for the default provider region
-resource "aws_guardduty_organization_admin_account" "default-region-administrator" {
-  depends_on       = [aws_organizations_organization.default]
-  admin_account_id = aws_organizations_account.organisation-security.id
-}
-
-####################################
-# GuardDuty detector for eu-west-2 #
-####################################
-
-# The detector is automatically created by AWS, so we need to import it before Terraform will manage it
-resource "aws_guardduty_detector" "organisation-security-eu-west-2" {
-  provider = aws.organisation-security-eu-west-2
-
-  # Set enable to false if you want to suspend GuardDuty.
-  # This allows you to keep historical findings rather than removing the resource
-  # block, which will destroy all historical findings
-  enable = true
-
-  # This will send GuardDuty notifications every 15 minutes, rather than every
-  # 6 hours (default)
-  finding_publishing_frequency = "FIFTEEN_MINUTES"
-
-  tags = merge(
+  root_tags = local.root_account
+  administrator_tags = merge(
     local.tags-organisation-management, {
       component = "Security"
     }
   )
-}
-
-##################################################
-# GuardDuty publishing destination for eu-west-2 #
-##################################################
-
-resource "aws_guardduty_publishing_destination" "eu-west-2" {
-  provider = aws.organisation-security-eu-west-2
-
-  detector_id     = aws_guardduty_detector.organisation-security-eu-west-2.id
-  destination_arn = aws_s3_bucket.guardduty-bucket.arn
-  kms_key_arn     = aws_kms_key.guardduty.arn
 
   depends_on = [
+    aws_organizations_organization.default,
     aws_s3_bucket_policy.guardduty-bucket-policy
   ]
 }
 
-################################
-# Member accounts in eu-west-2 #
-################################
+##########################
+# GuardDuty in eu-west-1 #
+##########################
+module "guardduty-eu-west-1" {
+  source = "./modules/guardduty"
 
-resource "aws_guardduty_member" "eu-west-2" {
-  for_each = {
+  providers = {
+    aws.root-account            = aws.aws-root-account-eu-west-1
+    aws.delegated-administrator = aws.organisation-security-eu-west-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+  enrolled_into_guardduty = {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
-  provider = aws.organisation-security-eu-west-2
 
-  # We want to add these accounts as members within the Organisation Security account
-  account_id  = each.value
-  detector_id = aws_guardduty_detector.organisation-security-eu-west-2.id
-  email       = "fake@email.com"
-  invite      = true
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+    }
+  )
 
-  # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
-  # as privilege is inferred by the fact that the account is already within Organizations.
-  # However, once a relationship is established, the GuardDuty API returns an email address, so Terraform returns a drift.
-  # Therefore, we can ignore_changes to an email address. You still need to provide one, though, so we use fake@email.com.
-  lifecycle {
-    ignore_changes = [
-      email
-    ]
-  }
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
 }
