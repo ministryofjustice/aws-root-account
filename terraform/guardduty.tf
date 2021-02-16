@@ -105,19 +105,20 @@ locals {
   ], local.modernisation-platform-managed-account-ids)
 }
 
-##########################
-# GuardDuty in eu-west-2 #
-##########################
-module "guardduty-eu-west-2" {
+###########################
+# GuardDuty in US regions #
+###########################
+module "guardduty-us-east-1" {
   source = "./modules/guardduty"
 
   providers = {
-    aws.root-account            = aws
-    aws.delegated-administrator = aws.organisation-security-eu-west-2
+    aws.root-account            = aws.aws-root-account-us-east-1
+    aws.delegated-administrator = aws.organisation-security-us-east-1
   }
 
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
+
   enrolled_into_guardduty = {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
@@ -127,8 +128,7 @@ module "guardduty-eu-west-2" {
   administrator_tags = merge(
     local.tags-organisation-management, {
       component = "Security"
-    }
-  )
+  })
 
   depends_on = [
     aws_organizations_organization.default,
@@ -136,9 +136,295 @@ module "guardduty-eu-west-2" {
   ]
 }
 
-##########################
-# GuardDuty in eu-west-1 #
-##########################
+module "guardduty-us-east-2" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-us-east-2
+    aws.delegated-administrator = aws.organisation-security-us-east-2
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-us-west-1" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-us-west-1
+    aws.delegated-administrator = aws.organisation-security-us-west-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-us-west-2" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-us-west-2
+    aws.delegated-administrator = aws.organisation-security-us-west-2
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+###########################
+# GuardDuty in AP regions #
+###########################
+module "guardduty-ap-south-1" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-ap-south-1
+    aws.delegated-administrator = aws.organisation-security-ap-south-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-ap-northeast-2" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-ap-northeast-2
+    aws.delegated-administrator = aws.organisation-security-ap-northeast-2
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-ap-southeast-1" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-ap-southeast-1
+    aws.delegated-administrator = aws.organisation-security-ap-southeast-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-ap-southeast-2" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-ap-southeast-2
+    aws.delegated-administrator = aws.organisation-security-ap-southeast-2
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-ap-northeast-1" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-ap-northeast-1
+    aws.delegated-administrator = aws.organisation-security-ap-northeast-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+###########################
+# GuardDuty in CA regions #
+###########################
+module "guardduty-ca-central-1" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-ca-central-1
+    aws.delegated-administrator = aws.organisation-security-ca-central-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+###########################
+# GuardDuty in EU regions #
+###########################
+module "guardduty-eu-central-1" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-eu-central-1
+    aws.delegated-administrator = aws.organisation-security-eu-central-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
 module "guardduty-eu-west-1" {
   source = "./modules/guardduty"
 
@@ -149,6 +435,7 @@ module "guardduty-eu-west-1" {
 
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
+
   enrolled_into_guardduty = {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
@@ -158,8 +445,122 @@ module "guardduty-eu-west-1" {
   administrator_tags = merge(
     local.tags-organisation-management, {
       component = "Security"
-    }
-  )
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-eu-west-2" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-eu-west-2
+    aws.delegated-administrator = aws.organisation-security-eu-west-2
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-eu-west-3" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-eu-west-3
+    aws.delegated-administrator = aws.organisation-security-eu-west-3
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+module "guardduty-eu-north-1" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-eu-north-1
+    aws.delegated-administrator = aws.organisation-security-eu-north-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
+###########################
+# GuardDuty in SA regions #
+###########################
+module "guardduty-sa-east-1" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-sa-east-1
+    aws.delegated-administrator = aws.organisation-security-sa-east-1
+  }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  enrolled_into_guardduty = {
+    for account in local.enrolled_into_guardduty :
+    account.name => account.id
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
 
   depends_on = [
     aws_organizations_organization.default,
