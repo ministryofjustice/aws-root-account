@@ -32,8 +32,10 @@ resource "aws_guardduty_detector" "delegated-administrator" {
   # block, which will destroy all historical findings
   enable = true
 
-  # This will send GuardDuty notifications every 15 minutes, rather than every
-  # 6 hours (default)
+  # For newly generated findings, AWS GuardDuty publishes the finding within 5 minutes, which cannot be changed.
+  # For subsequent findings, you can choose to be notified again within 6 hours, 1 hour, or 15 minutes.
+  # Note that member accounts inherit this setting, so it'll be set for all member accounts at the value here.
+  # See: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_cloudwatch.html#guardduty_findings_cloudwatch_notification_frequency
   finding_publishing_frequency = "FIFTEEN_MINUTES"
 
   tags = var.administrator_tags
