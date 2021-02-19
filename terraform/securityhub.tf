@@ -47,7 +47,7 @@ resource "aws_securityhub_member" "eu-west-2" {
 
   # We want to add these accounts as members within the Organisation Security account
   account_id = each.value
-  email      = "not-real@example.com"
+  email      = "placeholder-to-avoid-terraform-drift@example.com"
   invite     = false
 
   depends_on = [aws_securityhub_organization_admin_account.default-region-administrator]
@@ -57,7 +57,7 @@ resource "aws_securityhub_member" "eu-west-2" {
   # However, once a relationship is established, the SecurityHub API returns an email address, and sets `invite` to true,
   # so Terraform returns a drift.
   # Therefore, we can ignore_changes on both `email` and `invite`. You still need to provide an email, though, so we use
-  # not-real@example.com as it's a reserved domain (see: https://www.iana.org/domains/reserved)
+  # placeholder-to-avoid-terraform-drift@example.com as it's a reserved domain (see: https://www.iana.org/domains/reserved)
   lifecycle {
     ignore_changes = [
       email,
