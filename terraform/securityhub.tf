@@ -5,7 +5,7 @@
 locals {
   enrolled_into_securityhub = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" }
-  ], [])
+  ], local.modernisation-platform-managed-account-ids)
 }
 
 # Enable Security Hub for the default provider region, which is required to delegate a Security Hub administrator
