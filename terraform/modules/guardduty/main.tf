@@ -85,4 +85,7 @@ resource "aws_guardduty_member" "delegated-administrator" {
       email
     ]
   }
+
+  # You need to set the GuardDuty organisation administrator before adding members
+  depends_on = [aws_guardduty_organization_admin_account.default]
 }
