@@ -3,6 +3,7 @@ resource "aws_organizations_organization" "default" {
     "access-analyzer.amazonaws.com",
     "compute-optimizer.amazonaws.com",
     "guardduty.amazonaws.com",
+    "health.amazonaws.com",
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "securityhub.amazonaws.com",

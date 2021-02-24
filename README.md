@@ -12,6 +12,7 @@ We currently manage:
 
 - [x] [AWS Compute Optimizer](https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html) (not available in Terraform)
 - [x] [AWS GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/) ([terraform/guardduty.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/guardduty.tf))
+- [x] [AWS Health (Organisational view)](https://docs.aws.amazon.com/health/latest/ug/) [terraform/organizations.tf#L6](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L6)
 - [x] [AWS IAM Access Analyzer (Organisational zone of trust)](https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-what-is-access-analyzer.html) ([terraform/iam-access-analyzer.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/iam-access-analyzer.tf))
 - [x] [AWS Organizations: Service Control Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html) ([terraform/organizations-service-control-policies.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-service-control-policies.tf))
 - [x] [AWS Organizations: Tagging Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html) ([terraform/organizations-tag-policies.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-tag-policies.tf))
@@ -24,5 +25,4 @@ In the future, we will also manage:
 
 - [ ] [AWS CloudTrail (Organisational trail)](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html)
 - [ ] [AWS Config](https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html)
-- [ ] [AWS Health (Organisational view)](https://docs.aws.amazon.com/health/latest/ug/)
 - [ ] [AWS Security Hub](https://docs.aws.amazon.com/securityhub/latest/userguide/)
