@@ -142,6 +142,17 @@ resource "aws_organizations_policy_attachment" "hmpps-electronic-monitoring-ou-f
   target_id = aws_organizations_organizational_unit.hmpps-electronic-monitoring.id
 }
 
+resource "aws_organizations_organizational_unit" "hmpps-electronic-monitoring-acquisitive-crime" {
+  name      = "Acquisitive Crime"
+  parent_id = aws_organizations_organizational_unit.hmpps-electronic-monitoring
+}
+
+# Enrol all accounts within the Acquisitive Crime OU (current and future) to the restricted regions policy
+resource "aws_organizations_policy_attachment" "hmpps-electronic-monitoring-acquisitive-crime-ou-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_organizational_unit.hmpps-electronic-monitoring-acquisitive-crime.id
+}
+
 # YJB
 resource "aws_organizations_organizational_unit" "yjb" {
   name      = "YJB"
