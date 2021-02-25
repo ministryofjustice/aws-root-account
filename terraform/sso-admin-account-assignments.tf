@@ -82,7 +82,7 @@ locals {
         aws_organizations_account.moj-digital-services
       ]
     },
-    # Electronic Monitoring Acquisitive Crime access
+    # Electronic Monitoring
     {
       github_team    = "hmpps-ems-team"
       permission_set = aws_ssoadmin_permission_set.administrator-access
@@ -90,7 +90,21 @@ locals {
         aws_organizations_account.electronic-monitoring-acquisitive-crime-development,
         aws_organizations_account.electronic-monitoring-acquisitive-crime-preproduction,
         aws_organizations_account.electronic-monitoring-acquisitive-crime-production,
-        aws_organizations_account.electronic-monitoring-acquisitive-crime-test
+        aws_organizations_account.electronic-monitoring-acquisitive-crime-test,
+        aws_organizations_account.electronic-monitoring-archive-query-service,
+        aws_organizations_account.electronic-monitoring-identity-access-management,
+        aws_organizations_account.electronic-monitoring-infrastructure-dev,
+        aws_organizations_account.electronic-monitoring-monitoring-mapping-dev,
+        aws_organizations_account.electronic-monitoring-monitoring-mapping-pre-prod,
+        aws_organizations_account.electronic-monitoring-monitoring-mapping-prod,
+        aws_organizations_account.electronic-monitoring-monitoring-mapping-test,
+        aws_organizations_account.electronic-monitoring-protective-monitoring,
+        aws_organizations_account.electronic-monitoring-shared-logging,
+        aws_organizations_account.electronic-monitoring-shared-networking,
+        aws_organizations_account.electronic-monitoring-shared-networking-non-prod,
+        aws_organizations_account.electronic-monitoring-tagging-hardware-pre-prod,
+        aws_organizations_account.electronic-monitoring-tagging-hardware-prod,
+        aws_organizations_account.electronic-monitoring-tagging-hardware-test
       ]
     },
   ]
