@@ -81,7 +81,18 @@ locals {
       accounts = [
         aws_organizations_account.moj-digital-services
       ]
-    }
+    },
+    # Electronic Monitoring Acquisitive Crime access
+    {
+      github_team    = "hmpps-ems-team"
+      permission_set = aws_ssoadmin_permission_set.administrator-access
+      accounts = [
+        aws_organizations_account.electronic-monitoring-acquisitive-crime-development,
+        aws_organizations_account.electronic-monitoring-acquisitive-crime-preproduction,
+        aws_organizations_account.electronic-monitoring-acquisitive-crime-production,
+        aws_organizations_account.electronic-monitoring-acquisitive-crime-test
+      ]
+    },
   ]
   teams_to_account_assignments_association_list = flatten([
     for assignment in local.teams_to_account_assignments : [
