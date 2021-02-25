@@ -144,7 +144,7 @@ resource "aws_organizations_policy_attachment" "hmpps-electronic-monitoring-ou-f
 
 resource "aws_organizations_organizational_unit" "hmpps-electronic-monitoring-acquisitive-crime" {
   name      = "Acquisitive Crime"
-  parent_id = aws_organizations_organizational_unit.hmpps-electronic-monitoring
+  parent_id = aws_organizations_organizational_unit.hmpps-electronic-monitoring.id
 }
 
 # Enrol all accounts within the Acquisitive Crime OU (current and future) to the restricted regions policy
