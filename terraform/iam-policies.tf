@@ -119,3 +119,22 @@ resource "aws_iam_policy" "terraform-organisation-management-policy" {
   description = "A policy that allows the Modernisation Platform to manage organisations"
   policy      = data.aws_iam_policy_document.terraform-organisation-management.json
 }
+
+# SSO Administrator role, used by the Modernisation Platform to provide access to AWS accounts via AWS SSO
+data "aws_iam_policy_document" "sso-administrator-role" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "identitystore:*"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "modernisation-platform-sso-administrator" {
+  name        = "SSOAdministratorPolicy"
+  description = "A policy to allow teams to manage SSO for AWS accounts"
+  policy      = data.aws_iam_policy_document.sso-administrator-role.json
+}
