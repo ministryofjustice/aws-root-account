@@ -112,3 +112,34 @@ resource "aws_iam_role" "lambda-iam-generate-report-role" {
 
   tags = {}
 }
+
+# SSO Administrator role, assumable by the Modernisation Platform to provide access to AWS accounts via AWS SSO
+data "aws_iam_policy_document" "modernisation-platform-sso-administrator-assume-role" {
+  version = "2012-10-17"
+
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${aws_organizations_account.modernisation-platform.id}:root"]
+    }
+  }
+}
+
+resource "aws_iam_role" "modernisation-platform-sso-administrator" {
+  name               = "ModernisationPlatformSSOAdministrator"
+  assume_role_policy = data.aws_iam_policy_document.modernisation-platform-sso-administrator-assume-role.json
+  tags               = local.root_account
+}
+
+resource "aws_iam_role_policy_attachment" "sso-administrator" {
+  role       = aws_iam_role.modernisation-platform-sso-administrator.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSSSOMemberAccountAdministrator"
+}
+
+resource "aws_iam_role_policy_attachment" "identity-store-administrator" {
+  role       = aws_iam_role.modernisation-platform-sso-administrator.name
+  policy_arn = aws_iam_policy.modernisation-platform-sso-administrator.arn
+}
