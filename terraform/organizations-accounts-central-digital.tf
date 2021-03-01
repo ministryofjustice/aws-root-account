@@ -43,28 +43,6 @@ resource "aws_organizations_policy_attachment" "moj-digital-services" {
   target_id = aws_organizations_account.moj-digital-services.id
 }
 
-resource "aws_organizations_account" "platforms-non-production" {
-  name      = "platforms-non-production"
-  email     = local.aws_account_email_addresses["platforms-non-production"][0]
-  parent_id = aws_organizations_organizational_unit.central-digital.id
-
-  lifecycle {
-    # If any of these attributes are changed, it attempts to destroy and recreate the account,
-    # so we should ignore the changes to prevent this from happening.
-    ignore_changes = [
-      name,
-      email,
-      iam_user_access_to_billing,
-      role_name
-    ]
-  }
-}
-
-resource "aws_organizations_policy_attachment" "platforms-non-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.platforms-non-production.id
-}
-
 resource "aws_organizations_account" "network-architecture" {
   name      = "Network Architecture"
   email     = local.aws_account_email_addresses["Network Architecture"][0]
