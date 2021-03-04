@@ -12,7 +12,7 @@ resource "aws_cur_report_definition" "default" {
   refresh_closed_reports     = false
 
   # S3 configuration
-  s3_bucket                  = aws_s3_bucket.moj-cur-reports.bucket
-  s3_prefix                  = "CUR"
-  s3_region                  = "eu-west-2"
+  s3_bucket = aws_s3_bucket.moj-cur-reports.bucket
+  s3_prefix = "CUR"
+  s3_region = "eu-west-2"
 }
