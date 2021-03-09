@@ -5,7 +5,7 @@
 locals {
   enrolled_into_securityhub = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
-    aws_organizations_account.laa-test,
+    aws_organizations_account.legal-aid-agency,
     aws_organizations_account.modernisation-platform,
   ], local.modernisation-platform-managed-account-ids)
 }
