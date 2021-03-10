@@ -16,11 +16,6 @@ resource "aws_organizations_account" "strategic-partner-gateway-non-production" 
   }
 }
 
-resource "aws_organizations_policy_attachment" "strategic-partner-gateway-non-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.strategic-partner-gateway-non-production.id
-}
-
 resource "aws_organizations_account" "probation" {
   name      = "Probation"
   email     = local.aws_account_email_addresses["Probation"][0]
@@ -36,11 +31,6 @@ resource "aws_organizations_account" "probation" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "probation" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.probation.id
 }
 
 resource "aws_organizations_account" "hmpps-management" {
@@ -60,11 +50,6 @@ resource "aws_organizations_account" "hmpps-management" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "hmpps-management" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-management.id
-}
-
 resource "aws_organizations_account" "hmpps-co-financing-organisation" {
   name      = "HMPPS Co-Financing Organisation"
   email     = local.aws_account_email_addresses["HMPPS Co-Financing Organisation"][0]
@@ -80,11 +65,6 @@ resource "aws_organizations_account" "hmpps-co-financing-organisation" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "hmpps-co-financing-organisation" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-co-financing-organisation.id
 }
 
 resource "aws_organizations_account" "hmpps-security-audit" {
@@ -104,11 +84,6 @@ resource "aws_organizations_account" "hmpps-security-audit" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "hmpps-security-audit" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-security-audit.id
-}
-
 resource "aws_organizations_account" "hmpps-performance-hub" {
   name      = "HMPPS Performance Hub"
   email     = local.aws_account_email_addresses["HMPPS Performance Hub"][0]
@@ -124,11 +99,6 @@ resource "aws_organizations_account" "hmpps-performance-hub" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "hmpps-performance-hub" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-performance-hub.id
 }
 
 resource "aws_organizations_account" "hmpps-prod" {
@@ -148,11 +118,6 @@ resource "aws_organizations_account" "hmpps-prod" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "hmpps-prod" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-prod.id
-}
-
 resource "aws_organizations_account" "hmpps-engineering-production" {
   name      = "HMPPS Engineering Production"
   email     = local.aws_account_email_addresses["HMPPS Engineering Production"][0]
@@ -168,11 +133,6 @@ resource "aws_organizations_account" "hmpps-engineering-production" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "hmpps-engineering-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-engineering-production.id
 }
 
 resource "aws_organizations_account" "hmpps-check-my-diary-prod" {
@@ -192,11 +152,6 @@ resource "aws_organizations_account" "hmpps-check-my-diary-prod" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "hmpps-check-my-diary-prod" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-check-my-diary-prod.id
-}
-
 resource "aws_organizations_account" "hmpps-dev" {
   name      = "HMPPS Dev"
   email     = local.aws_account_email_addresses["HMPPS Dev"][0]
@@ -212,11 +167,6 @@ resource "aws_organizations_account" "hmpps-dev" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "hmpps-dev" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-dev.id
 }
 
 resource "aws_organizations_account" "noms-api" {
@@ -236,11 +186,6 @@ resource "aws_organizations_account" "noms-api" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "noms-api" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.noms-api.id
-}
-
 resource "aws_organizations_account" "hmpps-security-poc" {
   name      = "HMPPS Security POC"
   email     = local.aws_account_email_addresses["HMPPS Security POC"][0]
@@ -256,11 +201,6 @@ resource "aws_organizations_account" "hmpps-security-poc" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "hmpps-security-poc" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-security-poc.id
 }
 
 resource "aws_organizations_account" "hmpps-probation-production" {
@@ -280,11 +220,6 @@ resource "aws_organizations_account" "hmpps-probation-production" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "hmpps-probation-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-probation-production.id
-}
-
 resource "aws_organizations_account" "public-sector-prison-industries" {
   name      = "Public Sector Prison Industries"
   email     = local.aws_account_email_addresses["Public Sector Prison Industries"][0]
@@ -302,11 +237,6 @@ resource "aws_organizations_account" "public-sector-prison-industries" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "public-sector-prison-industries" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.public-sector-prison-industries.id
-}
-
 resource "aws_organizations_account" "hmpps-check-my-diary-development" {
   name      = "HMPPS Check My Diary Development"
   email     = local.aws_account_email_addresses["HMPPS Check My Diary Development"][0]
@@ -322,10 +252,5 @@ resource "aws_organizations_account" "hmpps-check-my-diary-development" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "hmpps-check-my-diary-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmpps-check-my-diary-development.id
 }
 

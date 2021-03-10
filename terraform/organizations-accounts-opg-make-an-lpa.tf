@@ -19,11 +19,6 @@ resource "aws_organizations_account" "moj-lpa-preproduction" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "moj-lpa-preproduction" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-lpa-preproduction.id
-}
-
 resource "aws_organizations_account" "opg-lpa-production" {
   name      = "OPG LPA Production"
   email     = local.aws_account_email_addresses["OPG LPA Production"][0]
@@ -43,11 +38,6 @@ resource "aws_organizations_account" "opg-lpa-production" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "opg-lpa-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.opg-lpa-production.id
 }
 
 resource "aws_organizations_account" "moj-opg-lpa-production" {
@@ -71,11 +61,6 @@ resource "aws_organizations_account" "moj-opg-lpa-production" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "moj-opg-lpa-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-opg-lpa-production.id
-}
-
 resource "aws_organizations_account" "moj-lpa-development" {
   name      = "MOJ LPA Development"
   email     = local.aws_account_email_addresses["MOJ LPA Development"][0]
@@ -94,9 +79,4 @@ resource "aws_organizations_account" "moj-lpa-development" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "moj-lpa-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-lpa-development.id
 }

@@ -15,8 +15,3 @@ resource "aws_organizations_account" "bichard7-2020-prototype" {
     ]
   }
 }
-
-resource "aws_organizations_policy_attachment" "bichard7-2020-prototype" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.bichard7-2020-prototype.id
-}

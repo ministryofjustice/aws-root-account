@@ -16,11 +16,6 @@ resource "aws_organizations_account" "cloud-platform-transit-gateways" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "cloud-platform-transit-gateways" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.cloud-platform-transit-gateways.id
-}
-
 resource "aws_organizations_account" "cloud-platform-ephemeral-test" {
   name      = "Cloud Platform Ephemeral Test"
   email     = local.aws_account_email_addresses["Cloud Platform Ephemeral Test"][0]
@@ -38,11 +33,6 @@ resource "aws_organizations_account" "cloud-platform-ephemeral-test" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "cloud-platform-ephemeral-test" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.cloud-platform-ephemeral-test.id
-}
-
 resource "aws_organizations_account" "cloud-platform" {
   name      = "Cloud Platform"
   email     = local.aws_account_email_addresses["Cloud Platform"][0]
@@ -58,9 +48,4 @@ resource "aws_organizations_account" "cloud-platform" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "cloud-platform" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.cloud-platform.id
 }

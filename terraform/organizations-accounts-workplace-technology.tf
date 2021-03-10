@@ -25,11 +25,6 @@ resource "aws_organizations_account" "workplace-tech-proof-of-concept-developmen
   tags = local.tags-workplace-technology
 }
 
-resource "aws_organizations_policy_attachment" "workplace-tech-proof-of-concept-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.workplace-tech-proof-of-concept-development.id
-}
-
 resource "aws_organizations_account" "wptpoc" {
   name      = "WPTPOC"
   email     = local.aws_account_email_addresses["WPTPOC"][0]
@@ -47,11 +42,6 @@ resource "aws_organizations_account" "wptpoc" {
   }
 
   tags = local.tags-workplace-technology
-}
-
-resource "aws_organizations_policy_attachment" "wptpoc" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.wptpoc.id
 }
 
 resource "aws_organizations_account" "moj-official-production" {
@@ -73,11 +63,6 @@ resource "aws_organizations_account" "moj-official-production" {
   tags = local.tags-workplace-technology
 }
 
-resource "aws_organizations_policy_attachment" "moj-official-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-official-production.id
-}
-
 resource "aws_organizations_account" "moj-official-pre-production" {
   name      = "MOJ Official (Pre-Production)"
   email     = local.aws_account_email_addresses["MOJ Official (Pre-Production)"][0]
@@ -95,11 +80,6 @@ resource "aws_organizations_account" "moj-official-pre-production" {
   }
 
   tags = local.tags-workplace-technology
-}
-
-resource "aws_organizations_policy_attachment" "moj-official-pre-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-official-pre-production.id
 }
 
 resource "aws_organizations_account" "moj-official-development" {
@@ -121,11 +101,6 @@ resource "aws_organizations_account" "moj-official-development" {
   tags = local.tags-workplace-technology
 }
 
-resource "aws_organizations_policy_attachment" "moj-official-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-official-development.id
-}
-
 resource "aws_organizations_account" "moj-official-public-key-infrastructure-dev" {
   name      = "MOJ Official (Public Key Infrastructure Dev)"
   email     = local.aws_account_email_addresses["MOJ Official (Public Key Infrastructure Dev)"][0]
@@ -143,11 +118,6 @@ resource "aws_organizations_account" "moj-official-public-key-infrastructure-dev
   }
 
   tags = local.tags-workplace-technology
-}
-
-resource "aws_organizations_policy_attachment" "moj-official-public-key-infrastructure-dev" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-official-public-key-infrastructure-dev.id
 }
 
 resource "aws_organizations_account" "moj-official-public-key-infrastructure" {
@@ -169,11 +139,6 @@ resource "aws_organizations_account" "moj-official-public-key-infrastructure" {
   tags = local.tags-workplace-technology
 }
 
-resource "aws_organizations_policy_attachment" "moj-official-public-key-infrastructure" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-official-public-key-infrastructure.id
-}
-
 resource "aws_organizations_account" "moj-official-shared-services" {
   name      = "MOJ Official (Shared Services)"
   email     = local.aws_account_email_addresses["MOJ Official (Shared Services)"][0]
@@ -191,9 +156,4 @@ resource "aws_organizations_account" "moj-official-shared-services" {
   }
 
   tags = local.tags-workplace-technology
-}
-
-resource "aws_organizations_policy_attachment" "moj-official-shared-services" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-official-shared-services.id
 }

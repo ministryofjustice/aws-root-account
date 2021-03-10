@@ -16,11 +16,6 @@ resource "aws_organizations_account" "analytical-platform-development" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "analytical-platform-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.analytical-platform-development.id
-}
-
 resource "aws_organizations_account" "analytics-platform-development" {
   # Note that this account was renamed from "Analytics Platform Development"
   # to Analytical Platform Data Engineering Sandbox, to make it clearer.
@@ -40,11 +35,6 @@ resource "aws_organizations_account" "analytics-platform-development" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "analytics-platform-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.analytics-platform-development.id
-}
-
 resource "aws_organizations_account" "analytical-platform-landing" {
   name      = "Analytical Platform Landing"
   email     = local.aws_account_email_addresses["Analytical Platform Landing"][0]
@@ -60,11 +50,6 @@ resource "aws_organizations_account" "analytical-platform-landing" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "analytical-platform-landing" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.analytical-platform-landing.id
 }
 
 resource "aws_organizations_account" "analytical-platform-production" {
@@ -84,11 +69,6 @@ resource "aws_organizations_account" "analytical-platform-production" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "analytical-platform-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.analytical-platform-production.id
-}
-
 resource "aws_organizations_account" "analytical-platform-data-engineering" {
   name      = "Analytical Platform Data Engineering"
   email     = local.aws_account_email_addresses["Analytical Platform Data Engineering"][0]
@@ -106,11 +86,6 @@ resource "aws_organizations_account" "analytical-platform-data-engineering" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "analytical-platform-data-engineering" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.analytical-platform-data-engineering.id
-}
-
 resource "aws_organizations_account" "moj-analytics-platform" {
   name      = "MoJ Analytics Platform"
   email     = local.aws_account_email_addresses["MoJ Analytics Platform"][0]
@@ -126,9 +101,4 @@ resource "aws_organizations_account" "moj-analytics-platform" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "moj-analytics-platform" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-analytics-platform.id
 }

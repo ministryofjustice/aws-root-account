@@ -27,11 +27,6 @@ resource "aws_organizations_account" "modernisation-platform" {
   tags = local.tags-modernisation-platform
 }
 
-resource "aws_organizations_policy_attachment" "modernisation-platform" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.modernisation-platform.id
-}
-
 # Below is a data source to get all Modernisation Platform-managed AWS accounts in a key => value
 # format, where key is the account name and value is their ID; which is stored in AWS Secrets Manager
 # on their side. We then store it in a local with the required map format:
