@@ -3,7 +3,9 @@
 ################
 
 # Get current region
-data "aws_region" "current" {}
+data "aws_region" "current" {
+  provider = aws.root-account
+}
 
 # Get the delegated administrator account ID
 data "aws_caller_identity" "delegated-administrator" {
@@ -19,18 +21,21 @@ resource "aws_securityhub_account" "default" {
 
 # Enable Standard: AWS Foundational Security Best Practices
 resource "aws_securityhub_standards_subscription" "default-aws-foundational" {
+  provider      = aws.root-account
   standards_arn = "arn:aws:securityhub:${data.aws_region.current.name}::standards/aws-foundational-security-best-practices/v/1.0.0"
   depends_on    = [aws_securityhub_account.default]
 }
 
 # Enable Standard: CIS AWS Foundations
 resource "aws_securityhub_standards_subscription" "default-cis" {
+  provider      = aws.root-account
   standards_arn = "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0"
   depends_on    = [aws_securityhub_account.default]
 }
 
 # Enable Standard: PCI DSS v3.2.1
 resource "aws_securityhub_standards_subscription" "default-pci" {
+  provider      = aws.root-account
   standards_arn = "arn:aws:securityhub:${data.aws_region.current.name}::standards/pci-dss/v/3.2.1"
   depends_on    = [aws_securityhub_account.default]
 }
@@ -44,18 +49,21 @@ resource "aws_securityhub_account" "delegated-administrator" {
 
 # Enable Standard: AWS Foundational Security Best Practices
 resource "aws_securityhub_standards_subscription" "delegated-administrator-aws-foundational" {
+  provider      = aws.delegated-administrator
   standards_arn = "arn:aws:securityhub:${data.aws_region.current.name}::standards/aws-foundational-security-best-practices/v/1.0.0"
   depends_on    = [aws_securityhub_account.delegated-administrator]
 }
 
 # Enable Standard: CIS AWS Foundations
 resource "aws_securityhub_standards_subscription" "delegated-administrator-cis" {
+  provider      = aws.delegated-administrator
   standards_arn = "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0"
   depends_on    = [aws_securityhub_account.delegated-administrator]
 }
 
 # Enable Standard: PCI DSS v3.2.1
 resource "aws_securityhub_standards_subscription" "delegated-administrator-pci" {
+  provider      = aws.delegated-administrator
   standards_arn = "arn:aws:securityhub:${data.aws_region.current.name}::standards/pci-dss/v/3.2.1"
   depends_on    = [aws_securityhub_account.delegated-administrator]
 }
@@ -64,6 +72,7 @@ resource "aws_securityhub_standards_subscription" "delegated-administrator-pci" 
 # Security Hub delegated administrator #
 ########################################
 resource "aws_securityhub_organization_admin_account" "default" {
+  provider         = aws.root-account
   admin_account_id = data.aws_caller_identity.delegated-administrator.account_id
 
   # Security Hub is required to be enabled in the root and delegated administrator accounts to set
