@@ -12,6 +12,7 @@ resource "aws_organizations_organization" "default" {
     "tagpolicies.tag.amazonaws.com"
   ]
   enabled_policy_types = [
+    "AISERVICES_OPT_OUT_POLICY",
     "SERVICE_CONTROL_POLICY",
     "TAG_POLICY"
   ]
