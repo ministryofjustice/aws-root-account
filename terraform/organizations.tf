@@ -39,6 +39,13 @@ resource "aws_organizations_policy_attachment" "optional-tags-policy" {
   target_id = aws_organizations_organization.default.roots[0].id
 }
 
+# Enrol all accounts within the AWS Organization to opting out of AWS AI services using our
+# data and content to train the AI services and models.
+resource "aws_organizations_policy_attachment" "ai-services-opt-out" {
+  policy_id = aws_organizations_policy.ai-services-opt-out-policy.id
+  target_id = aws_organizations_organization.default.roots[0].id
+}
+
 # If you're going to create a new account using this Terraform,
 # note that you'll have to import any aws_organizations_policy_attachment resources manually as
 # Terraform will fail to create them (as AWS attaches them on your behalf).
