@@ -20,11 +20,6 @@ resource "aws_organizations_account" "moj-opg-digicop-production" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "moj-opg-digicop-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-opg-digicop-production.id
-}
-
 resource "aws_organizations_account" "moj-opg-digicop-development" {
   name      = "MoJ OPG DigiCop Development"
   email     = local.aws_account_email_addresses["MoJ OPG DigiCop Development"][0]
@@ -45,11 +40,6 @@ resource "aws_organizations_account" "moj-opg-digicop-development" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "moj-opg-digicop-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-opg-digicop-development.id
-}
-
 resource "aws_organizations_account" "moj-opg-digicop-preproduction" {
   name      = "MoJ OPG DigiCop Preproduction"
   email     = local.aws_account_email_addresses["MoJ OPG DigiCop Preproduction"][0]
@@ -68,9 +58,4 @@ resource "aws_organizations_account" "moj-opg-digicop-preproduction" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "moj-opg-digicop-preproduction" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-opg-digicop-preproduction.id
 }

@@ -16,11 +16,6 @@ resource "aws_organizations_account" "cloud-networks-psn" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "cloud-networks-psn" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.cloud-networks-psn.id
-}
-
 resource "aws_organizations_account" "moj-digital-services" {
   name      = "MoJ Digital Services"
   email     = local.aws_account_email_addresses["MoJ Digital Services"][0]
@@ -36,11 +31,6 @@ resource "aws_organizations_account" "moj-digital-services" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "moj-digital-services" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-digital-services.id
 }
 
 resource "aws_organizations_account" "network-architecture" {
@@ -60,11 +50,6 @@ resource "aws_organizations_account" "network-architecture" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "network-architecture" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.network-architecture.id
-}
-
 resource "aws_organizations_account" "moj-cla" {
   name      = "MoJ CLA"
   email     = local.aws_account_email_addresses["MoJ CLA"][0]
@@ -82,11 +67,6 @@ resource "aws_organizations_account" "moj-cla" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "moj-cla" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-cla.id
-}
-
 resource "aws_organizations_account" "patterns" {
   name      = "Patterns"
   email     = local.aws_account_email_addresses["Patterns"][0]
@@ -102,9 +82,4 @@ resource "aws_organizations_account" "patterns" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "patterns" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.patterns.id
 }

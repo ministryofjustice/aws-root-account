@@ -18,11 +18,6 @@ resource "aws_organizations_account" "electronic-monitoring-acquisitive-crime-de
   }
 }
 
-resource "aws_organizations_policy_attachment" "electronic-monitoring-acquisitive-crime-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.electronic-monitoring-acquisitive-crime-development.id
-}
-
 resource "aws_organizations_account" "electronic-monitoring-acquisitive-crime-test" {
   name                       = "Electronic Monitoring Acquisitive Crime Test"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-ac-test")
@@ -40,11 +35,6 @@ resource "aws_organizations_account" "electronic-monitoring-acquisitive-crime-te
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "electronic-monitoring-acquisitive-crime-test" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.electronic-monitoring-acquisitive-crime-test.id
 }
 
 resource "aws_organizations_account" "electronic-monitoring-acquisitive-crime-preproduction" {
@@ -66,11 +56,6 @@ resource "aws_organizations_account" "electronic-monitoring-acquisitive-crime-pr
   }
 }
 
-resource "aws_organizations_policy_attachment" "electronic-monitoring-acquisitive-crime-preproduction" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.electronic-monitoring-acquisitive-crime-preproduction.id
-}
-
 resource "aws_organizations_account" "electronic-monitoring-acquisitive-crime-production" {
   name                       = "Electronic Monitoring Acquisitive Crime Production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-ac-prod")
@@ -88,9 +73,4 @@ resource "aws_organizations_account" "electronic-monitoring-acquisitive-crime-pr
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "electronic-monitoring-acquisitive-crime-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.electronic-monitoring-acquisitive-crime-production.id
 }

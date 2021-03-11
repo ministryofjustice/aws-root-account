@@ -24,11 +24,6 @@ resource "aws_organizations_account" "cica" {
   tags = local.tags-cica
 }
 
-resource "aws_organizations_policy_attachment" "cica" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.cica.id
-}
-
 resource "aws_organizations_account" "cica-development" {
   name      = "CICA Development"
   email     = local.aws_account_email_addresses["CICA Development"][0]
@@ -46,11 +41,6 @@ resource "aws_organizations_account" "cica-development" {
   }
 
   tags = local.tags-cica
-}
-
-resource "aws_organizations_policy_attachment" "cica-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.cica-development.id
 }
 
 resource "aws_organizations_account" "cica-test-verify" {
@@ -72,11 +62,6 @@ resource "aws_organizations_account" "cica-test-verify" {
   tags = local.tags-cica
 }
 
-resource "aws_organizations_policy_attachment" "cica-test-verify" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.cica-test-verify.id
-}
-
 resource "aws_organizations_account" "cica-uat" {
   name      = "CICA UAT"
   email     = local.aws_account_email_addresses["CICA UAT"][0]
@@ -94,9 +79,4 @@ resource "aws_organizations_account" "cica-uat" {
   }
 
   tags = local.tags-cica
-}
-
-resource "aws_organizations_policy_attachment" "cica-uat" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.cica-uat.id
 }

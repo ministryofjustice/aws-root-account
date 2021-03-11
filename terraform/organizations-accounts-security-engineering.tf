@@ -16,11 +16,6 @@ resource "aws_organizations_account" "security-operations-production" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "security-operations-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.security-operations-production.id
-}
-
 resource "aws_organizations_account" "security-engineering" {
   name      = "Security Engineering"
   email     = local.aws_account_email_addresses["Security Engineering"][0]
@@ -36,11 +31,6 @@ resource "aws_organizations_account" "security-engineering" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "security-engineering" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.security-engineering.id
 }
 
 resource "aws_organizations_account" "security-operations-development" {
@@ -60,11 +50,6 @@ resource "aws_organizations_account" "security-operations-development" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "security-operations-development" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.security-operations-development.id
-}
-
 resource "aws_organizations_account" "security-logging-platform" {
   name      = "Security Logging Platform"
   email     = local.aws_account_email_addresses["Security Logging Platform"][0]
@@ -80,11 +65,6 @@ resource "aws_organizations_account" "security-logging-platform" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "security-logging-platform" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.security-logging-platform.id
 }
 
 resource "aws_organizations_account" "moj-security" {
@@ -104,11 +84,6 @@ resource "aws_organizations_account" "moj-security" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "moj-security" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-security.id
-}
-
 resource "aws_organizations_account" "security-operations-pre-production" {
   name      = "Security Operations Pre Production"
   email     = local.aws_account_email_addresses["Security Operations Pre Production"][0]
@@ -124,9 +99,4 @@ resource "aws_organizations_account" "security-operations-pre-production" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "security-operations-pre-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.security-operations-pre-production.id
 }

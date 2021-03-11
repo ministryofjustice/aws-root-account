@@ -15,11 +15,6 @@ resource "aws_organizations_account" "money-to-prisoners-closed" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "money-to-prisoners-closed" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.money-to-prisoners-closed.id
-}
-
 resource "aws_organizations_account" "moj-security-closed" {
   name      = "MoJ-Security"
   email     = local.aws_account_email_addresses["MoJ-Security"][0]
@@ -35,11 +30,6 @@ resource "aws_organizations_account" "moj-security-closed" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "moj-security-closed" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-security-closed.id
 }
 
 resource "aws_organizations_account" "moj-peoplefinder" {
@@ -59,11 +49,6 @@ resource "aws_organizations_account" "moj-peoplefinder" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "moj-peoplefinder" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-peoplefinder.id
-}
-
 resource "aws_organizations_account" "parliamentary-questions" {
   name      = "Parliamentary Questions"
   email     = local.aws_account_email_addresses["Parliamentary Questions"][0]
@@ -79,11 +64,6 @@ resource "aws_organizations_account" "parliamentary-questions" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "parliamentary-questions" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.parliamentary-questions.id
 }
 
 resource "aws_organizations_account" "moj-intranet" {
@@ -103,11 +83,6 @@ resource "aws_organizations_account" "moj-intranet" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "moj-intranet" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-intranet.id
-}
-
 resource "aws_organizations_account" "get-help-with-child-arrangements" {
   name      = "Get help with child arrangements"
   email     = local.aws_account_email_addresses["Get help with child arrangements"][0]
@@ -123,11 +98,6 @@ resource "aws_organizations_account" "get-help-with-child-arrangements" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "get-help-with-child-arrangements" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.get-help-with-child-arrangements.id
 }
 
 resource "aws_organizations_account" "platforms-non-production" {
@@ -147,11 +117,6 @@ resource "aws_organizations_account" "platforms-non-production" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "platforms-non-production" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.platforms-non-production.id
-}
-
 resource "aws_organizations_account" "moj-billing-management" {
   name      = "MoJ Billing Management"
   email     = local.aws_account_email_addresses["MoJ Billing Management"][0]
@@ -167,9 +132,4 @@ resource "aws_organizations_account" "moj-billing-management" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "moj-billing-management" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-billing-management.id
 }

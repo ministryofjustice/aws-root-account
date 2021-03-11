@@ -16,11 +16,6 @@ resource "aws_organizations_account" "tp-hmcts" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "tp-hmcts" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.tp-hmcts.id
-}
-
 resource "aws_organizations_account" "tacticalproducts" {
   name      = "tacticalproducts"
   email     = local.aws_account_email_addresses["tacticalproducts"][0]
@@ -36,11 +31,6 @@ resource "aws_organizations_account" "tacticalproducts" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "tacticalproducts" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.tacticalproducts.id
 }
 
 resource "aws_organizations_account" "tp-alb" {
@@ -60,11 +50,6 @@ resource "aws_organizations_account" "tp-alb" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "tp-alb" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.tp-alb.id
-}
-
 resource "aws_organizations_account" "ministry-of-justice-courtfinder-prod" {
   name      = "Ministry of Justice Courtfinder Prod"
   email     = local.aws_account_email_addresses["Ministry of Justice Courtfinder Prod"][0]
@@ -80,11 +65,6 @@ resource "aws_organizations_account" "ministry-of-justice-courtfinder-prod" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "ministry-of-justice-courtfinder-prod" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.ministry-of-justice-courtfinder-prod.id
 }
 
 resource "aws_organizations_account" "tp-hq" {
@@ -104,11 +84,6 @@ resource "aws_organizations_account" "tp-hq" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "tp-hq" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.tp-hq.id
-}
-
 resource "aws_organizations_account" "moj-info-services-dev" {
   name      = "MoJ Info Services Dev"
   email     = local.aws_account_email_addresses["MoJ Info Services Dev"][0]
@@ -124,9 +99,4 @@ resource "aws_organizations_account" "moj-info-services-dev" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "moj-info-services-dev" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.moj-info-services-dev.id
 }

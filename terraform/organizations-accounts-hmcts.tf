@@ -16,11 +16,6 @@ resource "aws_organizations_account" "hmcts-fee-remissions" {
   }
 }
 
-resource "aws_organizations_policy_attachment" "hmcts-fee-remissions" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.hmcts-fee-remissions.id
-}
-
 resource "aws_organizations_account" "manchester-traffic-dev" {
   name      = "Manchester Traffic Dev"
   email     = local.aws_account_email_addresses["Manchester Traffic Dev"][0]
@@ -36,9 +31,4 @@ resource "aws_organizations_account" "manchester-traffic-dev" {
       role_name
     ]
   }
-}
-
-resource "aws_organizations_policy_attachment" "manchester-traffic-dev" {
-  policy_id = "p-FullAWSAccess"
-  target_id = aws_organizations_account.manchester-traffic-dev.id
 }
