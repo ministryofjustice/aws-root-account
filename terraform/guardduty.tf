@@ -1,13 +1,16 @@
 # Accounts to attach from the AWS Organization
 # This is currently done by adding accounts on a one-by-one basis as
 # we need to onboard people singularly rather than all at once.
-# In the future we can replace all of this with a for_each on a
-# data.aws_organizations_organization.example.accounts[*].id data resource,
-# and auto_enable will be turned on so new accounts won't need to be added here.
-# Any account added here in the meanwhile will have GuardDuty enabled in:
-# - eu-west-2
-# - eu-west-1
-
+#
+# In the future, we can use the aws_guardduty_organization_configuration to
+# automatically enable GuardDuty in all new accounts, without having to enrol
+# each account separately.
+# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration
+#
+# Any account added here in the meanwhile will have GuardDuty enabled in all regions, as per
+# the AWS GuardDuty best practices.
+# See: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_data-sources.html
+#
 # The configuration for the publishing destination is in guardduty-publishing-destination.tf,
 # which has an eu-west-2 bucket that all regional GuardDuty configurations publish to.
 locals {
