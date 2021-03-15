@@ -107,6 +107,19 @@ locals {
         aws_organizations_account.electronic-monitoring-tagging-hardware-test
       ]
     },
+    # HMPPS Community Rehabilitation
+    {
+      github_team    = "hmpps-jenkins-admin"
+      permission_set = aws_ssoadmin_permission_set.administrator-access
+      accounts = [
+        aws_organizations_account.hmpps-community-rehabilitation-jira-non-production,
+        aws_organizations_account.hmpps-community-rehabilitation-jira-production,
+        aws_organizations_account.hmpps-community-rehabilitation-jitbit-non-production,
+        aws_organizations_account.hmpps-community-rehabilitation-jitbit-production,
+        aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-non-production,
+        aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-production
+      ]
+    }
   ]
   teams_to_account_assignments_association_list = flatten([
     for assignment in local.teams_to_account_assignments : [
