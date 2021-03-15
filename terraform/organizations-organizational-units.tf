@@ -62,6 +62,17 @@ resource "aws_organizations_organizational_unit" "hmpps-vcms" {
   parent_id = aws_organizations_organizational_unit.hmpps.id
 }
 
+resource "aws_organizations_organizational_unit" "hmpps-community-rehabilitation" {
+  name      = "Community Rehabilitation"
+  parent_id = aws_organizations_organizational_unit.hmpps.id
+}
+
+# Enrol all accounts within the Community Rehabilitation (current and future) to the restricted regions policy
+resource "aws_organizations_policy_attachment" "hmpps-community-rehabilitation-ou-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_organizational_unit.hmpps-community-rehabilitation.id
+}
+
 resource "aws_organizations_organizational_unit" "hmpps-delius" {
   name      = "Delius"
   parent_id = aws_organizations_organizational_unit.hmpps.id
