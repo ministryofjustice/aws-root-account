@@ -1,28 +1,26 @@
 # AWS Root Account
 
-This repository holds Terraform for the Ministry of Justice AWS root account.
+This repository holds infrastructure as code for the Ministry of Justice [AWS Organizations](https://aws.amazon.com/organizations/) root account, and two supporting accounts: organisation-security, and organisation-logging.
 
 ## AWS Organizations
 
-All accounts defined in here form part of the [AWS Organization](https://aws.amazon.com/organizations/) configuration for the Ministry of Justice, allowing us to use [certain services](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html) for organisational audit, governance, security, and cost optimisation.
+All accounts defined here form part of the MOJ's [AWS Organization](https://aws.amazon.com/organizations/), allowing us to use [certain services](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html) for organisational audit, governance, security, and cost optimisation.
 
 ## Services
 
-We currently manage:
-
-- [x] [AWS Compute Optimizer](https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html) (not available in Terraform)
-- [x] [AWS GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/) ([terraform/guardduty.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/guardduty.tf))
-- [x] [AWS Health (Organisational view)](https://docs.aws.amazon.com/health/latest/ug/) [terraform/organizations.tf#L6](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L6)
-- [x] [AWS IAM Access Analyzer (Organisational zone of trust)](https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-what-is-access-analyzer.html) ([terraform/iam-access-analyzer.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/iam-access-analyzer.tf))
-- [x] [AWS Organizations: Service Control Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html) ([terraform/organizations-service-control-policies.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-service-control-policies.tf))
-- [x] [AWS Organizations: Tagging Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html) ([terraform/organizations-tag-policies.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-tag-policies.tf))
-- [x] [AWS Resource Access Manager (RAM): Organisational sharing](https://docs.aws.amazon.com/ram/latest/userguide/) (not available in Terraform)
-- [x] [AWS S3 Storage Lens](https://docs.aws.amazon.com/AmazonS3/latest/dev/storage_lens_basics_metrics_recommendations.html) (not available in Terraform)
-- [x] [AWS Single Sign-On (SSO)](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) ([terraform/sso.tf](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/sso.tf))
-- [x] [AWS Trusted Advisor (Organisational overview)](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-ta.html) (not available in Terraform)
-
-In the future, we will also manage:
-
-- [ ] [AWS CloudTrail (Organisational trail)](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html)
-- [ ] [AWS Config](https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html)
-- [ ] [AWS Security Hub](https://docs.aws.amazon.com/securityhub/latest/userguide/)
+| Service | Infrastructure as Code | Managed centrally | Method |
+|-|-|-|-|
+| [CloudTrail (Organisational trail)](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) | no | :x: no | Delegated to teams |
+| [Compute Optimizer](https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L4) | :white_check_mark: yes | Trusted access |
+| [Config](https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html) | no | :x: no | Delegated to teams |
+| [GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/guardduty.tf) | :white_check_mark: yes | Trusted access with a delegated administrator |
+| [Health (Organisational view)](https://docs.aws.amazon.com/health/latest/ug/) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L6) | :white_check_mark: yes | Trusted access |
+| [IAM Access Analyzer (Organisational zone of trust)](https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-what-is-access-analyzer.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L3) | :white_check_mark: yes | Trusted access with a delegated administrator |
+| [Organizations: AI services opt-out policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-ai-services-opt-out-policy.tf) | :white_check_mark: yes | [Inheritance](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_inheritance.html) |
+| [Organizations: Service Control Policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-service-control-policies.tf) | :white_check_mark: yes | [Inheritance](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_inheritance.html) |
+| [Organizations: Tagging policies](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations-tag-policies.tf) | :white_check_mark: yes | [Inheritance](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_inheritance.html) |
+| [Resource Access Manager (RAM): Organisational sharing](https://docs.aws.amazon.com/ram/latest/userguide/) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L7) | :white_check_mark: yes | Trusted access |
+| [S3 Storage Lens](https://docs.aws.amazon.com/AmazonS3/latest/dev/storage_lens_basics_metrics_recommendations.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L11) | :white_check_mark: yes | Trusted access |
+| [Security Hub](https://docs.aws.amazon.com/securityhub/latest/userguide/) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/securityhub.tf) | :wavy_dash: partially | Trusted access with a delegated administrator |
+| [Single Sign-On (SSO)](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/sso.tf) | :white_check_mark: yes | Trusted access |
+| [Trusted Advisor (Organisational overview)](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-ta.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L8) | :white_check_mark: yes | Trusted access |
