@@ -24,3 +24,9 @@ variable "administrator_tags" {
   type        = map(any)
   default     = {}
 }
+
+variable "filterable_security_accounts" {
+  description = "Security account IDs to filter out (with NOOP)"
+  type        = list(string)
+  default     = []
+}
