@@ -156,6 +156,8 @@ module "guardduty-us-east-1" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -183,6 +185,8 @@ module "guardduty-us-east-2" {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
+
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
   root_tags = local.root_account
   administrator_tags = merge(
@@ -212,6 +216,8 @@ module "guardduty-us-west-1" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -239,6 +245,8 @@ module "guardduty-us-west-2" {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
+
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
   root_tags = local.root_account
   administrator_tags = merge(
@@ -271,6 +279,8 @@ module "guardduty-ap-south-1" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -298,6 +308,8 @@ module "guardduty-ap-northeast-2" {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
+
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
   root_tags = local.root_account
   administrator_tags = merge(
@@ -327,6 +339,8 @@ module "guardduty-ap-southeast-1" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -355,6 +369,8 @@ module "guardduty-ap-southeast-2" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -382,6 +398,8 @@ module "guardduty-ap-northeast-1" {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
+
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
   root_tags = local.root_account
   administrator_tags = merge(
@@ -414,6 +432,8 @@ module "guardduty-ca-central-1" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -445,6 +465,8 @@ module "guardduty-eu-central-1" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -472,6 +494,8 @@ module "guardduty-eu-west-1" {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
+
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
   root_tags = local.root_account
   administrator_tags = merge(
@@ -501,6 +525,8 @@ module "guardduty-eu-west-2" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -529,6 +555,8 @@ module "guardduty-eu-west-3" {
     account.name => account.id
   }
 
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags-organisation-management, {
@@ -556,6 +584,8 @@ module "guardduty-eu-north-1" {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
+
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
   root_tags = local.root_account
   administrator_tags = merge(
@@ -587,6 +617,8 @@ module "guardduty-sa-east-1" {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
   }
+
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
   root_tags = local.root_account
   administrator_tags = merge(

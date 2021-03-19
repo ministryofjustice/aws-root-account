@@ -89,3 +89,22 @@ resource "aws_guardduty_member" "delegated-administrator" {
   # You need to set the GuardDuty organisation administrator before adding members
   depends_on = [aws_guardduty_organization_admin_account.default]
 }
+
+#####################
+# GuardDuty filters #
+#####################
+resource "aws_guardduty_filter" "security-operations" {
+  provider = aws.delegated-administrator
+
+  name        = "AllApartFromSecurityOperations"
+  action      = "NOOP"
+  detector_id = aws_guardduty_detector.delegated-administrator.id
+  rank        = 1
+
+  finding_criteria {
+    criterion {
+      field      = "accountId"
+      not_equals = var.filterable_security_accounts
+    }
+  }
+}
