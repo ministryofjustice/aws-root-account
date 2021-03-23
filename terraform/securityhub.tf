@@ -19,6 +19,9 @@ locals {
     aws_organizations_account.legal-aid-agency,
     aws_organizations_account.modernisation-platform,
     aws_organizations_account.moj-opg-sirius-preproduction,
+    aws_organizations_account.opg-backups,
+    aws_organizations_account.opg-digi-deps-preprod,
+    aws_organizations_account.opg-digi-deps-prod,
     aws_organizations_account.opg-sirius-backup,
     aws_organizations_account.opg-sirius-production,
   ], local.modernisation-platform-managed-account-ids)
