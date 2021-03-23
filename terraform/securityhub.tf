@@ -18,6 +18,9 @@ locals {
     aws_organizations_account.laa-test,
     aws_organizations_account.legal-aid-agency,
     aws_organizations_account.modernisation-platform,
+    aws_organizations_account.moj-opg-sirius-preproduction,
+    aws_organizations_account.opg-sirius-backup,
+    aws_organizations_account.opg-sirius-production,
   ], local.modernisation-platform-managed-account-ids)
 }
 
