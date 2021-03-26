@@ -13,6 +13,7 @@
 locals {
   enrolled_into_securityhub = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
+    aws_organizations_account.delius-core-non-prod,
     aws_organizations_account.laa-development,
     aws_organizations_account.laa-staging,
     aws_organizations_account.laa-test,
@@ -24,6 +25,7 @@ locals {
     aws_organizations_account.opg-digi-deps-prod,
     aws_organizations_account.opg-sirius-backup,
     aws_organizations_account.opg-sirius-production,
+    aws_organizations_account.vcms-non-prod,
   ], local.modernisation-platform-managed-account-ids)
 }
 
