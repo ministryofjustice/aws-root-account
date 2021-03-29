@@ -16,6 +16,7 @@ locals {
     aws_organizations_account.delius-core-non-prod,
     aws_organizations_account.hmpps-dev,
     aws_organizations_account.hmpps-management,
+    aws_organizations_account.hmpps-prod,
     aws_organizations_account.laa-cloudtrail,
     aws_organizations_account.laa-development,
     aws_organizations_account.laa-production,
