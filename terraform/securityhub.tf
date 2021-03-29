@@ -16,6 +16,7 @@ locals {
     aws_organizations_account.cloud-platform,
     aws_organizations_account.cloud-platform-ephemeral-test,
     aws_organizations_account.delius-core-non-prod,
+    aws_organizations_account.hmpps-co-financing-organisation,
     aws_organizations_account.hmpps-dev,
     aws_organizations_account.hmpps-management,
     aws_organizations_account.hmpps-prod,
