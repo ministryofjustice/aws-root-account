@@ -33,6 +33,7 @@ locals {
     aws_organizations_account.opg-digi-deps-prod,
     aws_organizations_account.opg-sirius-backup,
     aws_organizations_account.opg-sirius-production,
+    aws_organizations_account.security-logging-platform,
     aws_organizations_account.security-operations-development,
     aws_organizations_account.vcms-non-prod,
     aws_organizations_account.wptpoc,
