@@ -79,7 +79,9 @@ locals {
       github_team    = "webops"
       permission_set = aws_ssoadmin_permission_set.administrator-access
       accounts = [
-        aws_organizations_account.moj-digital-services
+        aws_organizations_account.moj-digital-services,
+        aws_organizations_account.cloud-platform,
+        aws_organizations_account.cloud-platform-ephemeral-test,
       ]
     },
     # Electronic Monitoring
