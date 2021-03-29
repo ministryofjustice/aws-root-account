@@ -34,6 +34,7 @@ locals {
     aws_organizations_account.opg-sirius-production,
     aws_organizations_account.security-operations-development,
     aws_organizations_account.vcms-non-prod,
+    aws_organizations_account.wptpoc,
   ], local.modernisation-platform-managed-account-ids)
 }
 
