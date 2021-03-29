@@ -13,6 +13,7 @@
 locals {
   enrolled_into_securityhub = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
+    aws_organizations_account.cloud-platform,
     aws_organizations_account.delius-core-non-prod,
     aws_organizations_account.hmpps-dev,
     aws_organizations_account.hmpps-management,
