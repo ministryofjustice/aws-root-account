@@ -18,6 +18,7 @@ locals {
     aws_organizations_account.cloud-platform-ephemeral-test,
     aws_organizations_account.delius-core-non-prod,
     aws_organizations_account.delius-new-tech-non-prod,
+    aws_organizations_account.hmpps-co-financing-organisation,
     aws_organizations_account.hmpps-delius-mis-non-prod,
     aws_organizations_account.hmpps-delius-performance,
     aws_organizations_account.hmpps-delius-po-test-1,
