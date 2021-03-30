@@ -10,11 +10,6 @@ resource "aws_organizations_organizational_unit" "closed-accounts" {
   parent_id = aws_organizations_organization.default.roots[0].id
 }
 
-resource "aws_organizations_organizational_unit" "closed-accounts-remove" {
-  name      = "Remove"
-  parent_id = aws_organizations_organizational_unit.closed-accounts.id
-}
-
 # OPG
 resource "aws_organizations_organizational_unit" "opg" {
   name      = "OPG"

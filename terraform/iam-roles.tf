@@ -49,27 +49,6 @@ resource "aws_iam_service_linked_role" "trustedadvisor-reporting" {
   description      = "Service Linked Role assumed by Trusted Advisor for multi account reporting."
 }
 
-# Other roles
-## IAM ReadOnly Access Role
-data "aws_iam_policy_document" "iam-read-only-access-assume-role" {
-  version = "2012-10-17"
-
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${local.caller_identity.account_id}:root"]
-    }
-  }
-}
-
-resource "aws_iam_role" "iam-read-only-access-role" {
-  name               = "IAMReadOnlyAccessRole"
-  assume_role_policy = data.aws_iam_policy_document.iam-read-only-access-assume-role.json
-}
-
 ## lambda_basic_execution-test
 data "aws_iam_policy_document" "lambda_basic_execution-test-assume-role" {
   version = "2012-10-17"
