@@ -14,6 +14,37 @@
 # The configuration for the publishing destination is in guardduty-publishing-destination.tf,
 # which has an eu-west-2 bucket that all regional GuardDuty configurations publish to.
 locals {
+  # These accounts currently have an integration in eu-west-2 for GuardDuty that needs unpicking.
+  # We've enrolled them into central GuardDuty in all other regions to make the transition easier.
+  enrolled_into_guardduty_non_eu_west_2_only = [
+    aws_organizations_account.hmpps-delius-mis-test,
+    aws_organizations_account.hmpps-delius-po-test-2,
+    aws_organizations_account.hmpps-delius-po-test-1,
+    aws_organizations_account.hmpps-delius-training-test,
+    aws_organizations_account.hmpps-delius-training,
+    aws_organizations_account.hmpps-delius-mis-non-prod,
+    aws_organizations_account.hmpps-victim-case-management-system-performance,
+    aws_organizations_account.hmpps-victim-case-management-system-stage,
+    aws_organizations_account.hmpps-victim-case-management-system-test,
+    aws_organizations_account.hmpps-security-audit,
+    aws_organizations_account.hmpps-engineering-production,
+    aws_organizations_account.hmpps-delius-pre-production,
+    aws_organizations_account.hmpps-delius-performance,
+    aws_organizations_account.hmpps-delius-stage,
+    aws_organizations_account.hmpps-delius-test,
+    aws_organizations_account.hmpps-victim-case-management-system-pre-production,
+    aws_organizations_account.hmpps-victim-case-management-system-production,
+    aws_organizations_account.hmpps-victim-case-management-system-integration,
+    aws_organizations_account.strategic-partner-gateway-non-production,
+    aws_organizations_account.hmpps-probation-production,
+    aws_organizations_account.probation-management-non-prod,
+    aws_organizations_account.alfresco-non-prod,
+    aws_organizations_account.delius-core-non-prod,
+    aws_organizations_account.delius-new-tech-non-prod,
+    aws_organizations_account.vcms-non-prod,
+    aws_organizations_account.probation,
+    aws_organizations_account.network-architecture,
+  ]
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
     aws_organizations_account.analytical-platform-data-engineering,
@@ -134,7 +165,7 @@ locals {
     aws_organizations_account.tp-hq,
     aws_organizations_account.workplace-tech-proof-of-concept-development,
     aws_organizations_account.wptpoc
-  ], local.modernisation-platform-managed-account-ids)
+  ], local.enrolled_into_guardduty_non_eu_west_2_only, local.modernisation-platform-managed-account-ids)
 }
 
 ###########################
@@ -523,6 +554,7 @@ module "guardduty-eu-west-2" {
   enrolled_into_guardduty = {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
+    if !contains(local.enrolled_into_guardduty_non_eu_west_2_only, account)
   }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
