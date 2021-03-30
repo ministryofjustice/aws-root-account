@@ -554,7 +554,7 @@ module "guardduty-eu-west-2" {
   enrolled_into_guardduty = {
     for account in local.enrolled_into_guardduty :
     account.name => account.id
-    if !contains(local.enrolled_into_guardduty_non_eu_west_2_only, account)
+    if ! contains(local.enrolled_into_guardduty_non_eu_west_2_only, account)
   }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
