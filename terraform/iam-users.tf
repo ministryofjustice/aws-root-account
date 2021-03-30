@@ -5,10 +5,6 @@ locals {
       aws_iam_group.billing_full_access.name,
       aws_iam_group.iam_user_change_password.name
     ]
-    "CeriBuck" = [
-      aws_iam_group.billing_full_access.name,
-      aws_iam_group.iam_user_change_password.name
-    ]
     "JakeMulley" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
@@ -24,13 +20,6 @@ locals {
       aws_iam_group.billing_full_access.name,
       aws_iam_group.iam_user_change_password.name
     ]
-    "LeahCios" = [
-      aws_iam_group.billing_full_access.name,
-      aws_iam_group.iam_user_change_password.name
-    ]
-    "MaxLakanu" = [
-      aws_iam_group.billing_full_access.name
-    ]
     "ModernisationPlatformOrganisationManagement" = []
     "PaulWyborn" = [
       aws_iam_group.admins.name,
@@ -45,12 +34,6 @@ locals {
     "SabluMiah" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
-      aws_iam_group.iam_user_change_password.name
-    ]
-    "SeanBusby" = [
-      aws_iam_group.admins.name,
-      aws_iam_group.aws_organisations_service_admins.name,
-      aws_iam_group.billing_full_access.name,
       aws_iam_group.iam_user_change_password.name
     ]
     "SteveMarshall" = [
