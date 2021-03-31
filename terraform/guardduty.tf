@@ -44,6 +44,14 @@ locals {
     aws_organizations_account.vcms-non-prod,
     aws_organizations_account.probation,
     aws_organizations_account.network-architecture,
+    aws_organizations_account.youth-justice-framework-dev,
+    aws_organizations_account.youth-justice-framework-management,
+    aws_organizations_account.youth-justice-framework-pre-prod,
+    aws_organizations_account.youth-justice-framework-juniper,
+    aws_organizations_account.youth-justice-framework-prod,
+    aws_organizations_account.youth-justice-framework-monitoring,
+    aws_organizations_account.youth-justice-framework-eng-tools,
+    aws_organizations_account.youth-justice-framework-sandpit,
   ]
   enrolled_into_guardduty = concat([
     { id = local.caller_identity.account_id, name = "MoJ root account" },
