@@ -148,9 +148,9 @@ resource "aws_organizations_organizational_unit" "workplace-technology" {
   parent_id = aws_organizations_organization.default.roots[0].id
 }
 
-# Analytics Platform
-resource "aws_organizations_organizational_unit" "analytics-platform" {
-  name      = "Analytics Platform"
+# Analytical Platform
+resource "aws_organizations_organizational_unit" "analytical-platform" {
+  name      = "Analytical Platform"
   parent_id = aws_organizations_organization.default.roots[0].id
 }
 
