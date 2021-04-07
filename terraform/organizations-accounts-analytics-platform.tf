@@ -73,7 +73,7 @@ resource "aws_organizations_account" "analytical-platform-production" {
   parent_id = aws_organizations_organizational_unit.analytical-platform.id
   tags = merge(local.tags-analytical-platform, {
     environment-name = "production"
-    is-production = true
+    is-production    = true
   })
 
   lifecycle {
