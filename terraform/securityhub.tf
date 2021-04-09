@@ -21,6 +21,7 @@ locals {
     aws_organizations_account.analytics-platform-development,
     aws_organizations_account.cloud-platform,
     aws_organizations_account.cloud-platform-ephemeral-test,
+    aws_organizations_account.cloud-platform-transit-gateways,
     aws_organizations_account.delius-core-non-prod,
     aws_organizations_account.delius-new-tech-non-prod,
     aws_organizations_account.hmpps-co-financing-organisation,
