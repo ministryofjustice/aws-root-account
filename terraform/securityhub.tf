@@ -63,6 +63,12 @@ locals {
     aws_organizations_account.moj-analytics-platform,
     aws_organizations_account.moj-digital-services,
     aws_organizations_account.moj-lpa-preproduction,
+    aws_organizations_account.moj-official-development,
+    aws_organizations_account.moj-official-pre-production,
+    aws_organizations_account.moj-official-production,
+    aws_organizations_account.moj-official-public-key-infrastructure,
+    aws_organizations_account.moj-official-public-key-infrastructure-dev,
+    aws_organizations_account.moj-official-shared-services,
     aws_organizations_account.moj-opg-lpa-production,
     aws_organizations_account.moj-opg-lpa-refunds-preproduction,
     aws_organizations_account.moj-opg-lpa-refunds-production,
@@ -85,6 +91,7 @@ locals {
     aws_organizations_account.security-operations-production,
     aws_organizations_account.strategic-partner-gateway-non-production,
     aws_organizations_account.vcms-non-prod,
+    aws_organizations_account.workplace-tech-proof-of-concept-development,
     aws_organizations_account.wptpoc,
   ], local.modernisation-platform-managed-account-ids)
 }
