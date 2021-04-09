@@ -62,6 +62,8 @@ locals {
     aws_organizations_account.modernisation-platform,
     aws_organizations_account.moj-analytics-platform,
     aws_organizations_account.moj-digital-services,
+    aws_organizations_account.moj-opg-shared-development,
+    aws_organizations_account.moj-opg-shared-production,
     aws_organizations_account.moj-opg-sirius-preproduction,
     aws_organizations_account.moj-security,
     aws_organizations_account.network-architecture,
