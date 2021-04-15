@@ -134,3 +134,54 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg-breakglass-policy" {
   managed_policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
   permission_set_arn = aws_ssoadmin_permission_set.opg-breakglass.arn
 }
+
+##################################################
+# Modernisation Platform specific permision sets #
+##################################################
+
+# The Modernisation Platform provides teams with view-only access,
+# but write permissions for Secrets Manager and SSM to initialise
+# secrets with their first value.
+resource "aws_ssoadmin_permission_set" "modernisation-platform-viewer" {
+  name             = "modernisation-platform-viewer"
+  instance_arn     = local.sso_instance_arn
+  session_duration = "PT1H"
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation-platform-viewer-policy" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-viewer.arn
+}
+
+data "aws_iam_policy_document" "secretsmanager-and-ssm" {
+  statement {
+    actions =  [
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds",
+      "secretsmanager:CreateSecret",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:UpdateSecret",
+      "secretsmanager:RestoreSecret",
+      "secretsmanager:DeleteSecret",
+      "ssm:PutParameter",
+      "ssm:DeleteParameter",
+      "ssm:GetParameterHistory",
+      "ssm:GetParametersByPath",
+      "ssm:GetParameters",
+      "ssm:GetParameter",
+      "ssm:DescribeParameters",
+      "ssm:DeleteParameters"
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-viewer-secrets" {
+  inline_policy      = data.aws_iam_policy_document.secretsmanager-and-ssm.json
+  instance_arn       = local.sso_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-viewer.arn
+}
