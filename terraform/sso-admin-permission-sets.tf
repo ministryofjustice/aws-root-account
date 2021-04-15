@@ -156,7 +156,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "modernisation-platform-viewer
 
 data "aws_iam_policy_document" "secretsmanager-and-ssm" {
   statement {
-    actions =  [
+    actions = [
       "secretsmanager:GetResourcePolicy",
       "secretsmanager:GetSecretValue",
       "secretsmanager:DescribeSecret",
