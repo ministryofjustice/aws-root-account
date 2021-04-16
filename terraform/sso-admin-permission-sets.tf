@@ -161,19 +161,15 @@ data "aws_iam_policy_document" "secretsmanager-and-ssm" {
       "secretsmanager:GetSecretValue",
       "secretsmanager:DescribeSecret",
       "secretsmanager:ListSecretVersionIds",
-      "secretsmanager:CreateSecret",
       "secretsmanager:PutSecretValue",
       "secretsmanager:UpdateSecret",
       "secretsmanager:RestoreSecret",
-      "secretsmanager:DeleteSecret",
       "ssm:PutParameter",
-      "ssm:DeleteParameter",
       "ssm:GetParameterHistory",
       "ssm:GetParametersByPath",
       "ssm:GetParameters",
       "ssm:GetParameter",
       "ssm:DescribeParameters",
-      "ssm:DeleteParameters"
     ]
 
     resources = ["*"]
