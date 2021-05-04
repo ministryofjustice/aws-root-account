@@ -30,3 +30,9 @@ variable "filterable_security_accounts" {
   type        = list(string)
   default     = []
 }
+
+variable "auto_enable" {
+  description = "Whether to auto-enable GuardDuty in new AWS accounts"
+  type        = bool
+  default     = false
+}

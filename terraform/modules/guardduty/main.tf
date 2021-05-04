@@ -51,6 +51,16 @@ resource "aws_guardduty_organization_admin_account" "default" {
   depends_on = [aws_guardduty_detector.delegated-administrator]
 }
 
+##################################################################
+# Auto-enable GuardDuty for new accounts in the AWS Organization #
+##################################################################
+resource "aws_guardduty_organization_configuration" "delegated-administrator" {
+  provider = aws.delegated-administrator
+
+  detector_id = aws_guardduty_detector.delegated-administrator.id
+  auto_enable = var.auto_enable
+}
+
 ####################################
 # GuardDuty publishing destination #
 ####################################
