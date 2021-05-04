@@ -2,6 +2,11 @@
 # GuardDuty #
 #############
 
+# Get the organization management account ID
+data "aws_caller_identity" "default" {
+  provider = aws.root-account
+}
+
 # Get the delegated administrator account ID
 data "aws_caller_identity" "delegated-administrator" {
   provider = aws.delegated-administrator
@@ -78,12 +83,15 @@ resource "aws_guardduty_publishing_destination" "delegated-administrator" {
 resource "aws_guardduty_member" "delegated-administrator" {
   provider = aws.delegated-administrator
 
-  for_each = var.enrolled_into_guardduty
+  for_each = (var.auto_enable == true && var.enrolled_into_guardduty == {}) ? {
+    # You still have to enrol the organization management account into GuardDuty as it would have been created before GuardDuty is auto-enabled.
+    management-account = data.aws_caller_identity.default.account_id
+  } : var.enrolled_into_guardduty
 
   # We want to add these accounts as members within the delegated administrator account
   account_id  = each.value
   detector_id = aws_guardduty_detector.delegated-administrator.id
-  email       = "fake@email.com"
+  email       = "placeholder-to-avoid-terraform-drift@example.com"
   invite      = true
 
   # With AWS Organizations, AWS doesn't rely on the email address provided to invite a member account,
