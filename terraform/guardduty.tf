@@ -1,18 +1,41 @@
-# Accounts to attach from the AWS Organization
-# This is currently done by adding accounts on a one-by-one basis as
-# we need to onboard people singularly rather than all at once.
-#
-# In the future, we can use the aws_guardduty_organization_configuration to
-# automatically enable GuardDuty in all new accounts, without having to enrol
-# each account separately.
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration
-#
-# Any account added here in the meanwhile will have GuardDuty enabled in all regions, as per
-# the AWS GuardDuty best practices.
-# See: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_data-sources.html
+# Accounts to enrol from the AWS Organization
+# This is currently done by adding accounts on a one-by-one basis as we need to
+# onboard teams singularly, rather than all at once for eu-* and us-* regions.
 #
 # The configuration for the publishing destination is in guardduty-publishing-destination.tf,
 # which has an eu-west-2 bucket that all regional GuardDuty configurations publish to.
+#
+# NOTE
+# Different regions have different configurations.
+#
+# Prior to 4th May 2021, no regions had auto-enable turned on. To speed up and
+# simplify this Terraform, auto-enable was turned on in the below regions. This
+# allows us to deprecate the enrolled_into_guardduty variable for those regions,
+# and we can rely on auto-enable to automatically enable GuardDuty for **new** AWS
+# accounts created after 4th May 2021. This resulted in 1,288 (184 accounts * 7 regions)
+# resources being removed from the state, nearly halving the time Terraform took
+# to run.
+#
+# The AWS API also doesn't return the status of a member account (whether GuardDuty
+# is enabled or not), so it didn't provide much value other than the initial association
+# as a member account.
+# See: https://docs.aws.amazon.com/guardduty/latest/APIReference/API_Member.html
+#
+# The following regions have auto-enable turned **off**:
+# eu-*
+# us-*
+#
+# The following regions have auto-enable turned **on**:
+# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration
+# ap-*
+# ca-*
+# sa-*
+#
+# In the event of having to recreate this AWS Organization, we can assume that
+# auto-enable will automatically create the member associations for the accounts.
+# Therefore, the aws_guardduty_member resources have been removed from regions
+# where auto-enable is now turned on as of 4th May 2021.
+
 locals {
   # These accounts currently have an integration in eu-west-2 for GuardDuty that needs unpicking.
   # We've enrolled them into central GuardDuty in all other regions to make the transition easier.
@@ -310,13 +333,11 @@ module "guardduty-ap-south-1" {
     aws.delegated-administrator = aws.organisation-security-ap-south-1
   }
 
+  # Automatically enable GuardDuty for ap-south-1
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -340,13 +361,11 @@ module "guardduty-ap-northeast-2" {
     aws.delegated-administrator = aws.organisation-security-ap-northeast-2
   }
 
+  # Automatically enable GuardDuty for ap-northeast-2
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -370,13 +389,11 @@ module "guardduty-ap-southeast-1" {
     aws.delegated-administrator = aws.organisation-security-ap-southeast-1
   }
 
+  # Automatically enable GuardDuty for ap-southeast-1
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -400,13 +417,11 @@ module "guardduty-ap-southeast-2" {
     aws.delegated-administrator = aws.organisation-security-ap-southeast-2
   }
 
+  # Automatically enable GuardDuty for ap-southeast-2
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -430,13 +445,11 @@ module "guardduty-ap-northeast-1" {
     aws.delegated-administrator = aws.organisation-security-ap-northeast-1
   }
 
+  # Automatically enable GuardDuty for ap-northeast-1
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -463,13 +476,11 @@ module "guardduty-ca-central-1" {
     aws.delegated-administrator = aws.organisation-security-ca-central-1
   }
 
+  # Automatically enable GuardDuty for ca-central-1
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -650,13 +661,11 @@ module "guardduty-sa-east-1" {
     aws.delegated-administrator = aws.organisation-security-sa-east-1
   }
 
+  # Automatically enable GuardDuty for sa-east-1
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
