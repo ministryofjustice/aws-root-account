@@ -86,7 +86,7 @@ resource "aws_guardduty_member" "delegated-administrator" {
   for_each = (var.auto_enable == true && var.enrolled_into_guardduty == {}) ? {
     # You still have to enrol the organization management account into GuardDuty as it would have been created before GuardDuty is auto-enabled.
     management-account = data.aws_caller_identity.default.account_id
-    } : var.enrolled_into_guardduty
+  } : var.enrolled_into_guardduty
 
   # We want to add these accounts as members within the delegated administrator account
   account_id  = each.value
