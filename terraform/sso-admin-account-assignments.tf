@@ -121,6 +121,14 @@ locals {
         aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-non-production,
         aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-production
       ]
+    },
+    # MOJ Official Technical Operations (Networking)
+    {
+      github_team    = "moj-official-techops"
+      permission_set = aws_ssoadmin_permission_set.administrator-access
+      accounts = [
+        aws_organizations_account.moj-official-network-operations-centre
+      ]
     }
   ]
   teams_to_account_assignments_association_list = flatten([
