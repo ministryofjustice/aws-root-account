@@ -101,6 +101,12 @@ resource "aws_organizations_account" "moj-official-development" {
   tags = local.tags-workplace-technology
 }
 
+# Enrol MOJ Official (Development) to the restricted regions policy
+resource "aws_organizations_policy_attachment" "moj-official-development-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.moj-official-development.id
+}
+
 resource "aws_organizations_account" "moj-official-public-key-infrastructure-dev" {
   name      = "MOJ Official (Public Key Infrastructure Dev)"
   email     = local.aws_account_email_addresses["MOJ Official (Public Key Infrastructure Dev)"][0]

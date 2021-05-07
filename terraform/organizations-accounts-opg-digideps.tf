@@ -65,3 +65,9 @@ resource "aws_organizations_account" "opg-digi-deps-preprod" {
     ]
   }
 }
+
+# Enrol DigiDeps preprod to the restricted regions policy
+resource "aws_organizations_policy_attachment" "opg-digi-deps-preprod-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.opg-digi-deps-preprod.id
+}
