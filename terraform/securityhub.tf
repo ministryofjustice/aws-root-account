@@ -74,6 +74,7 @@ locals {
     aws_organizations_account.moj-digital-services,
     aws_organizations_account.moj-lpa-preproduction,
     aws_organizations_account.moj-official-development,
+    aws_organizations_account.moj-official-network-operations-centre,
     aws_organizations_account.moj-official-pre-production,
     aws_organizations_account.moj-official-production,
     aws_organizations_account.moj-official-public-key-infrastructure,
