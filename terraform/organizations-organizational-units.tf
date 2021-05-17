@@ -31,6 +31,12 @@ resource "aws_organizations_organizational_unit" "opg-digideps" {
   parent_id = aws_organizations_organizational_unit.opg.id
 }
 
+# Enrol all accounts within the DigiDeps (current and future) to the restricted regions policy
+resource "aws_organizations_policy_attachment" "opg-digi-deps-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_organizational_unit.opg-digideps.id
+}
+
 resource "aws_organizations_organizational_unit" "opg-make-an-lpa" {
   name      = "Make An LPA"
   parent_id = aws_organizations_organizational_unit.opg.id

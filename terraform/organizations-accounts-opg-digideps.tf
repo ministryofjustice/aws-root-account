@@ -40,12 +40,6 @@ resource "aws_organizations_account" "opg-digi-deps-dev" {
   }
 }
 
-# Enrol DigiDeps development to the restricted regions policy
-resource "aws_organizations_policy_attachment" "opg-digi-deps-dev-restricted-regions" {
-  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
-  target_id = aws_organizations_account.opg-digi-deps-dev.id
-}
-
 resource "aws_organizations_account" "opg-digi-deps-preprod" {
   name      = "OPG Digi Deps Preprod"
   email     = local.aws_account_email_addresses["OPG Digi Deps Preprod"][0]
@@ -64,10 +58,4 @@ resource "aws_organizations_account" "opg-digi-deps-preprod" {
       role_name
     ]
   }
-}
-
-# Enrol DigiDeps preprod to the restricted regions policy
-resource "aws_organizations_policy_attachment" "opg-digi-deps-preprod-restricted-regions" {
-  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
-  target_id = aws_organizations_account.opg-digi-deps-preprod.id
 }
