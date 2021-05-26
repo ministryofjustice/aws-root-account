@@ -84,6 +84,55 @@ resource "aws_s3_bucket_policy" "moj-cur-reports-bucket-policy" {
   policy = data.aws_iam_policy_document.moj-cur-reports-bucket-policy.json
 }
 
+## S3 bucket for moj-cur-reports-quicksight
+resource "aws_s3_bucket" "moj-cur-reports-quicksight" {
+  bucket = "moj-cur-reports-quicksight"
+  acl    = "private"
+
+  versioning {
+    enabled = true
+  }
+}
+
+data "aws_iam_policy_document" "moj-cur-reports-quicksight-bucket-policy" {
+  version = "2008-10-17"
+
+  # 386209384616 is owned and maintained by AWS themselves, to enable
+  # upwards reporting of billing.
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketAcl",
+      "s3:GetBucketPolicy"
+    ]
+    resources = [aws_s3_bucket.moj-cur-reports-quicksight.arn]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::386209384616:root"]
+    }
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.moj-cur-reports-quicksight.arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::386209384616:root"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "moj-cur-reports-quicksight-bucket-policy" {
+  bucket = aws_s3_bucket.moj-cur-reports-quicksight.bucket
+
+  # 386209384616 is owned and maintained by AWS themselves, to enable
+  # upwards reporting of billing.
+  policy = data.aws_iam_policy_document.moj-cur-reports-quicksight-bucket-policy.json
+}
+
 # S3 bucket for storing tagging policy reports
 resource "aws_s3_bucket" "tagging-policy-reports" {
   # The bucket for Tag Policy reports used MUST reside in us-east-1, see:
