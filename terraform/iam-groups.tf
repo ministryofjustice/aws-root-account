@@ -47,3 +47,14 @@ resource "aws_iam_group_policy_attachment" "iam_user_change_password" {
   group      = aws_iam_group.iam_user_change_password.name
   policy_arn = "arn:aws:iam::aws:policy/IAMUserChangePassword"
 }
+
+# IAM group: ModernisationPlatformOrganisationManagement
+resource "aws_iam_group" "modernisation_platform_restricted_organisations_administrator" {
+  name = "ModernisationPlatformOrganisationManagement"
+}
+
+# Attach AWS-managed policy to the ModernisationPlatformOrganisationManagement
+resource "aws_iam_group_policy_attachment" "modernisation_platform_restricted_organisations_administrator" {
+  group      = aws_iam_group.modernisation_platform_restricted_organisations_administrator.name
+  policy_arn = aws_iam_policy.terraform-organisation-management-policy.arn
+}
