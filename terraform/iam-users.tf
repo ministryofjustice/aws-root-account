@@ -5,6 +5,9 @@ locals {
       aws_iam_group.billing_full_access.name,
       aws_iam_group.iam_user_change_password.name
     ]
+    "DavidElliott" = [
+      aws_iam_group.modernisation_platform_restricted_organisations_administrator.name
+    ]
     "JakeMulley" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
@@ -20,7 +23,9 @@ locals {
       aws_iam_group.billing_full_access.name,
       aws_iam_group.iam_user_change_password.name
     ]
-    "ModernisationPlatformOrganisationManagement" = []
+    "ModernisationPlatformOrganisationManagement" = [
+      aws_iam_group.modernisation_platform_restricted_organisations_administrator.name
+    ]
     "PaulWyborn" = [
       aws_iam_group.admins.name,
       aws_iam_group.aws_organisations_service_admins.name,
@@ -65,13 +70,4 @@ resource "aws_iam_user_group_membership" "group_memberships" {
   for_each = local.all_iam_users_and_groups
   user     = aws_iam_user.user[each.key].name
   groups   = each.value
-}
-
-# IAM User direct policy attachments
-# In the future these should be a group policy attachment, rather than directly attached to users
-
-## terraform-organisation-management-policy
-resource "aws_iam_user_policy_attachment" "terraform-organisation-management-attachment" {
-  user       = aws_iam_user.user["ModernisationPlatformOrganisationManagement"].name
-  policy_arn = aws_iam_policy.terraform-organisation-management-policy.arn
 }
