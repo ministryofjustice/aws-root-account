@@ -6,7 +6,7 @@ locals {
       aws_iam_group.iam_user_change_password.name
     ]
     "DavidElliott" = [
-      aws_iam_group.modernisation_platform_restricted_organisations_administrator.name
+      aws_iam_group.modernisation_platform_restricted_organisations_scps.name
     ]
     "JakeMulley" = [
       aws_iam_group.admins.name,

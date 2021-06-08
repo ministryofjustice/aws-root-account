@@ -58,3 +58,14 @@ resource "aws_iam_group_policy_attachment" "modernisation_platform_restricted_or
   group      = aws_iam_group.modernisation_platform_restricted_organisations_administrator.name
   policy_arn = aws_iam_policy.terraform-organisation-management-policy.arn
 }
+
+# IAM group: ModernisationPlatformOrganisationManagementWithSCPs
+resource "aws_iam_group" "modernisation_platform_restricted_organisations_scps" {
+  name = "ModernisationPlatformOrganisationManagementWithSCPs"
+}
+
+# Attach AWS-managed policy to the ModernisationPlatformOrganisationManagement
+resource "aws_iam_group_policy_attachment" "modernisation_platform_restricted_organisations_scps" {
+  group      = aws_iam_group.modernisation_platform_restricted_organisations_scps.name
+  policy_arn = aws_iam_policy.terraform-organisation-management-policy-scp.arn
+}
