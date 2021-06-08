@@ -120,6 +120,29 @@ resource "aws_iam_policy" "terraform-organisation-management-policy" {
   policy      = data.aws_iam_policy_document.terraform-organisation-management.json
 }
 
+data "aws_iam_policy_document" "terraform-organisation-management-policy-scp" {
+  source_json = data.aws_iam_policy_document.terraform-organisation-management.json
+
+  version = "2012-10-17"
+
+  statement {
+    sid    = "AllowOrganisationManagementSCPs"
+    effect = "Allow"
+    actions = [
+      "organizations:AttachPolicy",
+      "organizations:CreatePolicy",
+      "organizations:UpdatePolicy",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "terraform-organisation-management-policy-scp" {
+  name        = "TerraformOrganisationManagementPolicyWithSCPs"
+  description = "A policy that allows the Modernisation Platform to manage organisations and SCPs"
+  policy      = data.aws_iam_policy_document.terraform-organisation-management-policy-scp.json
+}
+
 # SSO Administrator role, used by the Modernisation Platform to provide access to AWS accounts via AWS SSO
 data "aws_iam_policy_document" "sso-administrator-role" {
   version = "2012-10-17"
