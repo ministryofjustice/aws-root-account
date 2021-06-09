@@ -76,11 +76,23 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
       "organizations:TagResource",
       "organizations:UntagResource",
       "organizations:UpdateOrganizationalUnit",
-      "sts:*"
+      "sts:*",
     ]
     resources = [
       "*"
     ]
+  }
+
+  statement {
+    sid    = "AllowAccessKeyProvisioning"
+    effect = "Allow"
+    actions = [
+      "iam:CreateAccessKey",
+      "iam:DeleteAccessKey",
+      "iam:ListAccessKeys",
+      "iam:UpdateAccessKey"
+    ]
+    resources = ["arn:aws:iam::*:user/$${aws:username}"]
   }
 
   # Allow access to the bucket from the MoJ root account
