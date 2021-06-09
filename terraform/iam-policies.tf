@@ -89,6 +89,8 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
     actions = [
       "iam:CreateAccessKey",
       "iam:DeleteAccessKey",
+      "iam:GetAccessKeyLastUsed",
+      "iam:GetUser",
       "iam:ListAccessKeys",
       "iam:UpdateAccessKey"
     ]
