@@ -5,6 +5,10 @@ locals {
       aws_iam_group.billing_full_access.name,
       aws_iam_group.iam_user_change_password.name
     ]
+    "BrianKing" = [
+      aws_iam_group.billing_full_access.name,
+      aws_iam_group.iam_user_change_password.name
+    ]
     "DavidElliott" = [
       aws_iam_group.modernisation_platform_restricted_organisations_scps.name,
       aws_iam_group.iam_user_change_password.name
