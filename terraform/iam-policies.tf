@@ -149,6 +149,17 @@ data "aws_iam_policy_document" "terraform-organisation-management-policy-scp" {
     ]
     resources = ["*"]
   }
+  statement {
+    sid    = "AllowDeleteOUs"
+    effect = "Allow"
+    actions = [
+      # Note temporary for reorganising the ou structure, to be deleted after
+      "organizations:DeleteOrganizationalUnit"
+    ]
+    resources = [
+      "*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "terraform-organisation-management-policy-scp" {
