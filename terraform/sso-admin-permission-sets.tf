@@ -185,12 +185,12 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-vie
 data "aws_iam_policy_document" "rotate-update-iam-key" {
   statement {
     actions = [
-        "iam:CreateAccessKey",
-        "iam:DeleteAccessKey",
-        "iam:GetAccessKeyLastUsed",
-        "iam:GetUser",
-        "iam:ListAccessKeys",
-        "iam:UpdateAccessKey"
+      "iam:CreateAccessKey",
+      "iam:DeleteAccessKey",
+      "iam:GetAccessKeyLastUsed",
+      "iam:GetUser",
+      "iam:ListAccessKeys",
+      "iam:UpdateAccessKey"
     ]
 
     resources = ["arn:aws:iam::*:user/cicd-member-user"]
