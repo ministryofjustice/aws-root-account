@@ -198,7 +198,7 @@ data "aws_iam_policy_document" "rotate-update-iam-key" {
 }
 
 resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-viewer-iam-key" {
-  inline_policy      = data.aws_iam_policy_document.rotate-update-iam-key
+  inline_policy      = data.aws_iam_policy_document.rotate-update-iam-key.json
   instance_arn       = local.sso_instance_arn
   permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-viewer.arn
 }
