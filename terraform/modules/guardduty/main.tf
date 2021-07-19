@@ -43,6 +43,13 @@ resource "aws_guardduty_detector" "delegated-administrator" {
   # See: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_cloudwatch.html#guardduty_findings_cloudwatch_notification_frequency
   finding_publishing_frequency = "FIFTEEN_MINUTES"
 
+  # Enable S3 logs to be analysed in GuardDuty
+  datasources {
+    s3_logs {
+      enable = true
+    }
+  }
+
   tags = var.administrator_tags
 }
 
@@ -64,6 +71,13 @@ resource "aws_guardduty_organization_configuration" "delegated-administrator" {
 
   detector_id = aws_guardduty_detector.delegated-administrator.id
   auto_enable = var.auto_enable
+
+  # Auto-enable S3 logs to be analysed for new accounts in the AWS Organization
+  datasources {
+    s3_logs {
+      auto_enable = true
+    }
+  }
 }
 
 ####################################
