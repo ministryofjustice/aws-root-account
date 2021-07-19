@@ -211,6 +211,9 @@ module "guardduty-us-east-1" {
     aws.delegated-administrator = aws.organisation-security-us-east-1
   }
 
+  # Automatically enable GuardDuty for us-east-1
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
@@ -240,6 +243,9 @@ module "guardduty-us-east-2" {
     aws.root-account            = aws.aws-root-account-us-east-2
     aws.delegated-administrator = aws.organisation-security-us-east-2
   }
+
+  # Automatically enable GuardDuty for us-east-2
+  auto_enable = true
 
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
@@ -271,6 +277,9 @@ module "guardduty-us-west-1" {
     aws.delegated-administrator = aws.organisation-security-us-west-1
   }
 
+  # Automatically enable GuardDuty for us-west-1
+  auto_enable = true
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
@@ -300,6 +309,9 @@ module "guardduty-us-west-2" {
     aws.root-account            = aws.aws-root-account-us-west-2
     aws.delegated-administrator = aws.organisation-security-us-west-2
   }
+
+  # Automatically enable GuardDuty for us-west-2
+  auto_enable = true
 
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
