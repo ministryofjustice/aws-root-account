@@ -31,6 +31,19 @@ resource "aws_ssoadmin_managed_policy_attachment" "view-only-access-policy" {
   permission_set_arn = aws_ssoadmin_permission_set.view-only-access.arn
 }
 
+# ReadOnlyAccess
+resource "aws_ssoadmin_permission_set" "read-only-access" {
+  name             = "ReadOnlyAccess"
+  instance_arn     = local.sso_instance_arn
+  session_duration = "PT1H"
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "read-only-access-policy" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.read-only-access.arn
+}
+
 # SecurityAudit
 resource "aws_ssoadmin_permission_set" "security-audit" {
   name             = "SecurityAudit"
