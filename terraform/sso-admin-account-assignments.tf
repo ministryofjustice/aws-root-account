@@ -74,6 +74,16 @@ locals {
         aws_organizations_account.modernisation-platform
       ]
     },
+
+    # Modernisation Platform engineers
+    {
+      github_team    = "modernisation-platform-engineers"
+      permission_set = aws_ssoadmin_permission_set.aws-sso-readonly
+      accounts = [
+        { id = local.caller_identity.account_id, name = "MoJ root account" }
+      ]
+    },
+
     # Cloud Platform (Webops) access
     {
       github_team    = "webops"
