@@ -119,6 +119,14 @@ locals {
         aws_organizations_account.electronic-monitoring-tagging-hardware-test
       ]
     },
+    # Electronic Monitoring MOJ SOC Integration
+    {
+      github_team    = "hmpps-ems-moj-soc"
+      permission_set = aws_ssoadmin_permission_set.security-audit
+      accounts = [
+        aws_organizations_account.electronic-monitoring-shared-logging
+      ]
+    },
     # HMPPS Community Rehabilitation
     {
       github_team    = "hmpps-jenkins-admin"
