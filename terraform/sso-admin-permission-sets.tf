@@ -31,6 +31,19 @@ resource "aws_ssoadmin_managed_policy_attachment" "view-only-access-policy" {
   permission_set_arn = aws_ssoadmin_permission_set.view-only-access.arn
 }
 
+# ReadOnlyAccess
+resource "aws_ssoadmin_permission_set" "read-only-access" {
+  name             = "ReadOnlyAccess"
+  instance_arn     = local.sso_instance_arn
+  session_duration = "PT1H"
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "read-only-access-policy" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.read-only-access.arn
+}
+
 # SecurityAudit
 resource "aws_ssoadmin_permission_set" "security-audit" {
   name             = "SecurityAudit"
@@ -139,22 +152,24 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg-breakglass-policy" {
 # Modernisation Platform specific permision sets #
 ##################################################
 
-# The Modernisation Platform provides teams with view-only access,
-# but write permissions for Secrets Manager and SSM to initialise
-# secrets with their first value.
-resource "aws_ssoadmin_permission_set" "modernisation-platform-viewer" {
-  name             = "modernisation-platform-viewer"
+# The Modernisation Platform provides developers with read-only access,
+# but with the following additional permissions:
+# write permissions for Secrets Manager and SSM to set secrets
+# generate keys for the application ci user
+
+resource "aws_ssoadmin_permission_set" "modernisation-platform-developer" {
+  name             = "modernisation-platform-developer"
   instance_arn     = local.sso_instance_arn
   session_duration = "PT1H"
 }
 
-resource "aws_ssoadmin_managed_policy_attachment" "modernisation-platform-viewer-policy" {
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation-platform-developer-policy" {
   instance_arn       = local.sso_instance_arn
-  managed_policy_arn = "arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"
-  permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-viewer.arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-developer.arn
 }
 
-data "aws_iam_policy_document" "secretsmanager-and-ssm" {
+data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
   statement {
     actions = [
       "secretsmanager:GetResourcePolicy",
@@ -189,8 +204,8 @@ data "aws_iam_policy_document" "secretsmanager-and-ssm" {
   }
 }
 
-resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-viewer-secrets" {
-  inline_policy      = data.aws_iam_policy_document.secretsmanager-and-ssm.json
+resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-developer-additional" {
+  inline_policy      = data.aws_iam_policy_document.modernisation-platform-developer-additional.json
   instance_arn       = local.sso_instance_arn
-  permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-viewer.arn
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-developer.arn
 }
