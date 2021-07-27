@@ -122,7 +122,7 @@ locals {
     # Electronic Monitoring MOJ SOC Integration
     {
       github_team    = "hmpps-ems-moj-soc"
-      permission_set = aws_ssoadmin_permission_set.security-audit
+      permission_set = aws_ssoadmin_permission_set.administrator-access
       accounts = [
         aws_organizations_account.electronic-monitoring-shared-logging
       ]
