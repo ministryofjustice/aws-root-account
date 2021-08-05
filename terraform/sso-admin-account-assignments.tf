@@ -147,7 +147,7 @@ locals {
       accounts = [
         aws_organizations_account.moj-official-network-operations-centre,
         aws_organizations_account.wptpoc,
-        aws_organizations_account,workplace-tech-proof-of-concept-development
+        aws_organizations_account, workplace-tech-proof-of-concept-development
       ]
     },
     {
@@ -162,7 +162,7 @@ locals {
         aws_organizations_account.moj-official-public-key-infrastructure,
         aws_organizations_account.moj-official-shared-services,
         aws_organizations_account.wptpoc,
-        aws_organizations_account,workplace-tech-proof-of-concept-development
+        aws_organizations_account, workplace-tech-proof-of-concept-development
       ]
     },
     {
@@ -177,7 +177,7 @@ locals {
         aws_organizations_account.moj-official-public-key-infrastructure,
         aws_organizations_account.moj-official-shared-services,
         aws_organizations_account.wptpoc,
-        aws_organizations_account,workplace-tech-proof-of-concept-development
+        aws_organizations_account, workplace-tech-proof-of-concept-development
       ]
     }
   ]
