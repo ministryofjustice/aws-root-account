@@ -140,12 +140,44 @@ locals {
         aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-production
       ]
     },
-    # MOJ Official Technical Operations (Networking)
+    # MOJ Official Technical Operations (Networking) and Cloud Ops team
     {
       github_team    = "moj-official-techops"
       permission_set = aws_ssoadmin_permission_set.administrator-access
       accounts = [
-        aws_organizations_account.moj-official-network-operations-centre
+        aws_organizations_account.moj-official-network-operations-centre,
+        aws_organizations_account.wptpoc,
+        aws_organizations_account.workplace-tech-proof-of-concept-development
+      ]
+    },
+    {
+      github_team    = "moj-official-techops"
+      permission_set = aws_ssoadmin_permission_set.read-only-access
+      accounts = [
+        aws_organizations_account.moj-official-network-operations-centre,
+        aws_organizations_account.moj-official-production,
+        aws_organizations_account.moj-official-pre-production,
+        aws_organizations_account.moj-official-development,
+        aws_organizations_account.moj-official-public-key-infrastructure-dev,
+        aws_organizations_account.moj-official-public-key-infrastructure,
+        aws_organizations_account.moj-official-shared-services,
+        aws_organizations_account.wptpoc,
+        aws_organizations_account.workplace-tech-proof-of-concept-development
+      ]
+    },
+    {
+      github_team    = "cloud-ops-admins"
+      permission_set = aws_ssoadmin_permission_set.administrator-access
+      accounts = [
+        aws_organizations_account.moj-official-network-operations-centre,
+        aws_organizations_account.moj-official-production,
+        aws_organizations_account.moj-official-pre-production,
+        aws_organizations_account.moj-official-development,
+        aws_organizations_account.moj-official-public-key-infrastructure-dev,
+        aws_organizations_account.moj-official-public-key-infrastructure,
+        aws_organizations_account.moj-official-shared-services,
+        aws_organizations_account.wptpoc,
+        aws_organizations_account.workplace-tech-proof-of-concept-development
       ]
     }
   ]
