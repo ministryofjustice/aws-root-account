@@ -145,6 +145,7 @@ locals {
       github_team    = "moj-official-techops"
       permission_set = aws_ssoadmin_permission_set.administrator-access
       accounts = [
+        aws_organizations_account.moj-official-development,
         aws_organizations_account.moj-official-network-operations-centre,
         aws_organizations_account.wptpoc,
         aws_organizations_account.workplace-tech-proof-of-concept-development
