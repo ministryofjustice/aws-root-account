@@ -179,6 +179,27 @@ locals {
         aws_organizations_account.wptpoc,
         aws_organizations_account.workplace-tech-proof-of-concept-development
       ]
+    },
+    {
+      github_team    = "hmpps-migration"
+      permission_set = aws_ssoadmin_permission_set.read-only-access
+      accounts = [
+        aws_organizations_account.alfresco-non-prod,
+        aws_organizations_account.hmpps-delius-training,
+        aws_organizations_account.hmpps-delius-mis-test,
+        aws_organizations_account.delius-new-tech-non-prod,
+        aws_organizations_account.hmpps-delius-training-test,
+        aws_organizations_account.hmpps-delius-pre-production,
+        aws_organizations_account.hmpps-delius-po-test,
+        aws_organizations_account.hmpps-delius-mis-non-prod,
+        aws_organizations_account.hmpps-delius-po-test-1,
+        aws_organizations_account.delius-core-non-prod,
+        aws_organizations_account.probation-management-non-prod,
+        aws_organizations_account.hmpps-delius-stage,
+        aws_organizations_account.hmpps-delius-test,
+        aws_organizations_account.hmpps-delius-po-test-2,
+        aws_organizations_account.hmpps-delius-performance,
+      ]
     }
   ]
   teams_to_account_assignments_association_list = flatten([
