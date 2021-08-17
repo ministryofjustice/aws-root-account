@@ -84,7 +84,6 @@ locals {
     aws_organizations_account.analytical-platform-production,
     aws_organizations_account.analytics-platform-development,
     aws_organizations_account.aws-laa,
-    aws_organizations_account.bichard7-2020-prototype,
     aws_organizations_account.cica,
     aws_organizations_account.cica-development,
     aws_organizations_account.cica-test-verify,
@@ -192,9 +191,7 @@ locals {
     aws_organizations_account.security-operations-pre-production,
     aws_organizations_account.security-operations-production,
     aws_organizations_account.tacticalproducts,
-    aws_organizations_account.tp-alb,
     aws_organizations_account.tp-hmcts,
-    aws_organizations_account.tp-hq,
     aws_organizations_account.workplace-tech-proof-of-concept-development,
     aws_organizations_account.wptpoc
   ], local.enrolled_into_guardduty_non_eu_west_2_only, local.modernisation-platform-managed-account-ids)
