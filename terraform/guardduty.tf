@@ -40,161 +40,49 @@ locals {
   # These accounts currently have an integration in eu-west-2 for GuardDuty that needs unpicking.
   # We've enrolled them into central GuardDuty in all other regions to make the transition easier.
   enrolled_into_guardduty_non_eu_west_2_only = [
-    aws_organizations_account.hmpps-delius-mis-test,
-    aws_organizations_account.hmpps-delius-po-test-2,
-    aws_organizations_account.hmpps-delius-po-test-1,
-    aws_organizations_account.hmpps-delius-training-test,
-    aws_organizations_account.hmpps-delius-training,
-    aws_organizations_account.hmpps-delius-mis-non-prod,
-    aws_organizations_account.hmpps-victim-case-management-system-performance,
-    aws_organizations_account.hmpps-victim-case-management-system-stage,
-    aws_organizations_account.hmpps-victim-case-management-system-test,
-    aws_organizations_account.hmpps-security-audit,
-    aws_organizations_account.hmpps-engineering-production,
-    aws_organizations_account.hmpps-delius-pre-production,
-    aws_organizations_account.hmpps-delius-performance,
-    aws_organizations_account.hmpps-delius-stage,
-    aws_organizations_account.hmpps-delius-test,
-    aws_organizations_account.hmpps-victim-case-management-system-pre-production,
-    aws_organizations_account.hmpps-victim-case-management-system-production,
-    aws_organizations_account.hmpps-victim-case-management-system-integration,
-    aws_organizations_account.strategic-partner-gateway-non-production,
-    aws_organizations_account.hmpps-probation-production,
-    aws_organizations_account.probation-management-non-prod,
-    aws_organizations_account.alfresco-non-prod,
-    aws_organizations_account.delius-core-non-prod,
-    aws_organizations_account.delius-new-tech-non-prod,
-    aws_organizations_account.vcms-non-prod,
-    aws_organizations_account.probation,
-    aws_organizations_account.network-architecture,
-    aws_organizations_account.youth-justice-framework-dev,
-    aws_organizations_account.youth-justice-framework-management,
-    aws_organizations_account.youth-justice-framework-pre-prod,
-    aws_organizations_account.youth-justice-framework-juniper,
-    aws_organizations_account.youth-justice-framework-prod,
-    aws_organizations_account.youth-justice-framework-monitoring,
-    aws_organizations_account.youth-justice-framework-eng-tools,
-    aws_organizations_account.youth-justice-framework-sandpit,
+    aws_organizations_account.hmpps-delius-mis-test.id,
+    aws_organizations_account.hmpps-delius-po-test-2.id,
+    aws_organizations_account.hmpps-delius-po-test-1.id,
+    aws_organizations_account.hmpps-delius-training-test.id,
+    aws_organizations_account.hmpps-delius-training.id,
+    aws_organizations_account.hmpps-delius-mis-non-prod.id,
+    aws_organizations_account.hmpps-victim-case-management-system-performance.id,
+    aws_organizations_account.hmpps-victim-case-management-system-stage.id,
+    aws_organizations_account.hmpps-victim-case-management-system-test.id,
+    aws_organizations_account.hmpps-security-audit.id,
+    aws_organizations_account.hmpps-engineering-production.id,
+    aws_organizations_account.hmpps-delius-pre-production.id,
+    aws_organizations_account.hmpps-delius-performance.id,
+    aws_organizations_account.hmpps-delius-stage.id,
+    aws_organizations_account.hmpps-delius-test.id,
+    aws_organizations_account.hmpps-victim-case-management-system-pre-production.id,
+    aws_organizations_account.hmpps-victim-case-management-system-production.id,
+    aws_organizations_account.hmpps-victim-case-management-system-integration.id,
+    aws_organizations_account.strategic-partner-gateway-non-production.id,
+    aws_organizations_account.hmpps-probation-production.id,
+    aws_organizations_account.probation-management-non-prod.id,
+    aws_organizations_account.alfresco-non-prod.id,
+    aws_organizations_account.delius-core-non-prod.id,
+    aws_organizations_account.delius-new-tech-non-prod.id,
+    aws_organizations_account.vcms-non-prod.id,
+    aws_organizations_account.probation.id,
+    aws_organizations_account.network-architecture.id,
+    aws_organizations_account.youth-justice-framework-dev.id,
+    aws_organizations_account.youth-justice-framework-management.id,
+    aws_organizations_account.youth-justice-framework-pre-prod.id,
+    aws_organizations_account.youth-justice-framework-juniper.id,
+    aws_organizations_account.youth-justice-framework-prod.id,
+    aws_organizations_account.youth-justice-framework-monitoring.id,
+    aws_organizations_account.youth-justice-framework-eng-tools.id,
+    aws_organizations_account.youth-justice-framework-sandpit.id,
   ]
-  enrolled_into_guardduty = concat([
-    { id = local.caller_identity.account_id, name = "MoJ root account" },
-    aws_organizations_account.analytical-platform-data-engineering,
-    aws_organizations_account.analytical-platform-development,
-    aws_organizations_account.analytical-platform-landing,
-    aws_organizations_account.analytical-platform-production,
-    aws_organizations_account.analytics-platform-development,
-    aws_organizations_account.aws-laa,
-    aws_organizations_account.cica,
-    aws_organizations_account.cica-development,
-    aws_organizations_account.cica-test-verify,
-    aws_organizations_account.cica-uat,
-    aws_organizations_account.cloud-networks-psn,
-    aws_organizations_account.cloud-platform,
-    aws_organizations_account.cloud-platform-ephemeral-test,
-    aws_organizations_account.cloud-platform-transit-gateways,
-    aws_organizations_account.electronic-monitoring-acquisitive-crime-development,
-    aws_organizations_account.electronic-monitoring-acquisitive-crime-preproduction,
-    aws_organizations_account.electronic-monitoring-acquisitive-crime-production,
-    aws_organizations_account.electronic-monitoring-acquisitive-crime-test,
-    aws_organizations_account.electronic-monitoring-archive-query-service,
-    aws_organizations_account.electronic-monitoring-identity-access-management,
-    aws_organizations_account.electronic-monitoring-infrastructure-dev,
-    aws_organizations_account.electronic-monitoring-monitoring-mapping-dev,
-    aws_organizations_account.electronic-monitoring-monitoring-mapping-pre-prod,
-    aws_organizations_account.electronic-monitoring-monitoring-mapping-prod,
-    aws_organizations_account.electronic-monitoring-monitoring-mapping-test,
-    aws_organizations_account.electronic-monitoring-protective-monitoring,
-    aws_organizations_account.electronic-monitoring-shared-logging,
-    aws_organizations_account.electronic-monitoring-shared-networking,
-    aws_organizations_account.electronic-monitoring-shared-networking-non-prod,
-    aws_organizations_account.electronic-monitoring-tagging-hardware-pre-prod,
-    aws_organizations_account.electronic-monitoring-tagging-hardware-prod,
-    aws_organizations_account.electronic-monitoring-tagging-hardware-test,
-    aws_organizations_account.hmcts-fee-remissions,
-    aws_organizations_account.hmpps-check-my-diary-development,
-    aws_organizations_account.hmpps-check-my-diary-prod,
-    aws_organizations_account.hmpps-co-financing-organisation,
-    aws_organizations_account.hmpps-community-rehabilitation-jira-non-production,
-    aws_organizations_account.hmpps-community-rehabilitation-jira-production,
-    aws_organizations_account.hmpps-community-rehabilitation-jitbit-non-production,
-    aws_organizations_account.hmpps-community-rehabilitation-jitbit-production,
-    aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-non-production,
-    aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-production,
-    aws_organizations_account.hmpps-delius-po-test,
-    aws_organizations_account.hmpps-dev,
-    aws_organizations_account.hmpps-management,
-    aws_organizations_account.hmpps-performance-hub,
-    aws_organizations_account.hmpps-prod,
-    aws_organizations_account.hmpps-security-poc,
-    aws_organizations_account.laa-cloudtrail,
-    aws_organizations_account.laa-development,
-    aws_organizations_account.laa-production,
-    aws_organizations_account.laa-shared-services,
-    aws_organizations_account.laa-staging,
-    aws_organizations_account.laa-test,
-    aws_organizations_account.laa-uat,
-    aws_organizations_account.legal-aid-agency,
-    aws_organizations_account.manchester-traffic-dev,
-    aws_organizations_account.ministry-of-justice-courtfinder-prod,
-    aws_organizations_account.modernisation-platform,
-    aws_organizations_account.moj-analytics-platform,
-    aws_organizations_account.moj-cla,
-    aws_organizations_account.moj-digital-services,
-    aws_organizations_account.moj-info-services-dev,
-    aws_organizations_account.moj-lpa-development,
-    aws_organizations_account.moj-lpa-preproduction,
-    aws_organizations_account.moj-official-development,
-    aws_organizations_account.moj-official-network-operations-centre,
-    aws_organizations_account.moj-official-pre-production,
-    aws_organizations_account.moj-official-production,
-    aws_organizations_account.moj-official-public-key-infrastructure,
-    aws_organizations_account.moj-official-public-key-infrastructure-dev,
-    aws_organizations_account.moj-official-shared-services,
-    aws_organizations_account.moj-opg-digicop-development,
-    aws_organizations_account.moj-opg-digicop-preproduction,
-    aws_organizations_account.moj-opg-digicop-production,
-    aws_organizations_account.moj-opg-identity,
-    aws_organizations_account.moj-opg-lpa-production,
-    aws_organizations_account.moj-opg-lpa-refunds-development,
-    aws_organizations_account.moj-opg-lpa-refunds-preproduction,
-    aws_organizations_account.moj-opg-lpa-refunds-production,
-    aws_organizations_account.moj-opg-management,
-    aws_organizations_account.moj-opg-sandbox,
-    aws_organizations_account.moj-opg-shared-development,
-    aws_organizations_account.moj-opg-shared-production,
-    aws_organizations_account.moj-opg-sirius-development,
-    aws_organizations_account.moj-opg-sirius-preproduction,
-    aws_organizations_account.moj-opg-sirius-production,
-    aws_organizations_account.moj-security,
-    aws_organizations_account.noms-api,
-    aws_organizations_account.opg-backups,
-    aws_organizations_account.opg-digi-deps-dev,
-    aws_organizations_account.opg-digi-deps-preprod,
-    aws_organizations_account.opg-digi-deps-prod,
-    aws_organizations_account.opg-lpa-production,
-    aws_organizations_account.opg-refund-develop,
-    aws_organizations_account.opg-refund-production,
-    aws_organizations_account.opg-shared,
-    aws_organizations_account.opg-sirius-backup,
-    aws_organizations_account.opg-sirius-dev,
-    aws_organizations_account.opg-sirius-production,
-    aws_organizations_account.opg-use-my-lpa-development,
-    aws_organizations_account.opg-use-my-lpa-preproduction,
-    aws_organizations_account.opg-use-my-lpa-production,
-    aws_organizations_account.organisation-logging,
-    aws_organizations_account.patterns,
-    aws_organizations_account.platforms-non-production,
-    aws_organizations_account.public-sector-prison-industries,
-    aws_organizations_account.security-engineering,
-    aws_organizations_account.security-logging-platform,
-    aws_organizations_account.security-operations-development,
-    aws_organizations_account.security-operations-pre-production,
-    aws_organizations_account.security-operations-production,
-    aws_organizations_account.tacticalproducts,
-    aws_organizations_account.tp-hmcts,
-    aws_organizations_account.workplace-tech-proof-of-concept-development,
-    aws_organizations_account.wptpoc
-  ], local.enrolled_into_guardduty_non_eu_west_2_only, local.modernisation-platform-managed-account-ids)
+  enrolled_into_guardduty = {
+    for account in aws_organizations_organization.default.accounts :
+    account.name => account.id
+    # Don't enrol the organisation-security account (as it'll already be enabled as the delegated administrator)
+    # Don't enrol suspended or removed (i.e. deleted) accounts
+    if account.status == "ACTIVE" && account.name != "organisation-security"
+  }
 }
 
 ###########################
@@ -211,13 +99,11 @@ module "guardduty-us-east-1" {
   # Automatically enable GuardDuty for us-east-1
   auto_enable = true
 
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -244,13 +130,11 @@ module "guardduty-us-east-2" {
   # Automatically enable GuardDuty for us-east-2
   auto_enable = true
 
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -277,13 +161,11 @@ module "guardduty-us-west-1" {
   # Automatically enable GuardDuty for us-west-1
   auto_enable = true
 
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -310,13 +192,11 @@ module "guardduty-us-west-2" {
   # Automatically enable GuardDuty for us-west-2
   auto_enable = true
 
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -346,6 +226,9 @@ module "guardduty-ap-south-1" {
   # Automatically enable GuardDuty for ap-south-1
   auto_enable = true
 
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
@@ -373,6 +256,9 @@ module "guardduty-ap-northeast-2" {
 
   # Automatically enable GuardDuty for ap-northeast-2
   auto_enable = true
+
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
 
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
@@ -402,6 +288,9 @@ module "guardduty-ap-southeast-1" {
   # Automatically enable GuardDuty for ap-southeast-1
   auto_enable = true
 
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
@@ -430,6 +319,9 @@ module "guardduty-ap-southeast-2" {
   # Automatically enable GuardDuty for ap-southeast-2
   auto_enable = true
 
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
@@ -457,6 +349,9 @@ module "guardduty-ap-northeast-1" {
 
   # Automatically enable GuardDuty for ap-northeast-1
   auto_enable = true
+
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
 
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
@@ -489,6 +384,9 @@ module "guardduty-ca-central-1" {
   # Automatically enable GuardDuty for ca-central-1
   auto_enable = true
 
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
@@ -517,13 +415,14 @@ module "guardduty-eu-central-1" {
     aws.delegated-administrator = aws.organisation-security-eu-central-1
   }
 
+  # Automatically enable GuardDuty for eu-central-1
+  auto_enable = true
+
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -547,13 +446,14 @@ module "guardduty-eu-west-1" {
     aws.delegated-administrator = aws.organisation-security-eu-west-1
   }
 
+  # Automatically enable GuardDuty for eu-west-1
+  auto_enable = true
+
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -577,14 +477,17 @@ module "guardduty-eu-west-2" {
     aws.delegated-administrator = aws.organisation-security-eu-west-2
   }
 
-  destination_arn = aws_s3_bucket.guardduty-bucket.arn
-  kms_key_arn     = aws_kms_key.guardduty.arn
+  # Automatically enable GuardDuty for eu-west-2
+  auto_enable = true
 
   enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-    if !contains(local.enrolled_into_guardduty_non_eu_west_2_only, account)
+    for account_name, account_id in local.enrolled_into_guardduty :
+    account_name => account_id
+    if !contains(local.enrolled_into_guardduty_non_eu_west_2_only, account_id)
   }
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -608,13 +511,14 @@ module "guardduty-eu-west-3" {
     aws.delegated-administrator = aws.organisation-security-eu-west-3
   }
 
+  # Automatically enable GuardDuty for eu-west-3
+  auto_enable = true
+
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -638,13 +542,14 @@ module "guardduty-eu-north-1" {
     aws.delegated-administrator = aws.organisation-security-eu-north-1
   }
 
+  # Automatically enable GuardDuty for eu-north-1
+  auto_enable = true
+
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
-
-  enrolled_into_guardduty = {
-    for account in local.enrolled_into_guardduty :
-    account.name => account.id
-  }
 
   filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
 
@@ -673,6 +578,9 @@ module "guardduty-sa-east-1" {
 
   # Automatically enable GuardDuty for sa-east-1
   auto_enable = true
+
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
 
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
