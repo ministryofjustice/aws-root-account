@@ -74,7 +74,6 @@ locals {
         aws_organizations_account.modernisation-platform
       ]
     },
-
     # Modernisation Platform engineers
     {
       github_team    = "modernisation-platform-engineers"
@@ -83,7 +82,6 @@ locals {
         { id = local.caller_identity.account_id, name = "MoJ root account" }
       ]
     },
-
     # Cloud Platform (Webops) access
     {
       github_team    = "webops"
@@ -206,7 +204,10 @@ locals {
   teams_to_account_assignments_association_list = flatten([
     for assignment in local.teams_to_account_assignments : [
       for account in assignment.accounts : {
-        account        = account
+        account = {
+          id   = account.id,
+          name = account.name
+        }
         github_team    = assignment["github_team"]
         permission_set = assignment["permission_set"]
       }
