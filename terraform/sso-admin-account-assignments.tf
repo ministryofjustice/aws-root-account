@@ -199,6 +199,13 @@ locals {
         aws_organizations_account.hmpps-delius-po-test-2,
         aws_organizations_account.hmpps-delius-performance,
       ]
+    },
+    {
+      github_team    = "operations-engineering"
+      permission_set = aws_ssoadmin_permission_set.administrator-access
+      accounts = [
+        aws_organizations_account.moj-digital-services
+      ]
     }
   ]
   teams_to_account_assignments_association_list = flatten([
