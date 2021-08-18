@@ -52,6 +52,16 @@ provider "aws" {
   }
 }
 
+# ap-northeast-3
+provider "aws" {
+  region = "ap-northeast-3"
+  alias  = "organisation-security-ap-northeast-3"
+
+  assume_role {
+    role_arn = "arn:aws:iam::${aws_organizations_account.organisation-security.id}:role/OrganizationAccountAccessRole"
+  }
+}
+
 # ap-northeast-2
 provider "aws" {
   region = "ap-northeast-2"
