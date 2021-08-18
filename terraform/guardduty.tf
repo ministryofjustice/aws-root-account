@@ -246,6 +246,37 @@ module "guardduty-ap-south-1" {
   ]
 }
 
+module "guardduty-ap-northeast-3" {
+  source = "./modules/guardduty"
+
+  providers = {
+    aws.root-account            = aws.aws-root-account-ap-northeast-3
+    aws.delegated-administrator = aws.organisation-security-ap-northeast-3
+  }
+
+  # Automatically enable GuardDuty for ap-northeast-3
+  auto_enable = true
+
+  # Enrol accounts created prior to the auto_enable flag being set
+  enrolled_into_guardduty = local.enrolled_into_guardduty
+
+  destination_arn = aws_s3_bucket.guardduty-bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+  filterable_security_accounts = [aws_organizations_account.security-operations-development.id]
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags-organisation-management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    aws_organizations_organization.default,
+    aws_s3_bucket_policy.guardduty-bucket-policy
+  ]
+}
+
 module "guardduty-ap-northeast-2" {
   source = "./modules/guardduty"
 

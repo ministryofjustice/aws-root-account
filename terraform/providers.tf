@@ -37,6 +37,12 @@ provider "aws" {
   alias  = "aws-root-account-ap-south-1"
 }
 
+# ap-northeast-3
+provider "aws" {
+  region = "ap-northeast-3"
+  alias  = "aws-root-account-ap-northeast-3"
+}
+
 # ap-northeast-2
 provider "aws" {
   region = "ap-northeast-2"
