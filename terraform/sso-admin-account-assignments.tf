@@ -198,6 +198,7 @@ locals {
         aws_organizations_account.hmpps-delius-test,
         aws_organizations_account.hmpps-delius-po-test-2,
         aws_organizations_account.hmpps-delius-performance,
+        aws_organizations_account.modernisation-platform
       ]
     },
     {
