@@ -202,6 +202,11 @@ locals {
       ]
     },
     {
+      github_team    = "hmpps-migration"
+      permission_set = aws_ssoadmin_permission_set.modernisation-platform-developer
+      accounts       = concat([], local.modernisation-platform-managed-account-ids)
+    },
+    {
       github_team    = "operations-engineering"
       permission_set = aws_ssoadmin_permission_set.administrator-access
       accounts = [
