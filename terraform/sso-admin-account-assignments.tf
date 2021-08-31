@@ -180,6 +180,22 @@ locals {
       ]
     },
     {
+      github_team    = "cloud-ops-alz-admins"
+      permission_set = aws_ssoadmin_permission_set.administrator-access
+      accounts = [
+        aws_organizations_account.moj-official-development
+      ]
+    },
+    {
+      github_team    = "cloud-ops-alz-admins"
+      permission_set = aws_ssoadmin_permission_set.read-only-access
+      accounts = [
+        aws_organizations_account.moj-official-production,
+        aws_organizations_account.moj-official-pre-production,
+        aws_organizations_account.moj-official-shared-services,
+      ]
+    },
+    {
       github_team    = "hmpps-migration"
       permission_set = aws_ssoadmin_permission_set.read-only-access
       accounts = [
