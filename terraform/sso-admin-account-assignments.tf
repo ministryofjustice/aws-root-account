@@ -214,7 +214,13 @@ locals {
         aws_organizations_account.hmpps-delius-test,
         aws_organizations_account.hmpps-delius-po-test-2,
         aws_organizations_account.hmpps-delius-performance,
+        aws_organizations_account.modernisation-platform
       ]
+    },
+    {
+      github_team    = "hmpps-migration"
+      permission_set = aws_ssoadmin_permission_set.modernisation-platform-developer
+      accounts       = concat([], local.modernisation-platform-managed-account-ids)
     },
     {
       github_team    = "operations-engineering"
