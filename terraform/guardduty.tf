@@ -73,8 +73,7 @@ locals {
     aws_organizations_account.youth-justice-framework-juniper.id,
     aws_organizations_account.youth-justice-framework-prod.id,
     aws_organizations_account.youth-justice-framework-monitoring.id,
-    aws_organizations_account.youth-justice-framework-eng-tools.id,
-    aws_organizations_account.youth-justice-framework-sandpit.id,
+    aws_organizations_account.youth-justice-framework-eng-tools.id
   ]
   enrolled_into_guardduty = {
     for account in aws_organizations_organization.default.accounts :
