@@ -185,6 +185,11 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
       "ssm:GetParameters",
       "ssm:GetParameter",
       "ssm:DescribeParameters",
+      "ssm:StartSession",
+      "ssm:TerminateSession",
+      "ssm:ResumeSession",
+      "ssm:DescribeSessions",
+      "ssm:GetConnectionStatus"
     ]
 
     resources = ["*"]
