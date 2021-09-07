@@ -67,13 +67,10 @@ locals {
     aws_organizations_account.vcms-non-prod.id,
     aws_organizations_account.probation.id,
     aws_organizations_account.network-architecture.id,
-    aws_organizations_account.youth-justice-framework-dev.id,
     aws_organizations_account.youth-justice-framework-management.id,
     aws_organizations_account.youth-justice-framework-pre-prod.id,
-    aws_organizations_account.youth-justice-framework-juniper.id,
     aws_organizations_account.youth-justice-framework-prod.id,
-    aws_organizations_account.youth-justice-framework-monitoring.id,
-    aws_organizations_account.youth-justice-framework-eng-tools.id
+    aws_organizations_account.youth-justice-framework-monitoring.id
   ]
   enrolled_into_guardduty = {
     for account in aws_organizations_organization.default.accounts :
