@@ -66,8 +66,7 @@ locals {
     aws_organizations_account.delius-new-tech-non-prod.id,
     aws_organizations_account.vcms-non-prod.id,
     aws_organizations_account.probation.id,
-    aws_organizations_account.network-architecture.id,
-    aws_organizations_account.youth-justice-framework-management.id
+    aws_organizations_account.network-architecture.id
   ]
   enrolled_into_guardduty = {
     for account in aws_organizations_organization.default.accounts :
