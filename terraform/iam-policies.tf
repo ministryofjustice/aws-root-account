@@ -126,6 +126,17 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
       values   = ["bucket-owner-full-control"]
     }
   }
+
+  # Allow access to the key to decrypt the S3 bucket
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey"
+    ]
+    resources = [
+      "arn:aws:kms:eu-west-2:${aws_organizations_account.modernisation-platform.id}:alias/s3-state-bucket"
+    ]
 }
 
 resource "aws_iam_policy" "terraform-organisation-management-policy" {
