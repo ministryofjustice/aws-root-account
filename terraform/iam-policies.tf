@@ -140,14 +140,14 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
     ]
 
     condition {
-      test = "ForAnyValue:StringLike"
+      test     = "ForAnyValue:StringLike"
       variable = "kms:ResourceAliases"
-      values = ["alias/s3-state-bucket"]
+      values   = ["alias/s3-state-bucket"]
 
-    #     "Condition": {
-    # "StringLike": {
-    #   "kms:RequestAlias": "alias/*alpha*"
-    # }
+      #     "Condition": {
+      # "StringLike": {
+      #   "kms:RequestAlias": "alias/*alpha*"
+      # }
 
     }
   }
