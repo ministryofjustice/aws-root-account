@@ -132,11 +132,24 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
     effect = "Allow"
     actions = [
       "kms:Decrypt",
-      "kms:GenerateDataKey"
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
     ]
     resources = [
-      "arn:aws:kms:eu-west-2:${aws_organizations_account.modernisation-platform.id}:alias/s3-state-bucket"
+      "arn:aws:kms:*:${aws_organizations_account.modernisation-platform.id}:*"
     ]
+
+    condition {
+      test = "ForAnyValue:StringLike"
+      variable = "kms:ResourceAliases"
+      values = ["alias/s3-state-bucket"]
+
+    #     "Condition": {
+    # "StringLike": {
+    #   "kms:RequestAlias": "alias/*alpha*"
+    # }
+
+    }
   }
 }
 
