@@ -137,6 +137,7 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
     resources = [
       "arn:aws:kms:eu-west-2:${aws_organizations_account.modernisation-platform.id}:alias/s3-state-bucket"
     ]
+  }
 }
 
 resource "aws_iam_policy" "terraform-organisation-management-policy" {
