@@ -172,6 +172,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "modernisation-platform-develo
 data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
   statement {
     actions = [
+      "secretsmanager:CreateSecret",
       "secretsmanager:GetResourcePolicy",
       "secretsmanager:GetSecretValue",
       "secretsmanager:DescribeSecret",
