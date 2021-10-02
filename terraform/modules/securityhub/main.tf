@@ -92,7 +92,7 @@ resource "aws_securityhub_member" "delegated-administrator" {
   # Note that this resource returns an UnprocessedAccount error when a member is removed, so you need to login to the AWS console
   # and do it manually, however, no one should be removed once enrolled.
   # See: https://docs.aws.amazon.com/guardduty/latest/APIReference/API_UnprocessedAccount.html
-  for_each = var.enrolled_into_securityhub
+  for_each = nonsensitive(var.enrolled_into_securityhub)
 
   # We want to add these accounts as members within the delegated administrator account
   account_id = each.value
