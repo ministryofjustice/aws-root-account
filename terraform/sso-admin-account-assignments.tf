@@ -257,7 +257,7 @@ locals {
 }
 
 resource "aws_ssoadmin_account_assignment" "account-assignments" {
-  for_each = tomap(local.teams_to_account_assignments_with_keys)
+  for_each = tomap(nonsensitive(local.teams_to_account_assignments_with_keys))
 
   # Instance
   instance_arn = local.sso_instance_arn
