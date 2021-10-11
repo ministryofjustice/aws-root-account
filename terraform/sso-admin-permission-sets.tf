@@ -215,8 +215,8 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
     ]
 
     resources = [
-      "arn:aws:iam::*:role/member-delegation-*",
-      "arn:aws:iam::*:role/modify-dns-records"
+      "arn:aws:iam::*:role/read-dns-records",
+      "arn:aws:iam::*:role/member-delegation-read-only"
     ]
   }
 }
