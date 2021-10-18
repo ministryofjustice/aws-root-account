@@ -74,12 +74,20 @@ locals {
         aws_organizations_account.modernisation-platform
       ]
     },
-    # Modernisation Platform engineers
+    # Modernisation Platform engineers sso read only
     {
       github_team    = "modernisation-platform-engineers"
       permission_set = aws_ssoadmin_permission_set.aws-sso-readonly
       accounts = [
         { id = local.caller_identity.account_id, name = "MoJ root account" }
+      ]
+    },
+    # Modernisation Platform engineers read only
+    {
+      github_team    = "modernisation-platform-engineers"
+      permission_set = aws_ssoadmin_permission_set.read-only-access
+      accounts = [
+        aws_organizations_account.moj-official-production
       ]
     },
     # Cloud Platform (Webops) access
@@ -249,7 +257,7 @@ locals {
 }
 
 resource "aws_ssoadmin_account_assignment" "account-assignments" {
-  for_each = tomap(local.teams_to_account_assignments_with_keys)
+  for_each = tomap(nonsensitive(local.teams_to_account_assignments_with_keys))
 
   # Instance
   instance_arn = local.sso_instance_arn
