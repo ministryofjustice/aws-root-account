@@ -210,6 +210,17 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
 
     resources = ["arn:aws:iam::*:user/cicd-member-user"]
   }
+
+  statement {
+    actions = [
+      "sts:AssumeRole"
+    ]
+
+    resources = [
+      "arn:aws:iam::*:role/read-dns-records",
+      "arn:aws:iam::*:role/member-delegation-read-only"
+    ]
+  }
 }
 
 resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-developer-additional" {
