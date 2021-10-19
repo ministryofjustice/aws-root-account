@@ -160,7 +160,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg-breakglass-policy" {
 resource "aws_ssoadmin_permission_set" "modernisation-platform-developer" {
   name             = "modernisation-platform-developer"
   instance_arn     = local.sso_instance_arn
-  session_duration = "PT1H"
+  session_duration = "PT8H"
 }
 
 resource "aws_ssoadmin_managed_policy_attachment" "modernisation-platform-developer-policy" {
