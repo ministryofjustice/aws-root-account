@@ -190,7 +190,9 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
       "ssm:ResumeSession",
       "ssm:DescribeSessions",
       "ssm:GetConnectionStatus",
-      "kms:Decrypt*"
+      "kms:Decrypt*",
+      "ec2:StartInstances",
+      "ec2:StopInstances"
     ]
 
     resources = ["*"]
