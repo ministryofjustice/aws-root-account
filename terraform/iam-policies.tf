@@ -165,6 +165,7 @@ data "aws_iam_policy_document" "terraform-organisation-management-policy-scp" {
       "organizations:AttachPolicy",
       "organizations:CreatePolicy",
       "organizations:UpdatePolicy",
+      "organizations:DetachPolicy",
     ]
     resources = ["*"]
   }
