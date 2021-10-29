@@ -236,6 +236,13 @@ locals {
       accounts = [
         aws_organizations_account.moj-digital-services
       ]
+    },
+    {
+      github_team    = "modernisation-platform"
+      permission_set = aws_ssoadmin_permission_set.billing
+      accounts = [
+        { id = local.caller_identity.account_id, name = "MoJ root account" }
+      ]
     }
   ]
   teams_to_account_assignments_association_list = flatten([
