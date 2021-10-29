@@ -45,7 +45,8 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
     sid    = "AllowOrganisationManagement"
     effect = "Allow"
     actions = [
-      # Note that this doesn't grant any destructive permissions for AWS Organizations
+      # Note that this doesn't grant any destructive permissions for AWS Organizations other than OU deletion
+      # OUs can only be deleted once all accounts and child ous have been deleted
       "iam:CreateServiceLinkedRole",
       "organizations:CreateAccount",
       "organizations:CreateOrganizationalUnit",
@@ -76,6 +77,7 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
       "organizations:TagResource",
       "organizations:UntagResource",
       "organizations:UpdateOrganizationalUnit",
+      "organizations:DeleteOrganizationalUnit",
       "sts:*",
     ]
     resources = [
