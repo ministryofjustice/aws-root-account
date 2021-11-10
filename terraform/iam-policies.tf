@@ -197,3 +197,23 @@ resource "aws_iam_policy" "modernisation-platform-sso-administrator" {
   description = "A policy to allow teams to manage SSO for AWS accounts"
   policy      = data.aws_iam_policy_document.sso-administrator-role.json
 }
+
+# Cost Explorer policy
+data "aws_iam_policy_document" "cost-explorer-readonly" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ce:Get*",
+      "ce:List*"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "cost-explorer-readonly" {
+  name        = "CostExplorerReadOnly"
+  description = "A policy to allow teams to read Cost Explorer data"
+  policy      = data.aws_iam_policy_document.cost-explorer-readonly.json
+}
