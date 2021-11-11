@@ -100,6 +100,14 @@ locals {
         aws_organizations_account.cloud-platform-ephemeral-test,
       ]
     },
+    # Cloud Platform (Non admin team) access read-only
+    {
+      github_team    = "cloud-platform-non-admin"
+      permission_set = aws_ssoadmin_permission_set.read-only-access
+      accounts = [
+        aws_organizations_account.cloud-platform,
+      ]
+    },
     # Electronic Monitoring
     {
       github_team    = "hmpps-ems-team"
