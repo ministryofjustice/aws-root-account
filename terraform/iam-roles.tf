@@ -122,3 +122,29 @@ resource "aws_iam_role_policy_attachment" "identity-store-administrator" {
   role       = aws_iam_role.modernisation-platform-sso-administrator.name
   policy_arn = aws_iam_policy.modernisation-platform-sso-administrator.arn
 }
+
+# Cost Explorer role, assumable by teams (currently only YJAF) to create cost reports for AWS resources
+data "aws_iam_policy_document" "cost-explorer-assume-role" {
+  version = "2012-10-17"
+
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${aws_organizations_account.youth-justice-framework-management.id}:root"]
+    }
+  }
+}
+
+resource "aws_iam_role" "cost-explorer-access" {
+  name               = "CostExplorerAccessReadOnly"
+  assume_role_policy = data.aws_iam_policy_document.cost-explorer-assume-role.json
+  tags               = local.root_account
+}
+
+resource "aws_iam_role_policy_attachment" "cost-explorer-access" {
+  role       = aws_iam_role.cost-explorer-access.name
+  policy_arn = aws_iam_policy.cost-explorer-readonly.arn
+}
