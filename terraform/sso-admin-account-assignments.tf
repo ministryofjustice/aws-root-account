@@ -107,7 +107,7 @@ locals {
       accounts = [
         aws_organizations_account.cloud-platform,
       ]
-    }, 
+    },
     # Electronic Monitoring
     {
       github_team    = "hmpps-ems-team"
