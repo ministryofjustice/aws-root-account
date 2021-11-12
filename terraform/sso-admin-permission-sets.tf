@@ -202,15 +202,14 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
       "ssm:TerminateSession",
       "ssm:ResumeSession",
       "ssm:DescribeSessions",
-      "ssm:GetConnectionStatus"
-      "s3:PutObject",
-      "s3:GetObject",
-      "s3:DeleteObject"
       "ssm:GetConnectionStatus",
       "kms:Decrypt*",
       "ec2:StartInstances",
       "ec2:StopInstances",
-      "ec2:RebootInstances"
+      "ec2:RebootInstances",
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:DeleteObject"
     ]
 
     resources = ["*"]
