@@ -84,6 +84,19 @@ resource "aws_ssoadmin_managed_policy_attachment" "dashboard-access-policy" {
   permission_set_arn = aws_ssoadmin_permission_set.dashboard-access.arn
 }
 
+# Billing
+resource "aws_ssoadmin_permission_set" "billing" {
+  name             = "Billing"
+  instance_arn     = local.sso_instance_arn
+  session_duration = "PT8H"
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "billing" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/job-function/Billing"
+  permission_set_arn = aws_ssoadmin_permission_set.billing.arn
+}
+
 ################################
 # OPG specific permission sets #
 ################################
@@ -160,7 +173,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg-breakglass-policy" {
 resource "aws_ssoadmin_permission_set" "modernisation-platform-developer" {
   name             = "modernisation-platform-developer"
   instance_arn     = local.sso_instance_arn
-  session_duration = "PT1H"
+  session_duration = "PT8H"
 }
 
 resource "aws_ssoadmin_managed_policy_attachment" "modernisation-platform-developer-policy" {
@@ -193,6 +206,11 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
       "s3:PutObject",
       "s3:GetObject",
       "s3:DeleteObject"
+      "ssm:GetConnectionStatus",
+      "kms:Decrypt*",
+      "ec2:StartInstances",
+      "ec2:StopInstances",
+      "ec2:RebootInstances"
     ]
 
     resources = ["*"]
@@ -209,6 +227,17 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
     ]
 
     resources = ["arn:aws:iam::*:user/cicd-member-user"]
+  }
+
+  statement {
+    actions = [
+      "sts:AssumeRole"
+    ]
+
+    resources = [
+      "arn:aws:iam::*:role/read-dns-records",
+      "arn:aws:iam::*:role/member-delegation-read-only"
+    ]
   }
 }
 

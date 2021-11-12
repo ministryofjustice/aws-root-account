@@ -45,7 +45,8 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
     sid    = "AllowOrganisationManagement"
     effect = "Allow"
     actions = [
-      # Note that this doesn't grant any destructive permissions for AWS Organizations
+      # Note that this doesn't grant any destructive permissions for AWS Organizations other than OU deletion
+      # OUs can only be deleted once all accounts and child ous have been deleted
       "iam:CreateServiceLinkedRole",
       "organizations:CreateAccount",
       "organizations:CreateOrganizationalUnit",
@@ -76,6 +77,7 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
       "organizations:TagResource",
       "organizations:UntagResource",
       "organizations:UpdateOrganizationalUnit",
+      "organizations:DeleteOrganizationalUnit",
       "sts:*",
     ]
     resources = [
@@ -126,6 +128,25 @@ data "aws_iam_policy_document" "terraform-organisation-management" {
       values   = ["bucket-owner-full-control"]
     }
   }
+
+  # Allow access to the key to decrypt the S3 bucket
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = [
+      "arn:aws:kms:*:${aws_organizations_account.modernisation-platform.id}:*"
+    ]
+
+    condition {
+      test     = "ForAnyValue:StringLike"
+      variable = "kms:ResourceAliases"
+      values   = ["alias/s3-state-bucket"]
+    }
+  }
 }
 
 resource "aws_iam_policy" "terraform-organisation-management-policy" {
@@ -146,6 +167,7 @@ data "aws_iam_policy_document" "terraform-organisation-management-policy-scp" {
       "organizations:AttachPolicy",
       "organizations:CreatePolicy",
       "organizations:UpdatePolicy",
+      "organizations:DetachPolicy",
     ]
     resources = ["*"]
   }
@@ -174,4 +196,24 @@ resource "aws_iam_policy" "modernisation-platform-sso-administrator" {
   name        = "SSOAdministratorPolicy"
   description = "A policy to allow teams to manage SSO for AWS accounts"
   policy      = data.aws_iam_policy_document.sso-administrator-role.json
+}
+
+# Cost Explorer policy
+data "aws_iam_policy_document" "cost-explorer-readonly" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ce:Get*",
+      "ce:List*"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "cost-explorer-readonly" {
+  name        = "CostExplorerReadOnly"
+  description = "A policy to allow teams to read Cost Explorer data"
+  policy      = data.aws_iam_policy_document.cost-explorer-readonly.json
 }
