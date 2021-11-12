@@ -206,7 +206,9 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
       "kms:Decrypt*",
       "ec2:StartInstances",
       "ec2:StopInstances",
-      "ec2:RebootInstances"
+      "ec2:RebootInstances",
+      "s3:PutObject",
+      "s3:DeleteObject"
     ]
 
     resources = ["*"]
