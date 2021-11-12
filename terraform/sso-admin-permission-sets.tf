@@ -208,7 +208,6 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
       "ec2:StopInstances",
       "ec2:RebootInstances",
       "s3:PutObject",
-      "s3:GetObject",
       "s3:DeleteObject"
     ]
 
