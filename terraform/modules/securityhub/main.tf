@@ -83,6 +83,18 @@ resource "aws_securityhub_organization_admin_account" "default" {
   ]
 }
 
+# Enable region aggregation in the delegated administrator account
+resource "aws_securityhub_finding_aggregator" "delegated-administrator" {
+  for_each = var.aggregation_region == true ? toset(["aggregator"]) : toset([])
+
+  provider = aws.delegated-administrator
+
+  linking_mode = "ALL_REGIONS"
+  depends_on = [
+    aws_securityhub_organization_admin_account.default
+  ]
+}
+
 ################################
 # Security Hub member accounts #
 ################################

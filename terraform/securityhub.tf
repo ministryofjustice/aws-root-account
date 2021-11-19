@@ -123,6 +123,8 @@ module "securityhub-eu-west-2" {
     aws.delegated-administrator = aws.organisation-security-eu-west-2
   }
 
+  aggregation_region = true
+
   enrolled_into_securityhub = {
     for account in local.enrolled_into_securityhub :
     account.name => account.id
