@@ -215,22 +215,42 @@ locals {
       github_team    = "hmpps-migration"
       permission_set = aws_ssoadmin_permission_set.read-only-access
       accounts = [
-        aws_organizations_account.alfresco-non-prod,
-        aws_organizations_account.hmpps-delius-training,
-        aws_organizations_account.hmpps-delius-mis-test,
-        aws_organizations_account.delius-new-tech-non-prod,
-        aws_organizations_account.hmpps-delius-training-test,
-        aws_organizations_account.hmpps-delius-pre-production,
-        aws_organizations_account.hmpps-delius-po-test,
-        aws_organizations_account.hmpps-delius-mis-non-prod,
-        aws_organizations_account.hmpps-delius-po-test-1,
-        aws_organizations_account.delius-core-non-prod,
+        # Central accounts
+        aws_organizations_account.probation,
+        aws_organizations_account.hmpps-security-audit,
+        aws_organizations_account.hmpps-engineering-production,
         aws_organizations_account.probation-management-non-prod,
+        # Delius
+        aws_organizations_account.alfresco-non-prod,
+        aws_organizations_account.delius-core-non-prod,
+        aws_organizations_account.delius-new-tech-non-prod,
+        aws_organizations_account.hmpps-delius-mis-non-prod,
+        aws_organizations_account.hmpps-delius-mis-test,
+        aws_organizations_account.hmpps-delius-performance,
+        aws_organizations_account.hmpps-delius-po-test,
+        aws_organizations_account.hmpps-delius-po-test-1,
+        aws_organizations_account.hmpps-delius-po-test-2,
+        aws_organizations_account.hmpps-delius-pre-production,
         aws_organizations_account.hmpps-delius-stage,
         aws_organizations_account.hmpps-delius-test,
-        aws_organizations_account.hmpps-delius-po-test-2,
-        aws_organizations_account.hmpps-delius-performance,
-        aws_organizations_account.modernisation-platform
+        aws_organizations_account.hmpps-delius-training,
+        aws_organizations_account.hmpps-delius-training-test,
+        aws_organizations_account.hmpps-probation-production, # Delius production
+        # VCMS
+        aws_organizations_account.hmpps-victim-case-management-system-integration,
+        aws_organizations_account.hmpps-victim-case-management-system-performance,
+        aws_organizations_account.hmpps-victim-case-management-system-pre-production,
+        aws_organizations_account.hmpps-victim-case-management-system-production,
+        aws_organizations_account.hmpps-victim-case-management-system-stage,
+        aws_organizations_account.hmpps-victim-case-management-system-test,
+        aws_organizations_account.vcms-non-prod,
+        # Community Rehabilitation
+        aws_organizations_account.hmpps-community-rehabilitation-jira-non-production,
+        aws_organizations_account.hmpps-community-rehabilitation-jira-production,
+        aws_organizations_account.hmpps-community-rehabilitation-jitbit-non-production,
+        aws_organizations_account.hmpps-community-rehabilitation-jitbit-production,
+        aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-non-production,
+        aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-production,
       ]
     },
     {
