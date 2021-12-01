@@ -244,3 +244,42 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-dev
   instance_arn       = local.sso_instance_arn
   permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-developer.arn
 }
+
+##################################################
+# Technical Operations specific permision sets   #
+##################################################
+
+# The Technical Operations role provides users with read-only access,
+# but with the following additional permissions:
+# Allow managing EC2 instances
+# Allow releasing of CodePipelines
+
+resource "aws_ssoadmin_permission_set" "techops-operator" {
+  name             = "techops-operator"
+  instance_arn     = local.sso_instance_arn
+  session_duration = "PT8H"
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "techops-operator-policy" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.techops-operator.arn
+}
+
+data "aws_iam_policy_document" "techops-operator-additional" {
+  statement {
+    actions = [
+      "ec2:StartInstances",
+      "ec2:StopInstances",
+      "ec2:RebootInstances",
+      "codebuild:StartBuild",
+    ]
+
+    resources = ["*"]
+  }
+}
+resource "aws_ssoadmin_permission_set_inline_policy" "techops-operator-additional" {
+  inline_policy      = data.aws_iam_policy_document.techops-operator-additional.json
+  instance_arn       = local.sso_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.techops-operator.arn
+}
