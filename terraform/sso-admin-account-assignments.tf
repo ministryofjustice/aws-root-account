@@ -167,7 +167,7 @@ locals {
     },
     {
       github_team    = "moj-official-techops"
-      permission_set = aws_ssoadmin_permission_set.read-only-access
+      permission_set = aws_ssoadmin_permission_set.techops-operator
       accounts = [
         aws_organizations_account.moj-official-network-operations-centre,
         aws_organizations_account.moj-official-production,
