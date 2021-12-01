@@ -272,7 +272,10 @@ data "aws_iam_policy_document" "techops-operator-additional" {
       "ec2:StartInstances",
       "ec2:StopInstances",
       "ec2:RebootInstances",
-      "codebuild:StartBuild",
+      "codepipeline:StartPipelineExecution",
+      "codepipeline:StopPipelineExecution",
+      "codepipeline:EnableStageTransition",
+      "codepipeline:DisableStageTransition",
     ]
 
     resources = ["*"]
