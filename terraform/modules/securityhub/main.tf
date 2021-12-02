@@ -7,6 +7,11 @@ data "aws_region" "current" {
   provider = aws.root-account
 }
 
+# Get the organization management account ID
+data "aws_caller_identity" "default" {
+  provider = aws.root-account
+}
+
 # Get the delegated administrator account ID
 data "aws_caller_identity" "delegated-administrator" {
   provider = aws.delegated-administrator
@@ -101,10 +106,10 @@ resource "aws_securityhub_finding_aggregator" "delegated-administrator" {
 resource "aws_securityhub_member" "delegated-administrator" {
   provider = aws.delegated-administrator
 
-  # Note that this resource returns an UnprocessedAccount error when a member is removed, so you need to login to the AWS console
-  # and do it manually, however, no one should be removed once enrolled.
-  # See: https://docs.aws.amazon.com/guardduty/latest/APIReference/API_UnprocessedAccount.html
-  for_each = nonsensitive(var.enrolled_into_securityhub)
+  for_each = (var.enrolled_into_securityhub == {}) ? {
+    # You still have to enrol the organization management account into Security Hub as it would have been created before Security Hub is auto-enabled.
+    management-account = data.aws_caller_identity.default.account_id
+  } : var.enrolled_into_securityhub
 
   # We want to add these accounts as members within the delegated administrator account
   account_id = each.value
