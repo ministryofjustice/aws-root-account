@@ -2,6 +2,7 @@ resource "aws_organizations_organization" "default" {
   aws_service_access_principals = [
     "access-analyzer.amazonaws.com",
     "compute-optimizer.amazonaws.com",
+    "config.amazonaws.com",
     "guardduty.amazonaws.com",
     "health.amazonaws.com",
     "ram.amazonaws.com",
