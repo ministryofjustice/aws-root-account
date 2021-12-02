@@ -109,19 +109,11 @@ module "config-organisation-security-eu-west-2" {
   home_region    = "eu-west-2"
 }
 
-resource "aws_config_configuration_aggregator" "aggregator" {
-  provider = aws.organisation-security-eu-west-2
-
-  name = "aggregator"
-
-  # Once all accounts are enrolled, you can use: `organization_aggregation_source {}` to enable the aggregator
-  # for all member accounts without having to specify them individually or work with singular Config Authorizations
-  # on a per-account, per-region basis.
-  account_aggregation_source {
-    account_ids = [
-      for account in local.enrolled_into_config :
-      account.id
-    ]
-    regions = ["eu-west-2", "eu-west-1"]
+# Enable Multi-region, multi-account aggregation via AWS Organizations
+module "config-aggregation" {
+  source = "./modules/config-aggregation"
+  providers = {
+    aws.root-account            = aws.aws-root-account-eu-west-2
+    aws.delegated-administrator = aws.organisation-security-eu-west-2
   }
 }

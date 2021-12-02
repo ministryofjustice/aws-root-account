@@ -1,10 +1,14 @@
 # AWS Root Account
 
-This repository holds infrastructure as code for the Ministry of Justice [AWS Organizations](https://aws.amazon.com/organizations/) root account, and two supporting accounts: organisation-security, and organisation-logging.
+This repository holds infrastructure as code for the Ministry of Justice
+[AWS Organizations](https://aws.amazon.com/organizations/) root account, and
+two supporting accounts: organisation-security, and organisation-logging.
 
 ## AWS Organizations
 
-All accounts defined here form part of the MOJ's [AWS Organization](https://aws.amazon.com/organizations/), allowing us to use [certain services](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html) for organisational audit, governance, security, and cost optimisation.
+All accounts defined here form part of the MOJ's [AWS Organization](https://aws.amazon.com/organizations/),
+allowing us to use [certain services](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html)
+for organisational audit, governance, security, and cost optimisation.
 
 ## Services
 
@@ -12,7 +16,8 @@ All accounts defined here form part of the MOJ's [AWS Organization](https://aws.
 |-|-|-|-|
 | [CloudTrail (Organisational trail)](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) | no | :x: no | Delegated to teams |
 | [Compute Optimizer](https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L4) | :white_check_mark: yes | Trusted access |
-| [Config](https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html) | no | :x: no | Delegated to teams |
+| [Config - Multi-account setup](https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html) | no | :x: no | Delegated to teams |
+| [Config - Multi-region, multi-account aggregation](https://docs.aws.amazon.com/config/latest/developerguide/aggregate-data.html) | yes | :white_check_mark: yes | Trusted access with a delegated administrator |
 | [GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/guardduty.tf) | :white_check_mark: yes | Trusted access with a delegated administrator |
 | [Health (Organisational view)](https://docs.aws.amazon.com/health/latest/ug/) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L6) | :white_check_mark: yes | Trusted access |
 | [IAM Access Analyzer (Organisational zone of trust)](https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-what-is-access-analyzer.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L3) | :white_check_mark: yes | Trusted access with a delegated administrator |
