@@ -12,16 +12,7 @@
 # in the region you're adding an member account to.
 locals {
   not_enrolled_into_securityhub = [
-    aws_organizations_account.aws-laa.id,
-    aws_organizations_account.cloud-networks-psn.id,
-    aws_organizations_account.hmcts-fee-remissions.id,
-    aws_organizations_account.hmpps-check-my-diary-development.id,
-    aws_organizations_account.hmpps-check-my-diary-prod.id,
-    aws_organizations_account.hmpps-delius-mis-test.id,
-    aws_organizations_account.hmpps-delius-po-test.id,
-    aws_organizations_account.hmpps-performance-hub.id,
-    aws_organizations_account.hmpps-security-poc.id,
-    aws_organizations_account.manchester-traffic-dev.id,
+    # OPG
     aws_organizations_account.moj-lpa-development.id,
     aws_organizations_account.moj-opg-digicop-development.id,
     aws_organizations_account.moj-opg-digicop-preproduction.id,
@@ -30,7 +21,6 @@ locals {
     aws_organizations_account.moj-opg-lpa-refunds-development.id,
     aws_organizations_account.moj-opg-management.id,
     aws_organizations_account.moj-opg-sandbox.id,
-    aws_organizations_account.noms-api.id,
     aws_organizations_account.opg-digi-deps-dev.id,
     aws_organizations_account.opg-lpa-production.id,
     aws_organizations_account.opg-modernising-lpa-development.id,
@@ -39,9 +29,7 @@ locals {
     aws_organizations_account.opg-refund-production.id,
     aws_organizations_account.opg-shared.id,
     aws_organizations_account.opg-sirius-dev.id,
-    aws_organizations_account.organisation-logging.id,
-    aws_organizations_account.patterns.id,
-    aws_organizations_account.platforms-non-production.id,
+    # Youth Justice Board
     aws_organizations_account.youth-justice-framework-dev.id,
     aws_organizations_account.youth-justice-framework-eng-tools.id,
     aws_organizations_account.youth-justice-framework-juniper.id,
