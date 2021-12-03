@@ -52,6 +52,11 @@ resource "aws_organizations_organizational_unit" "opg-use-my-lpa" {
   parent_id = aws_organizations_organizational_unit.opg.id
 }
 
+resource "aws_organizations_organizational_unit" "opg-modernising-lpa" {
+  name      = "Modernising LPA"
+  parent_id = aws_organizations_organizational_unit.opg.id
+}
+
 # HMPPS
 resource "aws_organizations_organizational_unit" "hmpps" {
   name      = "HMPPS"

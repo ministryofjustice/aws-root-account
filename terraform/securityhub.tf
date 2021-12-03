@@ -30,12 +30,12 @@ locals {
     aws_organizations_account.moj-opg-lpa-refunds-development.id,
     aws_organizations_account.moj-opg-management.id,
     aws_organizations_account.moj-opg-sandbox.id,
-    aws_organizations_account.moj-opg-sirius-development.id,
-    aws_organizations_account.moj-opg-sirius-production.id,
     aws_organizations_account.noms-api.id,
     aws_organizations_account.opg-digi-deps-dev.id,
     aws_organizations_account.opg-lpa-production.id,
-    aws_organizations_account.opg-refund-develop.id,
+    aws_organizations_account.opg-modernising-lpa-development.id,
+    aws_organizations_account.opg-modernising-lpa-preproduction.id,
+    aws_organizations_account.opg-modernising-lpa-production.id,
     aws_organizations_account.opg-refund-production.id,
     aws_organizations_account.opg-shared.id,
     aws_organizations_account.opg-sirius-dev.id,
@@ -48,8 +48,7 @@ locals {
     aws_organizations_account.youth-justice-framework-management.id,
     aws_organizations_account.youth-justice-framework-monitoring.id,
     aws_organizations_account.youth-justice-framework-pre-prod.id,
-    aws_organizations_account.youth-justice-framework-prod.id,
-    aws_organizations_account.youth-justice-framework-sandpit.id
+    aws_organizations_account.youth-justice-framework-prod.id
   ]
   enrolled_into_securityhub = {
     for account in aws_organizations_organization.default.accounts :
