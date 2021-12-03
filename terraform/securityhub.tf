@@ -48,8 +48,7 @@ locals {
     aws_organizations_account.youth-justice-framework-management.id,
     aws_organizations_account.youth-justice-framework-monitoring.id,
     aws_organizations_account.youth-justice-framework-pre-prod.id,
-    aws_organizations_account.youth-justice-framework-prod.id,
-    aws_organizations_account.youth-justice-framework-sandpit.id
+    aws_organizations_account.youth-justice-framework-prod.id
   ]
   enrolled_into_securityhub = {
     for account in aws_organizations_organization.default.accounts :
