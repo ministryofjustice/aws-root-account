@@ -1,5 +1,5 @@
 module "cloudtrail" {
-  source = "github.com/ministryofjustice/modernisation-platform-terraform-baselines?ref=v2.0.1//modules/cloudtrail"
+  source = "github.com/ministryofjustice/modernisation-platform-terraform-baselines?ref=v3.0.3//modules/cloudtrail"
   providers = {
     aws.replication-region = aws.aws-root-account-eu-west-1
   }
