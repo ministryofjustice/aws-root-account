@@ -129,6 +129,12 @@ resource "aws_organizations_organizational_unit" "platforms-and-architecture" {
   parent_id = aws_organizations_organization.default.roots[0].id
 }
 
+# Enrol all accounts within the Platforms & Architecture OU (current and future) to the restricted root user policy
+resource "aws_organizations_policy_attachment" "platforms-and-architecture-ou-deny-root-user" {
+  policy_id = aws_organizations_policy.deny-root-user.id
+  target_id = aws_organizations_organizational_unit.platforms-and-architecture.id
+}
+
 resource "aws_organizations_organizational_unit" "platforms-and-architecture-cloud-platform" {
   name      = "Cloud Platform"
   parent_id = aws_organizations_organizational_unit.platforms-and-architecture.id

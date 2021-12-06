@@ -104,3 +104,40 @@ resource "aws_organizations_policy" "deny-non-eu-non-us-east-1-operations" {
     source-code   = join("", [local.github_repository, "/organizations-service-control-policies.tf"])
   }
 }
+
+# Denies AWS account root user actions
+# https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
+#
+# If a team needs to use the AWS account root user (for e.g. to delete an account),
+# they will need to remove this policy.
+data "aws_iam_policy_document" "deny-root-user" {
+  version = "2012-10-17"
+
+  # Deny AWS account root user actions
+  statement {
+    effect    = "Deny"
+    actions   = ["*"]
+    resources = ["*"]
+
+    condition {
+      test     = "StringLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:root"
+      ]
+    }
+  }
+}
+
+resource "aws_organizations_policy" "deny-root-user" {
+  name        = "Deny AWS account root user"
+  description = "Denies the ability to use the AWS account root user (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html)"
+  type        = "SERVICE_CONTROL_POLICY"
+  content     = data.aws_iam_policy_document.deny-root-user.json
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/organizations-service-control-policies.tf"])
+  }
+}
