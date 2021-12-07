@@ -15,8 +15,6 @@ locals {
     # OPG
     aws_organizations_account.moj-lpa-development.id,
     aws_organizations_account.moj-opg-digicop-development.id,
-    aws_organizations_account.moj-opg-digicop-preproduction.id,
-    aws_organizations_account.moj-opg-digicop-production.id,
     aws_organizations_account.moj-opg-lpa-refunds-development.id,
     aws_organizations_account.moj-opg-sandbox.id,
     aws_organizations_account.opg-digi-deps-dev.id,
