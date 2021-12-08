@@ -217,3 +217,24 @@ resource "aws_iam_policy" "cost-explorer-readonly" {
   description = "A policy to allow teams to read Cost Explorer data"
   policy      = data.aws_iam_policy_document.cost-explorer-readonly.json
 }
+
+# Organizations list policy
+data "aws_iam_policy_document" "organization-accounts-readonly" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "organizations:List*",
+      "organizations:Describe*",
+      "organizations:Get*"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "organization-accounts-readonly" {
+  name        = "AWSOrganizationsListReadOnly"
+  description = "A policy to allow teams to read Organizations lists"
+  policy      = data.aws_iam_policy_document.organization-accounts-readonly.json
+}
