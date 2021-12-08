@@ -21,12 +21,8 @@ locals {
     aws_organizations_account.opg-modernising-lpa-development.id,
     aws_organizations_account.opg-sirius-dev.id,
     # Youth Justice Board
-    aws_organizations_account.youth-justice-framework-dev.id,
-    aws_organizations_account.youth-justice-framework-eng-tools.id,
-    aws_organizations_account.youth-justice-framework-juniper.id,
     aws_organizations_account.youth-justice-framework-management.id,
     aws_organizations_account.youth-justice-framework-monitoring.id,
-    aws_organizations_account.youth-justice-framework-pre-prod.id,
     aws_organizations_account.youth-justice-framework-prod.id
   ]
   enrolled_into_securityhub = {
