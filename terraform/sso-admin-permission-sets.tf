@@ -276,6 +276,7 @@ data "aws_iam_policy_document" "techops-operator-additional" {
       "codepipeline:StopPipelineExecution",
       "codepipeline:EnableStageTransition",
       "codepipeline:DisableStageTransition",
+      "codepipeline:PutApprovalResult",
     ]
 
     resources = ["*"]
