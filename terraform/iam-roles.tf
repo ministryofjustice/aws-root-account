@@ -148,3 +148,29 @@ resource "aws_iam_role_policy_attachment" "cost-explorer-access" {
   role       = aws_iam_role.cost-explorer-access.name
   policy_arn = aws_iam_policy.cost-explorer-readonly.arn
 }
+
+# Organization list read-only role, assumable by teams (currently only MOJ DSD) to list Organization accounts
+data "aws_iam_policy_document" "organization-accounts-assume-role" {
+  version = "2012-10-17"
+
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${aws_organizations_account.moj-digital-services.id}:root"]
+    }
+  }
+}
+
+resource "aws_iam_role" "organization-accounts-access" {
+  name               = "AWSOrganizationsListReadOnly"
+  assume_role_policy = data.aws_iam_policy_document.organization-accounts-assume-role.json
+  tags               = local.root_account
+}
+
+resource "aws_iam_role_policy_attachment" "organization-accounts-access" {
+  role       = aws_iam_role.organization-accounts-access.name
+  policy_arn = aws_iam_policy.organization-accounts-readonly.arn
+}
