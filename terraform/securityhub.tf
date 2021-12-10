@@ -11,22 +11,12 @@
 # Security Hub will alert you if AWS Config (a prerequesite for Security Hub) isn't enabled
 # in the region you're adding an member account to.
 locals {
-  not_enrolled_into_securityhub = [
-    # OPG
-    aws_organizations_account.moj-lpa-development.id,
-    aws_organizations_account.moj-opg-digicop-development.id,
-    aws_organizations_account.moj-opg-lpa-refunds-development.id,
-    aws_organizations_account.moj-opg-sandbox.id,
-    aws_organizations_account.opg-digi-deps-dev.id,
-    aws_organizations_account.opg-modernising-lpa-development.id,
-    aws_organizations_account.opg-sirius-dev.id
-  ]
   enrolled_into_securityhub = {
     for account in aws_organizations_organization.default.accounts :
     account.name => account.id
     # Don't enrol the organisation-security account (as it'll already be enabled as the delegated administrator)
     # Don't enrol suspended or removed (i.e. deleted) accounts
-    if account.status == "ACTIVE" && account.name != "organisation-security" && !contains(local.not_enrolled_into_securityhub, account.id)
+    if account.status == "ACTIVE" && account.name != "organisation-security"
   }
 }
 
