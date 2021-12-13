@@ -122,6 +122,19 @@ resource "aws_guardduty_member" "delegated-administrator" {
   depends_on = [aws_guardduty_organization_admin_account.default]
 }
 
+############################
+# GuardDuty ThreatIntelSet #
+############################
+resource "aws_guardduty_threatintelset" "default" {
+  provider = aws.delegated-administrator
+
+  activate    = true
+  detector_id = aws_guardduty_detector.delegated-administrator.id
+  format      = "TXT"
+  location    = "https://s3.amazonaws.com/${var.threatintelset_bucket}/${var.threatintelset_key}"
+  name        = var.threatintelset_key
+}
+
 #####################
 # GuardDuty filters #
 #####################

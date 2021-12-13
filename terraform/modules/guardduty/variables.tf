@@ -37,3 +37,13 @@ variable "auto_enable" {
   type        = bool
   default     = false
 }
+
+variable "threatintelset_bucket" {
+  description = "GuardDuty ThreatIntelSet bucket"
+  type        = string
+}
+
+variable "threatintelset_key" {
+  description = "GuardDuty ThreatIntelSet key"
+  type        = string
+}

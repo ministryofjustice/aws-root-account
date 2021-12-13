@@ -87,6 +87,10 @@ module "guardduty-us-east-1" {
     aws.delegated-administrator = aws.organisation-security-us-east-1
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for us-east-1
   auto_enable = true
 
@@ -117,6 +121,10 @@ module "guardduty-us-east-2" {
     aws.root-account            = aws.aws-root-account-us-east-2
     aws.delegated-administrator = aws.organisation-security-us-east-2
   }
+
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
   # Automatically enable GuardDuty for us-east-2
   auto_enable = true
@@ -149,6 +157,10 @@ module "guardduty-us-west-1" {
     aws.delegated-administrator = aws.organisation-security-us-west-1
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for us-west-1
   auto_enable = true
 
@@ -179,6 +191,10 @@ module "guardduty-us-west-2" {
     aws.root-account            = aws.aws-root-account-us-west-2
     aws.delegated-administrator = aws.organisation-security-us-west-2
   }
+
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
   # Automatically enable GuardDuty for us-west-2
   auto_enable = true
@@ -214,6 +230,10 @@ module "guardduty-ap-south-1" {
     aws.delegated-administrator = aws.organisation-security-ap-south-1
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for ap-south-1
   auto_enable = true
 
@@ -244,6 +264,10 @@ module "guardduty-ap-northeast-3" {
     aws.root-account            = aws.aws-root-account-ap-northeast-3
     aws.delegated-administrator = aws.organisation-security-ap-northeast-3
   }
+
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
   # Automatically enable GuardDuty for ap-northeast-3
   auto_enable = true
@@ -276,6 +300,10 @@ module "guardduty-ap-northeast-2" {
     aws.delegated-administrator = aws.organisation-security-ap-northeast-2
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for ap-northeast-2
   auto_enable = true
 
@@ -306,6 +334,10 @@ module "guardduty-ap-southeast-1" {
     aws.root-account            = aws.aws-root-account-ap-southeast-1
     aws.delegated-administrator = aws.organisation-security-ap-southeast-1
   }
+
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
   # Automatically enable GuardDuty for ap-southeast-1
   auto_enable = true
@@ -338,6 +370,10 @@ module "guardduty-ap-southeast-2" {
     aws.delegated-administrator = aws.organisation-security-ap-southeast-2
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for ap-southeast-2
   auto_enable = true
 
@@ -368,6 +404,10 @@ module "guardduty-ap-northeast-1" {
     aws.root-account            = aws.aws-root-account-ap-northeast-1
     aws.delegated-administrator = aws.organisation-security-ap-northeast-1
   }
+
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
   # Automatically enable GuardDuty for ap-northeast-1
   auto_enable = true
@@ -403,6 +443,10 @@ module "guardduty-ca-central-1" {
     aws.delegated-administrator = aws.organisation-security-ca-central-1
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for ca-central-1
   auto_enable = true
 
@@ -437,6 +481,10 @@ module "guardduty-eu-central-1" {
     aws.delegated-administrator = aws.organisation-security-eu-central-1
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for eu-central-1
   auto_enable = true
 
@@ -468,6 +516,10 @@ module "guardduty-eu-west-1" {
     aws.delegated-administrator = aws.organisation-security-eu-west-1
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for eu-west-1
   auto_enable = true
 
@@ -498,6 +550,10 @@ module "guardduty-eu-west-2" {
     aws.root-account            = aws.aws-root-account-eu-west-2
     aws.delegated-administrator = aws.organisation-security-eu-west-2
   }
+
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
   # Automatically enable GuardDuty for eu-west-2
   auto_enable = true
@@ -533,6 +589,10 @@ module "guardduty-eu-west-3" {
     aws.delegated-administrator = aws.organisation-security-eu-west-3
   }
 
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
+
   # Automatically enable GuardDuty for eu-west-3
   auto_enable = true
 
@@ -563,6 +623,10 @@ module "guardduty-eu-north-1" {
     aws.root-account            = aws.aws-root-account-eu-north-1
     aws.delegated-administrator = aws.organisation-security-eu-north-1
   }
+
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
   # Automatically enable GuardDuty for eu-north-1
   auto_enable = true
@@ -597,6 +661,10 @@ module "guardduty-sa-east-1" {
     aws.root-account            = aws.aws-root-account-sa-east-1
     aws.delegated-administrator = aws.organisation-security-sa-east-1
   }
+
+  # Utilise ThreatIntelSet
+  threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
+  threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
   # Automatically enable GuardDuty for sa-east-1
   auto_enable = true
