@@ -269,6 +269,8 @@ resource "aws_ssoadmin_managed_policy_attachment" "techops-operator-policy" {
 data "aws_iam_policy_document" "techops-operator-additional" {
   statement {
     actions = [
+      "ec2:CreateSnapshot",
+      "ec2:CreateImage",
       "ec2:StartInstances",
       "ec2:StopInstances",
       "ec2:RebootInstances",
