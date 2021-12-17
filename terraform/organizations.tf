@@ -5,6 +5,7 @@ resource "aws_organizations_organization" "default" {
     "config.amazonaws.com",
     "guardduty.amazonaws.com",
     "health.amazonaws.com",
+    "inspector2.amazonaws.com",
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "securityhub.amazonaws.com",
