@@ -25,6 +25,12 @@ resource "aws_organizations_account" "analytical-platform-development" {
   }
 }
 
+# Enrol Analytical Platform Development to the restricted regions policy
+resource "aws_organizations_policy_attachment" "analytical-platform-development-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.analytical-platform-development.id
+}
+
 resource "aws_organizations_account" "analytics-platform-development" {
   # Note that this account was renamed from "Analytics Platform Development"
   # to Analytical Platform Data Engineering Sandbox, to make it clearer.
@@ -47,6 +53,12 @@ resource "aws_organizations_account" "analytics-platform-development" {
   }
 }
 
+# Enrol Analytical Platform Data Engineering Sandbox to the restricted regions policy
+resource "aws_organizations_policy_attachment" "analytics-platform-development-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.analytics-platform-development.id
+}
+
 resource "aws_organizations_account" "analytical-platform-landing" {
   name      = "Analytical Platform Landing"
   email     = local.aws_account_email_addresses["Analytical Platform Landing"][0]
@@ -65,6 +77,12 @@ resource "aws_organizations_account" "analytical-platform-landing" {
       role_name
     ]
   }
+}
+
+# Enrol Analytical Platform Landing to the restricted regions policy
+resource "aws_organizations_policy_attachment" "analytical-platform-landing-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.analytical-platform-landing.id
 }
 
 resource "aws_organizations_account" "analytical-platform-production" {
