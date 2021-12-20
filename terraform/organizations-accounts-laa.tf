@@ -16,6 +16,12 @@ resource "aws_organizations_account" "laa-test" {
   }
 }
 
+# Enrol LAA Test to the restricted regions policy
+resource "aws_organizations_policy_attachment" "laa-test-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.laa-test.id
+}
+
 resource "aws_organizations_account" "laa-uat" {
   name      = "LAA UAT"
   email     = local.aws_account_email_addresses["LAA UAT"][0]
@@ -31,6 +37,12 @@ resource "aws_organizations_account" "laa-uat" {
       role_name
     ]
   }
+}
+
+# Enrol LAA UAT to the restricted regions policy
+resource "aws_organizations_policy_attachment" "laa-uat-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.laa-uat.id
 }
 
 resource "aws_organizations_account" "aws-laa" {
@@ -50,6 +62,12 @@ resource "aws_organizations_account" "aws-laa" {
   }
 }
 
+# Enrol AWS LAA to the restricted regions policy
+resource "aws_organizations_policy_attachment" "aws-laa-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.aws-laa.id
+}
+
 resource "aws_organizations_account" "laa-staging" {
   name      = "LAA Staging"
   email     = local.aws_account_email_addresses["LAA Staging"][0]
@@ -65,6 +83,12 @@ resource "aws_organizations_account" "laa-staging" {
       role_name
     ]
   }
+}
+
+# Enrol LAA Staging to the restricted regions policy
+resource "aws_organizations_policy_attachment" "laa-staging-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.laa-staging.id
 }
 
 resource "aws_organizations_account" "legal-aid-agency" {
@@ -84,6 +108,12 @@ resource "aws_organizations_account" "legal-aid-agency" {
   }
 }
 
+# Enrol LAA Sandbox (Legal Aid Agency) to the restricted regions policy
+resource "aws_organizations_policy_attachment" "legal-aid-agency-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.legal-aid-agency.id
+}
+
 resource "aws_organizations_account" "laa-development" {
   name      = "LAA Development"
   email     = local.aws_account_email_addresses["LAA Development"][0]
@@ -101,6 +131,12 @@ resource "aws_organizations_account" "laa-development" {
   }
 }
 
+# Enrol LAA Development to the restricted regions policy
+resource "aws_organizations_policy_attachment" "laa-development-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.laa-development.id
+}
+
 resource "aws_organizations_account" "laa-cloudtrail" {
   name      = "LAA CloudTrail"
   email     = local.aws_account_email_addresses["LAA CloudTrail"][0]
@@ -116,6 +152,12 @@ resource "aws_organizations_account" "laa-cloudtrail" {
       role_name
     ]
   }
+}
+
+# Enrol LAA CloudTrail to the restricted regions policy
+resource "aws_organizations_policy_attachment" "laa-cloudtrail-restricted-regions" {
+  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
+  target_id = aws_organizations_account.laa-cloudtrail.id
 }
 
 resource "aws_organizations_account" "laa-production" {
