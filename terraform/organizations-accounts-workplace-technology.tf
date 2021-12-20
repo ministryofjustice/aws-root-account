@@ -6,6 +6,23 @@ locals {
 }
 
 # Workplace Technology OU
+resource "aws_organizations_account" "cloud-networks-psn" {
+  name      = "Cloud Networks PSN"
+  email     = local.aws_account_email_addresses["Cloud Networks PSN"][0]
+  parent_id = aws_organizations_organizational_unit.workplace-technology.id
+
+  lifecycle {
+    # If any of these attributes are changed, it attempts to destroy and recreate the account,
+    # so we should ignore the changes to prevent this from happening.
+    ignore_changes = [
+      name,
+      email,
+      iam_user_access_to_billing,
+      role_name
+    ]
+  }
+}
+
 resource "aws_organizations_account" "workplace-tech-proof-of-concept-development" {
   name      = "Workplace Tech Proof Of Concept Development"
   email     = local.aws_account_email_addresses["Workplace Tech Proof Of Concept Development"][0]
