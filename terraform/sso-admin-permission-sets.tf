@@ -217,7 +217,7 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
       "lambda:InvokeFunction"
     ]
 
-    resources = "arn:aws:lambda:*:*:function:Automation*"
+    resources = ["arn:aws:lambda:*:*:function:Automation*"]
   }
 
 
