@@ -192,17 +192,7 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
       "secretsmanager:PutSecretValue",
       "secretsmanager:UpdateSecret",
       "secretsmanager:RestoreSecret",
-      "ssm:PutParameter",
-      "ssm:GetParameterHistory",
-      "ssm:GetParametersByPath",
-      "ssm:GetParameters",
-      "ssm:GetParameter",
-      "ssm:DescribeParameters",
-      "ssm:StartSession",
-      "ssm:TerminateSession",
-      "ssm:ResumeSession",
-      "ssm:DescribeSessions",
-      "ssm:GetConnectionStatus",
+      "ssm:*",
       "kms:Decrypt*",
       "ec2:StartInstances",
       "ec2:StopInstances",
@@ -213,6 +203,23 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
 
     resources = ["*"]
   }
+
+  statement {
+    actions = [
+      "sns:Publish"
+    ]
+
+    resources = ["arn:aws:sns:*:*:Automation*"]
+  }
+
+  statement {
+    actions = [
+      "lambda:InvokeFunction"
+    ]
+
+    resources = "arn:aws:lambda:*:*:function:Automation*"
+  }
+
 
   statement {
     actions = [
