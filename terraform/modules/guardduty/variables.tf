@@ -47,3 +47,9 @@ variable "threatintelset_key" {
   description = "GuardDuty ThreatIntelSet key"
   type        = string
 }
+
+variable "enable_threatintelset" {
+  description = "Whether to enable a ThreatIntelSet for GuardDuty"
+  type        = bool
+  default     = false
+}

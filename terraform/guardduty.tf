@@ -88,6 +88,7 @@ module "guardduty-us-east-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -123,6 +124,7 @@ module "guardduty-us-east-2" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -158,6 +160,7 @@ module "guardduty-us-west-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -193,6 +196,7 @@ module "guardduty-us-west-2" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -231,6 +235,7 @@ module "guardduty-ap-south-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -266,6 +271,7 @@ module "guardduty-ap-northeast-3" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -301,6 +307,7 @@ module "guardduty-ap-northeast-2" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -336,6 +343,7 @@ module "guardduty-ap-southeast-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -371,6 +379,7 @@ module "guardduty-ap-southeast-2" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -406,6 +415,7 @@ module "guardduty-ap-northeast-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -444,6 +454,7 @@ module "guardduty-ca-central-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -482,6 +493,7 @@ module "guardduty-eu-central-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -517,6 +529,7 @@ module "guardduty-eu-west-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -552,6 +565,7 @@ module "guardduty-eu-west-2" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -590,6 +604,7 @@ module "guardduty-eu-west-3" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -625,6 +640,7 @@ module "guardduty-eu-north-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 
@@ -663,6 +679,7 @@ module "guardduty-sa-east-1" {
   }
 
   # Utilise ThreatIntelSet
+  enable_threatintelset = false
   threatintelset_key    = aws_s3_bucket_object.guardduty-threatintelset.key
   threatintelset_bucket = aws_s3_bucket_object.guardduty-threatintelset.bucket
 

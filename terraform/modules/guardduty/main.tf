@@ -128,7 +128,7 @@ resource "aws_guardduty_member" "delegated-administrator" {
 resource "aws_guardduty_threatintelset" "default" {
   provider = aws.delegated-administrator
 
-  activate    = true
+  activate    = var.enable_threatintelset
   detector_id = aws_guardduty_detector.delegated-administrator.id
   format      = "TXT"
   location    = "https://s3.amazonaws.com/${var.threatintelset_bucket}/${var.threatintelset_key}"
