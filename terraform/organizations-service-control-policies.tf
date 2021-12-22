@@ -141,3 +141,27 @@ resource "aws_organizations_policy" "deny-root-user" {
     source-code   = join("", [local.github_repository, "/organizations-service-control-policies.tf"])
   }
 }
+
+# Denies access to anything (for suspended accounts)
+data "aws_iam_policy_document" "deny-all" {
+  version = "2021-10-17"
+
+  statement {
+    effect    = "Deny"
+    actions   = ["*"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_organizations_policy" "deny-all" {
+  name        = "Deny all actions on all resources"
+  description = "Denies the ability to do anything within an AWS account"
+  type        = "SERVICE_CONTROL_POLICY"
+  content     = data.aws_iam_policy_document.deny-all.json
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/organizations-service-control-policies.tf"])
+  }
+}
