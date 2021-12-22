@@ -10,6 +10,11 @@ resource "aws_organizations_organizational_unit" "closed-accounts" {
   parent_id = aws_organizations_organization.default.roots[0].id
 }
 
+resource "aws_organizations_policy_attachment" "closed-accounts-deny-all" {
+  policy_id = aws_organizations_policy.deny-all.id
+  target_id = aws_organizations_organizational_unit.closed-accounts.id
+}
+
 # OPG
 resource "aws_organizations_organizational_unit" "opg" {
   name      = "OPG"
