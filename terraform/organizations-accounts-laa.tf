@@ -45,29 +45,6 @@ resource "aws_organizations_policy_attachment" "laa-uat-restricted-regions" {
   target_id = aws_organizations_account.laa-uat.id
 }
 
-resource "aws_organizations_account" "aws-laa" {
-  name      = "AWS LAA"
-  email     = local.aws_account_email_addresses["AWS LAA"][0]
-  parent_id = aws_organizations_organizational_unit.laa.id
-
-  lifecycle {
-    # If any of these attributes are changed, it attempts to destroy and recreate the account,
-    # so we should ignore the changes to prevent this from happening.
-    ignore_changes = [
-      name,
-      email,
-      iam_user_access_to_billing,
-      role_name
-    ]
-  }
-}
-
-# Enrol AWS LAA to the restricted regions policy
-resource "aws_organizations_policy_attachment" "aws-laa-restricted-regions" {
-  policy_id = aws_organizations_policy.deny-non-eu-non-us-east-1-operations.id
-  target_id = aws_organizations_account.aws-laa.id
-}
-
 resource "aws_organizations_account" "laa-staging" {
   name      = "LAA Staging"
   email     = local.aws_account_email_addresses["LAA Staging"][0]

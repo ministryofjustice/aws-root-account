@@ -48,3 +48,21 @@ resource "aws_organizations_account" "moj-cla" {
     ]
   }
 }
+
+# This has MFA with a mobile number, so we can't suspend it yet, but it is closed (all resources deleted).
+resource "aws_organizations_account" "aws-laa" {
+  name      = "AWS LAA"
+  email     = local.aws_account_email_addresses["AWS LAA"][0]
+  parent_id = aws_organizations_organizational_unit.closed-accounts.id
+
+  lifecycle {
+    # If any of these attributes are changed, it attempts to destroy and recreate the account,
+    # so we should ignore the changes to prevent this from happening.
+    ignore_changes = [
+      name,
+      email,
+      iam_user_access_to_billing,
+      role_name
+    ]
+  }
+}
