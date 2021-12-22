@@ -3,6 +3,7 @@ resource "aws_organizations_organization" "default" {
     "access-analyzer.amazonaws.com",
     "compute-optimizer.amazonaws.com",
     "config.amazonaws.com",
+    "detective.amazonaws.com",
     "guardduty.amazonaws.com",
     "health.amazonaws.com",
     "inspector2.amazonaws.com",
