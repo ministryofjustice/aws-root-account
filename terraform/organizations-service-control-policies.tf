@@ -144,7 +144,7 @@ resource "aws_organizations_policy" "deny-root-user" {
 
 # Denies access to anything (for suspended accounts)
 data "aws_iam_policy_document" "deny-all" {
-  version = "2021-10-17"
+  version = "2012-10-17"
 
   statement {
     effect    = "Deny"
