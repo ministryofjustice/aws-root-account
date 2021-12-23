@@ -6,12 +6,18 @@ locals {
 }
 
 resource "aws_s3_bucket" "guardduty-threatintelset" {
+  provider = aws.organisation-security-eu-west-2
+
   acl = "private"
 }
 
 resource "aws_s3_bucket_object" "guardduty-threatintelset" {
-  acl     = "public-read"
-  bucket  = aws_s3_bucket.guardduty-threatintelset.id
-  content = local.guardduty-threatintelset
-  key     = "ThreatIntelSet"
+  provider = aws.organisation-security-eu-west-2
+
+  acl          = "public-read"
+  bucket       = aws_s3_bucket.guardduty-threatintelset.id
+  content      = local.guardduty-threatintelset
+  key          = "ThreatIntelSet"
+  content_type = "text/plain"
+  etag         = md5(local.guardduty-threatintelset)
 }
