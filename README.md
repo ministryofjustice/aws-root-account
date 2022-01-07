@@ -48,4 +48,4 @@ for organisational audit, governance, security, and cost optimisation.
 | [Single Sign-On (SSO)](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/sso.tf) | :white_check_mark: yes | Trusted access |
 | [Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resource-data-sync.html) | no | :x: no | no |
 | [Trusted Advisor (Organisational overview)](https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-ta.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/organizations.tf#L11) | :white_check_mark: yes | Trusted access |
-| [VPC IP Address Manager (IPAM)](https://docs.aws.amazon.com/vpc/latest/ipam/enable-integ-ipam.html) | no | :x: no | no |
+| [VPC IP Address Manager (IPAM)](https://docs.aws.amazon.com/vpc/latest/ipam/enable-integ-ipam.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/vpc-ipam.tf) | :white_check_mark: yes | Trusted access with a delegated administrator |
