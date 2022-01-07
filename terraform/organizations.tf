@@ -7,6 +7,7 @@ resource "aws_organizations_organization" "default" {
     "guardduty.amazonaws.com",
     "health.amazonaws.com",
     "inspector2.amazonaws.com",
+    "ipam.amazonaws.com",
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "securityhub.amazonaws.com",
