@@ -14,7 +14,7 @@ for organisational audit, governance, security, and cost optimisation.
 
 | Service | Infrastructure as Code | Managed centrally | Method |
 |-|-|-|-|
-| [Alternate contact information](https://docs.aws.amazon.com/accounts/latest/reference/API_Operations.html) | no | :x: no | Delegated to teams |
+| [Alternate contact information](https://docs.aws.amazon.com/accounts/latest/reference/API_Operations.html) | [yes](https://github.com/ministryofjustice/aws-root-account/blob/main/terraform/alternate-contacts.tf) | :wavy_dash: partially (`SECURITY` contact only) | Trusted access |
 | [Artifact (security and compliance reports)](https://aws.amazon.com/artifact/) | no | :white_check_mark: yes | no |
 | [Audit Manager](https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html) | no | :x: no | no |
 | [Backup](https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html) | no | :x: no | Delegated to teams |
