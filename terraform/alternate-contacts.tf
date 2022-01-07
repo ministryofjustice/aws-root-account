@@ -21,7 +21,9 @@ locals {
 resource "aws_account_alternate_contact" "security" {
   for_each = local.alternate_contacts_accounts
 
-  account_id             = each.value
+  # the AWS management account needs to omit the account ID to manage itself
+  account_id = aws_organizations_organization.default.master_account_id == each.value ? null : each.value
+
   alternate_contact_type = "SECURITY"
   name                   = "Security team"
   title                  = "Mx"
