@@ -252,6 +252,17 @@ locals {
         aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-non-production,
         aws_organizations_account.hmpps-community-rehabilitation-unpaid-work-production,
       ]
+
+    },
+    {
+      github_team    = "cica"
+      permission_set = aws_ssoadmin_permission_set.administrator-access
+      accounts = [
+        aws_organizations_account.cica,
+        aws_organizations_account.cica-development,
+        aws_organizations_account.cica-test-verify,
+        aws_organizations_account.cica-uat,
+      ]
     },
     {
       github_team    = "hmpps-migration"
