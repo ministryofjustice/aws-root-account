@@ -287,6 +287,20 @@ data "aws_iam_policy_document" "techops-operator-additional" {
       "codepipeline:DisableStageTransition",
       "codepipeline:RetryStageExecution",
       "codepipeline:PutApprovalResult",
+      "support:AddAttachmentsToSet",
+      "support:AddCommunicationToCase",
+      "support:CreateCase",
+      "support:DescribeAttachment",
+      "support:DescribeCases",
+      "support:DescribeCommunications",
+      "support:DescribeServices",
+      "support:DescribeSeverityLevels",
+      "support:DescribeTrustedAdvisorCheckRefreshStatuses",
+      "support:DescribeTrustedAdvisorCheckResult",
+      "support:DescribeTrustedAdvisorChecks",
+      "support:DescribeTrustedAdvisorCheckSummaries",
+      "support:RefreshTrustedAdvisorCheck",
+      "support:ResolveCase",
     ]
 
     resources = ["*"]
