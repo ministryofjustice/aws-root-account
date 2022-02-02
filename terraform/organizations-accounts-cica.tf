@@ -4,7 +4,7 @@ locals {
 }
 
 resource "aws_organizations_account" "cica" {
-  name      = "CICA"
+  name      = "CICA Shared Services"
   email     = local.aws_account_email_addresses["CICA"][0]
   parent_id = aws_organizations_organizational_unit.cica.id
   tags = merge(local.tags-cica, {
@@ -45,10 +45,11 @@ resource "aws_organizations_account" "cica-development" {
 }
 
 resource "aws_organizations_account" "cica-test-verify" {
-  name      = "CICA Test & Verify"
+  name      = "CICA Production"
   email     = local.aws_account_email_addresses["CICA Test & Verify"][0]
   parent_id = aws_organizations_organizational_unit.cica.id
   tags = merge(local.tags-cica, {
+    is-production    = true
     environment-name = "test-and-verify"
   })
 
