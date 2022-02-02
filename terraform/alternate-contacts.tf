@@ -15,6 +15,7 @@ locals {
   alternate_contacts_accounts = {
     for account in aws_organizations_organization.default.accounts :
     account.name => account.id
+    if account.status == "ACTIVE"
   }
 }
 
