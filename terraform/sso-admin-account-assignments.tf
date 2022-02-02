@@ -130,7 +130,10 @@ locals {
         aws_organizations_account.electronic-monitoring-shared-networking-non-prod,
         aws_organizations_account.electronic-monitoring-tagging-hardware-pre-prod,
         aws_organizations_account.electronic-monitoring-tagging-hardware-prod,
-        aws_organizations_account.electronic-monitoring-tagging-hardware-test
+        aws_organizations_account.electronic-monitoring-tagging-hardware-test,
+        aws_organizations_account.electronic-monitoring-case-management-development,
+        aws_organizations_account.electronic-monitoring-case-management-preprod,
+        aws_organizations_account.electronic-monitoring-case-management-production,
       ]
     },
     # Electronic Monitoring MOJ SOC Integration
