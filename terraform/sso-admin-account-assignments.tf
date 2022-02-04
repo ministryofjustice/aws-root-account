@@ -12,7 +12,6 @@ locals {
         aws_organizations_account.moj-opg-sandbox,
         aws_organizations_account.opg-use-my-lpa-development,
         aws_organizations_account.opg-use-my-lpa-preproduction,
-        aws_organizations_account.opg-use-my-lpa-production
       ]
     },
     {
