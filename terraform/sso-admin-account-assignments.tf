@@ -51,7 +51,7 @@ locals {
       ]
     },
     {
-      github_team    = "opg-use-an-lpa ",
+      github_team    = "opg-use-an-lpa",
       permission_set = aws_ssoadmin_permission_set.opg-breakglass,
       accounts = [
         aws_organizations_account.moj-opg-shared-development,
@@ -60,7 +60,7 @@ locals {
       ]
     },
     {
-      github_team    = "opg-use-an-lpa ",
+      github_team    = "opg-use-an-lpa",
       permission_set = aws_ssoadmin_permission_set.opg-operator,
       accounts = [
         aws_organizations_account.moj-opg-identity,
