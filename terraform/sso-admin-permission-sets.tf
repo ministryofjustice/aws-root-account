@@ -147,6 +147,148 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg-viewer-policy" {
   permission_set_arn = aws_ssoadmin_permission_set.opg-viewer.arn
 }
 
+# opg-operator
+resource "aws_ssoadmin_permission_set" "opg-operator" {
+  name             = "opg-operator"
+  description      = "Standard operator role given to an OPG Digital product's team members"
+  instance_arn     = local.sso_instance_arn
+  session_duration = "PT2H"
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "opg-operator-policy" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.opg-operator.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "opg-operator-policy-additional" {
+  inline_policy      = data.aws_iam_policy_document.opg-operator-policy-additional.json
+  instance_arn       = local.sso_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.opg-operator.arn
+}
+data "aws_iam_policy_document" "opg-operator-policy-additional" {
+  statement {
+    sid       = "AdminsManageSecrets"
+    effect    = "Allow"
+    actions   = ["secretsmanager:*"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ViewBillingInfo"
+    effect = "Allow"
+
+    actions = [
+      "aws-portal:*",
+      "budget:*",
+      "cur:*",
+    ]
+
+    resources = ["*"]
+  }
+  statement {
+    sid    = "UalCiIdentityCognitoAccess"
+    effect = "Allow"
+    actions = [
+      "cognito:*",
+      "cognito-idp:*",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "Support"
+    effect = "Allow"
+
+    actions = [
+      "support:*",
+      "trustedadvisor:*",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "SNSSubscriptions"
+    effect = "Allow"
+
+    actions = [
+      "sns:subscribe",
+      "sns:unsubscribe",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ECSRunTask"
+    effect = "Allow"
+
+    actions = [
+      "ecs:RunTask",
+      "iam:PassRole",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "APIGatewayInvoke"
+    effect = "Allow"
+
+    actions = [
+      "execute-api:Invoke",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "DynamoDBDescribeTables"
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:*Describe*",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ForbidDynamoDBAccess1"
+    effect = "Deny"
+
+    actions = [
+      "dynamodb:*Batch*",
+      "dynamodb:*Create*",
+      "dynamodb:*Delete*",
+      "dynamodb:*Get*",
+      "dynamodb:*List*",
+      "dynamodb:*Update*",
+      "dynamodb:*Tag*",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ForbidDynamoDBAccess2"
+    effect = "Deny"
+
+    actions = [
+      "dynamodb:ConditionCheckItem",
+      "dynamodb:PurchaseReservedCapacityOfferings",
+      "dynamodb:PutItem",
+      "dynamodb:Query",
+      "dynamodb:RestoreTableFromBackup",
+      "dynamodb:RestoreTableToPointInTime",
+      "dynamodb:Scan",
+    ]
+
+    resources = ["*"]
+  }
+}
+
 # opg-breakglass
 resource "aws_ssoadmin_permission_set" "opg-breakglass" {
   name             = "opg-breakglass"
