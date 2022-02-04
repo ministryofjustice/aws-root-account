@@ -9,7 +9,10 @@ locals {
         aws_organizations_account.moj-opg-shared-production,
         aws_organizations_account.moj-opg-management,
         aws_organizations_account.moj-opg-shared-development,
-        aws_organizations_account.moj-opg-sandbox
+        aws_organizations_account.moj-opg-sandbox,
+        aws_organizations_account.opg-use-my-lpa-development,
+        aws_organizations_account.opg-use-my-lpa-preproduction,
+        aws_organizations_account.opg-use-my-lpa-production
       ]
     },
     {
@@ -50,14 +53,20 @@ locals {
     },
     {
       github_team    = "opg-use-an-lpa ",
+      permission_set = aws_ssoadmin_permission_set.opg-breakglass,
+      accounts = [
+        aws_organizations_account.moj-opg-shared-development,
+        aws_organizations_account.opg-use-my-lpa-development,
+        aws_organizations_account.opg-use-my-lpa-preproduction,
+      ]
+    },
+    {
+      github_team    = "opg-use-an-lpa ",
       permission_set = aws_ssoadmin_permission_set.opg-operator,
       accounts = [
         aws_organizations_account.moj-opg-identity,
         aws_organizations_account.moj-opg-management,
-        aws_organizations_account.moj-opg-shared-development,
         aws_organizations_account.moj-opg-shared-production,
-        aws_organizations_account.opg-use-my-lpa-development,
-        aws_organizations_account.opg-use-my-lpa-preproduction,
         aws_organizations_account.opg-use-my-lpa-production
       ]
     },
