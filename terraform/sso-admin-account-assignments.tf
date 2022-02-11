@@ -108,7 +108,8 @@ locals {
       github_team    = "modernisation-platform-engineers"
       permission_set = aws_ssoadmin_permission_set.read-only-access
       accounts = [
-        aws_organizations_account.moj-official-production
+        aws_organizations_account.moj-official-production,
+        aws_organizations_account.cloud-platform-transit-gateways
       ]
     },
     # Cloud Platform (Webops) access
