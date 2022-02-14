@@ -71,6 +71,18 @@ resource "aws_ssoadmin_managed_policy_attachment" "aws-sso-readonly-policy" {
   permission_set_arn = aws_ssoadmin_permission_set.aws-sso-readonly.arn
 }
 
+resource "aws_ssoadmin_managed_policy_attachment" "aws-sso-directoryreadonly-policy" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSSSODirectoryReadOnly"
+  permission_set_arn = aws_ssoadmin_permission_set.aws-sso-readonly.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "aws-sso-lambda-readonly-policy" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.aws-sso-readonly.arn
+}
+
 # DashboardAccess
 resource "aws_ssoadmin_permission_set" "dashboard-access" {
   name             = "DashboardAccess"
