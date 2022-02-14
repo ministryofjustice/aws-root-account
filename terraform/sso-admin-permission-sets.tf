@@ -406,6 +406,37 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-dev
   permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-developer.arn
 }
 
+# Modernisation Platform Engineer
+# This role is designed to be used as an alternative to a full on admin role / read only role when trouble shooting MP accounts
+# Currently this is just readonly plus the ability to create support tickets, but potential we could add more permissions in here if it reduces admin role or superadmin usage
+resource "aws_ssoadmin_permission_set" "modernisation-platform-engineer" {
+  name             = "ModernisationPlatformEngineer"
+  instance_arn     = local.sso_instance_arn
+  session_duration = "PT8H"
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation-platform-engineer-readonly-policy" {
+  instance_arn       = local.sso_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-engineer.arn
+}
+
+data "aws_iam_policy_document" "modernisation-platform-engineer-additional" {
+  statement {
+    actions = [
+      "support:*"
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "modernisation-platform-engineer-additional" {
+  inline_policy      = data.aws_iam_policy_document.modernisation-platform-engineer-additional.json
+  instance_arn       = local.sso_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation-platform-engineer.arn
+}
+
 ##################################################
 # Technical Operations specific permision sets   #
 ##################################################

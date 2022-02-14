@@ -95,6 +95,14 @@ locals {
         aws_organizations_account.modernisation-platform
       ]
     },
+    # Modernisation Platform Engineers landing zone account
+    {
+      github_team    = "modernisation-platform-engineers"
+      permission_set = aws_ssoadmin_permission_set.modernisation-platform-engineer
+      accounts = [
+        aws_organizations_account.modernisation-platform
+      ]
+    },
     # Modernisation Platform engineers sso read only
     {
       github_team    = "modernisation-platform-engineers"
