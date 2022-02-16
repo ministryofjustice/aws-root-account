@@ -5,6 +5,7 @@ resource "aws_organizations_organization" "default" {
     "compute-optimizer.amazonaws.com",
     "config.amazonaws.com",
     "detective.amazonaws.com",
+    "fms.amazonaws.com",
     "guardduty.amazonaws.com",
     "health.amazonaws.com",
     "inspector2.amazonaws.com",
