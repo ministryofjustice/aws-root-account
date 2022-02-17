@@ -9,3 +9,15 @@ updates:
     directory: "/terraform" # Location of package manifests
     schedule:
       interval: "daily"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/management-account/terraform" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/organisation-security/terraform" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
