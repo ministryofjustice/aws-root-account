@@ -1,0 +1,27 @@
+name: tflint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tflint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: ["management-account", "organisation-security"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.tflint.d/plugins
+          key: tflint-${{ hashFiles('.tflint.hcl') }}
+      - uses: terraform-linters/setup-tflint@v1
+        with:
+          tflint_version: v0.34.1
+      - run: tflint --version
+      - run: tflint --init
+      - run: tflint -f compact
