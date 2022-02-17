@@ -395,7 +395,8 @@ data "aws_iam_policy_document" "modernisation-platform-developer-additional" {
 
     resources = [
       "arn:aws:iam::*:role/read-dns-records",
-      "arn:aws:iam::*:role/member-delegation-read-only"
+      "arn:aws:iam::*:role/member-delegation-read-only",
+      "arn:aws:iam::${local.modernisation_platform_environment_management.account_ids["core-shared-services-production"]}:role/member-shared-services"
     ]
   }
 }

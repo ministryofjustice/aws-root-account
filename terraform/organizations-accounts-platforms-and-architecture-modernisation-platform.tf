@@ -49,4 +49,7 @@ locals {
       name = key
     }
   ]
+
+  modernisation_platform_environment_management = jsondecode(data.aws_secretsmanager_secret_version.modernisation-platform-account-ids.secret_string)
+
 }
