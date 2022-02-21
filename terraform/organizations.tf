@@ -45,28 +45,3 @@ resource "aws_organizations_policy_attachment" "default" {
   policy_id = "p-FullAWSAccess"
   target_id = aws_organizations_organization.default.roots[0].id
 }
-
-# Enrol all accounts within the AWS Organization to unenforced tag policies
-# Note that when you attach a tag policy, it can take 48 hours to evaluate compliance
-# See: https://docs.aws.amazon.com/organizations/latest/userguide/attach-tag-policy.html
-resource "aws_organizations_policy_attachment" "mandatory-tags-policy" {
-  policy_id = aws_organizations_policy.mandatory-tags.id
-  target_id = aws_organizations_organization.default.roots[0].id
-}
-
-resource "aws_organizations_policy_attachment" "optional-tags-policy" {
-  policy_id = aws_organizations_policy.optional-tags.id
-  target_id = aws_organizations_organization.default.roots[0].id
-}
-
-# Enrol all accounts within the AWS Organization to opting out of AWS AI services using our
-# data and content to train the AI services and models.
-resource "aws_organizations_policy_attachment" "ai-services-opt-out" {
-  policy_id = aws_organizations_policy.ai-services-opt-out-policy.id
-  target_id = aws_organizations_organization.default.roots[0].id
-}
-
-# If you're going to create a new account using this Terraform,
-# note that you'll have to import any aws_organizations_policy_attachment resources manually as
-# Terraform will fail to create them (as AWS attaches them on your behalf).
-# When it does fail, import it into Terraform, so we can explicitly track what policies accounts have.
