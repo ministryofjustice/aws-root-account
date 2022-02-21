@@ -1,3 +1,6 @@
+# These resources (`aws_organizations_organizational_unit`) are now managed in management-account/terraform/organizations-organizational-units.tf
+# They have been left here whilst the other resources are moved (as there is a dependency on them)
+
 # Organisation Management accounts
 resource "aws_organizations_organizational_unit" "organisation-management" {
   name      = "Organisation Management"
