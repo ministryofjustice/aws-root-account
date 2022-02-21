@@ -1,3 +1,5 @@
+# This resource (`aws_organizations_organization`) is now managed in management-account/terraform/organizations.tf
+# It has been left here whilst the other aws_organizations_* resources are moved (as there is a dependency on it)
 resource "aws_organizations_organization" "default" {
   aws_service_access_principals = [
     "access-analyzer.amazonaws.com",
@@ -16,6 +18,7 @@ resource "aws_organizations_organization" "default" {
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "securityhub.amazonaws.com",
+    "ssm.amazonaws.com",
     "sso.amazonaws.com",
     "storage-lens.s3.amazonaws.com",
     "tagpolicies.tag.amazonaws.com"
@@ -26,6 +29,14 @@ resource "aws_organizations_organization" "default" {
     "TAG_POLICY"
   ]
   feature_set = "ALL"
+
+  lifecycle {
+    ignore_changes = [
+      aws_service_access_principals,
+      enabled_policy_types,
+      feature_set
+    ]
+  }
 }
 
 # Note that whatever is attached here is inherited by all sub-accounts
