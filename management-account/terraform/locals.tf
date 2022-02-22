@@ -18,6 +18,9 @@ locals {
     hq = merge(local.tags_default, {
       business-unit = "HQ"
     })
+    laa = merge(local.tags_default, {
+      business-unit = "LAA"
+    })
     platforms = merge(local.tags_default, {
       business-unit = "Platforms"
     })
