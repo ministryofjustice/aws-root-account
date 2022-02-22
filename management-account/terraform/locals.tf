@@ -6,6 +6,12 @@ locals {
     owner         = ""
   }
   tags_business_units = {
+    cica = merge(local.tags_default, {
+      business-unit = "CICA"
+    })
+    hq = merge(local.tags_default, {
+      business-unit = "HQ"
+    })
     platforms = merge(local.tags_default, {
       business-unit = "Platforms"
     })
