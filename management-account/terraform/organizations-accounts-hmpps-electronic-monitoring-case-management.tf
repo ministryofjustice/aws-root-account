@@ -49,7 +49,7 @@ resource "aws_organizations_account" "electronic_monitoring_case_management_prod
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_case_management.id
 
   tags = merge(local.tags_electronic_monitoring_case_management, {
-
+    is-production = true
   })
 
   lifecycle {

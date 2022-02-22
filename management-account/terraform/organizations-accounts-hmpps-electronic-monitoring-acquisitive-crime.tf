@@ -49,7 +49,7 @@ resource "aws_organizations_account" "electronic_monitoring_acquisitive_crime_pr
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id
 
   tags = merge(local.tags_electronic_monitoring_acquisitive_crime, {
-
+    is-production = true
   })
 
   lifecycle {
