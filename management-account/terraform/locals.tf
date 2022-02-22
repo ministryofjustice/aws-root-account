@@ -9,6 +9,12 @@ locals {
     cica = merge(local.tags_default, {
       business-unit = "CICA"
     })
+    hmcts = merge(local.tags_default, {
+      business-unit = "HMCTS"
+    })
+    hmpps = merge(local.tags_default, {
+      business-unit = "HMPPS"
+    })
     hq = merge(local.tags_default, {
       business-unit = "HQ"
     })
