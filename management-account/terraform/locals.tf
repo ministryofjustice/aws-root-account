@@ -27,6 +27,9 @@ locals {
     platforms = merge(local.tags_default, {
       business-unit = "Platforms"
     })
+    yjb = merge(local.tags_default, {
+      business-unit = "YJB"
+    })
   }
   github_repository = "github.com/ministryofjustice/aws-root-account/blob/main"
 }
