@@ -97,7 +97,7 @@ resource "aws_organizations_account" "analytical_platform_production" {
 
   tags = merge(local.tags_analytical_platform, {
     environment-name = "production"
-    is-production = true
+    is-production    = true
   })
 
   lifecycle {
