@@ -8,7 +8,7 @@ resource "aws_organizations_account" "alfresco_non_prod" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -28,7 +28,7 @@ resource "aws_organizations_account" "delius_core_non_prod" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -48,7 +48,7 @@ resource "aws_organizations_account" "delius_new_tech_non_prod" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -68,7 +68,7 @@ resource "aws_organizations_account" "hmpps_delius_mis_non_prod" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -88,7 +88,7 @@ resource "aws_organizations_account" "hmpps_delius_mis_test" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -108,7 +108,7 @@ resource "aws_organizations_account" "hmpps_delius_performance" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -128,7 +128,7 @@ resource "aws_organizations_account" "hmpps_delius_po_test" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -148,7 +148,7 @@ resource "aws_organizations_account" "hmpps_delius_po_test_1" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -168,7 +168,7 @@ resource "aws_organizations_account" "hmpps_delius_po_test_2" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -188,7 +188,7 @@ resource "aws_organizations_account" "hmpps_delius_pre_production" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -208,7 +208,7 @@ resource "aws_organizations_account" "hmpps_delius_stage" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -228,7 +228,7 @@ resource "aws_organizations_account" "hmpps_delius_test" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -248,7 +248,7 @@ resource "aws_organizations_account" "hmpps_delius_training" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -268,7 +268,7 @@ resource "aws_organizations_account" "hmpps_delius_training_test" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
@@ -288,7 +288,7 @@ resource "aws_organizations_account" "probation_management_non_prod" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
-  tags = merge(local.delius, {
+  tags = merge(local.tags_delius, {
 
   })
 
