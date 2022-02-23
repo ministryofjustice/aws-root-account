@@ -25,7 +25,7 @@ resource "aws_organizations_account" "opg_sirius_backup" {
   parent_id                  = aws_organizations_organizational_unit.opg_sirius.id
 
   tags = merge(local.tags_opg, {
-
+    is-production = true
   })
 
   lifecycle {

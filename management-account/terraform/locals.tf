@@ -1,9 +1,6 @@
 locals {
   tags_default = {
-    business-unit = ""
-    application   = ""
     is-production = false
-    owner         = ""
   }
   tags_business_units = {
     cica = merge(local.tags_default, {

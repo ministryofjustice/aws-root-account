@@ -9,7 +9,7 @@ resource "aws_organizations_account" "moj_opg_identity" {
   parent_id                  = aws_organizations_organizational_unit.opg.id
 
   tags = merge(local.tags_opg, {
-
+    is-production = true
   })
 
   lifecycle {
@@ -63,7 +63,7 @@ resource "aws_organizations_account" "moj_opg_sandbox" {
 }
 
 resource "aws_organizations_account" "moj_opg_shared_development" {
-  name                       = "MoJ Shared Development"
+  name                       = "MoJ OPG Shared Development"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "moj-opg-shared-dev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.opg.id
@@ -104,12 +104,12 @@ resource "aws_organizations_account" "moj_opg_shared_production" {
 
 resource "aws_organizations_account" "opg_backups" {
   name                       = "OPG Backups"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "moj-opg-backups")
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "opg-backups")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.opg.id
 
   tags = merge(local.tags_opg, {
-
+    is-production = true
   })
 
   lifecycle {
@@ -124,7 +124,7 @@ resource "aws_organizations_account" "opg_backups" {
 
 resource "aws_organizations_account" "opg_shared" {
   name                       = "opg-shared"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "moj-opg-shared")
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "opg-shared")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.opg.id
 

@@ -9,7 +9,7 @@ resource "aws_organizations_account" "hmpps_cr_jira_non_production" {
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
 
   tags = merge(local.tags_community_rehabilitation, {
-    application = "Community Rehabilitation Jira"
+    application = "Community Rehabilitation - Jira"
   })
 
   lifecycle {
@@ -29,7 +29,7 @@ resource "aws_organizations_account" "hmpps_cr_jira_production" {
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
 
   tags = merge(local.tags_community_rehabilitation, {
-    application   = "Community Rehabilitation Jira"
+    application   = "Community Rehabilitation - Jira"
     is-production = true
   })
 
@@ -50,7 +50,7 @@ resource "aws_organizations_account" "hmpps_cr_jitbit_non_production" {
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
 
   tags = merge(local.tags_community_rehabilitation, {
-    application = "Community Rehabilitation Jitbit"
+    application = "Community Rehabilitation - Jitbit"
   })
 
   lifecycle {
@@ -70,7 +70,7 @@ resource "aws_organizations_account" "hmpps_cr_jitbit_production" {
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
 
   tags = merge(local.tags_community_rehabilitation, {
-    application   = "Community Rehabilitation Jitbit"
+    application   = "Community Rehabilitation - Jitbit"
     is-production = true
   })
 
@@ -91,7 +91,7 @@ resource "aws_organizations_account" "hmpps_cr_unpaid_work_non_production" {
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
 
   tags = merge(local.tags_community_rehabilitation, {
-    application = "Community Rehabilitation Unpaid Work"
+    application = "Community Rehabilitation - Unpaid Work"
   })
 
   lifecycle {
@@ -111,7 +111,7 @@ resource "aws_organizations_account" "hmpps_cr_unpaid_work_production" {
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
 
   tags = merge(local.tags_community_rehabilitation, {
-    application   = "Community Rehabilitation Unpaid Work"
+    application   = "Community Rehabilitation - Unpaid Work"
     is-production = true
   })
 
