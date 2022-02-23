@@ -8,7 +8,9 @@ resource "aws_organizations_account" "moj_digital_services" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.central_digital.id
 
-  tags = local.tags_central_digital
+  tags = merge(local.tags_central_digital, {
+    is-production = true
+  })
 
   lifecycle {
     ignore_changes = [
