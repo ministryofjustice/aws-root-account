@@ -338,6 +338,17 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
   }
 }
 
+resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou_scp" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children :
+    child.id
+    if child.name == "Modernisation Platform Member"
+  ])
+
+  target_id = each.value
+  policy_id = aws_organizations_policy.modernisation_platform_member_ou_scp.id
+}
+
 #######################################################
 # Modernisation Platform Member OU SCP - Prevent Root #
 #######################################################
