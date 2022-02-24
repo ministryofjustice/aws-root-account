@@ -200,6 +200,11 @@ resource "aws_organizations_organizational_unit" "platforms_and_architecture_mod
   tags      = {}
 }
 
+# Modernisation Platform children (managed by Modernisation Platform team)
+data "aws_organizations_organizational_units" "platforms_and_architecture_modernisation_platform_children" {
+  parent_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
+}
+
 ########################
 # Security Engineering #
 ########################
