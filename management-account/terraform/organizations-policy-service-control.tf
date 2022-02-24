@@ -247,31 +247,6 @@ resource "aws_organizations_policy_attachment" "deny_cloudtrail_delete_stop_upda
   target_id = aws_organizations_organizational_unit.laa.id
 }
 
-######################################
-# Modernisation Platform Core OU SCP #
-######################################
-resource "aws_organizations_policy" "modernisation_platform_core_ou_scp" {
-  name        = "Modernisation Platform Core OU SCP"
-  description = "Restricts permissions for all OUs and accounts under the Modernisation Platform Core OU"
-  type        = "SERVICE_CONTROL_POLICY"
-
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
-  }
-
-  content = data.aws_iam_policy_document.modernisation_platform_core_ou_scp.json
-}
-
-data "aws_iam_policy_document" "modernisation_platform_core_ou_scp" {
-  statement {
-    effect    = "Allow"
-    actions   = ["*"]
-    resources = ["*"]
-  }
-}
-
 #####################################################
 # Modernisation Platform Core OU SCP - Prevent Root #
 #####################################################
@@ -386,31 +361,6 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp_prevent_roo
   }
 }
 
-####################################################
-# Modernisation Platform Member Unrestriced OU SCP #
-####################################################
-resource "aws_organizations_policy" "modernisation_platform_member_unrestriced_ou_scp" {
-  name        = "Modernisation Platform Member Unrestriced OU SCP"
-  description = "Restricts permissions for all OUs and accounts under the Modernisation Platform Member Unrestriced OU"
-  type        = "SERVICE_CONTROL_POLICY"
-
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
-  }
-
-  content = data.aws_iam_policy_document.modernisation_platform_member_unrestriced_ou_scp.json
-}
-
-data "aws_iam_policy_document" "modernisation_platform_member_unrestriced_ou_scp" {
-  statement {
-    effect    = "Allow"
-    actions   = ["*"]
-    resources = ["*"]
-  }
-}
-
 ####################################################################
 # Modernisation Platform Member Unrestricted OU SCP - Prevent Root #
 ####################################################################
@@ -445,30 +395,5 @@ data "aws_iam_policy_document" "modernisation_platform_member_unrestricted_ou_sc
       variable = "aws:PrincipalArn"
       values   = ["arn:aws:iam::*:root"]
     }
-  }
-}
-
-#####################################################
-# Modernisation Platform Member unrestricted OU SCP #
-#####################################################
-resource "aws_organizations_policy" "modernisation_platform_member_unrestricted_ou_scp" {
-  name        = "Modernisation Platform Member unrestricted OU SCP"
-  description = "Restricts permissions for all OUs and accounts under the Modernisation Platform Member unrestricted OU"
-  type        = "SERVICE_CONTROL_POLICY"
-
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
-  }
-
-  content = data.aws_iam_policy_document.modernisation_platform_member_unrestricted_ou_scp.json
-}
-
-data "aws_iam_policy_document" "modernisation_platform_member_unrestricted_ou_scp" {
-  statement {
-    effect    = "Allow"
-    actions   = ["*"]
-    resources = ["*"]
   }
 }
