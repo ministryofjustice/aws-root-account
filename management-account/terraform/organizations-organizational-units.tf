@@ -34,13 +34,6 @@ resource "aws_organizations_organizational_unit" "closed_accounts" {
   tags      = {}
 }
 
-# Remove
-resource "aws_organizations_organizational_unit" "closed_accounts_remove" {
-  name      = "Remove"
-  parent_id = aws_organizations_organizational_unit.closed_accounts.id
-  tags      = {}
-}
-
 #########
 # HMCTS #
 #########
