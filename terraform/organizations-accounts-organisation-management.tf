@@ -9,30 +9,6 @@ locals {
   }
 }
 
-# Organisation logging account
-resource "aws_organizations_account" "organisation-logging" {
-  name      = "organisation-logging"
-  email     = replace(local.aws_account_email_addresses_template, "{email}", "organisation-logging")
-  parent_id = aws_organizations_organizational_unit.organisation-management.id
-
-  lifecycle {
-    # If any of these attributes are changed, it attempts to destroy and recreate the account,
-    # so we should ignore the changes to prevent this from happening.
-    ignore_changes = [
-      name,
-      email,
-      iam_user_access_to_billing,
-      role_name
-    ]
-  }
-
-  tags = merge(
-    local.tags-organisation-management, {
-      component = "Logging"
-    }
-  )
-}
-
 # Organisation security account
 resource "aws_organizations_account" "organisation-security" {
   name      = "organisation-security"
