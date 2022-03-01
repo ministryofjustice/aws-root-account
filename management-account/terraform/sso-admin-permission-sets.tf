@@ -5,7 +5,7 @@
 # AdministratorAccess
 resource "aws_ssoadmin_permission_set" "administrator_access" {
   name             = "AdministratorAccess"
-  description      = "12345"
+  description      = "Full AWS administrator access"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT1H"
   tags             = {}
@@ -47,7 +47,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_read_only_directory" 
 # Billing Access
 resource "aws_ssoadmin_permission_set" "billing" {
   name             = "Billing"
-  description      = "12345"
+  description      = "Billing-only access"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT8H"
   tags             = {}
@@ -62,7 +62,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "billing" {
 # Read Only Access
 resource "aws_ssoadmin_permission_set" "read_only_access" {
   name             = "ReadOnlyAccess"
-  description      = "12345"
+  description      = "Read-only access"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT1H"
   tags             = {}
@@ -77,7 +77,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "read_only_access" {
 # Security Audit
 resource "aws_ssoadmin_permission_set" "security_audit" {
   name             = "SecurityAudit"
-  description      = "12345"
+  description      = "Security auditor access"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT1H"
   tags             = {}
@@ -92,7 +92,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "security_audit" {
 # View Only Access
 resource "aws_ssoadmin_permission_set" "view_only_access" {
   name             = "ViewOnlyAccess"
-  description      = "12345"
+  description      = "View-only access"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT1H"
   tags             = {}
@@ -111,7 +111,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "view_only_access" {
 # Modernisation Platform developer
 resource "aws_ssoadmin_permission_set" "modernisation_platform_developer" {
   name             = "modernisation-platform-developer"
-  description      = "12345"
+  description      = "Modernisation Platform: developer tenancy"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT8H"
   tags             = {}
@@ -189,7 +189,7 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
     resources = [
       "arn:aws:iam::*:role/read-dns-records",
       "arn:aws:iam::*:role/member-delegation-read-only",
-      "arn:aws:iam::${local.modernisation_platform_environment_management.account_ids["core-shared-services-production"]}:role/member-shared-services}:role/member-shared-services"
+      "arn:aws:iam::${local.modernisation_platform_environment_management["core-shared-services-production"]}:role/member-shared-services"
     ]
   }
 }
@@ -199,7 +199,7 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
 # Currently this is just readonly plus the ability to create support tickets, but potential we could add more permissions in here if it reduces admin role or superadmin usage
 resource "aws_ssoadmin_permission_set" "modernisation_platform_engineer" {
   name             = "ModernisationPlatformEngineer"
-  description      = "12345"
+  description      = "Modernisation Platform: engineer troubleshooting role"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT8H"
   tags             = {}
@@ -428,7 +428,7 @@ resource "aws_ssoadmin_permission_set" "opg_viewer" {
   name             = "opg-viewer"
   description      = "Standard viewer role given to all members of OPG Digital"
   instance_arn     = local.sso_admin_instance_arn
-  session_duration = "PT1H"
+  session_duration = "PT2H"
   tags             = {}
 }
 
@@ -450,7 +450,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg_viewer" {
 # - allow access to support:*
 resource "aws_ssoadmin_permission_set" "techops_operator" {
   name             = "techops-operator"
-  description      = "12345"
+  description      = "Technical Operations operator"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT8H"
   tags             = {}
