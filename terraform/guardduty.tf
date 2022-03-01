@@ -37,36 +37,6 @@
 # where auto-enable is now turned on as of 4th May 2021.
 
 locals {
-  # These accounts currently have an integration in eu-west-2 for GuardDuty that needs unpicking.
-  # We've enrolled them into central GuardDuty in all other regions to make the transition easier.
-  enrolled_into_guardduty_non_eu_west_2_only = [
-    aws_organizations_account.hmpps-delius-mis-test.id,
-    aws_organizations_account.hmpps-delius-po-test-2.id,
-    aws_organizations_account.hmpps-delius-po-test-1.id,
-    aws_organizations_account.hmpps-delius-training-test.id,
-    aws_organizations_account.hmpps-delius-training.id,
-    aws_organizations_account.hmpps-delius-mis-non-prod.id,
-    aws_organizations_account.hmpps-victim-case-management-system-performance.id,
-    aws_organizations_account.hmpps-victim-case-management-system-stage.id,
-    aws_organizations_account.hmpps-victim-case-management-system-test.id,
-    aws_organizations_account.hmpps-security-audit.id,
-    aws_organizations_account.hmpps-engineering-production.id,
-    aws_organizations_account.hmpps-delius-pre-production.id,
-    aws_organizations_account.hmpps-delius-performance.id,
-    aws_organizations_account.hmpps-delius-stage.id,
-    aws_organizations_account.hmpps-delius-test.id,
-    aws_organizations_account.hmpps-victim-case-management-system-pre-production.id,
-    aws_organizations_account.hmpps-victim-case-management-system-production.id,
-    aws_organizations_account.hmpps-victim-case-management-system-integration.id,
-    aws_organizations_account.strategic-partner-gateway-non-production.id,
-    aws_organizations_account.hmpps-probation-production.id,
-    aws_organizations_account.probation-management-non-prod.id,
-    aws_organizations_account.alfresco-non-prod.id,
-    aws_organizations_account.delius-core-non-prod.id,
-    aws_organizations_account.delius-new-tech-non-prod.id,
-    aws_organizations_account.vcms-non-prod.id,
-    aws_organizations_account.probation.id
-  ]
   enrolled_into_guardduty = {
     for account in aws_organizations_organization.default.accounts :
     account.name => account.id
@@ -575,7 +545,6 @@ module "guardduty-eu-west-2" {
   enrolled_into_guardduty = {
     for account_name, account_id in local.enrolled_into_guardduty :
     account_name => account_id
-    if !contains(local.enrolled_into_guardduty_non_eu_west_2_only, account_id)
   }
 
   destination_arn = aws_s3_bucket.guardduty-bucket.arn
