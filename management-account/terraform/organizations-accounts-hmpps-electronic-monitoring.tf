@@ -2,6 +2,27 @@ locals {
   tags_electronic_monitoring = local.tags_business_units.hmpps
 }
 
+# Electronic Monitoring (ProMon)
+resource "aws_organizations_account" "electronic_monitoring" {
+  name                       = "Electronic Monitoring"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-test") # Repurposed account
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring.id
+
+  tags = merge(local.tags_electronic_monitoring, {
+
+  })
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
+
 # Electronic Monitoring Archive & Query Service
 resource "aws_organizations_account" "electronic_monitoring_archive_and_query_service" {
   name                       = "Electronic Monitoring Archive & Query Service"
@@ -69,69 +90,6 @@ resource "aws_organizations_account" "electronic_monitoring_infrastructure_dev" 
 resource "aws_organizations_account" "electronic_monitoring_monitoring_and_mapping_dev" {
   name                       = "Electronic Monitoring Monitoring&Mapping Dev"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-dev")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring.id
-
-  tags = merge(local.tags_electronic_monitoring, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
-# Electronic Monitoring Monitoring&Mapping Pre-Prod
-resource "aws_organizations_account" "electronic_monitoring_monitoring_and_mapping_pre_prod" {
-  name                       = "Electronic Monitoring Monitoring&Mapping Pre-Prod"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-pre-prod")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring.id
-
-  tags = merge(local.tags_electronic_monitoring, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
-# Electronic Monitoring Monitoring&Mapping Prod
-resource "aws_organizations_account" "electronic_monitoring_monitoring_and_mapping_prod" {
-  name                       = "Electronic Monitoring Monitoring&Mapping Prod"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-prod")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring.id
-
-  tags = merge(local.tags_electronic_monitoring, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
-# Electronic Monitoring Monitoring&Mapping Test
-resource "aws_organizations_account" "electronic_monitoring_monitoring_and_mapping_test" {
-  name                       = "Electronic Monitoring Monitoring&Mapping Test"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-test")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring.id
 
@@ -295,4 +253,3 @@ resource "aws_organizations_account" "electronic_monitoring_tagging_hardware_tes
     ]
   }
 }
-
