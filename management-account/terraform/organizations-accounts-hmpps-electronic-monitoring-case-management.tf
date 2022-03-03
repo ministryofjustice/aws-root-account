@@ -65,7 +65,7 @@ resource "aws_organizations_account" "electronic_monitoring_case_management_prod
 # Electronic Monitoring Case Management Networking prod
 resource "aws_organizations_account" "electronic_monitoring_case_management_networking_prod" {
   name                       = "Electronic Monitoring Case Management Networking prod"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-pre-prod") # Repurposed account
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-prod") # Repurposed account
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_case_management.id
 
@@ -86,7 +86,7 @@ resource "aws_organizations_account" "electronic_monitoring_case_management_netw
 # Electronic Monitoring Case Management Management prod
 resource "aws_organizations_account" "electronic_monitoring_case_management_management_prod" {
   name                       = "Electronic Monitoring Case Management Management prod"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-prod") # Repurposed account
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-pre-prod") # Repurposed account
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_case_management.id
 
