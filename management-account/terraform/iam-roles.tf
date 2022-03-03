@@ -36,8 +36,11 @@ data "aws_iam_policy_document" "cost_explorer_access_read_only" {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${aws_organizations_account.youth_justice_framework_management.id}:root"]
+      type = "AWS"
+      identifiers = [
+        aws_organizations_account.youth_justice_framework_management.id,
+        aws_organizations_account.moj_opg_management.id
+      ]
     }
   }
 }
