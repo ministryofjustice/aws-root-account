@@ -264,6 +264,13 @@ locals {
       ]
     },
     {
+      github_team        = "moj-official-techops",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        local.modernisation_platform_environment_management["core-network-services-production"]
+      ]
+    },
+    {
       github_team        = "cloud-ops-alz-admins",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
