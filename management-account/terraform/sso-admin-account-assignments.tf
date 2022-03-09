@@ -331,7 +331,7 @@ locals {
 }
 
 resource "aws_ssoadmin_account_assignment" "github_team_access" {
-  for_each = local.sso_admin_account_assignments_with_keys
+  for_each = tomap(nonsensitive(local.sso_admin_account_assignments_with_keys))
 
   instance_arn       = local.sso_admin_instance_arn
   permission_set_arn = each.value.permission_set_arn
