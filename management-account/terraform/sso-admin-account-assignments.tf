@@ -7,6 +7,7 @@ locals {
         aws_organizations_account.moj_digital_services.id,
         aws_organizations_account.cloud_platform.id,
         aws_organizations_account.cloud_platform_ephemeral_test.id,
+        aws_organizations_account.cloud_platform_transit_gateways.id
       ]
     },
     {
