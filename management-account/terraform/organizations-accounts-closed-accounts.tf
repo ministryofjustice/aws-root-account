@@ -15,23 +15,6 @@ resource "aws_organizations_account" "aws_laa" {
   }
 }
 
-resource "aws_organizations_account" "moj_cla" {
-  name                       = "MoJ CLA"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "cla-dev")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
-  tags                       = {}
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "money_to_prisoners" {
   name                       = "Money To Prisoners"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "moneytoprisoners")
