@@ -2,26 +2,6 @@ locals {
   tags_hmpps = local.tags_business_units.hmpps
 }
 
-resource "aws_organizations_account" "hmpps_check_my_diary_development" {
-  name                       = "HMPPS Check My Diary Development"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cmd-dev")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_co_financing_organisation" {
   name                       = "HMPPS Co-Financing Organisation"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-co-financing-org")
