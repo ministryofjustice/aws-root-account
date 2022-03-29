@@ -14,8 +14,8 @@ jobs:
       matrix:
         directory: ["management-account", "organisation-security"]
     steps:
-      - uses: actions/checkout@main
-      - uses: tfsec/tfsec-sarif-action@master
+      - uses: actions/checkout@v3
+      - uses: tfsec/tfsec-sarif-action@v0.1.0
         with:
           sarif_file: tfsec.sarif
           working_directory: ${{ matrix.directory }}
