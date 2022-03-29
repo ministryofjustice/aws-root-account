@@ -13,6 +13,7 @@ resource "aws_organizations_organization" "default" {
     "license-management.marketplace.amazonaws.com",
     "license-manager.amazonaws.com",
     "license-manager.member-account.amazonaws.com",
+    "macie.amazonaws.com",
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "securityhub.amazonaws.com",
