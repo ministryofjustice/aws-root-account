@@ -29,4 +29,13 @@ locals {
     })
   }
   github_repository = "github.com/ministryofjustice/aws-root-account/blob/main"
+
+  # Account maps
+  accounts = {
+    active_only : {
+      for account in aws_organizations_organization.default.accounts :
+      account.name => account.id
+      if account.status == "ACTIVE"
+    }
+  }
 }
