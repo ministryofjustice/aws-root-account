@@ -27,6 +27,7 @@ module "cloudtrail_s3_bucket" {
   source = "../../modules/s3"
 
   bucket_name = "cloudtrail-20210315101356188000000003"
+  bucket_acl  = "log-delivery-write"
 }
 
 # log-bucket-replication20210315101330747900000001
