@@ -17,7 +17,6 @@ resource "aws_organizations_organization" "default" {
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "securityhub.amazonaws.com",
-    "ssm.amazonaws.com",
     "sso.amazonaws.com",
     "storage-lens.s3.amazonaws.com",
     "tagpolicies.tag.amazonaws.com",
