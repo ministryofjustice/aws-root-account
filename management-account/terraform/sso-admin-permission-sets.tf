@@ -493,3 +493,57 @@ data "aws_iam_policy_document" "techops_operator" {
     resources = ["*"]
   }
 }
+
+#########################################
+# organisation-security permission sets #
+#########################################
+
+# Web Application Firewall (WAF) viewer
+#
+# This role provides permissions to view:
+#
+# - Firewall Manager
+# - AWS Shield Advanced
+resource "aws_ssoadmin_permission_set" "waf_viewer" {
+  name             = "web-application-firewall-viewer"
+  description      = "A role to view AWS Shield Advanced and Firewall Manager resources"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "waf_viewer_firewall_manager" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSFMAdminReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.waf_viewer.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "waf_viewer_shield" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.waf_viewer_shield.json
+  permission_set_arn = aws_ssoadmin_permission_set.waf_viewer.arn
+}
+
+data "aws_iam_policy_document" "waf_viewer_shield" {
+  statement {
+    actions = [
+      "shield:UntagResource",
+      "shield:DescribeProtection",
+      "shield:ListResourcesInProtectionGroup",
+      "shield:ListTagsForResource",
+      "shield:DescribeProtectionGroup",
+      "shield:TagResource",
+      "shield:DescribeAttack",
+      "shield:DescribeAttackStatistics",
+      "shield:ListProtectionGroups",
+      "shield:DescribeSubscription",
+      "shield:GetSubscriptionState",
+      "shield:ListProtections",
+      "shield:DescribeEmergencyContactSettings",
+      "shield:ListAttacks",
+      "shield:DescribeDRTAccess"
+    ]
+
+    resources = ["*"]
+  }
+}
