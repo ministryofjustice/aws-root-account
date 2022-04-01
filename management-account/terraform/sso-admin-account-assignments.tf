@@ -314,6 +314,13 @@ locals {
       account_ids = [
         aws_organizations_organization.default.master_account_id
       ]
+    },
+    {
+      github_team        = "organisation-security-waf"
+      permission_set_arn = aws_ssoadmin_permission_set.waf_viewer.arn,
+      account_ids = [
+        aws_organizations_account.organisation_security.id
+      ]
     }
   ]
   sso_admin_account_assignments_expanded = flatten([
