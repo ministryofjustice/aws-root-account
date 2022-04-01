@@ -5,21 +5,62 @@ locals {
     if account.name == "organisation-security"
   ]...)
 
+  # AWS Organizational Units
+  ou_platforms_and_architecture_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "Platforms & Architecture"
+  ]...)
+
+  ou_modernisation_platform_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.platforms_and_architecture.children :
+    ou.id
+    if ou.name == "Modernisation Platform"
+  ]...)
+
+  ou_modernisation_platform_core_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.modernisation_platform.children :
+    ou.id
+    if ou.name == "Modernisation Platform Core"
+  ]...)
+
+  ou_modernisation_platform_member_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.modernisation_platform.children :
+    ou.id
+    if ou.name == "Modernisation Platform Member"
+  ]...)
+
+  ou_modernisation_platform_unrestricted_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.modernisation_platform.children :
+    ou.id
+    if ou.name == "Modernisation Platform Member Unrestricted"
+  ]...)
+
+  # Shield Advanced
+  shield_advanced_auto_remediate = {
+    accounts             = null,
+    organizational_units = null
+  }
+  shield_advanced_no_auto_remediate = {
+    accounts = null,
+    organizational_units = flatten([
+      data.aws_organizations_organizational_units.modernisation_platform_core.id,
+      [
+        for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
+        ou.id
+        if(
+          ou.name != "modernisation-platform-xhibit-portal"
+        )
+      ]
+    ])
+  }
+
   # Accounts map
   accounts = {
     active_only_not_self : {
       for account in data.aws_organizations_organization.default.accounts :
       account.name => account.id
       if account.status == "ACTIVE" && account.name != "organisation-security"
-    },
-    modernisation_platform_shield_advanced : {
-      for account in data.aws_organizations_organization.default.accounts :
-      account.name => account.id
-      if account.status == "ACTIVE" && (
-        account.name == "cooker-development" ||
-        account.name == "sprinkler-development" ||
-        account.name == "shared-services-dev"
-      )
     }
   }
 }
