@@ -72,7 +72,7 @@ resource "aws_fms_policy" "eu_west_2_shield_advanced_no_auto_remediate" {
 
 # Shield Advanced policy (auto-remediate)
 resource "aws_fms_policy" "eu_west_1_shield_advanced_auto_remediate" {
-  provider = aws.eu-west-2
+  provider = aws.eu-west-1
 
   name                               = "shield_advanced_auto_remediate"
   delete_all_policy_resources        = true
@@ -104,7 +104,7 @@ resource "aws_fms_policy" "eu_west_1_shield_advanced_auto_remediate" {
 
 # Shield Advanced policy (don't auto remediate)
 resource "aws_fms_policy" "eu_west_1_shield_advanced_no_auto_remediate" {
-  provider = aws.eu-west-2
+  provider = aws.eu-west-1
 
   name                               = "shield_advanced_no_auto_remediate"
   delete_all_policy_resources        = true
