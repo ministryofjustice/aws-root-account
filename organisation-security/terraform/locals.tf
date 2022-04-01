@@ -11,6 +11,15 @@ locals {
       for account in data.aws_organizations_organization.default.accounts :
       account.name => account.id
       if account.status == "ACTIVE" && account.name != "organisation-security"
+    },
+    modernisation_platform_shield_advanced : {
+      for account in data.aws_organizations_organization.default.accounts :
+      account.name => account.id
+      if account.status == "ACTIVE" && (
+        account.name == "cooker-development" ||
+        account.name == "sprinkler-development" ||
+        account.name == "shared-services-dev"
+      )
     }
   }
 }
