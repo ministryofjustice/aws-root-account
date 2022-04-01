@@ -89,6 +89,12 @@ resource "aws_ssoadmin_managed_policy_attachment" "security_audit" {
   permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn
 }
 
+resource "aws_ssoadmin_managed_policy_attachment" "security_audit_inspector_v2" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn
+}
+
 # View Only Access
 resource "aws_ssoadmin_permission_set" "view_only_access" {
   name             = "ViewOnlyAccess"
