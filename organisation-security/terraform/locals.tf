@@ -38,7 +38,7 @@ locals {
 
   # Shield Advanced
   shield_advanced_auto_remediate = {
-    accounts = null,
+    accounts             = null,
     organizational_units = null
   }
   shield_advanced_no_auto_remediate = {
@@ -46,9 +46,9 @@ locals {
     organizational_units = flatten([
       data.aws_organizations_organizational_units.modernisation_platform_core.id,
       [
-        for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children:
+        for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
         ou.id
-        if (
+        if(
           ou.name != "modernisation-platform-xhibit-portal"
         )
       ]
