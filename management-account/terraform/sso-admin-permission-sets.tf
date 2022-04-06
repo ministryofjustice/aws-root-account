@@ -138,6 +138,7 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_dev
 data "aws_iam_policy_document" "modernisation_platform_developer" {
   statement {
     actions = [
+      "acm:ImportCertificate",
       "secretsmanager:GetResourcePolicy",
       "secretsmanager:GetSecretValue",
       "secretsmanager:DescribeSecret",
@@ -156,7 +157,8 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "ec2:CreateSnapshots"
       "ec2:CreateTags",
       "s3:PutObject",
-      "s3:DeleteObject"
+      "s3:DeleteObject",
+      "marketplace:ViewSubscriptions"      
     ]
 
     resources = ["*"]
