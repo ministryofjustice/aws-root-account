@@ -38,10 +38,6 @@ locals {
 
   # Shield Advanced
   shield_advanced_auto_remediate = {
-    accounts             = null,
-    organizational_units = null
-  }
-  shield_advanced_no_auto_remediate = {
     accounts = null,
     organizational_units = flatten([
       data.aws_organizations_organizational_units.modernisation_platform_core.id,
@@ -53,6 +49,14 @@ locals {
         )
       ]
     ])
+  }
+  shield_advanced_no_auto_remediate = {
+    accounts = [
+      for account_name, account_value in local.accounts.active_only_not_self :
+      account_value
+      if account_name == "shared-services-dev"
+    ],
+    organizational_units = null
   }
 
   # Accounts map
