@@ -19,7 +19,7 @@ variable "attach_policy" {
 
 variable "policy" {
   type    = string
-  default = null
+  default = ""
 }
 
 variable "enable_versioning" {
@@ -55,4 +55,9 @@ variable "server_side_encryption_configuration" {
 variable "additional_tags" {
   type    = map(any)
   default = {}
+}
+
+variable "require_ssl_requests" {
+  type    = bool
+  default = false
 }
