@@ -43,7 +43,6 @@ locals {
         aws_organizations_account.hmpps_delius_mis_non_prod.id,
         aws_organizations_account.hmpps_delius_mis_test.id,
         aws_organizations_account.hmpps_delius_performance.id,
-        aws_organizations_account.hmpps_delius_po_test.id,
         aws_organizations_account.hmpps_delius_po_test_1.id,
         aws_organizations_account.hmpps_delius_po_test_2.id,
         aws_organizations_account.hmpps_delius_pre_production.id,
