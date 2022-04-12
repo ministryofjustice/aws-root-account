@@ -77,6 +77,11 @@ resource "aws_organizations_policy_attachment" "deny_aws_account_root_user" {
   target_id = aws_organizations_organizational_unit.platforms_and_architecture.id
 }
 
+resource "aws_organizations_policy_attachment" "deny_aws_account_root_user_hmpps_community_rehabilitation" {
+  policy_id = aws_organizations_policy.deny_aws_account_root_user.id
+  target_id = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
+}
+
 #####################################
 # Deny all actions on all resources #
 #####################################
