@@ -38,7 +38,15 @@ locals {
 
   # Shield Advanced
   shield_advanced_auto_remediate = {
-    accounts = null,
+    accounts = [
+      for account_name, account_value in local.accounts.active_only_not_self :
+      account_value
+      if
+      (
+        account_name == "Legal Aid Agency" ||
+        account_name == "MOJ Official (Development)"
+      )
+    ],
     organizational_units = flatten([
       data.aws_organizations_organizational_units.modernisation_platform_core.id,
       [
