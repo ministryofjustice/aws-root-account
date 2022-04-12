@@ -148,9 +148,15 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "secretsmanager:RestoreSecret",
       "ssm:*",
       "kms:Decrypt*",
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
       "ec2:StartInstances",
       "ec2:StopInstances",
       "ec2:RebootInstances",
+      "ec2:CopyImage",
       "ec2:CreateImage",
       "ec2:CopySnapshot",
       "ec2:CreateSnapshot",
@@ -158,7 +164,9 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "ec2:CreateTags",
       "s3:PutObject",
       "s3:DeleteObject",
-      "aws-marketplace:ViewSubscriptions"
+      "aws-marketplace:ViewSubscriptions",
+      "support:*",
+      "ssm-guiconnect:*"
     ]
 
     resources = ["*"]
