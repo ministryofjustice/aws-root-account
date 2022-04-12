@@ -69,7 +69,36 @@ resource "aws_s3_bucket_policy" "default" {
 data "aws_iam_policy_document" "combined" {
   for_each = var.attach_policy ? toset(["enabled"]) : []
 
-  source_policy_documents = compact([var.policy])
+  source_policy_documents = compact([
+    var.require_ssl_requests ? data.aws_iam_policy_document.require_ssl_requests.json : "",
+    var.policy
+  ])
+}
+
+# Policy to require requests to use HTTPS/SSL. This explicitly denies access HTTP requests to the bucket.
+data "aws_iam_policy_document" "require_ssl_requests" {
+  version = "2012-10-17"
+
+  statement {
+    sid     = "AllowSSLRequestsOnly"
+    effect  = "Deny"
+    actions = ["s3:*"]
+    resources = [
+      "${aws_s3_bucket.default.arn}/*",
+      "${aws_s3_bucket.default.arn}"
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
 }
 
 ##############################

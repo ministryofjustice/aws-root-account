@@ -9,9 +9,10 @@ module "cloudtrail_replication_s3_bucket" {
   }
   source = "../../modules/s3"
 
-  bucket_name   = "cloudtrail--replication20210315101340520100000002"
-  attach_policy = true
-  policy        = data.aws_iam_policy_document.cloudtrail_replication_s3_bucket.json
+  bucket_name = "cloudtrail--replication20210315101340520100000002"
+
+  attach_policy        = true
+  require_ssl_requests = true
 
   server_side_encryption_configuration = {
     rule = {
@@ -23,36 +24,16 @@ module "cloudtrail_replication_s3_bucket" {
   }
 }
 
-data "aws_iam_policy_document" "cloudtrail_replication_s3_bucket" {
-  statement {
-    effect  = "Deny"
-    actions = ["s3:*"]
-    resources = [
-      "arn:aws:s3:::cloudtrail--replication20210315101340520100000002/*",
-      "arn:aws:s3:::cloudtrail--replication20210315101340520100000002"
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
-    }
-  }
-}
-
 # cloudtrail-20210315101356188000000003
 module "cloudtrail_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name   = "cloudtrail-20210315101356188000000003"
-  bucket_acl    = "log-delivery-write"
-  attach_policy = true
-  policy        = data.aws_iam_policy_document.cloudtrail_s3_bucket.json
+  bucket_name = "cloudtrail-20210315101356188000000003"
+  bucket_acl  = "log-delivery-write"
+
+  attach_policy        = true
+  policy               = data.aws_iam_policy_document.cloudtrail_s3_bucket.json
+  require_ssl_requests = true
 
   server_side_encryption_configuration = {
     rule = {
@@ -65,26 +46,6 @@ module "cloudtrail_s3_bucket" {
 }
 
 data "aws_iam_policy_document" "cloudtrail_s3_bucket" {
-  statement {
-    effect  = "Deny"
-    actions = ["s3:*"]
-    resources = [
-      "arn:aws:s3:::cloudtrail-20210315101356188000000003/*",
-      "arn:aws:s3:::cloudtrail-20210315101356188000000003"
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
-    }
-  }
-
   statement {
     effect    = "Allow"
     actions   = ["s3:GetBucketAcl"]
@@ -121,37 +82,16 @@ module "log_bucket_replication_s3_bucket" {
   }
   source = "../../modules/s3"
 
-  bucket_name   = "log-bucket-replication20210315101330747900000001"
-  attach_policy = true
-  policy        = data.aws_iam_policy_document.log_bucket_replication_s3_bucket.json
+  bucket_name = "log-bucket-replication20210315101330747900000001"
+
+  attach_policy        = true
+  require_ssl_requests = true
 
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
         sse_algorithm = "aws:kms"
       }
-    }
-  }
-}
-
-data "aws_iam_policy_document" "log_bucket_replication_s3_bucket" {
-  statement {
-    effect  = "Deny"
-    actions = ["s3:*"]
-    resources = [
-      "arn:aws:s3:::log-bucket-replication20210315101330747900000001/*",
-      "arn:aws:s3:::log-bucket-replication20210315101330747900000001"
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
     }
   }
 }
@@ -160,37 +100,16 @@ data "aws_iam_policy_document" "log_bucket_replication_s3_bucket" {
 module "log_bucket_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name   = "log-bucket20210315101344444500000002"
-  attach_policy = true
-  policy        = data.aws_iam_policy_document.log_bucket_s3_bucket.json
+  bucket_name = "log-bucket20210315101344444500000002"
+
+  attach_policy        = true
+  require_ssl_requests = true
 
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
         sse_algorithm = "aws:kms"
       }
-    }
-  }
-}
-
-data "aws_iam_policy_document" "log_bucket_s3_bucket" {
-  statement {
-    effect  = "Deny"
-    actions = ["s3:*"]
-    resources = [
-      "arn:aws:s3:::log-bucket20210315101344444500000002/*",
-      "arn:aws:s3:::log-bucket20210315101344444500000002"
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
     }
   }
 }
