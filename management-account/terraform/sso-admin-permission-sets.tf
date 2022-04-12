@@ -156,6 +156,8 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "ec2:StartInstances",
       "ec2:StopInstances",
       "ec2:RebootInstances",
+      "ec2:ModifyImageAttribute",
+      "ec2:ModifySnapshotAttribute",
       "ec2:CopyImage",
       "ec2:CreateImage",
       "ec2:CopySnapshot",
