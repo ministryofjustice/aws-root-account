@@ -198,6 +198,13 @@ data "aws_organizations_organizational_units" "platforms_and_architecture_modern
   parent_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
 
+# Operations Engineering
+resource "aws_organizations_organizational_unit" "platforms_and_architecture_operations_engineering" {
+  name      = "Operations Engineering"
+  parent_id = aws_organizations_organizational_unit.platforms_and_architecture.id
+  tags      = {}
+}
+
 ########################
 # Security Engineering #
 ########################
