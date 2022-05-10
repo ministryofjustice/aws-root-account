@@ -39,21 +39,3 @@ resource "aws_organizations_account" "network_architecture" {
     ]
   }
 }
-
-resource "aws_organizations_account" "patterns" {
-  name                       = "Patterns"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "patterns")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.central_digital.id
-
-  tags = local.tags_central_digital
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
