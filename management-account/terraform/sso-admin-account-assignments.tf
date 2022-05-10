@@ -246,6 +246,7 @@ locals {
         aws_organizations_account.moj_official_network_operations_centre.id,
         aws_organizations_account.workplace_tech_proof_of_concept_development.id,
         aws_organizations_account.wptpoc.id,
+        aws_organizations_account.network_architecture.id,
       ]
     },
     {
@@ -261,6 +262,7 @@ locals {
         aws_organizations_account.moj_official_shared_services.id,
         aws_organizations_account.workplace_tech_proof_of_concept_development.id,
         aws_organizations_account.wptpoc.id,
+        aws_organizations_account.network_architecture.id,
       ]
     },
     {
