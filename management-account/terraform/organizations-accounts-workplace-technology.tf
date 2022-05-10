@@ -181,21 +181,3 @@ resource "aws_organizations_account" "wptpoc" {
     ]
   }
 }
-
-resource "aws_organizations_account.network_architecture" "network_architecture" {
-  name                       = "Network Architecture - WTP Landing Zone"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "network_architecture")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_account.network_architecture.id
-
-  tags = local.tags_workplace_technology
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
