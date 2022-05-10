@@ -142,26 +142,6 @@ resource "aws_organizations_account" "hmpps_prod" {
   }
 }
 
-resource "aws_organizations_account" "hmpps_security_audit" {
-  name                       = "HMPPS Security Audit"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-security-audit")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_security_poc" {
   name                       = "HMPPS Security POC"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "HMPPS_Security_POC")
