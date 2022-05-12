@@ -5,7 +5,11 @@ resource "aws_organizations_account" "moj_digital_services" {
   parent_id                  = aws_organizations_organizational_unit.platforms_and_architecture_operations_engineering.id
 
   tags = merge(local.tags_platforms, {
-    is-production = true
+    is-production          = true
+    application            = "DNS and legacy services"
+    environment-name       = "MOJ DSD"
+    infrastructure-support = "Operations Engineering: operations-engineering@digital.justice.gov.uk"
+    owner                  = "Operations Engineering: operations-engineering@digital.justice.gov.uk"
   })
 
   lifecycle {
