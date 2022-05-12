@@ -214,15 +214,6 @@ resource "aws_organizations_organizational_unit" "security_engineering" {
   tags      = {}
 }
 
-#####################
-# Tactical Products #
-#####################
-resource "aws_organizations_organizational_unit" "tactical_products" {
-  name      = "Tactical Products"
-  parent_id = aws_organizations_organization.default.roots[0].id
-  tags      = {}
-}
-
 ########################
 # Workplace Technology #
 ########################
