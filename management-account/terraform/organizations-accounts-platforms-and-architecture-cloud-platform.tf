@@ -29,7 +29,6 @@ resource "aws_organizations_account" "cloud_platform_ephemeral_test" {
   parent_id                  = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
 
   tags = merge(local.tags_platforms, {
-    is-production          = false
     application            = "Cloud Platform Ephemeral Test"
     environment-name       = "cloud-platform-ephemeral-test"
     owner                  = "Cloud Platform: platforms@digital.justice.gov.uk"
