@@ -214,11 +214,11 @@ resource "aws_organizations_organizational_unit" "security_engineering" {
   tags      = {}
 }
 
-########################
-# Workplace Technology #
-########################
-resource "aws_organizations_organizational_unit" "workplace_technology" {
-  name      = "Workplace Technology"
+#######################
+# Technology Services #
+#######################
+resource "aws_organizations_organizational_unit" "technology_services" {
+  name      = "Technology Services"
   parent_id = aws_organizations_organization.default.roots[0].id
   tags      = {}
 }
