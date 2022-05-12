@@ -1,5 +1,9 @@
 locals {
-  tags_yjb = local.tags_business_units.yjb
+  tags_yjb = merge(local.tags_business_units.yjb, {
+    application            = "Youth Justice Framework"
+    owner                  = "Youth Justice Board ICT: ict@yjb.gov.uk"
+    infrastructure-support = "YJAF Operations at NEC: yjafoperationsaws@necsws.com"
+  })
 }
 
 resource "aws_organizations_account" "youth_justice_framework_dev" {
@@ -8,7 +12,9 @@ resource "aws_organizations_account" "youth_justice_framework_dev" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
 
-  tags = local.tags_yjb
+  tags = merge(local.tags_yjb, {
+    environment-name = "development"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -26,7 +32,9 @@ resource "aws_organizations_account" "youth_justice_framework_eng_tools" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
 
-  tags = local.tags_yjb
+  tags = merge(local.tags_yjb, {
+    environment-name = "engineering-tools"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -44,7 +52,9 @@ resource "aws_organizations_account" "youth_justice_framework_juniper" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
 
-  tags = local.tags_yjb
+  tags = merge(local.tags_yjb, {
+    environment-name = "juniper-network"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -62,7 +72,9 @@ resource "aws_organizations_account" "youth_justice_framework_management" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
 
-  tags = local.tags_yjb
+  tags = merge(local.tags_yjb, {
+    environment-name = "landing-zone"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -80,7 +92,9 @@ resource "aws_organizations_account" "youth_justice_framework_monitoring" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
 
-  tags = local.tags_yjb
+  tags = merge(local.tags_yjb, {
+    environment-name = "monitoring"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -98,7 +112,9 @@ resource "aws_organizations_account" "youth_justice_framework_pre_prod" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
 
-  tags = local.tags_yjb
+  tags = merge(local.tags_yjb, {
+    environment-name = "pre-production"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -116,7 +132,10 @@ resource "aws_organizations_account" "youth_justice_framework_prod" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
 
-  tags = local.tags_yjb
+  tags = merge(local.tags_yjb, {
+    environment-name = "production"
+    is-production    = true
+  })
 
   lifecycle {
     ignore_changes = [
@@ -134,7 +153,9 @@ resource "aws_organizations_account" "youth_justice_framework_sandpit" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
 
-  tags = local.tags_yjb
+  tags = merge(local.tags_yjb, {
+    environment-name = "sandpit"
+  })
 
   lifecycle {
     ignore_changes = [
