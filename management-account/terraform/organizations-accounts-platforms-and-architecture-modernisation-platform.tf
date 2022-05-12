@@ -5,7 +5,11 @@ resource "aws_organizations_account" "modernisation_platform" {
   parent_id                  = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 
   tags = merge(local.tags_platforms, {
-    is-production = true
+    is-production          = true
+    application            = "Modernisation Platform"
+    environment-name       = "landing-zone"
+    infrastructure-support = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
+    owner                  = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
   })
 
   lifecycle {

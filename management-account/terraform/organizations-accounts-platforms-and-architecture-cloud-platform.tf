@@ -5,7 +5,11 @@ resource "aws_organizations_account" "cloud_platform" {
   parent_id                  = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
 
   tags = merge(local.tags_platforms, {
-    is-production = true
+    is-production          = true
+    application            = "Cloud Platform"
+    environment-name       = "cloud-platform"
+    owner                  = "Cloud Platform: platforms@digital.justice.gov.uk"
+    infrastructure-support = "Cloud Platform: platforms@digital.justice.gov.uk"
   })
 
   lifecycle {
@@ -25,7 +29,10 @@ resource "aws_organizations_account" "cloud_platform_ephemeral_test" {
   parent_id                  = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
 
   tags = merge(local.tags_platforms, {
-
+    application            = "Cloud Platform Ephemeral Test"
+    environment-name       = "cloud-platform-ephemeral-test"
+    owner                  = "Cloud Platform: platforms@digital.justice.gov.uk"
+    infrastructure-support = "Cloud Platform: platforms@digital.justice.gov.uk"
   })
 
   lifecycle {
