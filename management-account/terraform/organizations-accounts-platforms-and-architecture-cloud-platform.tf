@@ -7,7 +7,7 @@ resource "aws_organizations_account" "cloud_platform" {
   tags = merge(local.tags_platforms, {
     is-production          = true
     application            = "Cloud Platform"
-    environment-name       = "Cloud Platform"
+    environment-name       = "cloud-platform"
     owner                  = "Cloud Platform: platforms@digital.justice.gov.uk"
     infrastructure-support = "Cloud Platform: platforms@digital.justice.gov.uk"
   })
@@ -31,7 +31,7 @@ resource "aws_organizations_account" "cloud_platform_ephemeral_test" {
   tags = merge(local.tags_platforms, {
     is-production          = false
     application            = "Cloud Platform Ephemeral Test"
-    application            = "Cloud Platform Ephemeral Test"
+    environment-name       = "cloud-platform-ephemeral-test"
     owner                  = "Cloud Platform: platforms@digital.justice.gov.uk"
     infrastructure-support = "Cloud Platform: platforms@digital.justice.gov.uk"
   })

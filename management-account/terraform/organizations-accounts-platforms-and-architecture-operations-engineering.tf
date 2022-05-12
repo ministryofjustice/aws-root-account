@@ -7,7 +7,7 @@ resource "aws_organizations_account" "moj_digital_services" {
   tags = merge(local.tags_platforms, {
     is-production          = true
     application            = "DNS and legacy services"
-    environment-name       = "MOJ DSD"
+    environment-name       = "moj-dsd"
     infrastructure-support = "Operations Engineering: operations-engineering@digital.justice.gov.uk"
     owner                  = "Operations Engineering: operations-engineering@digital.justice.gov.uk"
   })
