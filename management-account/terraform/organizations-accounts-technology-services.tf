@@ -1,5 +1,8 @@
 locals {
-  tags_technology_services = local.tags_business_units.hq
+  tags_technology_services = merge(local.tags_business_units.hq, {
+    owner                  = "Technology Services Technology Operations: moj-technicaloperations@justice.gov.uk"
+    infrastructure-support = "Technology Services Technology Operations: moj-technicaloperations@justice.gov.uk"
+  })
 }
 
 resource "aws_organizations_account" "cloud_networks_psn" {
@@ -8,7 +11,9 @@ resource "aws_organizations_account" "cloud_networks_psn" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    is-production = true
+  })
 
   lifecycle {
     ignore_changes = [
@@ -26,7 +31,10 @@ resource "aws_organizations_account" "moj_official_development" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    application = "MOJ Official: DHCP / DNS / Monitoring / NACs / SMTP Relay / Global Protect / Transit Gateway"
+    source-code = "github.com/ministryofjustice/network-operations,github.com/ministryofjustice/cloud-operations"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -44,7 +52,10 @@ resource "aws_organizations_account" "moj_official_network_operations_centre" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    is-production = true
+    application   = "Network Operations Centre"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -62,7 +73,10 @@ resource "aws_organizations_account" "moj_official_preproduction" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    application = "MOJ Official: DHCP / DNS / Monitoring / NACs / SMTP Relay / Global Protect / Transit Gateway"
+    source-code = "github.com/ministryofjustice/network-operations,github.com/ministryofjustice/cloud-operations"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -80,7 +94,11 @@ resource "aws_organizations_account" "moj_official_production" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    is-production = true
+    application   = "MOJ Official: DHCP / DNS / Monitoring / NACs / SMTP Relay / Global Protect / Transit Gateway"
+    source-code   = "github.com/ministryofjustice/network-operations,github.com/ministryofjustice/cloud-operations"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -98,7 +116,10 @@ resource "aws_organizations_account" "moj_official_public_key_infrastructure_dev
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    application = "Entrust Managed VMs"
+    source-code = "github.com/ministryofjustice/staff-infrastructure-certificate-services"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -116,7 +137,11 @@ resource "aws_organizations_account" "moj_official_public_key_infrastructure" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    is-production = true
+    application   = "Entrust Managed VMs"
+    source-code   = "github.com/ministryofjustice/staff-infrastructure-certificate-services"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -134,7 +159,11 @@ resource "aws_organizations_account" "moj_official_shared_services" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    is-production = true
+    application   = "Shared Services for MOJ Official (CodePipeline, etc)"
+    source-code   = "https://github.com/ministryofjustice/staff-device-shared-services-infrastructure"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -152,7 +181,9 @@ resource "aws_organizations_account" "workplace_tech_proof_of_concept_developmen
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    application = "Workplace Technology"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -170,7 +201,9 @@ resource "aws_organizations_account" "wptpoc" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    application = "Workplace Technology"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -188,7 +221,11 @@ resource "aws_organizations_account" "network_architecture" {
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
 
-  tags = local.tags_technology_services
+  tags = merge(local.tags_technology_services, {
+    is-production    = true
+    application      = "Workplace Technology"
+    environment-name = "landing-zone"
+  })
 
   lifecycle {
     ignore_changes = [
@@ -208,6 +245,8 @@ resource "aws_organizations_account" "cloud_platform_transit_gateways" {
 
   tags = merge(local.tags_technology_services, {
     is-production = true
+    application   = "Core Transit Gateway"
+    source-code   = "github.com/ministryofjustice/transit-gateways"
   })
 
   lifecycle {
