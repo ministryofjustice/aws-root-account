@@ -306,6 +306,8 @@ data "aws_iam_policy_document" "opg_operator" {
       "aws-portal:*",
       "budget:*",
       "cur:*",
+      "ce:GetCostForecast",
+      "ce:GetCostAndUsage",
     ]
 
     resources = ["*"]
@@ -368,6 +370,29 @@ data "aws_iam_policy_document" "opg_operator" {
   }
 
   statement {
+    sid    = "CloudwatchAccess"
+    effect = "Allow"
+
+    actions = [
+      "cloudwatch:DescribeAlarms",
+      "applicationinsights:ListApplications",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "HealthEvents"
+    effect = "Allow"
+
+    actions = [
+      "health:DescribeEventAggregates",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
     sid    = "DynamoDBDescribeTables"
     effect = "Allow"
 
@@ -387,7 +412,6 @@ data "aws_iam_policy_document" "opg_operator" {
       "dynamodb:*Create*",
       "dynamodb:*Delete*",
       "dynamodb:*Get*",
-      "dynamodb:*List*",
       "dynamodb:*Update*",
       "dynamodb:*Tag*",
     ]
