@@ -412,7 +412,6 @@ data "aws_iam_policy_document" "opg_operator" {
       "dynamodb:*Create*",
       "dynamodb:*Delete*",
       "dynamodb:*Get*",
-      "dynamodb:*List*",
       "dynamodb:*Update*",
       "dynamodb:*Tag*",
     ]
