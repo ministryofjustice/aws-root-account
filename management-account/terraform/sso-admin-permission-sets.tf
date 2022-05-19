@@ -217,6 +217,158 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
   }
 }
 
+# Modernisation Platform sandbox
+resource "aws_ssoadmin_permission_set" "modernisation_platform_sandbox" {
+  name             = "modernisation-platform-sandbox"
+  description      = "Modernisation Platform: sandbox tenancy"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_sandbox" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_sandbox.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_sandbox" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.modernisation_platform_sandbox.json
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_sandbox.arn
+}
+
+data "aws_iam_policy_document" "modernisation_platform_sandbox" {
+  statement {
+    #checkov:skip=CKV_AWS_108
+    #checkov:skip=CKV_AWS_111
+    #checkov:skip=CKV_AWS_107
+    #checkov:skip=CKV_AWS_109
+    #checkov:skip=CKV_AWS_110
+    effect = "Allow"
+    actions = [
+      "acm-pca:*",
+      "acm:*",
+      "application-autoscaling:*",
+      "athena:*",
+      "autoscaling:*",
+      "cloudfront:*",
+      "cloudwatch:*",
+      "dlm:*",
+      "dynamodb:*",
+      "ebs:*",
+      "ec2:Describe*",
+      "ec2:*SecurityGroup*",
+      "ec2:*KeyPair*",
+      "ec2:*Tags*",
+      "ec2:*Volume*",
+      "ec2:*Snapshot*",
+      "ec2:*Ebs*",
+      "ec2:*NetworkInterface*",
+      "ec2:*Address*",
+      "ec2:*Image*",
+      "ec2:*Event*",
+      "ec2:*Instance*",
+      "ec2:*CapacityReservation*",
+      "ec2:*Fleet*",
+      "ec2:Get*",
+      "ec2:SendDiagnosticInterrupt",
+      "ec2:*LaunchTemplate*",
+      "ec2:*PlacementGroup*",
+      "ec2:*IdFormat*",
+      "ec2:*Spot*",
+      "ecr-public:*",
+      "ecr:*",
+      "ecs:*",
+      "elasticfilesystem:*",
+      "elasticloadbalancing:*",
+      "events:*",
+      "glacier:*",
+      "glue:*",
+      "guardduty:get*",
+      "iam:*",
+      "kms:*",
+      "lambda:*",
+      "logs:*",
+      "organizations:Describe*",
+      "organizations:List*",
+      "rds-db:*",
+      "rds:*",
+      "route53:*",
+      "s3:*",
+      "secretsmanager:*",
+      "ses:*",
+      "sns:*",
+      "sqs:*",
+      "ssm:*",
+      "wafv2:*"
+    ]
+    resources = ["*"] #tfsec:ignore:AWS099 tfsec:ignore:AWS097
+  }
+
+  statement {
+    effect = "Deny"
+    actions = [
+      "ec2:CreateVpc",
+      "ec2:CreateSubnet",
+      "ec2:CreateVpcPeeringConnection",
+      "iam:AddClientIDToOpenIDConnectProvider",
+      "iam:AddUserToGroup",
+      "iam:AttachGroupPolicy",
+      "iam:AttachUserPolicy",
+      "iam:CreateAccountAlias",
+      "iam:CreateGroup",
+      "iam:CreateLoginProfile",
+      "iam:CreateOpenIDConnectProvider",
+      "iam:CreateSAMLProvider",
+      "iam:CreateUser",
+      "iam:CreateVirtualMFADevice",
+      "iam:DeactivateMFADevice",
+      "iam:DeleteAccountAlias",
+      "iam:DeleteAccountPasswordPolicy",
+      "iam:DeleteGroup",
+      "iam:DeleteGroupPolicy",
+      "iam:DeleteLoginProfile",
+      "iam:DeleteOpenIDConnectProvider",
+      "iam:DeleteSAMLProvider",
+      "iam:DeleteUser",
+      "iam:DeleteUserPermissionsBoundary",
+      "iam:DeleteUserPolicy",
+      "iam:DeleteVirtualMFADevice",
+      "iam:DetachGroupPolicy",
+      "iam:DetachUserPolicy",
+      "iam:EnableMFADevice",
+      "iam:RemoveClientIDFromOpenIDConnectProvider",
+      "iam:RemoveUserFromGroup",
+      "iam:ResyncMFADevice",
+      "iam:UpdateAccountPasswordPolicy",
+      "iam:UpdateGroup",
+      "iam:UpdateLoginProfile",
+      "iam:UpdateOpenIDConnectProviderThumbprint",
+      "iam:UpdateSAMLProvider",
+      "iam:UpdateUser"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Deny"
+    actions = [
+      "iam:AttachRolePolicy",
+      "iam:DeleteRole",
+      "iam:DeleteRolePermissionsBoundary",
+      "iam:DeleteRolePolicy",
+      "iam:DetachRolePolicy",
+      "iam:PutRolePermissionsBoundary",
+      "iam:PutRolePolicy",
+      "iam:UpdateAssumeRolePolicy",
+      "iam:UpdateRole",
+      "iam:UpdateRoleDescription"
+    ]
+    resources = ["arn:aws:iam::*:user/cicd-member-user"]
+  }
+}
+
 # Modernisation Platform engineer
 # This role is designed to be used as an alternative to a full on admin role / read only role when trouble shooting MP accounts
 # Currently this is just readonly plus the ability to create support tickets, but potential we could add more permissions in here if it reduces admin role or superadmin usage
