@@ -33,7 +33,7 @@ resource "aws_organizations_account" "moj_official_development" {
 
   tags = merge(local.tags_technology_services, {
     application = "MOJ Official: DHCP / DNS / Monitoring / NACs / SMTP Relay / Global Protect / Transit Gateway"
-    source-code = "github.com/ministryofjustice/network-operations,github.com/ministryofjustice/cloud-operations"
+    source-code = "github.com/ministryofjustice/network-operations github.com/ministryofjustice/cloud-operations"
   })
 
   lifecycle {
@@ -75,7 +75,7 @@ resource "aws_organizations_account" "moj_official_preproduction" {
 
   tags = merge(local.tags_technology_services, {
     application = "MOJ Official: DHCP / DNS / Monitoring / NACs / SMTP Relay / Global Protect / Transit Gateway"
-    source-code = "github.com/ministryofjustice/network-operations,github.com/ministryofjustice/cloud-operations"
+    source-code = "github.com/ministryofjustice/network-operations github.com/ministryofjustice/cloud-operations"
   })
 
   lifecycle {
@@ -97,7 +97,7 @@ resource "aws_organizations_account" "moj_official_production" {
   tags = merge(local.tags_technology_services, {
     is-production = true
     application   = "MOJ Official: DHCP / DNS / Monitoring / NACs / SMTP Relay / Global Protect / Transit Gateway"
-    source-code   = "github.com/ministryofjustice/network-operations,github.com/ministryofjustice/cloud-operations"
+    source-code   = "github.com/ministryofjustice/network-operations github.com/ministryofjustice/cloud-operations"
   })
 
   lifecycle {
@@ -161,7 +161,7 @@ resource "aws_organizations_account" "moj_official_shared_services" {
 
   tags = merge(local.tags_technology_services, {
     is-production = true
-    application   = "Shared Services for MOJ Official (CodePipeline, etc)"
+    application   = "Shared Services for MOJ Official - CodePipeline etc"
     source-code   = "https://github.com/ministryofjustice/staff-device-shared-services-infrastructure"
   })
 
