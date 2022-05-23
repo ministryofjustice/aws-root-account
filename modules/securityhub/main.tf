@@ -1,9 +1,12 @@
 # Get current region
 data "aws_region" "current" {}
 
-######################
-# Self-configuration #
-######################
+# Get current account
+data "aws_caller_identity" "current" {}
+
+###############################
+# Self-configuration: general #
+###############################
 
 # Enable Security Hub
 resource "aws_securityhub_account" "default" {}
@@ -24,6 +27,34 @@ resource "aws_securityhub_standards_subscription" "default_cis_aws_foundations" 
 resource "aws_securityhub_standards_subscription" "default_pci_dss" {
   depends_on    = [aws_securityhub_account.default]
   standards_arn = "arn:aws:securityhub:${data.aws_region.current.name}::standards/pci-dss/v/3.2.1"
+}
+
+############################################
+# Self-configuration: turning off controls #
+############################################
+
+# AWS Foundational Security Best Practices v1.0.0
+resource "aws_securityhub_standards_control" "default_aws_foundational_security_best_practices_hardware_mfa" {
+  standards_control_arn = "arn:aws:securityhub:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:control/aws-foundational-security-best-practices/v/1.0.0/IAM.6"
+  control_status        = "DISABLED"
+  disabled_reason       = "Due to the risk of losing hardware, we store passwords in a closed box using different methods. Further, root access to an account is restricted by an SCP."
+  depends_on            = [aws_securityhub_standards_subscription.default_aws_foundational_security_best_practices]
+}
+
+# CIS AWS Foundations v1.2.0
+resource "aws_securityhub_standards_control" "default_cis_aws_foundations_hardware_mfa" {
+  standards_control_arn = "arn:aws:securityhub:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:control/cis-aws-foundations-benchmark/v/1.2.0/1.14"
+  control_status        = "DISABLED"
+  disabled_reason       = "Due to the risk of losing hardware, we store passwords in a closed box using different methods. Further, root access to an account is restricted by an SCP."
+  depends_on            = [aws_securityhub_standards_subscription.default_cis_aws_foundations]
+}
+
+# PCI DSS v3.2.1
+resource "aws_securityhub_standards_control" "default_pci_dss_hardware_mfa" {
+  standards_control_arn = "arn:aws:securityhub:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:control/pci-dss/v/3.2.1/PCI.IAM.4"
+  control_status        = "DISABLED"
+  disabled_reason       = "Due to the risk of losing hardware, we store passwords in a closed box using different methods. Further, root access to an account is restricted by an SCP."
+  depends_on            = [aws_securityhub_standards_subscription.default_pci_dss]
 }
 
 ###########################
