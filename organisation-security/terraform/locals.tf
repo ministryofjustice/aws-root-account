@@ -62,7 +62,9 @@ locals {
     accounts = [
       for account_name, account_value in local.accounts.active_only_not_self :
       account_value
-      if account_name == "shared-services-dev"
+      if
+        (account_name == "shared-services-dev") ||
+        (account_name == "OPG Use My LPA Development")
     ],
     organizational_units = null
   }
