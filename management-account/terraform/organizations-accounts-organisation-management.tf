@@ -5,7 +5,12 @@ resource "aws_organizations_account" "organisation_logging" {
   parent_id                  = aws_organizations_organizational_unit.organisation_management.id
 
   tags = merge(local.tags_platforms, {
-    is-production = true
+    is-production          = true
+    application            = "organisation-logging"
+    environment-name       = "organisation-logging"
+    owner                  = "Hosting leads: hosting-leads@digital.justice.gov.uk"
+    infrastructure-support = "Hosting leads: hosting-leads@digital.justice.gov.uk"
+    source-code            = local.github_repository
   })
 
   lifecycle {
@@ -25,7 +30,12 @@ resource "aws_organizations_account" "organisation_security" {
   parent_id                  = aws_organizations_organizational_unit.organisation_management.id
 
   tags = merge(local.tags_platforms, {
-    is-production = true
+    is-production          = true
+    application            = "organisation-security"
+    environment-name       = "organisation-security"
+    owner                  = "Hosting leads: hosting-leads@digital.justice.gov.uk"
+    infrastructure-support = "Hosting leads: hosting-leads@digital.justice.gov.uk"
+    source-code            = local.github_repository
   })
 
   lifecycle {
