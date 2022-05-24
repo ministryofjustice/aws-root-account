@@ -44,8 +44,9 @@ locals {
       if
       (
         account_name == "Legal Aid Agency" ||
-        account_name == "MOJ Official (Development)" ||
         account_name == "LAA Development" ||
+        account_name == "MOJ Official (Development)" ||
+        account_name == "MOJ Official (Pre-Production)" ||
         account_name == "OPG Use My LPA Development" ||
         account_name == "OPG Use My LPA Preproduction"
       )
