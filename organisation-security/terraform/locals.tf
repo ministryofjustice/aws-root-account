@@ -44,7 +44,8 @@ locals {
       if
       (
         account_name == "Legal Aid Agency" ||
-        account_name == "MOJ Official (Development)"
+        account_name == "MOJ Official (Development)" ||
+        account_name == "LAA Development"
       )
     ],
     organizational_units = flatten([
