@@ -13,6 +13,11 @@ resource "aws_s3_account_public_access_block" "default" {
 # S3 buckets #
 ##############
 
+# AWS Config log bucket
+module "config_log_bucket" {
+  source = "../../modules/config-bucket"
+}
+
 # cloudtrail--replication20210315101340520100000002
 module "cloudtrail_replication_s3_bucket" {
   providers = {
