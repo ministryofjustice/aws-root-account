@@ -45,7 +45,8 @@ locals {
       (
         account_name == "Legal Aid Agency" ||
         account_name == "MOJ Official (Development)" ||
-        account_name == "LAA Development"
+        account_name == "LAA Development" ||
+        account_name == "OPG Use My LPA Development"
       )
     ],
     organizational_units = flatten([
@@ -64,8 +65,7 @@ locals {
       for account_name, account_value in local.accounts.active_only_not_self :
       account_value
       if
-        (account_name == "shared-services-dev") ||
-        (account_name == "OPG Use My LPA Development")
+      (account_name == "shared-services-dev")
     ],
     organizational_units = null
   }
