@@ -67,7 +67,7 @@ locals {
       for account_name, account_value in local.accounts.active_only_not_self :
       account_value
       if
-      (account_name == "shared-services-dev")
+      (account_name == "shared-services-dev" || account_name == "MoJ Digital Services")
     ],
     organizational_units = null
   }
