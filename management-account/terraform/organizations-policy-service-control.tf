@@ -214,6 +214,7 @@ locals {
     aws_organizations_account.legal_aid_agency.id,
     aws_organizations_account.moj_official_development.id,
     aws_organizations_account.moj_official_network_operations_centre.id,
+    aws_organizations_account.security_operations_pre_production.id,
   ]
 }
 
