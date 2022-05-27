@@ -6,6 +6,18 @@ locals {
   ]...)
 
   # AWS Organizational Units
+  ou_opg = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "OPG"
+  ]...)
+
+  ou_opg_use_my_lpa = coalesce([
+    for ou in data.aws_organizations_organizational_units.opg.children :
+    ou.id
+    if ou.name == "Use My LPA"
+  ]...)
+
   ou_platforms_and_architecture_id = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
@@ -46,12 +58,11 @@ locals {
         account_name == "Legal Aid Agency" ||
         account_name == "LAA Development" ||
         account_name == "MOJ Official (Development)" ||
-        account_name == "MOJ Official (Pre-Production)" ||
-        account_name == "OPG Use My LPA Development" ||
-        account_name == "OPG Use My LPA Preproduction"
+        account_name == "MOJ Official (Pre-Production)"
       )
     ],
     organizational_units = flatten([
+      local.ou_opg_use_my_lpa,
       data.aws_organizations_organizational_units.modernisation_platform_core.id,
       [
         for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
