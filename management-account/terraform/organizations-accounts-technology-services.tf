@@ -5,26 +5,6 @@ locals {
   })
 }
 
-resource "aws_organizations_account" "cloud_networks_psn" {
-  name                       = "Cloud Networks PSN"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "cloud_networks_PSN")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.technology_services.id
-
-  tags = merge(local.tags_technology_services, {
-    is-production = true
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "moj_official_development" {
   name                       = "MOJ Official (Development)"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-dev")
