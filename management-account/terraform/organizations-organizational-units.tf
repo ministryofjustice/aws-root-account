@@ -205,6 +205,13 @@ resource "aws_organizations_organizational_unit" "platforms_and_architecture_ope
   tags      = {}
 }
 
+# Digital Studio Operations
+resource "aws_organizations_organizational_unit" "platforms_and_architecture_digital_studio_operations" {
+  name      = "Digital Studio Operations"
+  parent_id = aws_organizations_organizational_unit.platforms_and_architecture.id
+  tags      = {}
+}
+
 ########################
 # Security Engineering #
 ########################
