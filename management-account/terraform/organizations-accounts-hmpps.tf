@@ -22,49 +22,9 @@ resource "aws_organizations_account" "hmpps_co_financing_organisation" {
   }
 }
 
-resource "aws_organizations_account" "hmpps_dev" {
-  name                       = "HMPPS Dev"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-dev")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_engineering_production" {
   name                       = "HMPPS Engineering Production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-engineering-prod")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
-resource "aws_organizations_account" "hmpps_management" {
-  name                       = "HMPPS Management"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-mgmt")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps.id
 
@@ -105,26 +65,6 @@ resource "aws_organizations_account" "hmpps_performance_hub" {
 resource "aws_organizations_account" "hmpps_probation_production" {
   name                       = "HMPPS Probation Production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-probation-prod")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
-resource "aws_organizations_account" "hmpps_prod" {
-  name                       = "HMPPS PROD"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps.id
 
