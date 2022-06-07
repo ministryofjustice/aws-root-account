@@ -284,3 +284,23 @@ resource "aws_organizations_account" "cloud_networks_psn" {
     ]
   }
 }
+
+resource "aws_organizations_account" "hmpps_delius_po_test_2" {
+  name                       = "HMPPS Delius PO Test 2"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-po-test2")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = merge(local.tags_delius, {
+
+  })
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
