@@ -102,26 +102,6 @@ resource "aws_organizations_account" "hmpps_delius_performance" {
   }
 }
 
-resource "aws_organizations_account" "hmpps_delius_po_test_2" {
-  name                       = "HMPPS Delius PO Test 2"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-po-test2")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
-
-  tags = merge(local.tags_delius, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_delius_pre_production" {
   name                       = "HMPPS Delius Pre Production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-pre-prod")
