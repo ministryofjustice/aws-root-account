@@ -204,6 +204,7 @@ locals {
     # orgnaizational-unit
     aws_organizations_organizational_unit.analytical_platform.id,
     aws_organizations_organizational_unit.central_digital.id,
+    aws_organizations_organizational_unit.cica.id,
     aws_organizations_organizational_unit.hmcts.id,
     aws_organizations_organizational_unit.hmpps_community_rehabilitation.id,
     aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id,
