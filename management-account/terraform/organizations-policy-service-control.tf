@@ -209,12 +209,11 @@ locals {
     aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id,
     aws_organizations_organizational_unit.platforms_and_architecture_operations_engineering.id,
     aws_organizations_organizational_unit.security_engineering.id,
+    aws_organizations_organizational_unit.technology_services.id,
     # organization-account
     aws_organizations_account.analytical_platform_data_engineering_sandbox.id,
     aws_organizations_account.analytical_platform_development.id,
     aws_organizations_account.analytical_platform_landing.id,
-    aws_organizations_account.moj_official_development.id,
-    aws_organizations_account.moj_official_network_operations_centre.id,
     aws_organizations_account.security_operations_pre_production.id,
   ]
 }
