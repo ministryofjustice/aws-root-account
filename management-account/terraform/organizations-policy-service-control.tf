@@ -206,6 +206,7 @@ locals {
     aws_organizations_organizational_unit.laa.id,
     aws_organizations_organizational_unit.opg.id,
     aws_organizations_organizational_unit.organisation_management.id,
+    aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id,
     aws_organizations_organizational_unit.platforms_and_architecture_digital_studio_operations.id,
     aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id,
     aws_organizations_organizational_unit.platforms_and_architecture_operations_engineering.id,
