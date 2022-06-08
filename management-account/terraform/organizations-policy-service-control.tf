@@ -203,6 +203,7 @@ locals {
     aws_organizations_organizational_unit.opg.id,
     aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id,
     aws_organizations_organizational_unit.security_engineering.id,
+    aws_organizations_organizational_unit.organisation_management.id,
     # organization-account
     aws_organizations_account.analytical_platform_data_engineering_sandbox.id,
     aws_organizations_account.analytical_platform_development.id,
