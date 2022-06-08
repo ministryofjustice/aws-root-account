@@ -197,6 +197,7 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
 locals {
   deny_non_eu_non_us_east_1_operations_targets = [
     # orgnaizational-unit
+    aws_organizations_organizational_unit.hmcts.id,
     aws_organizations_organizational_unit.hmpps_community_rehabilitation.id,
     aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id,
     aws_organizations_organizational_unit.hmpps_electronic_monitoring_case_management.id,
