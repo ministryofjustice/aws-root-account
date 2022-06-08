@@ -213,7 +213,6 @@ locals {
     aws_organizations_organizational_unit.security_engineering.id,
     aws_organizations_organizational_unit.technology_services.id,
     # organization-account
-    aws_organizations_account.security_operations_pre_production.id,
   ]
 }
 
