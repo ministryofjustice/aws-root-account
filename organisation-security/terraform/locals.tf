@@ -48,6 +48,12 @@ locals {
     if ou.name == "Modernisation Platform Member Unrestricted"
   ]...)
 
+  ou_technology_services = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "Technology Services"
+  ]...)
+
   # Shield Advanced
   shield_advanced_auto_remediate = {
     accounts = [
@@ -89,7 +95,9 @@ locals {
         account_name == "MOJ LPA Preproduction"
       )
     ],
-    organizational_units = null
+    organizational_units = [
+      local.ou_technology_services
+    ]
   }
 
   # Accounts map
