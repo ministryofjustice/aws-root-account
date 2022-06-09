@@ -54,6 +54,12 @@ locals {
     if ou.name == "Technology Services"
   ]...)
 
+  ou_laa = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "LAA"
+  ]...)
+
   # Shield Advanced
   shield_advanced_auto_remediate = {
     accounts = [
@@ -96,7 +102,8 @@ locals {
       )
     ],
     organizational_units = [
-      local.ou_technology_services
+      local.ou_technology_services,
+      local.ou_laa,
     ]
   }
 
