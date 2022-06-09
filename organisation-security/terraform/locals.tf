@@ -83,9 +83,6 @@ locals {
       [
         for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
         ou.id
-        if(
-          ou.name != "modernisation-platform-xhibit-portal"
-        )
       ]
     ])
   }
