@@ -98,7 +98,8 @@ locals {
       if
       (
         account_name == "shared-services-dev" ||
-        account_name == "MoJ Digital Services"
+        account_name == "MoJ Digital Services" ||
+        account_name == "MOJ LPA Production"
       )
     ],
     organizational_units = [
