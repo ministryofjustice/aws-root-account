@@ -161,6 +161,13 @@ resource "aws_organizations_organizational_unit" "opg_use_my_lpa" {
   tags      = {}
 }
 
+# Legacy
+resource "aws_organizations_organizational_unit" "opg_legacy" {
+  name      = "Legacy"
+  parent_id = aws_organizations_organizational_unit.opg.id
+  tags      = {}
+}
+
 ###########################
 # Organisation Management #
 ###########################
