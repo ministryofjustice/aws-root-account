@@ -99,7 +99,7 @@ locals {
       (
         account_name == "shared-services-dev" ||
         account_name == "MoJ Digital Services" ||
-        account_name == "MOJ LPA Production"
+        account_name == "MOJ OPG LPA Production"
       )
     ],
     organizational_units = [
