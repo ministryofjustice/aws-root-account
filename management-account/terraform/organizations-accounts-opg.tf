@@ -121,23 +121,3 @@ resource "aws_organizations_account" "opg_backups" {
     ]
   }
 }
-
-resource "aws_organizations_account" "opg_shared" {
-  name                       = "opg-shared"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "opg-shared")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.opg.id
-
-  tags = merge(local.tags_opg, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
