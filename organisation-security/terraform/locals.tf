@@ -74,7 +74,9 @@ locals {
         account_name == "Youth Justice Framework Dev" ||
         account_name == "Youth Justice Framework Eng Tools" ||
         account_name == "Youth Justice Framework Management" ||
-        account_name == "Youth Justice Framework Sandpit"
+        account_name == "Youth Justice Framework Sandpit" ||
+        account_name == "MOJ LPA Development" ||
+        account_name == "MOJ LPA Preproduction"
       )
     ],
     organizational_units = flatten([
@@ -97,8 +99,7 @@ locals {
       (
         account_name == "shared-services-dev" ||
         account_name == "MoJ Digital Services" ||
-        account_name == "MOJ LPA Development" ||
-        account_name == "MOJ LPA Preproduction"
+        account_name == "MOJ LPA Production"
       )
     ],
     organizational_units = [
