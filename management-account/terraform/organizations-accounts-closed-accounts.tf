@@ -304,3 +304,43 @@ resource "aws_organizations_account" "hmpps_delius_po_test_2" {
     ]
   }
 }
+
+resource "aws_organizations_account" "hmpps_victim_case_management_system_performance" {
+  name                       = "HMPPS Victim Case Management System Performance"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-vcms-perf")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = merge(local.tags_victim_case_management_system, {
+
+  })
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
+
+resource "aws_organizations_account" "hmpps_victim_case_management_system_stage" {
+  name                       = "HMPPS Victim Case Management System Stage"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-vcms-stage")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = merge(local.tags_victim_case_management_system, {
+
+  })
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
