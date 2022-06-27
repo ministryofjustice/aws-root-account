@@ -15,7 +15,7 @@ locals {
   ou_opg_make_an_lpa = coalesce([
     for ou in data.aws_organizations_organizational_units.opg.children :
     ou.id
-    if ou.name == "Make an LPA"
+    if ou.name == "Make An LPA"
   ]...)
 
   ou_opg_use_my_lpa = coalesce([
