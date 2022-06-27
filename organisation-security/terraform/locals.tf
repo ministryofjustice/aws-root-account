@@ -12,6 +12,12 @@ locals {
     if ou.name == "OPG"
   ]...)
 
+  ou_opg_make_an_lpa = coalesce([
+    for ou in data.aws_organizations_organizational_units.opg.children :
+    ou.id
+    if ou.name == "Make an LPA"
+  ]...)
+
   ou_opg_use_my_lpa = coalesce([
     for ou in data.aws_organizations_organizational_units.opg.children :
     ou.id
@@ -74,13 +80,12 @@ locals {
         account_name == "Youth Justice Framework Dev" ||
         account_name == "Youth Justice Framework Eng Tools" ||
         account_name == "Youth Justice Framework Management" ||
-        account_name == "Youth Justice Framework Sandpit" ||
-        account_name == "MOJ LPA Development" ||
-        account_name == "MOJ LPA Preproduction"
+        account_name == "Youth Justice Framework Sandpit"
       )
     ],
     organizational_units = flatten([
       local.ou_opg_use_my_lpa,
+      local.ou_opg_make_an_lpa,
       data.aws_organizations_organizational_units.modernisation_platform_core.id,
       [
         for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
@@ -95,8 +100,7 @@ locals {
       if
       (
         account_name == "shared-services-dev" ||
-        account_name == "MoJ Digital Services" ||
-        account_name == "MOJ OPG LPA Production"
+        account_name == "MoJ Digital Services"
       )
     ],
     organizational_units = [
