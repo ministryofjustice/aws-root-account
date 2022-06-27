@@ -75,8 +75,6 @@ locals {
       (
         account_name == "Legal Aid Agency" ||
         account_name == "LAA Development" ||
-        account_name == "MOJ Official (Development)" ||
-        account_name == "MOJ Official (Pre-Production)" ||
         account_name == "Youth Justice Framework Dev" ||
         account_name == "Youth Justice Framework Eng Tools" ||
         account_name == "Youth Justice Framework Management" ||
@@ -84,8 +82,9 @@ locals {
       )
     ],
     organizational_units = flatten([
-      local.ou_opg_use_my_lpa,
       local.ou_opg_make_an_lpa,
+      local.ou_opg_use_my_lpa,
+      local.ou_technology_services,
       data.aws_organizations_organizational_units.modernisation_platform_core.id,
       [
         for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
@@ -104,7 +103,6 @@ locals {
       )
     ],
     organizational_units = [
-      local.ou_technology_services,
       local.ou_laa,
     ]
   }
