@@ -304,3 +304,43 @@ resource "aws_organizations_account" "hmpps_victim_case_management_system_stage"
     ]
   }
 }
+
+resource "aws_organizations_account" "hmpps_delius_performance" {
+  name                       = "HMPPS Delius Performance"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-performance")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = merge(local.tags_delius, {
+
+  })
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
+
+resource "aws_organizations_account" "hmpps_delius_training_test" {
+  name                       = "HMPPS Delius Training Test"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-training-test")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = merge(local.tags_delius, {
+
+  })
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}

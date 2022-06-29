@@ -82,26 +82,6 @@ resource "aws_organizations_account" "hmpps_delius_mis_test" {
   }
 }
 
-resource "aws_organizations_account" "hmpps_delius_performance" {
-  name                       = "HMPPS Delius Performance"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-performance")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
-
-  tags = merge(local.tags_delius, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_delius_pre_production" {
   name                       = "HMPPS Delius Pre Production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-pre-prod")
@@ -165,26 +145,6 @@ resource "aws_organizations_account" "hmpps_delius_test" {
 resource "aws_organizations_account" "hmpps_delius_training" {
   name                       = "HMPPS Delius Training"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-training")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
-
-  tags = merge(local.tags_delius, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
-resource "aws_organizations_account" "hmpps_delius_training_test" {
-  name                       = "HMPPS Delius Training Test"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-training-test")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
 
