@@ -49,46 +49,6 @@ resource "aws_organizations_account" "platforms_non_production" {
   }
 }
 
-resource "aws_organizations_account" "hmpps_check_my_diary_production" {
-  name                       = "HMPPS Check My Diary Prod"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cmd-prod")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
-resource "aws_organizations_account" "hmpps_check_my_diary_development" {
-  name                       = "HMPPS Check My Diary Development"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cmd-dev")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_delius_po_test" {
   name                       = "HMPPS Delius PO Test"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-po-test")
