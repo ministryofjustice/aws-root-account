@@ -1,0 +1,31 @@
+name: terraform (management-account)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: ./management-account/terraform
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ROOT_ACCOUNT_ID}}:role/github-actions
+          role-session-name: GitHubActions
+          aws-region: eu-west-2
+      - uses: hashicorp/setup-terraform@v2
+      - run: terraform fmt -check
+        continue-on-error: true
+      - run: terraform init
+      - run: terraform validate -no-color
+      - run: terraform plan -no-color
