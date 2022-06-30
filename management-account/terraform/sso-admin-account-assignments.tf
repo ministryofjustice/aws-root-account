@@ -275,9 +275,9 @@ locals {
     {
       github_team        = "moj-official-techops",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = [
-        local.modernisation_platform_environment_management["core-network-services-production"]
-      ]
+      account_ids = flatten([
+        local.modernisation_platform_accounts.core_network_services_id
+      ])
     },
     {
       github_team        = "cloud-ops-alz-admins",
@@ -347,7 +347,7 @@ locals {
 }
 
 resource "aws_ssoadmin_account_assignment" "github_team_access" {
-  for_each = tomap(nonsensitive(local.sso_admin_account_assignments_with_keys))
+  for_each = tomap(local.sso_admin_account_assignments_with_keys)
 
   instance_arn       = local.sso_admin_instance_arn
   permission_set_arn = each.value.permission_set_arn
