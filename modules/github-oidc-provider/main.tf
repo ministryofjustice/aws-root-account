@@ -64,7 +64,8 @@ data "aws_iam_policy_document" "extra_permissions" {
     actions = [
       "account:GetAlternateContact",
       "cur:DescribeReportDefinitions",
-      "secretsmanager:GetSecretValue"
+      "identitystore:ListGroups",
+      "secretsmanager:GetSecretValue",
     ]
 
     resources = ["*"]
