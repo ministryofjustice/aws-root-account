@@ -19,3 +19,12 @@ resource "aws_iam_account_password_policy" "default" {
   require_symbols                = true
   require_uppercase_characters   = true
 }
+
+####################################
+# OIDC Provider for GitHub actions #
+####################################
+module "github_oidc" {
+  source                = "../../modules/github-oidc-provider"
+  repository_with_owner = "ministryofjustice/aws-root-account"
+  repository_branch     = "main"
+}
