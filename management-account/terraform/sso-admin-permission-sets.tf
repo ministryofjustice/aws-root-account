@@ -213,7 +213,7 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
     resources = [
       "arn:aws:iam::*:role/read-dns-records",
       "arn:aws:iam::*:role/member-delegation-read-only",
-      "arn:aws:iam::${local.modernisation_platform_environment_management["core-shared-services-production"]}:role/member-shared-services"
+      "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.core_shared_services_id...)}:role/member-shared-services"
     ]
   }
 }
