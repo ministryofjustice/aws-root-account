@@ -18,7 +18,7 @@ locals {
       ]
     },
     {
-      github_team        = "operations-engineering-ro",
+      github_team        = "operations-engineering",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
         aws_organizations_account.moj_digital_services.id
