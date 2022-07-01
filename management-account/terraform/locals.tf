@@ -52,4 +52,15 @@ locals {
       if account_name == "core-shared-services"
     ]
   }
+
+  # SSO
+  sso = {
+    email_suffix        = "@digital.justice.gov.uk"
+    region              = "eu-west-2"
+    github_organisation = "ministryofjustice"
+    auth0_tenant_domain = "ministryofjustice.eu.auth0.com"
+    auth0_saml          = sensitive(jsondecode(data.aws_secretsmanager_secret_version.auth0_saml.secret_string))
+    github_saml         = sensitive(jsondecode(data.aws_secretsmanager_secret_version.github_saml.secret_string))
+    aws_saml            = sensitive(jsondecode(data.aws_secretsmanager_secret_version.aws_saml.secret_string))
+  }
 }
