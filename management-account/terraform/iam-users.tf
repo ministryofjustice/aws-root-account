@@ -81,6 +81,26 @@ resource "aws_iam_user_group_membership" "jason_birchall" {
   ]
 }
 
+##################
+# Julie Robertson #
+##################
+resource "aws_iam_user" "julie_robertson" {
+  name          = "JulieRobertson"
+  path          = "/"
+  force_destroy = true
+  tags          = {}
+}
+
+# User membership
+resource "aws_iam_user_group_membership" "julie_robertson" {
+  user = aws_iam_user.julie_robertson.name
+
+  groups = [
+    aws_iam_group.billing_full_access.name,
+    aws_iam_group.iam_user_change_password.name,
+  ]
+}
+
 ###############################################
 # ModernisationPlatformOrganisationManagement #
 ###############################################
