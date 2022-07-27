@@ -54,7 +54,6 @@ resource "aws_budgets_budget" "hmpps_delius" {
       aws_organizations_account.hmpps_delius_mis_non_prod.id,
       aws_organizations_account.hmpps_delius_mis_test.id,
       aws_organizations_account.hmpps_delius_performance.id,
-      aws_organizations_account.hmpps_delius_po_test.id,
       aws_organizations_account.hmpps_delius_po_test_1.id,
       aws_organizations_account.hmpps_delius_po_test_2.id,
       aws_organizations_account.hmpps_delius_pre_production.id,
@@ -110,7 +109,6 @@ resource "aws_budgets_budget" "laa" {
   cost_filter {
     name = "LinkedAccount"
     values = [
-      aws_organizations_account.aws_laa.id,
       aws_organizations_account.laa_cloudtrail.id,
       aws_organizations_account.laa_development.id,
       aws_organizations_account.laa_production.id,
