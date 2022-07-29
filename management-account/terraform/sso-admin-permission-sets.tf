@@ -59,6 +59,21 @@ resource "aws_ssoadmin_managed_policy_attachment" "billing" {
   permission_set_arn = aws_ssoadmin_permission_set.billing.arn
 }
 
+# EC2 Read Only
+resource "aws_ssoadmin_permission_set" "ec2_readonly" {
+  name             = "EC2ReadOnly"
+  description      = "EC2 read-only access"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "ec2_readonly" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.ec2_readonly.arn
+}
+
 # Read Only Access
 resource "aws_ssoadmin_permission_set" "read_only_access" {
   name             = "ReadOnlyAccess"

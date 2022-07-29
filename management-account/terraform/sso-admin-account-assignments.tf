@@ -329,6 +329,14 @@ locals {
       account_ids = [
         aws_organizations_account.organisation_security.id
       ]
+    },
+    {
+      github_team        = "transit-gateway-readonly"
+      permission_set_arn = aws_ssoadmin_permission_set.ec2_readonly.arn,
+      account_ids = [
+        aws_organizations_account.moj_analytics_platform.id,
+        aws_organizations_account.analytical_platform_data_engineering.id
+      ]
     }
   ]
   sso_admin_account_assignments_expanded = flatten([
