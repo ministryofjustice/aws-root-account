@@ -160,8 +160,9 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
         "eu-central-1", # Europe (Frankfurt)
         "eu-west-1",    # Europe (Ireland)
         "eu-west-2",    # Europe (London)
-        "us-west-2",    # US West (Oregon) (for Network Manager)
         "us-east-1",    # US East (N. Virginia) (for global services)
+        "us-east-2",    # US East (Ohio) (for Chatbot)
+        "us-west-2",    # US West (Oregon) (for Network Manager)
       ]
     }
   }
@@ -171,9 +172,9 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
     effect = "Deny"
     not_actions = [
       "networkmanager:*",
-      "cloudwatch:List*",    # To view the Network Manager log group
-      "cloudwatch:Get*",     # To view the Network Manager log group
-      "cloudwatch:Describe*" # To view the Network Manager log group
+      "cloudwatch:List*",     # To view the Network Manager log group
+      "cloudwatch:Get*",      # To view the Network Manager log group
+      "cloudwatch:Describe*", # To view the Network Manager log group
     ]
     resources = ["*"]
 
@@ -182,6 +183,23 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
       variable = "aws:RequestedRegion"
       values = [
         "us-west-2"
+      ]
+    }
+  }
+
+  # Deny anything apart from Chatbot in us-east-2
+  statement {
+    effect = "Deny"
+    not_actions = [
+      "chatbot:*"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:RequestedRegion"
+      values = [
+        "us-east-2"
       ]
     }
   }
