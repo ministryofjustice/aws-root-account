@@ -67,7 +67,6 @@ locals {
         aws_organizations_account.vcms_non_prod.id,
         aws_organizations_account.hmpps_engineering_production.id,
         aws_organizations_account.hmpps_probation_production.id,
-        aws_organizations_account.hmpps_security_audit.id,
         aws_organizations_account.probation.id,
       ]
     },
