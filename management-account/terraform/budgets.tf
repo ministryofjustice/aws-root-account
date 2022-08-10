@@ -63,8 +63,6 @@ resource "aws_budgets_budget" "hmpps_delius" {
       aws_organizations_account.hmpps_delius_training_test.id,
       aws_organizations_account.hmpps_engineering_production.id,
       aws_organizations_account.hmpps_probation_production.id,
-      aws_organizations_account.hmpps_security_audit.id,
-      aws_organizations_account.hmpps_security_poc.id,
       aws_organizations_account.hmpps_victim_case_management_system_integration.id,
       aws_organizations_account.hmpps_victim_case_management_system_performance.id,
       aws_organizations_account.hmpps_victim_case_management_system_pre_production.id,
