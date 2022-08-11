@@ -634,7 +634,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg_security_audit_securityhu
 
 resource "aws_ssoadmin_managed_policy_attachment" "opg_security_audit_cloudtrail" {
   instance_arn       = local.sso_admin_instance_arn
-  managed_policy_arn = "arn:aws:iam::aws:policy/AWSCloudTrailReadOnlyAccess"
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess"
   permission_set_arn = aws_ssoadmin_permission_set.opg_security_audit.arn
 }
 
