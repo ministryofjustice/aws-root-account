@@ -336,6 +336,13 @@ locals {
         aws_organizations_account.moj_analytics_platform.id,
         aws_organizations_account.analytical_platform_data_engineering.id
       ]
+    },
+    {
+      github_team        = "secops-dev",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.security_operations_development.id
+      ]
     }
   ]
   sso_admin_account_assignments_expanded = flatten([
