@@ -58,7 +58,6 @@ locals {
         aws_organizations_account.hmpps_delius_training.id,
         aws_organizations_account.hmpps_delius_training_test.id,
         aws_organizations_account.probation_management_non_prod.id,
-        aws_organizations_account.hmpps_victim_case_management_system_integration.id,
         aws_organizations_account.hmpps_victim_case_management_system_performance.id,
         aws_organizations_account.hmpps_victim_case_management_system_pre_production.id,
         aws_organizations_account.hmpps_victim_case_management_system_production.id,
