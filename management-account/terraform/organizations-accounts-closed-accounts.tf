@@ -212,3 +212,23 @@ resource "aws_organizations_account" "hmpps_delius_training_test" {
     ]
   }
 }
+
+resource "aws_organizations_account" "hmpps_victim_case_management_system_integration" {
+  name                       = "HMPPS Victim Case Management System Integration"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-vcms-integration")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = merge(local.tags_victim_case_management_system, {
+
+  })
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
