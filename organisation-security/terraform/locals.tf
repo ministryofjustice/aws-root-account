@@ -78,7 +78,9 @@ locals {
         account_name == "Youth Justice Framework Dev" ||
         account_name == "Youth Justice Framework Eng Tools" ||
         account_name == "Youth Justice Framework Management" ||
-        account_name == "Youth Justice Framework Sandpit"
+        account_name == "Youth Justice Framework Sandpit" ||
+        account_name == "opg-sirius-dev" ||
+        account_name == "MoJ OPG Sirius Preproduction"
       )
     ],
     organizational_units = flatten([
@@ -100,8 +102,8 @@ locals {
       (
         account_name == "shared-services-dev" ||
         account_name == "MoJ Digital Services" ||
-        account_name == "opg-sirius-dev" ||
-        account_name == "MoJ OPG Sirius Preproduction"
+        account_name == "OPG Sirius Backup" ||
+        account_name == "OPG Sirius Production"
       )
     ],
     organizational_units = [
