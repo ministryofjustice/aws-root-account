@@ -100,8 +100,8 @@ locals {
       (
         account_name == "shared-services-dev" ||
         account_name == "MoJ Digital Services" ||
-        account_name == "OPG Sirius Development" ||
-        account_name == "OPG Sirius Preproduction"
+        account_name == "opg-sirius-dev" ||
+        account_name == "MoJ OPG Sirius Preproduction"
       )
     ],
     organizational_units = [
