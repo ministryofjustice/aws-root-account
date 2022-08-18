@@ -155,6 +155,8 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
     actions = [
       "acm:ImportCertificate",
       "autoscaling:UpdateAutoScalingGroup",
+      "lambda:InvokeFunction",
+      "lambda:UpdateFunctionCode",
       "secretsmanager:GetResourcePolicy",
       "secretsmanager:GetSecretValue",
       "secretsmanager:DescribeSecret",
