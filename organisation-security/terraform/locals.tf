@@ -24,6 +24,12 @@ locals {
     if ou.name == "Use My LPA"
   ]...)
 
+  ou_sirius = coalesce([
+    for ou in data.aws_organizations_organizational_units.opg.children :
+    ou.id
+    if ou.name == "Sirius"
+  ]...)
+
   ou_platforms_and_architecture_id = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
@@ -78,14 +84,13 @@ locals {
         account_name == "Youth Justice Framework Dev" ||
         account_name == "Youth Justice Framework Eng Tools" ||
         account_name == "Youth Justice Framework Management" ||
-        account_name == "Youth Justice Framework Sandpit" ||
-        account_name == "opg-sirius-dev" ||
-        account_name == "MoJ OPG Sirius Preproduction"
+        account_name == "Youth Justice Framework Sandpit"
       )
     ],
     organizational_units = flatten([
       local.ou_opg_make_an_lpa,
       local.ou_opg_use_my_lpa,
+      local.ou_sirius,
       local.ou_technology_services,
       data.aws_organizations_organizational_units.modernisation_platform_core.id,
       [
@@ -101,9 +106,7 @@ locals {
       if
       (
         account_name == "shared-services-dev" ||
-        account_name == "MoJ Digital Services" ||
-        account_name == "OPG Sirius Backup" ||
-        account_name == "OPG Sirius Production"
+        account_name == "MoJ Digital Services"
       )
     ],
     organizational_units = [
