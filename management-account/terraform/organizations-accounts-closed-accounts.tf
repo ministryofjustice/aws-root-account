@@ -15,26 +15,6 @@ resource "aws_organizations_account" "money_to_prisoners" {
   }
 }
 
-resource "aws_organizations_account" "strategic_partner_gateway_non_production" {
-  name                       = "Strategic Partner Gateway Non Production"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "spg-non-prod")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "security_engineering" {
   name                       = "Security Engineering"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "security_engineering")
