@@ -71,7 +71,6 @@ resource "aws_budgets_budget" "hmpps_delius" {
       aws_organizations_account.hmpps_victim_case_management_system_test.id,
       aws_organizations_account.probation.id,
       aws_organizations_account.probation_management_non_prod.id,
-      aws_organizations_account.strategic_partner_gateway_non_production.id,
       aws_organizations_account.vcms_non_prod.id,
     ]
   }
