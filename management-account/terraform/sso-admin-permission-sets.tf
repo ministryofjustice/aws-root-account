@@ -186,7 +186,8 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "s3:DeleteObject",
       "aws-marketplace:ViewSubscriptions",
       "support:*",
-      "ssm-guiconnect:*"
+      "ssm-guiconnect:*",
+      "sso:GetRoleCredentials"
     ]
 
     resources = ["*"]
