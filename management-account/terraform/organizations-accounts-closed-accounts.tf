@@ -15,44 +15,6 @@ resource "aws_organizations_account" "money_to_prisoners" {
   }
 }
 
-resource "aws_organizations_account" "security_engineering" {
-  name                       = "Security Engineering"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "security_engineering")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
-
-  tags = local.tags_security
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
-resource "aws_organizations_account" "delius_new_tech_non_prod" {
-  name                       = "Delius New Tech non-prod"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "delius_new_tech_non_prod")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
-
-  tags = merge(local.tags_delius, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_delius_po_test_1" {
   name                       = "HMPPS Delius PO Test 1"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-po-test1")
