@@ -44,7 +44,6 @@ resource "aws_budgets_budget" "hmpps_delius" {
     values = [
       aws_organizations_account.alfresco_non_prod.id,
       aws_organizations_account.delius_core_non_prod.id,
-      aws_organizations_account.delius_new_tech_non_prod.id,
       aws_organizations_account.hmpps_cr_jira_non_production.id,
       aws_organizations_account.hmpps_cr_jira_production.id,
       aws_organizations_account.hmpps_cr_jitbit_non_production.id,
