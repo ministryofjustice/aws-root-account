@@ -93,10 +93,7 @@ locals {
       local.ou_sirius,
       local.ou_technology_services,
       data.aws_organizations_organizational_units.modernisation_platform_core.id,
-      [
-        for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
-        ou.id
-      ]
+      data.aws_organizations_organizational_units.modernisation_platform_member.id
     ])
   }
   shield_advanced_no_auto_remediate = {
