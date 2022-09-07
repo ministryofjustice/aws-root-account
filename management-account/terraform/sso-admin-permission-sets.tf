@@ -191,6 +191,17 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
 
     resources = ["*"]
   }
+  statement {
+    actions = [
+      "kms:CreateGrant"
+    ]
+    resources = ["arn:aws:kms:*:${coalesce(local.modernisation_platform_accounts.core_shared_services_id...)}:key/*"]
+    condition {
+      test     = "Bool"
+      variable = "kms:GrantIsForAWSResource"
+      values   = ["true"]
+    }
+  }
 
   statement {
     actions = [
