@@ -285,7 +285,7 @@ locals {
         aws_organizations_account.moj_official_shared_services.id,
       ]
     },
-        {
+    {
       github_team        = "cloud-ops-writers",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
