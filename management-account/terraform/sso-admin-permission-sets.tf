@@ -321,6 +321,7 @@ data "aws_iam_policy_document" "modernisation_platform_sandbox" {
       "logs:*",
       "organizations:Describe*",
       "organizations:List*",
+      "quicksight:*",
       "rds-db:*",
       "rds:*",
       "route53:*",
