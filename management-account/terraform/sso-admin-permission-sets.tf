@@ -316,6 +316,7 @@ data "aws_iam_policy_document" "modernisation_platform_sandbox" {
       "glue:*",
       "guardduty:get*",
       "iam:*",
+      "kinesis:*",
       "kms:*",
       "lambda:*",
       "logs:*",
