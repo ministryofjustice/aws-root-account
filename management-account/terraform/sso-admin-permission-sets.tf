@@ -182,6 +182,7 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "ec2:CreateSnapshot",
       "ec2:CreateSnapshots",
       "ec2:CreateTags",
+      "kinesis:*"
       "s3:PutObject",
       "s3:DeleteObject",
       "aws-marketplace:ViewSubscriptions",
