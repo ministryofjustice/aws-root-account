@@ -242,7 +242,7 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "arn:aws:iam::*:role/read-dns-records",
       "arn:aws:iam::*:role/member-delegation-read-only",
       "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.core_shared_services_id...)}:role/member-shared-services",
-      "arn:aws:iam::${aws_organizations_account.modernisation_platform.id}:role/modernisation_account_limited_read"
+      "arn:aws:iam::${aws_organizations_account.modernisation_platform.id}:role/ModernisationAccountLimitedRead"
     ]
   }
 }
@@ -409,7 +409,7 @@ data "aws_iam_policy_document" "modernisation_platform_sandbox" {
       "arn:aws:iam::*:role/read-dns-records",
       "arn:aws:iam::*:role/member-delegation-read-only",
       "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.core_shared_services_id...)}:role/member-shared-services",
-      "arn:aws:iam::${aws_organizations_account.modernisation_platform.id}:role/modernisation_account_limited_read"
+      "arn:aws:iam::${aws_organizations_account.modernisation_platform.id}:role/ModernisationAccountLimitedRead"
     ]
   }
 }
