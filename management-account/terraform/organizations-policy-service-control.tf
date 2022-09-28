@@ -328,6 +328,8 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
       values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::${aws_organizations_account.modernisation-platform.id}:role/superadmin"]
     }
   }
+
+  # block changes to OIDC providers
   statement {
     effect = "Deny"
     actions = [
