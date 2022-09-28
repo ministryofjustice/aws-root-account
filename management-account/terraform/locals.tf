@@ -51,6 +51,11 @@ locals {
       account_id
       if account_name == "core-shared-services"
     ]
+    modernisation_platform_id = [
+      for account_name, account_id in local.accounts.active_only :
+      account_id
+      if account_name == "Modernisation Platform"
+    ]
   }
 
   # SSO
