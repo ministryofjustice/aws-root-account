@@ -306,6 +306,44 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
     ]
     resources = ["*"]
   }
+  # block changes to OIDC provider github role
+  statement {
+    effect = "Deny"
+    actions = [
+      "iam:AttachRolePolicy",
+      "iam:DeleteRole",
+      "iam:DeleteRolePermissionsBoundary",
+      "iam:DeleteRolePolicy",
+      "iam:DetachRolePolicy",
+      "iam:PutRolePermissionsBoundary",
+      "iam:PutRolePolicy",
+      "iam:UpdateAssumeRolePolicy",
+      "iam:UpdateRole",
+      "iam:UpdateRoleDescription"
+    ]
+    resources = ["arn:aws:iam::*:role/github-actions"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalARN"
+      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::${aws_organizations_account.modernisation-platform.id}:role/superadmin"]
+    }
+  }
+  statement {
+    effect = "Deny"
+    actions = [
+      "iam:AddClientIDToOpenIDConnectProvider",
+      "iam:CreateOpenIDConnectProvider",
+      "iam:DeleteOpenIDConnectProvider",
+      "iam:RemoveClientIDFromOpenIDConnectProvider",
+      "iam:UpdateOpenIDConnectProviderThumbprint"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalARN"
+      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::${aws_organizations_account.modernisation-platform.id}:role/superadmin"]
+    }
+  }
 }
 
 resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou_scp" {
