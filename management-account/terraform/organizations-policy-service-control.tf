@@ -325,10 +325,27 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalARN"
-      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
+      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
     }
   }
 
+  # block changes to github-actions policy
+  statement {
+    effect = "Deny"
+    actions = [
+      "iam:CreatePolicy*",
+      "iam:DeletePolicy*",
+      "iam:SetDefaultPolicyVersion",
+      "iam:TagPolicy",
+      "iam:UntagPolicy"
+    ]
+    resources = ["arn:aws:iam::*:policy/github-actions"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalARN"
+      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
+    }
+  }
   # block changes to OIDC providers
   statement {
     effect = "Deny"
@@ -343,7 +360,7 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalARN"
-      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
+      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
     }
   }
 }
