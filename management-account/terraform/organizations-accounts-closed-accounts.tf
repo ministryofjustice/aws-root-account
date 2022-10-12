@@ -54,3 +54,21 @@ resource "aws_organizations_account" "hmpps_delius_mis_test" {
     ]
   }
 }
+
+resource "aws_organizations_account" "security_logging_platform" {
+  name                       = "Security Logging Platform"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "security-logging-platform")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = local.tags_security
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
