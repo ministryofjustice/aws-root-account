@@ -185,6 +185,10 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "s3:PutObject",
       "s3:DeleteObject",
       "aws-marketplace:ViewSubscriptions",
+      "rds:CopyDBSnapshot",
+      "rds:CopyDBClusterSnapshot",
+      "rds:CreateDBSnapshot",
+      "rds:CreateDBClusterSnapshot",
       "support:*",
       "ssm-guiconnect:*",
       "rhelkb:GetRhelURL"
