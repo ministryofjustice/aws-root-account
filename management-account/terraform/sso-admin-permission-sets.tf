@@ -338,7 +338,10 @@ data "aws_iam_policy_document" "modernisation_platform_sandbox" {
       "sns:*",
       "sqs:*",
       "ssm:*",
-      "wafv2:*"
+      "wafv2:*",
+      "redshift:*",
+      "redshift-data:*",
+      "redshift-serverless:*"
     ]
     resources = ["*"] #tfsec:ignore:AWS099 tfsec:ignore:AWS097
   }
