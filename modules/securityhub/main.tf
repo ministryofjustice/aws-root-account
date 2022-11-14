@@ -23,6 +23,12 @@ resource "aws_securityhub_standards_subscription" "default_cis_aws_foundations" 
   standards_arn = "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0"
 }
 
+# Subscribe to CIS AWS Foundations v1.4.0
+resource "aws_securityhub_standards_subscription" "default_cis_aws_foundations_1_4_0" {
+  depends_on    = [aws_securityhub_account.default]
+  standards_arn = "arn:aws:securityhub:${data.aws_region.current.name}::standards/cis-aws-foundations-benchmark/v/1.4.0"
+}
+
 # Subscribe to PCI DSS v3.2.1
 resource "aws_securityhub_standards_subscription" "default_pci_dss" {
   depends_on    = [aws_securityhub_account.default]
