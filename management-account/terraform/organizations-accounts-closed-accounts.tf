@@ -15,26 +15,6 @@ resource "aws_organizations_account" "money_to_prisoners" {
   }
 }
 
-resource "aws_organizations_account" "hmpps_victim_case_management_system_integration" {
-  name                       = "HMPPS Victim Case Management System Integration"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-vcms-integration")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
-
-  tags = merge(local.tags_victim_case_management_system, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_delius_mis_test" {
   name                       = "HMPPS Delius MIS Test"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-mis-test")
@@ -62,6 +42,26 @@ resource "aws_organizations_account" "security_logging_platform" {
   parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
 
   tags = local.tags_security
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
+
+resource "aws_organizations_account" "hmpps_cr_jira_non_production" {
+  name                       = "HMPPS CR Jira non-production"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cr-jira-non-production")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = merge(local.tags_community_rehabilitation, {
+    application = "Community Rehabilitation - Jira"
+  })
 
   lifecycle {
     ignore_changes = [

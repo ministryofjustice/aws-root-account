@@ -2,26 +2,6 @@ locals {
   tags_community_rehabilitation = local.tags_business_units.hmpps
 }
 
-resource "aws_organizations_account" "hmpps_cr_jira_non_production" {
-  name                       = "HMPPS CR Jira non-production"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cr-jira-non-production")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
-
-  tags = merge(local.tags_community_rehabilitation, {
-    application = "Community Rehabilitation - Jira"
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_cr_jira_production" {
   name                       = "HMPPS CR Jira production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cr-jira-production")
