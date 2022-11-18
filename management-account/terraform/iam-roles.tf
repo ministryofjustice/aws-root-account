@@ -100,3 +100,18 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_sso_administra
   role       = aws_iam_role.modernisation_platform_sso_administrator.name
   policy_arn = aws_iam_policy.sso_administrator_policy.arn
 }
+
+##########################################
+# ModernisationPlatformGithubActionsRole #
+##########################################
+
+module "modernisation_platform_github_actions_role" {
+
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v1.0.0"
+
+  github_repositories = ["ministryofjustice/modernisation-platform:*"]
+  role_name           = "ModernisationPlatformGithubActionsRole"
+  policy_arns         = [aws_iam_policy.terraform_organisation_management_policy.arn]
+  tags                = {}
+
+}
