@@ -112,7 +112,7 @@ module "modernisation_platform_github_actions_role" {
   github_repositories = ["ministryofjustice/modernisation-platform:*"]
   role_name           = "ModernisationPlatformGithubActionsRole"
   policy_arns         = [aws_iam_policy.terraform_organisation_management_policy.arn]
-  policy_jsons        = [aws_iam_policy_document.modernisation_platform_github_actions_additional_policy.json]
+  policy_jsons        = [data.aws_iam_policy_document.modernisation_platform_github_actions_additional_policy.json]
   tags                = {}
 
 }
