@@ -228,7 +228,7 @@ locals {
       ]
     },
     {
-      github_team        = "cloud-ops-admins",
+      github_team        = "nvvs-devops-admins",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
@@ -293,7 +293,7 @@ locals {
       ]
     },
     {
-      github_team        = "cloud-ops-writers",
+      github_team        = "nvvs-devops-writers",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
