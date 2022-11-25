@@ -297,6 +297,7 @@ data "aws_iam_policy_document" "modernisation_platform_sandbox" {
       "cloudwatch:*",
       "dlm:*",
       "dynamodb:*",
+      "dms:*",
       "ebs:*",
       "ec2:Describe*",
       "ec2:*SecurityGroup*",
