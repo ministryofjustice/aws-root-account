@@ -192,6 +192,7 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "rds:CopyDBClusterSnapshot",
       "rds:CreateDBSnapshot",
       "rds:CreateDBClusterSnapshot",
+      "rds:RebootDB*",
       "support:*",
       "ssm-guiconnect:*",
       "rhelkb:GetRhelURL",
