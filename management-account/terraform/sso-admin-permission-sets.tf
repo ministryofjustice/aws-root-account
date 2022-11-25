@@ -182,6 +182,9 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "ec2:CreateSnapshot",
       "ec2:CreateSnapshots",
       "ec2:CreateTags",
+      "ec2:DescribeVolumes",
+      "ec2:DescribeInstances",
+      "ec2:DescribeInstanceTypes",
       "s3:PutObject",
       "s3:DeleteObject",
       "aws-marketplace:ViewSubscriptions",
@@ -191,7 +194,10 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "rds:CreateDBClusterSnapshot",
       "support:*",
       "ssm-guiconnect:*",
-      "rhelkb:GetRhelURL"
+      "rhelkb:GetRhelURL",
+      "cloudwatch:PutDashboard",
+      "cloudwatch:ListMetrics",
+      "cloudwatch:DeleteDashboards"
     ]
 
     resources = ["*"]

@@ -19,9 +19,9 @@ jobs:
         with:
           path: ~/.tflint.d/plugins
           key: tflint-${{ hashFiles('.tflint.hcl') }}
-      - uses: terraform-linters/setup-tflint@v2
+      - uses: terraform-linters/setup-tflint@v3
         with:
-          tflint_version: v0.35.0
+          tflint_version: latest
       - run: tflint --version
       - run: tflint --init
       - run: tflint -f compact
