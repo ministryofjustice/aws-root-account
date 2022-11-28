@@ -195,6 +195,7 @@ locals {
       account_ids = [
         aws_organizations_account.cloud_platform_transit_gateways.id,
         aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
       ]
     },
     {
