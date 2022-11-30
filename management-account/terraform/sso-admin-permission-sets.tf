@@ -349,7 +349,8 @@ data "aws_iam_policy_document" "modernisation_platform_sandbox" {
       "wafv2:*",
       "redshift:*",
       "redshift-data:*",
-      "redshift-serverless:*"
+      "redshift-serverless:*",
+      "sqlworkbench:*"
     ]
     resources = ["*"] #tfsec:ignore:AWS099 tfsec:ignore:AWS097
   }
