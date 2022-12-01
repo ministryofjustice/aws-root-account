@@ -18,6 +18,12 @@ locals {
     if ou.name == "Make An LPA"
   ]...)
 
+  ou_opg_digideps = coalesce([
+    for ou in data.aws_organizations_organizational_units.opg.children :
+    ou.id
+    if ou.name == "DigiDeps"
+  ]...)
+
   ou_opg_use_my_lpa = coalesce([
     for ou in data.aws_organizations_organizational_units.opg.children :
     ou.id
@@ -108,6 +114,7 @@ locals {
     ],
     organizational_units = [
       local.ou_laa,
+      local.ou_opg_digideps,
     ]
   }
 
