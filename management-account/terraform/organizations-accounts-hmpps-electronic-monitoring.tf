@@ -2,27 +2,6 @@ locals {
   tags_electronic_monitoring = local.tags_business_units.hmpps
 }
 
-# Electronic Monitoring (ProMon)
-resource "aws_organizations_account" "electronic_monitoring" {
-  name                       = "Electronic Monitoring"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-test") # Repurposed account
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring.id
-
-  tags = merge(local.tags_electronic_monitoring, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 # Electronic Monitoring Archive & Query Service
 resource "aws_organizations_account" "electronic_monitoring_archive_and_query_service" {
   name                       = "Electronic Monitoring Archive & Query Service"
