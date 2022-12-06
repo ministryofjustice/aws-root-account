@@ -110,6 +110,21 @@ resource "aws_ssoadmin_managed_policy_attachment" "security_audit_inspector_v2" 
   permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn
 }
 
+# Support
+resource "aws_ssoadmin_permission_set" "support" {
+  name             = "Support"
+  description      = "This policy grants permissions to troubleshoot and resolve issues in an AWS account. This policy also enables the user to contact AWS support to create and manage cases."
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT1H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "support" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/job-function/SupportUser"
+  permission_set_arn = aws_ssoadmin_permission_set.support.arn
+}
+
 # View Only Access
 resource "aws_ssoadmin_permission_set" "view_only_access" {
   name             = "ViewOnlyAccess"
