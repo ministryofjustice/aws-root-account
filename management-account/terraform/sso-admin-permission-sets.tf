@@ -213,7 +213,9 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "rhelkb:GetRhelURL",
       "cloudwatch:PutDashboard",
       "cloudwatch:ListMetrics",
-      "cloudwatch:DeleteDashboards"
+      "cloudwatch:DeleteDashboards",
+      "ds:*Tags*",
+      "ds:*Snapshot*"
     ]
 
     resources = ["*"]
@@ -368,7 +370,9 @@ data "aws_iam_policy_document" "modernisation_platform_sandbox" {
       "sqlworkbench:*",
       "mgn:*",
       "drs:*",
-      "mgh:*"
+      "mgh:*",
+      "ds:*Tags*",
+      "ds:*Snapshot*"
     ]
     resources = ["*"] #tfsec:ignore:AWS099 tfsec:ignore:AWS097
   }
