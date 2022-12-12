@@ -354,6 +354,13 @@ locals {
       account_ids = [
         aws_organizations_account.security_operations_development.id
       ]
+    },
+    {
+      github_team        = "soc-engineering",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_development.id
+      ]
     }
   ]
   sso_admin_account_assignments_expanded = flatten([
