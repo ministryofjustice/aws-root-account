@@ -400,7 +400,11 @@ data "aws_iam_policy_document" "modernisation_platform_sandbox" {
       "ds:UpdateDirectorySetup",
       "ds:UpdateNumberOfDomainControllers",
       "ds:UpdateRadius",
-      "ds:UpdateSettings"
+      "ds:UpdateSettings",
+      "support:*",
+      "ssm-guiconnect:*",
+      "aws-marketplace:ViewSubscriptions",
+      "rhelkb:GetRhelURL"
     ]
     resources = ["*"] #tfsec:ignore:AWS099 tfsec:ignore:AWS097
   }
