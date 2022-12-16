@@ -200,6 +200,8 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "ec2:DescribeVolumes",
       "ec2:DescribeInstances",
       "ec2:DescribeInstanceTypes",
+      "ecs:StartTask",
+      "ecs:StopTask",
       "s3:PutObject",
       "s3:DeleteObject",
       "aws-marketplace:ViewSubscriptions",
