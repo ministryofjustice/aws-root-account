@@ -3,8 +3,10 @@ data "aws_identitystore_group" "default" {
 
   identity_store_id = local.sso_admin_identity_store_id
 
-  filter {
-    attribute_path  = "DisplayName"
-    attribute_value = each.value
+  alternate_identifier {
+    unique_attribute {
+      attribute_path  = "DisplayName"
+      attribute_value = each.value
+    }
   }
 }
