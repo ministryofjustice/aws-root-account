@@ -38,7 +38,6 @@ locals {
       github_team        = "hmpps-migration",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
-        aws_organizations_account.hmpps_cr_jira_non_production.id,
         aws_organizations_account.hmpps_cr_jira_production.id,
         aws_organizations_account.hmpps_cr_jitbit_non_production.id,
         aws_organizations_account.hmpps_cr_jitbit_production.id,
@@ -65,7 +64,6 @@ locals {
       github_team        = "hmpps-jenkins-admin",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
-        aws_organizations_account.hmpps_cr_jira_non_production.id,
         aws_organizations_account.hmpps_cr_jira_production.id,
         aws_organizations_account.hmpps_cr_jitbit_non_production.id,
         aws_organizations_account.hmpps_cr_jitbit_production.id,
