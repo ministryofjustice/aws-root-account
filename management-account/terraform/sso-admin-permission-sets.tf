@@ -169,7 +169,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platfo
   instance_arn       = local.sso_admin_instance_arn
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_developer.arn
   customer_managed_policy_reference {
-    name = "developer-policy"
+    name = "developer_policy"
     path = "/"
   }
 }
