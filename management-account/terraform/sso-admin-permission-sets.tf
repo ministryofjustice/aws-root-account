@@ -504,10 +504,19 @@ resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_engine
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_engineer.arn
 }
 
-resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_engineer" {
+# resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_engineer" {
+#   instance_arn       = local.sso_admin_instance_arn
+#   inline_policy      = data.aws_iam_policy_document.modernisation_platform_engineer.json
+#   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_engineer.arn
+# }
+
+resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platform_engineer" {
   instance_arn       = local.sso_admin_instance_arn
-  inline_policy      = data.aws_iam_policy_document.modernisation_platform_engineer.json
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_engineer.arn
+  customer_managed_policy_reference {
+    name = "SSOCustomerManagedPolicyEngineer"
+    path = "/"
+  }
 }
 
 data "aws_iam_policy_document" "modernisation_platform_engineer" {
