@@ -5,4 +5,5 @@ module "scim" {
   sso_aws_region        = local.sso.region
   sso_email_suffix      = local.sso.email_suffix
   sso_identity_store_id = local.sso_admin_identity_store_id
+  not_dry_run           = true
 }
