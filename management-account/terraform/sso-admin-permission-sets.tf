@@ -179,6 +179,7 @@ data "aws_iam_policy_document" "modernisation_platform_developer" {
       "secretsmanager:PutSecretValue",
       "secretsmanager:UpdateSecret",
       "secretsmanager:RestoreSecret",
+      "secretsmanager:RotateSecret",
       "ssm:*",
       "kms:Decrypt*",
       "kms:Encrypt",
