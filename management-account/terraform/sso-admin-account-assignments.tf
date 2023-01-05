@@ -362,7 +362,7 @@ locals {
     },
     {
       github_team        = "analytics-hq",
-      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      permission_set_arn = aws_ssoadmin_permission_set.ap_read_only_access.arn,
       account_ids = [
         aws_organizations_account.analytical_platform_data_engineering.id,
         aws_organizations_account.analytical_platform_data_engineering_sandbox.id,
