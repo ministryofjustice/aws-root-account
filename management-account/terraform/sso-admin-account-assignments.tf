@@ -1,7 +1,7 @@
 locals {
   sso_admin_account_assignments = [
     {
-      github_team        = "analytics-hq",
+      github_team        = "modernisation-platform",
       permission_set_arn = aws_ssoadmin_permission_set.ap_read_only_access.arn,
       account_ids = [
         aws_organizations_account.analytical_platform_data_engineering.id,
