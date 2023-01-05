@@ -4,12 +4,7 @@ locals {
       github_team        = "modernisation-platform",
       permission_set_arn = aws_ssoadmin_permission_set.ap_read_only_access.arn,
       account_ids = [
-        aws_organizations_account.analytical_platform_data_engineering.id,
-        aws_organizations_account.analytical_platform_data_engineering_sandbox.id,
-        aws_organizations_account.analytical_platform_development.id,
-        aws_organizations_account.analytical_platform_landing.id,
-        aws_organizations_account.analytical_platform_production.id,
-        aws_organizations_account.moj_analytics_platform.id,
+        aws_organizations_account.analytical_platform_data_engineering.id
       ]
     }
   ]
