@@ -592,3 +592,41 @@ data "aws_iam_policy_document" "waf_viewer_shield" {
     resources = ["*"]
   }
 }
+
+################################
+# AP specific permission sets  #
+################################
+
+
+resource "aws_ssoadmin_permission_set" "ap_read_only_access" {
+  name             = "AnalyticalPlatformReadOnlyAccess"
+  description      = "Read-only access without S3 for Analytical Platform"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT1H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "ap_read_only_access" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.ap_read_only_access.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "ap_block_all_s3" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.ap_block_s3.json
+  permission_set_arn = aws_ssoadmin_permission_set.ap_read_only_access.arn
+}
+
+data "aws_iam_policy_document" "ap_block_s3" {
+  statement {
+    sid    = "BlockAllS3"
+    effect = "Deny"
+
+    actions = [
+      "s3:*"
+    ]
+
+    resources = ["*"]
+  }
+}
