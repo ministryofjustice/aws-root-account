@@ -371,7 +371,14 @@ locals {
         aws_organizations_account.analytical_platform_data_engineering.id,
         aws_organizations_account.moj_analytics_platform.id,
       ]
-    }
+    },
+    {
+      github_team        = "data-engineering",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.analytical_platform_data_engineering_sandbox.id,
+      ]
+    },
   ]
   sso_admin_account_assignments_expanded = flatten([
     for assignment in local.sso_admin_account_assignments : [
