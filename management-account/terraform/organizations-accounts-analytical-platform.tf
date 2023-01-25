@@ -19,7 +19,6 @@ resource "aws_organizations_account" "analytical_platform_data_engineering" {
     ignore_changes = [
       email,
       iam_user_access_to_billing,
-      name,
       role_name,
     ]
   }
@@ -40,7 +39,6 @@ resource "aws_organizations_account" "analytical_platform_data_engineering_sandb
     ignore_changes = [
       email,
       iam_user_access_to_billing,
-      name,
       role_name,
     ]
   }
@@ -61,7 +59,6 @@ resource "aws_organizations_account" "analytical_platform_development" {
     ignore_changes = [
       email,
       iam_user_access_to_billing,
-      name,
       role_name,
     ]
   }
@@ -82,7 +79,6 @@ resource "aws_organizations_account" "analytical_platform_landing" {
     ignore_changes = [
       email,
       iam_user_access_to_billing,
-      name,
       role_name,
     ]
   }
@@ -104,7 +100,6 @@ resource "aws_organizations_account" "analytical_platform_production" {
     ignore_changes = [
       email,
       iam_user_access_to_billing,
-      name,
       role_name,
     ]
   }
@@ -125,7 +120,6 @@ resource "aws_organizations_account" "moj_analytics_platform" {
     ignore_changes = [
       email,
       iam_user_access_to_billing,
-      name,
       role_name,
     ]
   }
