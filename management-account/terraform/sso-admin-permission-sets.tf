@@ -251,7 +251,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
 
 # Modernisation Platform instance-management role
 resource "aws_ssoadmin_permission_set" "modernisation_platform_instance_management" {
-  name             = "modernisation-platform-instance-management"
+  name             = "mp-instance-management"
   description      = "Modernisation Platform: instance-management"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT8H"
