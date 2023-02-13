@@ -248,6 +248,31 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
   }
 }
 
+
+# Modernisation Platform instance-management role
+resource "aws_ssoadmin_permission_set" "modernisation_platform_instance_management" {
+  name             = "mp-instance-management"
+  description      = "Modernisation Platform: instance-management"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_instance_management" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_instance_management.arn
+}
+
+resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platform_instance_management" {
+  instance_arn       = local.sso_admin_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_instance_management.arn
+  customer_managed_policy_reference {
+    name = "instance_management_policy"
+    path = "/"
+  }
+}
+
 ################################
 # OPG specific permission sets #
 ################################
