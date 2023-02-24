@@ -194,7 +194,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_migrat
 
 resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_migration_ec2" {
   instance_arn       = local.sso_admin_instance_arn
-  managed_policy_arn = "arn:aws:iam::aws:policy/EC2FullAccess"
+  managed_policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_migration.arn
 }
 
