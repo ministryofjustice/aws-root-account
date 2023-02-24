@@ -192,6 +192,12 @@ resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_migrat
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_migration.arn
 }
 
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_migration_ec2" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/EC2FullAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_migration.arn
+}
+
 resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_migration_mgn" {
   instance_arn       = local.sso_admin_instance_arn
   managed_policy_arn = "arn:aws:iam::aws:policy/AWSApplicationMigrationFullAccess"
@@ -201,6 +207,12 @@ resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_migrat
 resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_migration_datasync" {
   instance_arn       = local.sso_admin_instance_arn
   managed_policy_arn = "arn:aws:iam::aws:policy/AWSDataSyncFullAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_migration.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_migration_servermigration" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ServerMigrationConnector"
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_migration.arn
 }
 
