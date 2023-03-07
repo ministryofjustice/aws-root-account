@@ -18,7 +18,7 @@ jobs:
         working-directory: ./management-account/terraform
     steps:
       - uses: actions/checkout@v3
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::${{secrets.AWS_ROOT_ACCOUNT_ID}}:role/github-actions
           role-session-name: GitHubActions
