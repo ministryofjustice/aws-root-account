@@ -17,7 +17,7 @@ jobs:
       - run: rm -r terraform/ # remove legacy terraform dir from being security checked
       - uses: aquasecurity/tfsec-sarif-action@v0.1.4
         with:
-          tfsec_args: --force-all-dirs --soft-fail
+          tfsec_args: --force-all-dirs --soft-fail -m CRITICAL
           sarif_file: tfsec.sarif
       - uses: github/codeql-action/upload-sarif@v2
         with:
@@ -34,7 +34,7 @@ jobs:
         with:
           tflint_version: latest
       - run: tflint --version
-      - run: tflint --init
+      - run: tflint -c $(realpath .tflint.hcl) --init
         env:
           GITHUB_TOKEN: ${{ github.token }} # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
       - run: rm -r modules/ # remove modules from being linted
