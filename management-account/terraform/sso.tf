@@ -1,4 +1,5 @@
 module "sso" {
+  # tflint-ignore: terraform_module_pinned_source
   source                     = "github.com/ministryofjustice/moj-terraform-aws-sso"
   auth0_allowed_domains      = local.sso.email_suffix
   auth0_aws_sso_acs_url      = sensitive(local.sso.aws_saml.acs_url)

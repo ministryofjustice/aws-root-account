@@ -60,12 +60,6 @@ locals {
     if ou.name == "Modernisation Platform Member"
   ]...)
 
-  ou_modernisation_platform_unrestricted_id = coalesce([
-    for ou in data.aws_organizations_organizational_units.modernisation_platform.children :
-    ou.id
-    if ou.name == "Modernisation Platform Member Unrestricted"
-  ]...)
-
   ou_technology_services = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id

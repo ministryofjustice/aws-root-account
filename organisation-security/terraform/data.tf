@@ -22,10 +22,6 @@ data "aws_organizations_organizational_units" "modernisation_platform_member" {
   parent_id = local.ou_modernisation_platform_member_id
 }
 
-data "aws_organizations_organizational_units" "modernisation_platform_unrestricted" {
-  parent_id = local.ou_modernisation_platform_unrestricted_id
-}
-
 data "aws_organizations_organizational_units" "opg" {
   parent_id = local.ou_opg
 }
