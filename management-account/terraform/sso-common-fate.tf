@@ -46,7 +46,7 @@ module "commonfate" {
   aws_sso_instance_arn      = local.sso_admin_instance_arn
   aws_sso_region            = data.aws_region.current.name
 
-  sources_version      = "v0.15.0"
+  sources_version = "v0.15.0"
 
   identity_provider_type = "aws-sso"
   identity_provider_name = "AWS"
