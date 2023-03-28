@@ -25,7 +25,8 @@ data "aws_secretsmanager_secret_version" "commonfate_saml_application_metadata_u
 }
 
 module "commonfate" {
-  source = "github.com/chrnorm/terraform-aws-commonfate?ref=aws-sso-support"
+  source  = "bjsscloud/common-fate/aws"
+  version = "2.1.0"
 
   providers = {
     aws           = aws
@@ -39,11 +40,13 @@ module "commonfate" {
   aws_account_id = data.aws_caller_identity.current.account_id
   region         = data.aws_region.current.name
 
+  public_hosted_zone_id = aws_route53_zone.access_platforms_service_justice_gov_uk.zone_id
+
   aws_sso_identity_store_id = local.sso_admin_identity_store_id
   aws_sso_instance_arn      = local.sso_admin_instance_arn
   aws_sso_region            = data.aws_region.current.name
 
-  sources_version = "v0.13.2"
+  sources_version      = "v0.15.0"
 
   identity_provider_type = "aws-sso"
   identity_provider_name = "AWS"
