@@ -10,7 +10,7 @@ data "aws_identitystore_group" "commonfate_administrators" {
   alternate_identifier {
     unique_attribute {
       attribute_path  = "DisplayName"
-      attribute_value = "common-fate-admins"
+      attribute_value = "common-fate-administrators"
     }
   }
 }
