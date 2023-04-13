@@ -7,6 +7,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  TF_VAR_sso_identity_store_id: ${{ secrets.SSO_IDENTITY_STORE_ID }}
+  TF_VAR_sso_scim_token: ${{ secrets.SSO_SCIM_TOKEN }}
+  TF_VAR_sso_tenant_id: ${{ secrets.SSO_TENANT_ID }}
+
 jobs:
   plan:
     runs-on: ubuntu-latest
