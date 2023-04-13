@@ -153,6 +153,30 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platfo
   }
 }
 
+# Modernisation Platform data engineer
+resource "aws_ssoadmin_permission_set" "modernisation_platform_data_engineer" {
+  name             = "modernisation-platform-data-eng"
+  description      = "Modernisation Platform: data engineer tenancy"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_data_engineer" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_data_engineer.arn
+}
+
+resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platform_data_engineer" {
+  instance_arn       = local.sso_admin_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_data_engineer.arn
+  customer_managed_policy_reference {
+    name = "data_engineering_policy"
+    path = "/"
+  }
+}
+
 # Modernisation Platform sandbox
 resource "aws_ssoadmin_permission_set" "modernisation_platform_sandbox" {
   name             = "modernisation-platform-sandbox"

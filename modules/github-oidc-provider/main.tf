@@ -69,6 +69,7 @@ data "aws_iam_policy_document" "extra_permissions" {
       "identitystore:DescribeGroup",
       "logs:ListTagsForResource",
       "secretsmanager:GetSecretValue",
+      "kms:Decrypt" # for CommonFate
     ]
 
     resources = ["*"]
