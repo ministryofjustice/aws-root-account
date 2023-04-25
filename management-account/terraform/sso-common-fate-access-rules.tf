@@ -12,7 +12,7 @@ locals {
   ]
 }
 
-resource "common_fate_access_rules" "access_rules" {
+resource "commonfate_access_rule" "access_rules" {
   for_each = { for access_rule in local.common_fate_access_rules : access_rule.name => access_rule }
 
   name        = each.value.name
