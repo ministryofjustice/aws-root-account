@@ -106,21 +106,48 @@ resource "aws_iam_policy" "extra_permissions_write" {
 }
 
 data "aws_iam_policy_document" "extra_permissions_write" {
-  version = "2012-10-17"
-
   statement {
     effect = "Allow"
     actions = [
-      "account:GetAlternateContact",
-      "cur:DescribeReportDefinitions",
-      "identitystore:ListGroups",
-      "identitystore:GetGroupId",
-      "identitystore:DescribeGroup",
-      "logs:ListTagsForResource",
-      "secretsmanager:GetSecretValue",
-      "kms:Decrypt" # for CommonFate
+      "iam:*",
+      "budgets:*",
+      "cloudtrail:*",
+      "logs:*",
+      "config:*",
+      "ce:*",
+      "fms:*",
+      "guardduty:*",
+      "lambda:*",
+      "license-manager:*",
+      "route53:*",
+      "s3:*",
+      "secretsmanager:*",
+      "securityhub:*",
+      "sns:*",
+      "sso-directory:*",
+      "organizations:DescribeAccount",
+      "organizations:DescribeCreateAccountStatus",
+      "organizations:ListAccounts",
+      "kms:Decrypt",
+      "organizations:ListAccountsForParent",
+      "organizations:ListOrganizationalUnitsForParent",
+      "organizations:CreateOrganizationalUnit",
+      "organizations:MoveAccount",
+      "organizations:MoveOrganizationalUnit",
+      "organizations:UpdateOrganizationalUnit",
+      "organizations:AddAccountToOrganization",
+      "organizations:EnablePolicyType",
+      "organizations:DisablePolicyType",
+      "organizations:ListPoliciesForTarget",
+      "organizations:ListRoots",
+      "organizations:DescribeOrganization",
+      "organizations:ListParents",
+      "organizations:TagResource",
+      "organizations:UntagResource",
+      "organizations:UpdatePolicy",
+      "organizations:CreatePolicy",
+      "organizations:CreateAccount"
     ]
-
     resources = ["*"]
   }
 }
