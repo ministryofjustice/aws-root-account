@@ -1,11 +1,9 @@
-name: terraform (management-account)
+name: terraform apply (management-account)
 
 on:
   push:
     branches:
       - main
-  pull_request:
-  workflow_dispatch:
 
 jobs:
   plan:
@@ -20,7 +18,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::${{secrets.AWS_ROOT_ACCOUNT_ID}}:role/github-actions
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ROOT_ACCOUNT_ID}}:role/github-actions-apply
           role-session-name: GitHubActions
           aws-region: eu-west-2
       - uses: hashicorp/setup-terraform@v2
@@ -33,3 +31,4 @@ jobs:
       - run: terraform plan -no-color
       - run: terraform apply -auto-approve
         if: ${{github.event.pull_request.merged == 'true'}}
+   
