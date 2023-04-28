@@ -96,9 +96,8 @@ resource "aws_iam_role_policy_attachment" "write" {
   policy_arn = "arn:aws:iam::aws:policy/WriteAccess"
 }
 
-# Add actions missing from arn:aws:iam::aws:policy/ReadOnlyAccess
 resource "aws_iam_policy" "extra_permissions_write" {
-  name        = "github-actions"
+  name        = "github-actions-apply"
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
@@ -150,9 +149,4 @@ data "aws_iam_policy_document" "extra_permissions_write" {
     ]
     resources = ["*"]
   }
-}
-
-resource "aws_iam_role_policy_attachment" "extra_permissions_write" {
-  role       = aws_iam_role.apply.name
-  policy_arn = aws_iam_policy.extra_permissions_write.arn
 }
