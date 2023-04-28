@@ -33,5 +33,5 @@ resource "commonfate_access_rule" "access_rules" {
   ]
 
   duration           = each.value.duration
-  target_provider_id = "aws-sso-v2"
+  target_provider_id = "aws-sso"
 }

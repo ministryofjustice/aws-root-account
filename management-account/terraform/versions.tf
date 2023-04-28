@@ -7,7 +7,7 @@ terraform {
     }
     commonfate = {
       source  = "common-fate/commonfate"
-      version = "1.2.0"
+      version = "1.2.1"
     }
   }
 }
