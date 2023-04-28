@@ -93,7 +93,7 @@ resource "aws_iam_role" "apply" {
 
 resource "aws_iam_role_policy_attachment" "write" {
   role       = aws_iam_role.apply.name
-  policy_arn = "arn:aws:iam::aws:policy/WriteAccess"
+  policy_arn = aws_iam_policy.extra_permissions_write.arn
 }
 
 resource "aws_iam_policy" "extra_permissions_write" {
