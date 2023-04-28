@@ -23,6 +23,29 @@ provider "registry.terraform.io/auth0/auth0" {
   ]
 }
 
+provider "registry.terraform.io/common-fate/commonfate" {
+  version     = "1.2.0"
+  constraints = "1.2.0"
+  hashes = [
+    "h1:Q4sk0H1lj6uKzE0UkfUkU0dKocCKLNEq3MlMsJjpvLM=",
+    "zh:081f9aca06955b610bd54f587532f7d518969f720430eb755061126e3c86e9c4",
+    "zh:0958d00d9421db3601e30b322ecb2b3098ad3515c446b92eff19774a3bb7e52a",
+    "zh:0dde99e7b343fa01f8eefc378171fb8621bedb20f59157d6cc8e3d46c738105f",
+    "zh:2248f5bff80aa09f13b0b7ee666c3f200be88a2cbe854c02c4c60ba710921211",
+    "zh:225fe37a2863781a72ac704fd5ce573d8428d1257f73a553474ea9c4c4539ef3",
+    "zh:27b76411f9b18c979aa46452c6c25090eec6e89f4934dc7c8233c2ca5e6e5b80",
+    "zh:53c5bc33a2f384318d5412a12ad88038d72a6cdaa62540d13a968ba71506578b",
+    "zh:714fec7fb2dc6d1647b22ffbea3a9615f55d61c8be57538b2a7c6ec34f459df1",
+    "zh:a6b0e88063728f184201d1b45ac52da3f2be79a9ae820b9a2aaf37344297a717",
+    "zh:d5f82070958a78e5e309c7f147571d5adcde352215793c7120c8b8e957da987d",
+    "zh:d8fbcf1abb8ba41ba2b53a8593559f183e0d5f9957af7315b00ec8098596e1c8",
+    "zh:e223926745cf278055cf4a87de8224a65d34016280fe0b068e8add84021a159a",
+    "zh:e7e3e4e76e0e6ca3d9064093dbad8a5aed8fb46f2eddd7e5d47642c5fc7adf3f",
+    "zh:e8cde8fe99efb3ea569111ae8995b703ff3966a0020b9a94e73a57c29d525cc3",
+    "zh:ee155f31fced87fb515aa421d93de59ec59f10e6a51353e33d01cb9025e54561",
+  ]
+}
+
 provider "registry.terraform.io/hashicorp/archive" {
   version     = "2.2.0"
   constraints = ">= 2.2.0"
