@@ -3,7 +3,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "4.61.0"
+      version = "4.65.0"
     }
     commonfate = {
       source  = "common-fate/commonfate"
