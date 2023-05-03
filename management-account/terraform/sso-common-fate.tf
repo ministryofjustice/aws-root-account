@@ -24,9 +24,19 @@ data "aws_secretsmanager_secret_version" "commonfate_saml_application_metadata_u
   secret_id = data.aws_secretsmanager_secret.commonfate_saml_application_metadata_url.id
 }
 
+data "aws_secretsmanager_secret" "commonfate_slack_webhook_url" {
+  name = "commonfate-slack-webhook-url"
+}
+
+data "aws_secretsmanager_secret_version" "commonfate_slack_webhook_url" {
+  secret_id = data.aws_secretsmanager_secret.commonfate_slack_webhook_url.id
+}
+
 module "commonfate" {
-  source  = "bjsscloud/common-fate/aws"
-  version = "2.1.0"
+  # Commenting out while we test Slack integration
+  # source  = "bjsscloud/common-fate/aws"
+  # version = "2.1.0"
+  source = "github.com/bjsscloud/terraform-aws-common-fate?ref=slack-incoming-webhooks"
 
   providers = {
     aws           = aws
@@ -46,11 +56,15 @@ module "commonfate" {
   aws_sso_instance_arn      = local.sso_admin_instance_arn
   aws_sso_region            = data.aws_region.current.name
 
-  sources_version = "v0.15.0"
+  sources_version = "v0.14.7"
 
   identity_provider_type = "aws-sso"
   identity_provider_name = "AWS"
   administrator_group_id = data.aws_identitystore_group.commonfate_administrators.id
 
   saml_sso_metadata_url = data.aws_secretsmanager_secret_version.commonfate_saml_application_metadata_url.secret_string
+
+  slack_incoming_webhook_urls = {
+    common-fate-requests = data.aws_secretsmanager_secret_version.commonfate_slack_webhook_url.secret_string
+  }
 }
