@@ -1,7 +1,7 @@
 locals {
   common_fate_access_rules = [
     {
-      name                    = "data-platform-development-AdministratorAccess"
+      name                    = "data-platform-development-administratoraccess"
       description             = "AdministratorAccess to data-platform-development"
       requesting_github_teams = ["data-platform-core-infra"],
       approving_github_teams  = ["data-platform-core-infra"],
@@ -33,5 +33,5 @@ resource "commonfate_access_rule" "access_rules" {
   ]
 
   duration           = each.value.duration
-  target_provider_id = "aws-sso"
+  target_provider_id = "aws-sso-v2"
 }
