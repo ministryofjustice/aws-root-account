@@ -181,13 +181,6 @@ locals {
       ]
     },
     {
-      github_team        = "cloud-platform-non-admin",
-      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = [
-        aws_organizations_account.cloud_platform.id
-      ]
-    },
-    {
       github_team        = "modernisation-platform-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
