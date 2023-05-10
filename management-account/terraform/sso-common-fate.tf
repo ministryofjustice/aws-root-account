@@ -24,14 +24,6 @@ data "aws_secretsmanager_secret_version" "commonfate_saml_application_metadata_u
   secret_id = data.aws_secretsmanager_secret.commonfate_saml_application_metadata_url.id
 }
 
-data "aws_secretsmanager_secret" "commonfate_slack_webhook_url" {
-  name = "commonfate-slack-webhook-url"
-}
-
-data "aws_secretsmanager_secret_version" "commonfate_slack_webhook_url" {
-  secret_id = data.aws_secretsmanager_secret.commonfate_slack_webhook_url.id
-}
-
 module "commonfate" {
   # Commenting out while we test Slack integration
   # source  = "bjsscloud/common-fate/aws"
@@ -64,7 +56,5 @@ module "commonfate" {
 
   saml_sso_metadata_url = data.aws_secretsmanager_secret_version.commonfate_saml_application_metadata_url.secret_string
 
-  slack_incoming_webhook_urls = {
-    common-fate-requests = data.aws_secretsmanager_secret_version.commonfate_slack_webhook_url.secret_string
-  }
+  slack_incoming_webhook_urls = ["common-fate-requests"]
 }
