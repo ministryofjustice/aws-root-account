@@ -334,21 +334,6 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platfo
 # OPG specific permission sets #
 ################################
 
-# OPG Breakglass
-resource "aws_ssoadmin_permission_set" "opg_breakglass" {
-  name             = "opg-breakglass"
-  description      = "Breakglass role given to the webops engineers at OPG incase of emergencies"
-  instance_arn     = local.sso_admin_instance_arn
-  session_duration = "PT1H"
-  tags             = {}
-}
-
-resource "aws_ssoadmin_managed_policy_attachment" "opg_breakglass" {
-  instance_arn       = local.sso_admin_instance_arn
-  managed_policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-  permission_set_arn = aws_ssoadmin_permission_set.opg_breakglass.arn
-}
-
 # OPG Security Audit
 resource "aws_ssoadmin_permission_set" "opg_security_audit" {
   name             = "opg-security-audit"
