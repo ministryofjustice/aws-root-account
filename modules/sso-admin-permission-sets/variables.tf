@@ -1,6 +1,10 @@
 variable "name" {
   description = "The name of the permission set."
   type        = string
+  validation {
+    condition     = length(var.name) > 32
+    error_message = "Error: expected length of name to be in the range (1 - 32)."
+  }
 }
 
 variable "description" {
