@@ -1,18 +1,18 @@
 module "opg_breakglass" {
-  source = "../../modules/sso-admin-permission-sets"
-  name = "opg-breakglass"
-  description = "Breakglass policy with full access to all services"
-  instance_arn = local.sso_admin_instance_arn
+  source              = "../../modules/sso-admin-permission-sets"
+  name                = "opg-breakglass"
+  description         = "Breakglass policy with full access to all services"
+  instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
 }
 
 module "opg_viewer" {
-  source = "../../modules/sso-admin-permission-sets"
-  name = "opg-viewer"
-  description = "View only policy with explicit deny to storage and database services"
-  instance_arn = local.sso_admin_instance_arn
+  source              = "../../modules/sso-admin-permission-sets"
+  name                = "opg-viewer"
+  description         = "View only policy with explicit deny to storage and database services"
+  instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
-  inline_policy = data.aws_iam_policy_document.opg_viewer_deny.json
+  inline_policy       = data.aws_iam_policy_document.opg_viewer_deny.json
 }
 
 data "aws_iam_policy_document" "opg_viewer_deny" {
@@ -57,17 +57,17 @@ data "aws_iam_policy_document" "opg_viewer_deny" {
 
     resources = [
       "arn:aws:logs:*:*:log-group:/ecs/pii*",
-      ]
+    ]
   }
 }
 
 module "opg_billing" {
-  source = "../../modules/sso-admin-permission-sets"
-  name = "opg-billing"
-  description = "Billing policy with permission to cost explorer and billing services"
-  instance_arn = local.sso_admin_instance_arn
+  source              = "../../modules/sso-admin-permission-sets"
+  name                = "opg-billing"
+  description         = "Billing policy with permission to cost explorer and billing services"
+  instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
-  inline_policy = data.aws_iam_policy_document.opg_billing_deny.json
+  inline_policy       = data.aws_iam_policy_document.opg_billing_deny.json
 }
 
 data "aws_iam_policy_document" "opg_billing_deny" {
@@ -83,29 +83,29 @@ data "aws_iam_policy_document" "opg_billing_deny" {
 }
 
 module "opg_non_production_operator" {
-  source = "../../modules/sso-admin-permission-sets"
-  name = "opg-modernising-lpa-development-operator"
-  description = "Modernising LPA development operator policy with full access to all services"
-  instance_arn = local.sso_admin_instance_arn
+  source              = "../../modules/sso-admin-permission-sets"
+  name                = "opg-modernising-lpa-development-operator"
+  description         = "Modernising LPA development operator policy with full access to all services"
+  instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
 }
 
 module "opg_modernising_lpa_production_operator" {
-  source = "../../modules/sso-admin-permission-sets"
-  name = "opg-modernising-lpa-production-operator"
-  description = "Modernising LPA production operator policy explicit deny to storage and database services and full access to all other services"
-  instance_arn = local.sso_admin_instance_arn
+  source              = "../../modules/sso-admin-permission-sets"
+  name                = "opg-modernising-lpa-production-operator"
+  description         = "Modernising LPA production operator policy explicit deny to storage and database services and full access to all other services"
+  instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
-  inline_policy = data.aws_iam_policy_document.opg_viewer_deny.json
+  inline_policy       = data.aws_iam_policy_document.opg_viewer_deny.json
 }
 
 module "opg_use_a_lpa_production_operator" {
-  source = "../../modules/sso-admin-permission-sets"
-  name = "opg-use-a-lpa-production-operator"
-  description = "Use a LPA operator policy with explicit deny to storage and database services and full access to all other services"
-  instance_arn = local.sso_admin_instance_arn
+  source              = "../../modules/sso-admin-permission-sets"
+  name                = "opg-use-a-lpa-production-operator"
+  description         = "Use a LPA operator policy with explicit deny to storage and database services and full access to all other services"
+  instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"]
-  inline_policy = data.aws_iam_policy_document.opg_use_a_lpa_production_operator.json
+  inline_policy       = data.aws_iam_policy_document.opg_use_a_lpa_production_operator.json
 }
 
 data "aws_iam_policy_document" "opg_use_a_lpa_production_operator" {
