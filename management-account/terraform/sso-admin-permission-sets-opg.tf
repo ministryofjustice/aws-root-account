@@ -84,7 +84,7 @@ data "aws_iam_policy_document" "opg_billing_deny" {
 
 module "opg_non_production_operator" {
   source              = "../../modules/sso-admin-permission-sets"
-  name                = "opg-modernising-lpa-development-operator"
+  name                = "opg-mlpa-development-operator"
   description         = "Modernising LPA development operator policy with full access to all services"
   instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
@@ -92,7 +92,7 @@ module "opg_non_production_operator" {
 
 module "opg_modernising_lpa_production_operator" {
   source              = "../../modules/sso-admin-permission-sets"
-  name                = "opg-modernising-lpa-production-operator"
+  name                = "opg-mlpa-production-operator"
   description         = "Modernising LPA production operator policy explicit deny to storage and database services and full access to all other services"
   instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
@@ -101,7 +101,7 @@ module "opg_modernising_lpa_production_operator" {
 
 module "opg_use_a_lpa_production_operator" {
   source              = "../../modules/sso-admin-permission-sets"
-  name                = "opg-use-a-lpa-production-operator"
+  name                = "opg-ualpa-production-operator"
   description         = "Use a LPA operator policy with explicit deny to storage and database services and full access to all other services"
   instance_arn        = local.sso_admin_instance_arn
   managed_policy_arns = ["arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"]
