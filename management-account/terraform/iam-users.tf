@@ -185,3 +185,44 @@ resource "aws_iam_user_group_membership" "steve_marshall" {
     aws_iam_group.iam_user_change_password.name,
   ]
 }
+
+################
+# Finance team #
+################
+
+variable "finance_team" {
+  description = "Finance team members"
+  type        = list(string)
+  default     = [
+    # Finance business partners
+    "NickiStowe",
+    "TraceyBartonWilliams",
+
+    # Digital finance team
+    "TraceyCampbell",
+    "AdeoluAdelaja",
+    "DavidCooper",
+
+    # Accounting
+    "AnthonyTimms",
+  ]
+}
+
+resource "aws_iam_user" "finance_team" {
+  for_each = toset(var.finance_team)
+  name = each.value
+  path = "/"
+  force_destroy = true
+  tags = {}
+}
+
+# User membership
+resource "aws_iam_user_group_membership" "finance_team" {
+  for_each = toset(var.finance_team)
+  user = aws_iam_user.finance_team[each.key].name
+
+  groups = [
+    aws_iam_group.billing_full_access.name,
+    aws_iam_group.iam_user_change_password.name,
+  ]
+}
