@@ -249,6 +249,30 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platfo
   }
 }
 
+# Modernisation Platform reporting operations 
+resource "aws_ssoadmin_permission_set" "modernisation_platform_reporting_operations" {
+  name             = "mp-reporting-operations"
+  description      = "Modernisation Platform: reporting-operations tenancy"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_reporting_operations" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_reporting_operations.arn
+}
+
+resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platform_reporting_operations" {
+  instance_arn       = local.sso_admin_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_reporting_operations.arn
+  customer_managed_policy_reference {
+    name = "reporting_operations_policy"
+    path = "/"
+  }
+}
+
 # Modernisation Platform engineer
 # This role is designed to be used as an alternative to a full on admin role / read only role when trouble shooting MP accounts
 # Currently this is just readonly plus the ability to create support tickets, but potential we could add more permissions in here if it reduces admin role or superadmin usage
