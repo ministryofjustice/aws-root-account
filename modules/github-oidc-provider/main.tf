@@ -49,7 +49,7 @@ resource "aws_iam_role_policy_attachment" "read_only" {
 
 # Add actions missing from arn:aws:iam::aws:policy/ReadOnlyAccess
 resource "aws_iam_policy" "extra_permissions_plan" {
-  name        = "github-actions"
+  name        = "github-actions-plan"
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
