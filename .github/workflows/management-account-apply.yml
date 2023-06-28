@@ -33,5 +33,4 @@ jobs:
       - run: terraform validate -no-color
       - run: terraform plan -no-color
       - run: terraform apply -auto-approve
-        if: ${{github.event.pull_request.merged == 'true'}}
-   
+        if: github.event.ref == 'refs/heads/main'
