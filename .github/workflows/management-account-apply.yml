@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  plan:
+  apply:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
