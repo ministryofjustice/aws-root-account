@@ -2,6 +2,9 @@ name: terraform plan (management-account)
 
 on:
   pull_request:
+    paths:
+      - 'management-account/terraform/**'
+      - 'modules/**'
   workflow_dispatch:
 
 jobs:

@@ -2,6 +2,9 @@ name: terraform apply (management-account)
 
 on:
   push:
+    paths:
+      - 'management-account/terraform/**'
+      - 'modules/**'
     branches:
       - main
 

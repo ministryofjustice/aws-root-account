@@ -10,7 +10,7 @@ resource "aws_iam_openid_connect_provider" "this" {
   tags = var.tags
 }
 
-# Create a role
+# Create roles
 resource "aws_iam_role" "plan" {
   name               = "github-actions-plan"
   assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
@@ -53,7 +53,7 @@ resource "aws_iam_policy" "extra_permissions_plan" {
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
-  policy = data.aws_iam_policy_document.extra_permissions.json
+  policy = data.aws_iam_policy_document.extra_permissions_plan.json
 }
 
 data "aws_iam_policy_document" "extra_permissions_plan" {
@@ -71,17 +71,14 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
       "secretsmanager:GetSecretValue",
       "kms:Decrypt" # for CommonFate
     ]
-
     resources = ["*"]
   }
 }
 
 resource "aws_iam_role_policy_attachment" "extra_permissions_plan" {
   role       = aws_iam_role.plan.name
-  policy_arn = aws_iam_policy.extra_permissions.arn
+  policy_arn = aws_iam_policy.extra_permissions_plan.arn
 }
-
-
 
 # ===================
 
@@ -90,21 +87,20 @@ resource "aws_iam_role" "apply" {
   assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
 }
 
-
-resource "aws_iam_role_policy_attachment" "write" {
+resource "aws_iam_role_policy_attachment" "apply" {
   role       = aws_iam_role.apply.name
-  policy_arn = aws_iam_policy.extra_permissions_write.arn
+  policy_arn = aws_iam_policy.extra_permissions_apply.arn
 }
 
-resource "aws_iam_policy" "extra_permissions_write" {
+resource "aws_iam_policy" "extra_permissions_apply" {
   name        = "github-actions-apply"
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
-  policy = data.aws_iam_policy_document.extra_permissions_write.json
+  policy = data.aws_iam_policy_document.extra_permissions_apply.json
 }
 
-data "aws_iam_policy_document" "extra_permissions_write" {
+data "aws_iam_policy_document" "extra_permissions_apply" {
   statement {
     effect = "Allow"
     actions = [
