@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "github_oidc_assume_role_plan" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "read_only" {
+resource "aws_iam_role_policy_attachment" "read_only_plan" {
   role       = aws_iam_role.plan.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
@@ -83,6 +83,11 @@ resource "aws_iam_role" "apply" {
   assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role_apply.json
 }
 
+resource "aws_iam_role_policy_attachment" "read_only_apply" {
+  role       = aws_iam_role.apply.name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
 data "aws_iam_policy_document" "github_oidc_assume_role_apply" {
   version = "2012-10-17"
   statement {
@@ -122,6 +127,12 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
   statement {
     effect = "Allow"
     actions = [
+      "account:GetAlternateContact",
+      "cur:DescribeReportDefinitions",
+      "identitystore:ListGroups",
+      "identitystore:GetGroupId",
+      "identitystore:DescribeGroup",
+      "logs:ListTagsForResource",
       "iam:*",
       "budgets:*",
       "cloudtrail:*",
