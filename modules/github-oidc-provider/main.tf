@@ -10,9 +10,9 @@ resource "aws_iam_openid_connect_provider" "this" {
   tags = var.tags
 }
 
-# Create a role
-resource "aws_iam_role" "this" {
-  name               = "github-actions"
+# Create roles
+resource "aws_iam_role" "plan" {
+  name               = "github-actions-plan"
   assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
 }
 
@@ -43,20 +43,20 @@ data "aws_iam_policy_document" "github_oidc_assume_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "read_only" {
-  role       = aws_iam_role.this.name
+  role       = aws_iam_role.plan.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 # Add actions missing from arn:aws:iam::aws:policy/ReadOnlyAccess
-resource "aws_iam_policy" "extra_permissions" {
+resource "aws_iam_policy" "extra_permissions_plan" {
   name        = "github-actions"
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
-  policy = data.aws_iam_policy_document.extra_permissions.json
+  policy = data.aws_iam_policy_document.extra_permissions_plan.json
 }
 
-data "aws_iam_policy_document" "extra_permissions" {
+data "aws_iam_policy_document" "extra_permissions_plan" {
   version = "2012-10-17"
 
   statement {
@@ -71,12 +71,78 @@ data "aws_iam_policy_document" "extra_permissions" {
       "secretsmanager:GetSecretValue",
       "kms:Decrypt" # for CommonFate
     ]
-
     resources = ["*"]
   }
 }
 
-resource "aws_iam_role_policy_attachment" "extra_permissions" {
-  role       = aws_iam_role.this.name
-  policy_arn = aws_iam_policy.extra_permissions.arn
+resource "aws_iam_role_policy_attachment" "extra_permissions_plan" {
+  role       = aws_iam_role.plan.name
+  policy_arn = aws_iam_policy.extra_permissions_plan.arn
+}
+
+# ===================
+
+resource "aws_iam_role" "apply" {
+  name               = "github-actions-apply"
+  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "apply" {
+  role       = aws_iam_role.apply.name
+  policy_arn = aws_iam_policy.extra_permissions_apply.arn
+}
+
+resource "aws_iam_policy" "extra_permissions_apply" {
+  name        = "github-actions-apply"
+  path        = "/"
+  description = "A policy for extra permissions for GitHub Actions"
+
+  policy = data.aws_iam_policy_document.extra_permissions_apply.json
+}
+
+data "aws_iam_policy_document" "extra_permissions_apply" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:*",
+      "budgets:*",
+      "cloudtrail:*",
+      "logs:*",
+      "config:*",
+      "ce:*",
+      "fms:*",
+      "guardduty:*",
+      "lambda:*",
+      "license-manager:*",
+      "route53:*",
+      "s3:*",
+      "secretsmanager:*",
+      "securityhub:*",
+      "sns:*",
+      "sso-directory:*",
+      "organizations:DescribeAccount",
+      "organizations:DescribeCreateAccountStatus",
+      "organizations:ListAccounts",
+      "kms:Decrypt",
+      "organizations:ListAccountsForParent",
+      "organizations:ListOrganizationalUnitsForParent",
+      "organizations:CreateOrganizationalUnit",
+      "organizations:MoveAccount",
+      "organizations:MoveOrganizationalUnit",
+      "organizations:UpdateOrganizationalUnit",
+      "organizations:AddAccountToOrganization",
+      "organizations:EnablePolicyType",
+      "organizations:DisablePolicyType",
+      "organizations:ListPoliciesForTarget",
+      "organizations:ListRoots",
+      "organizations:DescribeOrganization",
+      "organizations:ListParents",
+      "organizations:TagResource",
+      "organizations:UntagResource",
+      "organizations:UpdatePolicy",
+      "organizations:CreatePolicy",
+      "organizations:CreateAccount"
+    ]
+    resources = ["*"]
+  }
 }
