@@ -13,27 +13,23 @@ resource "aws_iam_openid_connect_provider" "this" {
 # Create roles
 resource "aws_iam_role" "plan" {
   name               = "github-actions-plan"
-  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role_plan.json
 }
 
-data "aws_iam_policy_document" "github_oidc_assume_role" {
+data "aws_iam_policy_document" "github_oidc_assume_role_plan" {
   version = "2012-10-17"
-
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRoleWithWebIdentity"]
-
     principals {
       type        = "Federated"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"]
     }
-
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:aud"
       values   = ["sts.amazonaws.com"]
     }
-
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
@@ -42,14 +38,14 @@ data "aws_iam_policy_document" "github_oidc_assume_role" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "read_only" {
+resource "aws_iam_role_policy_attachment" "read_only_plan" {
   role       = aws_iam_role.plan.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 # Add actions missing from arn:aws:iam::aws:policy/ReadOnlyAccess
 resource "aws_iam_policy" "extra_permissions_plan" {
-  name        = "github-actions"
+  name        = "github-actions-plan"
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
@@ -84,7 +80,34 @@ resource "aws_iam_role_policy_attachment" "extra_permissions_plan" {
 
 resource "aws_iam_role" "apply" {
   name               = "github-actions-apply"
-  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role_apply.json
+}
+
+resource "aws_iam_role_policy_attachment" "read_only_apply" {
+  role       = aws_iam_role.apply.name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+data "aws_iam_policy_document" "github_oidc_assume_role_apply" {
+  version = "2012-10-17"
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:${var.repository_with_owner}:ref:refs/heads/main"]
+    }
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "apply" {
@@ -104,6 +127,12 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
   statement {
     effect = "Allow"
     actions = [
+      "account:GetAlternateContact",
+      "cur:DescribeReportDefinitions",
+      "identitystore:ListGroups",
+      "identitystore:GetGroupId",
+      "identitystore:DescribeGroup",
+      "logs:ListTagsForResource",
       "iam:*",
       "budgets:*",
       "cloudtrail:*",
