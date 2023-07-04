@@ -12,6 +12,7 @@ resource "aws_organizations_organization" "default" {
     "inspector2.amazonaws.com",
     "ipam.amazonaws.com",
     "license-management.marketplace.amazonaws.com",
+    "license-manager-linux-subscriptions.amazonaws.com",
     "license-manager.amazonaws.com",
     "license-manager.member-account.amazonaws.com",
     "macie.amazonaws.com",
