@@ -216,7 +216,6 @@ locals {
       account_ids = [
         aws_organizations_account.security_operations_development.id,
         aws_organizations_account.security_operations_pre_production.id,
-        aws_organizations_account.security_operations_production.id,
       ]
     },
     {
