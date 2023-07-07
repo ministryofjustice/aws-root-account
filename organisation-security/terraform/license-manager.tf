@@ -72,10 +72,10 @@ resource "aws_licensemanager_license_configuration" "oracle_ee" {
 
 resource "aws_licensemanager_license_configuration" "oracle_ec2_licensemanager_configurations" {
   for_each = {
-    "OracleDbEELicenseConfiguration"   = { description = "Oracle EC2 DB Enterprise Edition"},
-    "OracleDbSE2LicenseConfiguration"  = { description = "Oracle EC2 DB Standard Edition 2"},
-    "OracleDbPELicenseConfiguration"   = { description = "Oracle EC2 DB Personal Edition"},
-    "OracleDbXELicenseConfiguration"   = { description = "Oracle EC2 DB Express Edition"}
+    "OracleDbEELicenseConfiguration"  = { description = "Oracle EC2 DB Enterprise Edition" },
+    "OracleDbSE2LicenseConfiguration" = { description = "Oracle EC2 DB Standard Edition 2" },
+    "OracleDbPELicenseConfiguration"  = { description = "Oracle EC2 DB Personal Edition" },
+    "OracleDbXELicenseConfiguration"  = { description = "Oracle EC2 DB Express Edition" }
   }
   name                     = each.key
   description              = each.value.description
