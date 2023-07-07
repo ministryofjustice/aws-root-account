@@ -69,3 +69,17 @@ resource "aws_licensemanager_license_configuration" "oracle_ee" {
   license_count_hard_limit = false
   license_counting_type    = "vCPU"
 }
+
+resource "aws_licensemanager_license_configuration" "oracle_ec2_licensemanager_configurations" {
+  for_each = {
+    "OracleDbEELicenseConfiguration"  = { description = "Oracle EC2 DB Enterprise Edition" },
+    "OracleDbSE2LicenseConfiguration" = { description = "Oracle EC2 DB Standard Edition 2" },
+    "OracleDbPELicenseConfiguration"  = { description = "Oracle EC2 DB Personal Edition" },
+    "OracleDbXELicenseConfiguration"  = { description = "Oracle EC2 DB Express Edition" }
+  }
+  name                     = each.key
+  description              = each.value.description
+  license_count            = 0
+  license_count_hard_limit = false
+  license_counting_type    = "vCPU"
+}
