@@ -83,3 +83,33 @@ resource "aws_licensemanager_license_configuration" "oracle_ec2_licensemanager_c
   license_count_hard_limit = false
   license_counting_type    = "vCPU"
 }
+
+# Cloudformation stack for Oracle Database auto detection
+resource "aws_cloudformation_stack" "oracleblts" {
+  name         = "OracleDbLTS"
+  capabilities = ["CAPABILITY_NAMED_IAM"]
+  parameters = {
+    IsDelegatedAdministrator = true
+    AdministratorAccountId   = data.aws_caller_identity.current.id
+    OrganizationId           = data.aws_organizations_organization.default.id
+    InstanceIAMRoleName      = "OracleLicenseRole" # I've made this up, will question the need for this
+    TargetOUs                = local.ou_sprinkler
+    TargetRegions            = "eu-west-2"
+    TargetKey                = "tag:OracleDbLTS-ManagedInstance"
+    TargetValues             = true
+    MaxConcurrency           = 4
+    MaxErrors                = 4
+    ArtifactsS3Bucket        = "license-manager-artifact-bucket"
+    AdministratorAccountId   = data.aws_caller_identity.current.id
+    OrganizationId           = data.aws_organizations_organization.default.id
+    InstanceIAMRoleName      = "OracleLicenseRole" # I've made this up, will question the need for this
+    TargetOUs                = local.ou_sprinkler
+    TargetRegions            = "eu-west-2"
+    TargetKey                = "tag:OracleDbLTS-ManagedInstance"
+    TargetValues             = true
+    MaxConcurrency           = 4
+    MaxErrors                = 4
+  }
+
+  template_body = file("${path.module}/cloudformation/OracleDbLTS-Orchestrate.yaml")
+}
