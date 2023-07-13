@@ -678,3 +678,24 @@ data "aws_iam_policy_document" "waf_viewer_shield" {
     resources = ["*"]
   }
 }
+
+#################################
+# Data Platform Permission Sets #
+#################################
+
+resource "aws_ssoadmin_permission_set" "data_platform_airflow_user" {
+  name             = "data-platform-airflow-user"
+  description      = "Data Platform: Airflow User"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_customer_managed_policy_attachment" "data_platform_airflow_user" {
+  instance_arn       = local.sso_admin_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.data_platform_airflow_user.arn
+  customer_managed_policy_reference {
+    name = "data-platform-airflow-user"
+    path = "/"
+  }
+}
