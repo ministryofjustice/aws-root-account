@@ -23,6 +23,7 @@ resource "aws_organizations_organization" "default" {
     "sso.amazonaws.com",
     "storage-lens.s3.amazonaws.com",
     "tagpolicies.tag.amazonaws.com",
+    "member.org.stacksets.cloudformation.amazonaws.com",
   ]
 
   enabled_policy_types = [
@@ -32,4 +33,10 @@ resource "aws_organizations_organization" "default" {
   ]
 
   feature_set = "ALL"
+}
+
+# Delegate Cloudformation Stacksets to organisation-security
+resource "aws_organizations_delegated_administrator" "stacksets_organisation_security" {
+  account_id        = aws_organizations_account.organisation_security.id
+  service_principal = "member.org.stacksets.cloudformation.amazonaws.com"
 }
