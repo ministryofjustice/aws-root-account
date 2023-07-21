@@ -90,20 +90,11 @@ resource "aws_cloudformation_stack" "oracleblts" {
   capabilities = ["CAPABILITY_NAMED_IAM"]
   parameters = {
     IsDelegatedAdministrator = true
-    AdministratorAccountId   = data.aws_caller_identity.current.id
-    OrganizationId           = data.aws_organizations_organization.default.id
-    InstanceIAMRoleName      = "OracleLicenseRole" # I've made this up, will question the need for this
-    TargetOUs                = local.ou_sprinkler
-    TargetRegions            = "eu-west-2"
-    TargetKey                = "tag:OracleDbLTS-ManagedInstance"
-    TargetValues             = true
-    MaxConcurrency           = 4
-    MaxErrors                = 4
     ArtifactsS3Bucket        = "license-manager-artifact-bucket"
     AdministratorAccountId   = data.aws_caller_identity.current.id
     OrganizationId           = data.aws_organizations_organization.default.id
-    InstanceIAMRoleName      = "OracleLicenseRole" # I've made this up, will question the need for this
-    TargetOUs                = local.ou_sprinkler
+    InstanceIAMRoleName      = "AmazonSSMRoleForInstancesQuickSetup" # I've made this up, will question the need for this
+    TargetOUs                = local.ou_example
     TargetRegions            = "eu-west-2"
     TargetKey                = "tag:OracleDbLTS-ManagedInstance"
     TargetValues             = true
@@ -112,4 +103,19 @@ resource "aws_cloudformation_stack" "oracleblts" {
   }
 
   template_body = file("${path.module}/cloudformation/OracleDbLTS-Orchestrate.yaml")
+}
+
+# TODO get some values below from stack above or make dependant on stack
+resource "aws_ssm_association" "license_manager" {
+  name             = "OracleDbLTS-Orchestrate"
+  association_name = "OracleDbLicenseTrackingSolutionAssociation"
+
+  # schedule_expression = "0 1 * * *"
+  max_concurrency = 4
+  max_errors      = 4
+  parameters = {
+    AutomationAssumeRole = "arn:aws:iam::${data.aws_caller_identity.current.id}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
+    DeploymentTargets    = local.ou_example
+    TargetRegions        = "eu-west-2"
+  }
 }

@@ -72,10 +72,10 @@ locals {
     if ou.name == "LAA"
   ]...)
 
-  ou_sprinkler = coalesce([
+  ou_example = coalesce([
     for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
     ou.id
-    if ou.name == "modernisation-platform-sprinkler"
+    if ou.name == "modernisation-platform-example"
   ]...)
 
   # Shield Advanced
