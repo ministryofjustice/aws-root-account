@@ -90,3 +90,22 @@ data "aws_iam_policy_document" "cloudtrail_s3_bucket" {
     }
   }
 }
+
+# Athena
+module "athena_results_s3_bucket" {
+  source = "../../modules/s3"
+
+  bucket_name = "athena-results-${random_integer.suffix.result}"
+  bucket_acl  = "private"
+
+  attach_policy        = false
+  require_ssl_requests = true
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}

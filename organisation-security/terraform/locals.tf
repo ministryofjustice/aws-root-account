@@ -72,6 +72,7 @@ locals {
     if ou.name == "LAA"
   ]...)
 
+  # for license manager testing
   ou_example = coalesce([
     for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
     ou.id
