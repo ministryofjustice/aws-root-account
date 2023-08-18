@@ -60,6 +60,7 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
     actions = [
       "account:GetAlternateContact",
       "cur:DescribeReportDefinitions",
+      "execute-api:Invoke", # for CommonFate
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
@@ -129,6 +130,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
     actions = [
       "account:GetAlternateContact",
       "cur:DescribeReportDefinitions",
+      "execute-api:Invoke", # for CommonFate
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
