@@ -202,6 +202,8 @@ variable "finance_team" {
     "TraceyCampbell",
     "AdeoluAdelaja",
     "DavidCooper",
+    "DanielUkponmwan",
+    "MarkAstley",
 
     # Accounting
     "AnthonyTimms",
