@@ -25,3 +25,6 @@ data "aws_organizations_organizational_units" "modernisation_platform_member" {
 data "aws_organizations_organizational_units" "opg" {
   parent_id = local.ou_opg
 }
+
+data "aws_caller_identity" "current" {
+}
