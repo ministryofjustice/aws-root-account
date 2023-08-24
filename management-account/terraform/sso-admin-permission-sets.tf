@@ -192,12 +192,18 @@ resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_data_m
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_data_mwaa_user.arn
 }
 
-resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platform_data_mwaa_user" {
+resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_data_mwaa_user" {
   instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.modernisation_platform_data_mwaa_user.json
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_data_mwaa_user.arn
-  customer_managed_policy_reference {
-    name = "data_engineering_mwaa_user_policy"
-    path = "/"
+}
+
+data "aws_iam_policy_document" "modernisation_platform_data_mwaa_user" {
+  statement {
+    actions = [
+      "airflow:CreateWebLoginToken"
+    ]
+    resources = ["*"]
   }
 }
 
