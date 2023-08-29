@@ -23,26 +23,6 @@ resource "aws_organizations_account" "hmpps_cr_jira_production" {
   }
 }
 
-resource "aws_organizations_account" "hmpps_cr_jitbit_non_production" {
-  name                       = "HMPPS CR Jitbit non-production"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cr-jitbit-non-production")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
-
-  tags = merge(local.tags_community_rehabilitation, {
-    application = "Community Rehabilitation - Jitbit"
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_cr_jitbit_production" {
   name                       = "HMPPS CR Jitbit production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cr-jitbit-production")
@@ -104,4 +84,3 @@ resource "aws_organizations_account" "hmpps_cr_unpaid_work_production" {
     ]
   }
 }
-
