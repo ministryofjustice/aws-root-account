@@ -203,7 +203,7 @@ data "aws_iam_policy_document" "modernisation_platform_data_mwaa_user" {
     actions = [
       "airflow:CreateWebLoginToken"
     ]
-    resources = ["*"]
+    resources = ["arn:aws:airflow:*:*:role/*/User"]
   }
 }
 
