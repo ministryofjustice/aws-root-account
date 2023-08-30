@@ -128,7 +128,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
   statement {
     effect = "Allow"
     actions = [
-      "account:GetAlternateContact",
+      "account:*AlternateContact",
       "cur:DescribeReportDefinitions",
       "execute-api:Invoke", # for CommonFate
       "identitystore:ListGroups",
@@ -151,6 +151,8 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "securityhub:*",
       "sns:*",
       "sso-directory:*",
+      "sso:*PermissionSet*",
+      "sso:*AccountAssignment*",
       "organizations:DescribeAccount",
       "organizations:DescribeCreateAccountStatus",
       "organizations:ListAccounts",
