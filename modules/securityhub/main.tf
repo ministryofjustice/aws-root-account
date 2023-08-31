@@ -82,7 +82,7 @@ resource "aws_securityhub_organization_admin_account" "default" {
 # Configure organisational settings
 resource "aws_securityhub_organization_configuration" "default" {
   for_each    = var.is_delegated_administrator ? toset(["delegated_administrator"]) : []
-  auto_enable = false
+  auto_enable = true
 }
 
 # Add members from the organisation
