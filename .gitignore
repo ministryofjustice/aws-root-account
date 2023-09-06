@@ -2,6 +2,3 @@
 .terraform
 *.tfstate*
 .DS_Store
-
-# commonfate
-work/
