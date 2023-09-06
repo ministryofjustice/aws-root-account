@@ -60,13 +60,11 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
     actions = [
       "account:GetAlternateContact",
       "cur:DescribeReportDefinitions",
-      "execute-api:Invoke", # for CommonFate
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
       "logs:ListTagsForResource",
       "secretsmanager:GetSecretValue",
-      "kms:Decrypt" # for CommonFate
     ]
     resources = ["*"]
   }
@@ -130,7 +128,6 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
     actions = [
       "account:*AlternateContact",
       "cur:DescribeReportDefinitions",
-      "execute-api:Invoke", # for CommonFate
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
