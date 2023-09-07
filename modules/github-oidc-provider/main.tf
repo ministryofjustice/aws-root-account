@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
-      "kms:*",
+      "kms:Decrypt",
       "lambda:*",
       "license-manager:*",
       "logs:*",
