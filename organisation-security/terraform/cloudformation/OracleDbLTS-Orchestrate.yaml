@@ -9,7 +9,6 @@ Metadata:
           - IsDelegatedAdministrator
           - AdministratorAccountId
           - OrganizationId
-          - InstanceIAMRoleName
       - Label:
           default: "Targets"
         Parameters:
@@ -39,8 +38,6 @@ Metadata:
         default: "Maximum Concurrency"
       MaxErrors:
         default: "Maximum Errors"
-      InstanceIAMRoleName:
-        default: "Managed Instance IAM Role Name"
 
 Parameters:
   IsDelegatedAdministrator:
@@ -84,10 +81,6 @@ Parameters:
     Type: String
     Description: The number of errors that are allowed before the system stops running the automation on additional targets. You can specify a number, such as 10, or a percentage, such as 10%. The default value is 4.
     Default: "4"
-  InstanceIAMRoleName:
-    Type: CommaDelimitedList
-    Description: (Required) Friendly name of the current IAM role attached to all the target managed instances that are being targeted for this solution
-    AllowedPattern: ".+"
 
 Conditions:
   IsGovCloud: !Equals [!Ref AWS::Partition, aws-us-gov]
@@ -278,8 +271,6 @@ Resources:
           ParameterValue: !Ref AdministratorAccountId
         - ParameterKey: ArtifactsS3Bucket
           ParameterValue: !Ref ArtifactsS3Bucket
-        - ParameterKey: InstanceIAMRoleName
-          ParameterValue: !Join [",", !Ref InstanceIAMRoleName]
       PermissionModel: SERVICE_MANAGED
       Capabilities:
         - CAPABILITY_IAM
@@ -298,9 +289,6 @@ Resources:
           ArtifactsS3Bucket:
             Type: String
             Description: Specify the S3 bucket name where the license tracking solution scripts and ssm outputs will be stored (temporarily)
-          InstanceIAMRoleName:
-            Type: CommaDelimitedList
-            Description: Friendly name of the current IAM role attached to managed instances that are being targeted for this solution
         Resources:
           AutomationExecutionRole:
             Type: 'AWS::IAM::Role'
@@ -358,27 +346,6 @@ Resources:
                           - 'iam:PassRole'
                         Resource: !Sub >-
                           arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationExecutionRole
-          
-          S3BucketPolicyForInstance: 
-            Type: AWS::IAM::ManagedPolicy
-            Properties: 
-              Description: !Sub "Managed Policy to allow managed instances to access ${ArtifactsS3Bucket} bucket for the Oracle License Tracking Solution"
-              ManagedPolicyName: OracleDbLTS-SSMS3BucketPolicy
-              PolicyDocument: 
-                Version: '2012-10-17'
-                Statement:
-                - Sid: SSMS3BucketPolicy
-                  Effect: Allow
-                  Action:
-                  - s3:PutObject
-                  - s3:GetObject
-                  - s3:PutObjectAcl
-                  - s3:ListBucket
-                  - s3:DeleteObject
-                  Resource:
-                    - !Sub "arn:${AWS::Partition}:s3:::${ArtifactsS3Bucket}/*"
-                    - !Sub "arn:${AWS::Partition}:s3:::${ArtifactsS3Bucket}"
-              Roles: !Ref InstanceIAMRoleName
 
   OracleDbLTSOrchestrate:
     Type: "AWS::SSM::Document"

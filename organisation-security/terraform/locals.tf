@@ -5,6 +5,8 @@ locals {
     if account.name == "organisation-security"
   ]...)
 
+  organisation_account_numbers = [for account in data.aws_organizations_organization.default.accounts : account.id]
+
   # AWS Organizational Units
   ou_opg = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
@@ -78,6 +80,11 @@ locals {
     ou.id
     if ou.name == "modernisation-platform-example"
   ]...)
+
+  modernisation_platform_member_ous = [
+    for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
+    ou.id
+  ]
 
   # Shield Advanced
   shield_advanced_auto_remediate = {

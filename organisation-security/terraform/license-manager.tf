@@ -97,9 +97,7 @@ resource "aws_cloudformation_stack" "oracleblts" {
     ArtifactsS3Bucket        = "license-manager-artifact-bucket"
     AdministratorAccountId   = data.aws_caller_identity.current.id
     OrganizationId           = data.aws_organizations_organization.default.id
-    InstanceIAMRoleName      = "AmazonSSMRoleForInstancesQuickSetup" # I've made this up, will question the need for this
-    TargetOUs                = local.ou_example
-    # TargetOUs                = local.ou_modernisation_platform_member_id
+    TargetOUs                = local.ou_modernisation_platform_member_id
     TargetRegions            = "eu-west-2"
     TargetKey                = "tag:OracleDbLTS-ManagedInstance"
     TargetValues             = true
@@ -118,14 +116,16 @@ resource "aws_ssm_association" "license_manager" {
   name             = "OracleDbLTS-Orchestrate"
   association_name = "OracleDbLicenseTrackingSolutionAssociation"
 
-  schedule_expression = "0 1 * * *"
-  max_concurrency = 4
-  max_errors      = 4
+  schedule_expression = "cron(15 0 ? * MON *)"
+  # schedule_expression = "cron(25 10 ? * * *)"
+  max_concurrency                  = 4
+  max_errors                       = 4
+  automation_target_parameter_name = "InstanceId"
   parameters = {
     AutomationAssumeRole = "arn:aws:iam::${data.aws_caller_identity.current.id}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
     DeploymentTargets    = local.ou_example
-    # DeploymentTargets    = local.ou_modernisation_platform_member_id
-    TargetRegions        = "eu-west-2"
+    # DeploymentTargets    = join(",", local.modernisation_platform_member_ous) #Key DeploymentTargets must have length less than or equal to 512
+    TargetRegions = "eu-west-2"
   }
 
   depends_on = [
@@ -133,55 +133,24 @@ resource "aws_ssm_association" "license_manager" {
   ]
 }
 
-# KMS key for resource sync
-resource "aws_kms_key" "oracle_licensing" {
-  description         = "Used for Oracle Licensing resources"
-  policy              = data.aws_iam_policy_document.oracle_kms.json
-  is_enabled          = true
-  enable_key_rotation = true
+# Athena resources
+resource "aws_athena_database" "ssm_resource_sync" {
+  name   = "ssm_resource_sync"
+  bucket = module.ssm_resource_sync_s3_bucket.bucket_name
 }
 
-resource "aws_kms_alias" "oracle_licensing" {
-  name          = "alias/oracle-licensing"
-  target_key_id = aws_kms_key.oracle_licensing.key_id
+# Glue crawler to update Athena Table
+# Role for crawler
+resource "aws_iam_role" "ssm_glue_crawler" {
+  name               = "ssm-glue-crawler"
+  assume_role_policy = data.aws_iam_policy_document.ssm_glue_crawler_assume.json
 }
 
-data "aws_iam_policy_document" "oracle_kms" {
+data "aws_iam_policy_document" "ssm_glue_crawler_assume" {
   statement {
-    effect    = "Allow"
-    actions   = ["kms:*"]
-    resources = ["*"]
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
 
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
-  }
-  statement {
-    sid       = "ssm-access-policy-statement"
-    effect    = "Allow"
-    actions   = ["kms:GenerateDataKey"]
-    resources = ["*"]
-    principals {
-      type        = "Service"
-      identifiers = ["ssm.amazonaws.com"]
-    }
-    condition {
-      test     = "StringLike"
-      variable = "aws:SourceAccount"
-      values   = ["083957762049"]
-    }
-    condition {
-      test     = "ArnLike"
-      variable = "aws:SourceArn"
-      values   = ["arn:aws:ssm:*:083957762049:resource-data-sync/*"]
-    }
-  }
-  statement {
-    sid       = "glue-crawler-access"
-    effect    = "Allow"
-    actions   = ["kms:Decrypt"]
-    resources = ["*"]
     principals {
       type        = "Service"
       identifiers = ["glue.amazonaws.com"]
@@ -189,147 +158,47 @@ data "aws_iam_policy_document" "oracle_kms" {
   }
 }
 
-module "oracle_licensing_s3_bucket" {
-  source = "../../modules/s3"
-
-  bucket_name = "oracle-license-data-${random_integer.suffix.result}"
-  bucket_acl  = "private"
-
-  attach_policy        = true
-  policy               = data.aws_iam_policy_document.oracle_licensing_s3_bucket.json
-  require_ssl_requests = true
-
-  server_side_encryption_configuration = {
-    rule = {
-      apply_server_side_encryption_by_default = {
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
+resource "aws_iam_policy" "ssm_glue_crawler" {
+  name   = "SSMGlueCrawler"
+  policy = data.aws_iam_policy_document.ssm_glue_crawler.json
 }
 
-data "aws_iam_policy_document" "oracle_licensing_s3_bucket" {
+data "aws_iam_policy_document" "ssm_glue_crawler" {
   statement {
-    sid       = "SSMBucketDelivery"
-    effect    = "Allow"
-    actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::oracle-license-data-${random_integer.suffix.result}/*"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["ssm.amazonaws.com"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-acl"
-      values   = ["bucket-owner-full-control"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
-      values   = ["245753150946"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
-      values   = ["083957762049"]
-    }
-    condition {
-      test     = "ArnLike"
-      variable = "aws:SourceArn"
-      values   = ["arn:aws:ssm:*:245753150946:resource-data-sync/*"]
-    }
-    condition {
-      test     = "ArnLike"
-      variable = "aws:SourceArn"
-      values   = ["arn:aws:ssm:*:083957762049:resource-data-sync/*"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-server-side-encryption"
-      values   = ["aws:kms"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-server-side-encryption-aws-kms-key-id"
-      values   = [aws_kms_key.oracle_licensing.arn]
-    }
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
+    ]
+    resources = ["arn:aws:s3:::${module.ssm_resource_sync_s3_bucket.bucket_name}*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [aws_kms_key.ssm_resource_sync.arn]
   }
 }
 
-# Athena resources
-resource "aws_athena_database" "oracle_licensing" {
-  name   = "oracle_dblts"
-  bucket = module.oracle_licensing_s3_bucket.bucket_name
+resource "aws_iam_role_policy_attachment" "ssm_glue_crawler" {
+  role       = aws_iam_role.ssm_glue_crawler.name
+  policy_arn = aws_iam_policy.ssm_glue_crawler.arn
 }
 
-# resource "aws_athena_named_query" "foo" {
-#   name      = "create_oracle_dblts"
-#   database  = aws_athena_database.oracle_licensing.name
-#   query     = "
-# CREATE EXTERNAL TABLE IF NOT EXISTS oracle_dblts.AWS_InstanceDetailedInformation (
-# `Cpus` string,
-# `osservicepack` string,
-# `cpuhyperthreadenabled` string, 
-# `cpuspeedmhz` string, 
-# `cpusockets` string, 
-# `cpucores` string, 
-# `cpumodel` string, 
-# `resourceid` string, 
-# `capturetime` string, 
-# `schemaversion` string 
-# ) 
-# PARTITIONED BY (AccountId string, Region string, ResourceType string) 
-# ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe' 
-# WITH SERDEPROPERTIES ( 'serialization.format' = '1' ) 
-# LOCATION 's3://oracle-license-data-50974883831/AWS:InstanceDetailedInformation/'CREATE EXTERNAL TABLE IF NOT EXISTS oracle_dblts.AWS_InstanceDetailedInformation (
-# `Cpus` string,
-# `osservicepack` string,
-# `cpuhyperthreadenabled` string, 
-# `cpuspeedmhz` string, 
-# `cpusockets` string, 
-# `cpucores` string, 
-# `cpumodel` string, 
-# `resourceid` string, 
-# `capturetime` string, 
-# `schemaversion` string 
-# ) 
-# PARTITIONED BY (AccountId string, Region string, ResourceType string) 
-# ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe' 
-# WITH SERDEPROPERTIES ( 'serialization.format' = '1' ) 
-# LOCATION 's3://oracle-license-data-50974883831/AWS:InstanceDetailedInformation/'
-# "}
+resource "aws_iam_role_policy_attachment" "ssm_glue_servicec" {
+  role       = aws_iam_role.ssm_glue_crawler.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+}
 
-# MSCK REPAIR TABLE oracle_dblts.AWS_InstanceDetailedInformation;
+# Glue Crawler
+resource "aws_glue_crawler" "ssm_resource_sync" {
+  database_name = aws_athena_database.ssm_resource_sync.name
+  name          = "ssm_resource_sync"
+  role          = aws_iam_role.ssm_glue_crawler.arn
+  schedule      = "cron(15 1 ? * MON *)"
 
-# Note: You will need to run this statement again as the partition changes (for example, for new accounts, regions, or resource types). Depending on how often these change in your organization, consider using the AWS Glue crawler to automate this step.
-
-# CREATE EXTERNAL TABLE IF NOT EXISTS oracle_dblts.AWS_Tag ( 
-# `key` string, 
-# `value` string, 
-# `resourceid` string, 
-# `capturetime` string, 
-# `schemaversion` string ) 
-# PARTITIONED BY (AccountId string, Region string, ResourceType string) 
-# ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe' 
-# WITH SERDEPROPERTIES ( 
-#   'serialization.format' = '1' 
-# ) LOCATION 's3://oracle-license-data-50974883831/AWS:Tag/'
-
-# MSCK REPAIR TABLE oracle_dblts.AWS_Tag
-
-# CREATE EXTERNAL TABLE IF NOT EXISTS oracle_dblts.Custom_SQLServer ( 
-# `name` string, 
-# `edition` string, 
-# `version` string, 
-# `resourceid` string, 
-# `capturetime` string, 
-# `schemaversion` string) 
-# PARTITIONED BY (AccountId string, Region string, ResourceType string) 
-# ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe' 
-# WITH SERDEPROPERTIES (
-#  'serialization.format' = '1' 
-# ) LOCATION 's3://oracle-license-data-50974883831/Custom:SQLServer/'
-
-# MSCK REPAIR TABLE oracle_dblts.Custom_SQLServer
+  s3_target {
+    path = "s3://${module.ssm_resource_sync_s3_bucket.bucket_name}"
+  }
+}
