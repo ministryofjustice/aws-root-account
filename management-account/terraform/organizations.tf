@@ -40,3 +40,6 @@ resource "aws_organizations_delegated_administrator" "stacksets_organisation_sec
   account_id        = aws_organizations_account.organisation_security.id
   service_principal = "member.org.stacksets.cloudformation.amazonaws.com"
 }
+
+# Enable RAM sharing with the organization without requiring acceptors
+resource "aws_ram_sharing_with_organization" "default" {}
