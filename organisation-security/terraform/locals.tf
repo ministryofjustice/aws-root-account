@@ -81,10 +81,16 @@ locals {
     if ou.name == "modernisation-platform-example"
   ]...)
 
-  modernisation_platform_member_ous = [
-    for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
-    ou.id
-  ]
+  # modernisation_platform_member_ous = [
+  #   for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
+  #   ou.id
+  # ]
+
+  ou_modernisation_platform_member_arn = coalesce([
+    for ou in data.aws_organizations_organizational_units.modernisation_platform.children :
+    ou.arn
+    if ou.name == "Modernisation Platform Member"
+  ]...)
 
   # Shield Advanced
   shield_advanced_auto_remediate = {

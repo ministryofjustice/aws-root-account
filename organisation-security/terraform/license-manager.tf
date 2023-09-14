@@ -73,8 +73,8 @@ resource "aws_licensemanager_license_configuration" "oracle_ee" {
 # Oracle DB on EC2 licensing automation
 # https://aws.amazon.com/blogs/mt/centrally-track-oracle-database-licenses-in-aws-organizations-using-aws-license-manager-and-aws-systems-manager/
 
-# Create license configurations
-resource "aws_licensemanager_license_configuration" "oracle_ec2_licensemanager_configurations" {
+module "oracle_ec2_license_configurations" {
+  source = "../../modules/license-configuration"
   for_each = {
     "OracleDbEELicenseConfiguration"  = { description = "Oracle EC2 DB Enterprise Edition" },
     "OracleDbSE2LicenseConfiguration" = { description = "Oracle EC2 DB Standard Edition 2" },
@@ -86,6 +86,7 @@ resource "aws_licensemanager_license_configuration" "oracle_ec2_licensemanager_c
   license_count            = 0
   license_count_hard_limit = false
   license_counting_type    = "vCPU"
+  principal                = local.ou_modernisation_platform_member_arn
 }
 
 # Cloudformation stack for Oracle Database auto detection
@@ -107,7 +108,7 @@ resource "aws_cloudformation_stack" "oracleblts" {
   template_body = file("${path.module}/cloudformation/OracleDbLTS-Orchestrate.yaml")
 
   depends_on = [
-    aws_licensemanager_license_configuration.oracle_ec2_licensemanager_configurations
+    module.oracle_ec2_license_configurations
   ]
 }
 
