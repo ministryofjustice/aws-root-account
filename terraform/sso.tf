@@ -6,7 +6,7 @@ locals {
 }
 
 module "sso" {
-  source                     = "github.com/ministryofjustice/moj-terraform-aws-sso"
+  source                     = "github.com/ministryofjustice/moj-terraform-aws-sso?ref=af6f4debb6d8473a73f2f82c6c5bcad431e1059c" #v1.0.0"
   auth0_allowed_domains      = local.email_suffix
   auth0_aws_sso_acs_url      = local.aws_saml.acs_url    # Note that this is a secret, but is output in plaintext when using `terraform plan` or `terraform apply`
   auth0_aws_sso_issuer_url   = local.aws_saml.issuer_url # Note that this is a secret, but is output in plaintext when using `terraform plan` or `terraform apply`
