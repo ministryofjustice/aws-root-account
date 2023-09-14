@@ -4,8 +4,8 @@ variable "name" {
 }
 
 variable "principal" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
   description = "Principal to RAM share with"
 }
 
