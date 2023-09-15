@@ -5,6 +5,8 @@ locals {
     if account.name == "organisation-security"
   ]...)
 
+  organisation_account_numbers = [for account in data.aws_organizations_organization.default.accounts : account.id]
+
   # AWS Organizational Units
   ou_opg = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
@@ -70,6 +72,24 @@ locals {
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
     if ou.name == "LAA"
+  ]...)
+
+  # for license manager testing
+  ou_example = coalesce([
+    for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
+    ou.id
+    if ou.name == "modernisation-platform-example"
+  ]...)
+
+  # modernisation_platform_member_ous = [
+  #   for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
+  #   ou.id
+  # ]
+
+  ou_modernisation_platform_member_arn = coalesce([
+    for ou in data.aws_organizations_organizational_units.modernisation_platform.children :
+    ou.arn
+    if ou.name == "Modernisation Platform Member"
   ]...)
 
   # Shield Advanced
