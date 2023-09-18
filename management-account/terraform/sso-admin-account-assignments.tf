@@ -212,7 +212,6 @@ locals {
       github_team        = "secops",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
-        aws_organizations_account.security_operations_development.id,
         aws_organizations_account.security_operations_pre_production.id,
       ]
     },
@@ -326,13 +325,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.waf_viewer.arn,
       account_ids = [
         aws_organizations_account.organisation_security.id
-      ]
-    },
-    {
-      github_team        = "secops-dev",
-      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
-      account_ids = [
-        aws_organizations_account.security_operations_development.id
       ]
     },
     {
