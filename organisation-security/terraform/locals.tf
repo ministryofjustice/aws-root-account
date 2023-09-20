@@ -75,7 +75,7 @@ locals {
   ]...)
 
   # ous for license manager
-  ou_example = coalesce([for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children : ou.id if ou.name == "modernisation-platform-example"]...)
+  ou_example  = coalesce([for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children : ou.id if ou.name == "modernisation-platform-example"]...)
   ou_ccms_ebs = coalesce([for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children : ou.id if ou.name == "modernisation-platform-ccms-ebs"]...)
 
   license_mamager_ous = [
