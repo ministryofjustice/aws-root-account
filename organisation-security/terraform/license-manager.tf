@@ -124,7 +124,7 @@ resource "aws_ssm_association" "license_manager" {
   automation_target_parameter_name = "InstanceId"
   parameters = {
     AutomationAssumeRole = "arn:aws:iam::${data.aws_caller_identity.current.id}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
-    DeploymentTargets    = local.ou_example
+    DeploymentTargets    = join(",", local.license_mamager_ous)
     # DeploymentTargets    = join(",", local.modernisation_platform_member_ous) #Key DeploymentTargets must have length less than or equal to 512
     TargetRegions = "eu-west-2"
   }
