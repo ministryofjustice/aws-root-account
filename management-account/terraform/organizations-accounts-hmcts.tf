@@ -61,24 +61,6 @@ resource "aws_organizations_account" "ministry_of_justice_courtfinder_prod" {
   }
 }
 
-resource "aws_organizations_account" "moj_info_services_dev" {
-  name                       = "MoJ Info Services Dev"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "courtfinder")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmcts.id
-
-  tags = local.tags_hmcts
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "tp_hmcts" {
   name                       = "TP-HMCTS"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "TP-HMCTS")
