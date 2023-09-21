@@ -134,22 +134,3 @@ resource "aws_guardduty_threatintelset" "default" {
   location    = "https://s3.amazonaws.com/${var.threatintelset_bucket}/${var.threatintelset_key}"
   name        = var.threatintelset_key
 }
-
-#####################
-# GuardDuty filters #
-#####################
-resource "aws_guardduty_filter" "security-operations" {
-  provider = aws.delegated-administrator
-
-  name        = "AllApartFromSecurityOperations"
-  action      = "NOOP"
-  detector_id = aws_guardduty_detector.delegated-administrator.id
-  rank        = 1
-
-  finding_criteria {
-    criterion {
-      field      = "accountId"
-      not_equals = var.filterable_security_accounts
-    }
-  }
-}
