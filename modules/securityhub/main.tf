@@ -86,6 +86,7 @@ resource "aws_securityhub_organization_configuration" "default" {
 }
 
 # Add members from the organisation
+# This is now down automatically when accounts are created
 resource "aws_securityhub_member" "default" {
   depends_on = [aws_securityhub_account.default]
   for_each   = var.is_delegated_administrator ? var.enrolled_accounts : {}
