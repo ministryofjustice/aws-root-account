@@ -10,7 +10,6 @@ module "securityhub_eu_west_2" {
   aggregation_region = true
 
   is_delegated_administrator = true
-  enrolled_accounts          = tomap(local.accounts.active_only_not_self)
 }
 
 module "securityhub_eu_west_1" {
@@ -20,7 +19,6 @@ module "securityhub_eu_west_1" {
   }
 
   is_delegated_administrator = true
-  enrolled_accounts          = tomap(local.accounts.active_only_not_self)
 }
 
 module "securityhub_eu_central_1" {
@@ -30,7 +28,6 @@ module "securityhub_eu_central_1" {
   }
 
   is_delegated_administrator = true
-  enrolled_accounts          = tomap(local.accounts.active_only_not_self)
 }
 
 ##############################
@@ -44,5 +41,4 @@ module "securityhub_us_east_1" {
   source = "../../modules/securityhub"
 
   is_delegated_administrator = true
-  enrolled_accounts          = tomap(local.accounts.active_only_not_self)
 }
