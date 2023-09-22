@@ -84,7 +84,6 @@ locals {
         aws_organizations_account.electronic_monitoring_monitoring_and_mapping_dev.id,
         aws_organizations_account.electronic_monitoring_case_management_networking_prod.id,
         aws_organizations_account.electronic_monitoring_case_management_management_prod.id,
-        aws_organizations_account.electronic_monitoring.id,
         aws_organizations_account.electronic_monitoring_protective_monitoring.id,
         aws_organizations_account.electronic_monitoring_shared_logging.id,
         aws_organizations_account.electronic_monitoring_shared_networking.id,
