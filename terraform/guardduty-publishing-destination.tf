@@ -187,8 +187,8 @@ data "aws_iam_policy_document" "guardduty-kms-key-policy" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${local.caller_identity.id}:root",                          # Allow the root account to manage this key
-        "arn:aws:iam::${aws_organizations_account.organisation-security.id}:root" # Allow the organisation-security account to manage this key
+        "arn:aws:iam::${local.caller_identity.id}:root",      # Allow the root account to manage this key
+        "arn:aws:iam::${local.organisation_security_id}:root" # Allow the organisation-security account to manage this key
       ]
     }
   }
