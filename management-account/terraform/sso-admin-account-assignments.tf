@@ -78,7 +78,6 @@ locals {
         aws_organizations_account.electronic_monitoring_case_management_dev.id,
         aws_organizations_account.electronic_monitoring_case_management_preprod.id,
         aws_organizations_account.electronic_monitoring_case_management_prod.id,
-        aws_organizations_account.electronic_monitoring_archive_and_query_service.id,
         aws_organizations_account.electronic_monitoring_identity_and_access_management.id,
         aws_organizations_account.electronic_monitoring_infrastructure_dev.id,
         aws_organizations_account.electronic_monitoring_monitoring_and_mapping_dev.id,
