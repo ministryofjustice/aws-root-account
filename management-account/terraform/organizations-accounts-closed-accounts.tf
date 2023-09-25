@@ -37,3 +37,42 @@ resource "aws_organizations_account" "legal_aid_agency" {
     ]
   }
 }
+
+resource "aws_organizations_account" "moj_info_services_dev" {
+  name                       = "MoJ Info Services Dev"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "courtfinder")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = local.tags_hmcts
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
+
+# Electronic Monitoring Archive & Query Service
+resource "aws_organizations_account" "electronic_monitoring_archive_and_query_service" {
+  name                       = "Electronic Monitoring Archive & Query Service"
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-archive-query")
+  iam_user_access_to_billing = "ALLOW"
+  parent_id                  = aws_organizations_organizational_unit.closed_accounts.id
+
+  tags = merge(local.tags_electronic_monitoring, {
+
+  })
+
+  lifecycle {
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      name,
+      role_name,
+    ]
+  }
+}
