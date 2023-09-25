@@ -1,3 +1,5 @@
+# Moved to organisation security, leaving here whilst other guardduty resources are still dependant on it
+
 locals {
   guardduty-threatintelset = join("\n", [
     for file in fileset("./guardduty-threatintelset", "*.txt") :
