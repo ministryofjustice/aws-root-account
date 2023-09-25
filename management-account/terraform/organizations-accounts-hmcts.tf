@@ -64,6 +64,7 @@ resource "aws_organizations_account" "ministry_of_justice_courtfinder_prod" {
   }
 }
 
+# Contains IAC Fees - awaiting migration sign-off before closure
 resource "aws_organizations_account" "tp_hmcts" {
   name                       = "TP-HMCTS"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "TP-HMCTS")
