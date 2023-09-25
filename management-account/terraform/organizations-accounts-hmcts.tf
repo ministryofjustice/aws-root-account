@@ -2,6 +2,7 @@ locals {
   tags_hmcts = local.tags_business_units.hmcts
 }
 
+# Used to contain Help with Fees, Tax Tribunals, awaiting confirmation of DNS removal before deletion
 resource "aws_organizations_account" "hmcts_fee_remissions" {
   name                       = "HMCTS Fee Remissions"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "fee-remission")
@@ -23,6 +24,7 @@ resource "aws_organizations_account" "hmcts_fee_remissions" {
   }
 }
 
+# Contains Make a Plea - migrating October 2023
 resource "aws_organizations_account" "manchester_traffic_dev" {
   name                       = "Manchester Traffic Dev"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "manchester-traffic-dev")
@@ -43,6 +45,7 @@ resource "aws_organizations_account" "manchester_traffic_dev" {
   }
 }
 
+# Contains UTIAC Tribunals docs in S3 - migrating November 2023
 resource "aws_organizations_account" "ministry_of_justice_courtfinder_prod" {
   name                       = "Ministry of Justice Courtfinder Prod"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "courtfinder-prod")
@@ -79,6 +82,7 @@ resource "aws_organizations_account" "moj_info_services_dev" {
   }
 }
 
+# Contains IACFees legacy - awaiting business testing before migration completion
 resource "aws_organizations_account" "tp_hmcts" {
   name                       = "TP-HMCTS"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "TP-HMCTS")
