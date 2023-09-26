@@ -1,5 +1,3 @@
-# Moved to organisation security, leaving here whilst other guardduty resources are still dependant on it
-
 #########################################
 # Configures the publishing destination #
 # S3 bucket with a KMS key              #
@@ -10,14 +8,25 @@
 #########################################
 # See: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_exportfindings.html
 
-data "aws_iam_policy_document" "guardduty-publishing-destination-s3-bucket-policy" {
+locals {
+  tags_organisation_management = {
+    application            = "Organisation Management"
+    business-unit          = "Platforms"
+    infrastructure-support = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
+    is-production          = true
+    owner                  = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
+    source-code            = "github.com/ministryofjustice/aws-root-account"
+  }
+}
+
+data "aws_iam_policy_document" "guardduty_publishing_destination_s3_bucket_policy" {
   version = "2012-10-17"
 
   statement {
     sid       = "Allow GuardDuty to use the getBucketLocation operation"
     effect    = "Allow"
     actions   = ["s3:GetBucketLocation"]
-    resources = [aws_s3_bucket.guardduty-bucket.arn]
+    resources = [aws_s3_bucket.guardduty_bucket.arn]
 
     principals {
       type        = "Service"
@@ -29,7 +38,7 @@ data "aws_iam_policy_document" "guardduty-publishing-destination-s3-bucket-polic
     sid       = "Allow GuardDuty to upload objects to the bucket"
     effect    = "Allow"
     actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.guardduty-bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.guardduty_bucket.arn}/*"]
 
     principals {
       type        = "Service"
@@ -41,7 +50,7 @@ data "aws_iam_policy_document" "guardduty-publishing-destination-s3-bucket-polic
     sid       = "Deny unencrypted object uploads"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.guardduty-bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.guardduty_bucket.arn}/*"]
 
     principals {
       type        = "Service"
@@ -59,7 +68,7 @@ data "aws_iam_policy_document" "guardduty-publishing-destination-s3-bucket-polic
     sid       = "Deny incorrect encryption header"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.guardduty-bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.guardduty_bucket.arn}/*"]
 
     principals {
       type        = "Service"
@@ -77,7 +86,7 @@ data "aws_iam_policy_document" "guardduty-publishing-destination-s3-bucket-polic
     sid       = "Deny non-HTTPS access"
     effect    = "Deny"
     actions   = ["s3:*"]
-    resources = ["${aws_s3_bucket.guardduty-bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.guardduty_bucket.arn}/*"]
 
     principals {
       type        = "*"
@@ -92,9 +101,7 @@ data "aws_iam_policy_document" "guardduty-publishing-destination-s3-bucket-polic
   }
 }
 
-resource "aws_s3_bucket" "guardduty-bucket" {
-  # Set the provider to organisation-security, as that's where we manage GuardDuty
-  provider = aws.organisation-security-eu-west-2
+resource "aws_s3_bucket" "guardduty_bucket" {
 
   bucket_prefix = "moj-guardduty"
   acl           = "private"
@@ -127,17 +134,14 @@ resource "aws_s3_bucket" "guardduty-bucket" {
   }
 
   tags = merge(
-    local.tags-organisation-management, {
+    local.tags_organisation_management, {
       component = "Security"
     }
   )
 }
 
-resource "aws_s3_bucket_public_access_block" "guardduty-bucket-public-access-block" {
-  # Set the provider to organisation-security, as that's where we manage GuardDuty
-  provider = aws.organisation-security-eu-west-2
-
-  bucket = aws_s3_bucket.guardduty-bucket.id
+resource "aws_s3_bucket_public_access_block" "guardduty_bucket_public_access_block" {
+  bucket = aws_s3_bucket.guardduty_bucket.id
 
   # Block public ACLs
   block_public_acls = true
@@ -152,19 +156,16 @@ resource "aws_s3_bucket_public_access_block" "guardduty-bucket-public-access-blo
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_policy" "guardduty-bucket-policy" {
-  # Set the provider to organisation-security, as that's where we manage GuardDuty
-  provider = aws.organisation-security-eu-west-2
-
-  bucket = aws_s3_bucket.guardduty-bucket.id
-  policy = data.aws_iam_policy_document.guardduty-publishing-destination-s3-bucket-policy.json
+resource "aws_s3_bucket_policy" "guardduty_bucket_policy" {
+  bucket = aws_s3_bucket.guardduty_bucket.id
+  policy = data.aws_iam_policy_document.guardduty_publishing_destination_s3_bucket_policy.json
 }
 
 #########################################
 # KMS policy                            #
 #########################################
 # See: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_exportfindings.html
-data "aws_iam_policy_document" "guardduty-kms-key-policy" {
+data "aws_iam_policy_document" "guardduty_kms_key_policy" {
   statement {
     sid       = "Allow GuardDuty to use the key"
     effect    = "Allow"
@@ -189,25 +190,22 @@ data "aws_iam_policy_document" "guardduty-kms-key-policy" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${local.caller_identity.id}:root",      # Allow the root account to manage this key
-        "arn:aws:iam::${local.organisation_security_id}:root" # Allow the organisation-security account to manage this key
+        "arn:aws:iam::${data.aws_caller_identity.root.id}:root",   # Allow the root account to manage this key
+        "arn:aws:iam::${data.aws_caller_identity.current.id}:root" # Allow the organisation-security account to manage this key
       ]
     }
   }
 }
 
 resource "aws_kms_key" "guardduty" {
-  # Set the provider to organisation-security, as that's where we manage GuardDuty
-  provider = aws.organisation-security-eu-west-2
-
   description             = "KMS key for AWS GuardDuty to encrypt findings for publishing to S3"
   deletion_window_in_days = 30
   is_enabled              = true
   enable_key_rotation     = true
-  policy                  = data.aws_iam_policy_document.guardduty-kms-key-policy.json
+  policy                  = data.aws_iam_policy_document.guardduty_kms_key_policy.json
 
   tags = merge(
-    local.tags-organisation-management, {
+    local.tags_organisation_management, {
       component = "Security"
     }
   )

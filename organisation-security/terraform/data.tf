@@ -1,5 +1,9 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_caller_identity" "root" {
+  provider = aws.root
+}
+
 data "aws_organizations_organization" "default" {
   provider = aws.root
 }
