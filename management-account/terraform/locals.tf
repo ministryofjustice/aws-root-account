@@ -58,6 +58,21 @@ locals {
     ]
   }
 
+  root_account = merge(local.tags_business_units.platforms, {
+    application   = "AWS root account"
+    is-production = true
+    owner         = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
+  })
+
+  tags_organisation_management = {
+    application            = "Organisation Management"
+    business-unit          = "Platforms"
+    infrastructure-support = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
+    is-production          = true
+    owner                  = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
+    source-code            = "github.com/ministryofjustice/aws-root-account"
+  }
+
   # SSO
   sso = {
     email_suffix        = "@digital.justice.gov.uk"
