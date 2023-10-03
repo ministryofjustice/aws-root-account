@@ -143,5 +143,5 @@ locals {
     }
   }
 
-  guardduty_administrator_detector_ids = data.terraform_remote_state.management_account.guardduty_administrator_detector_ids
+  guardduty_administrator_detector_ids = data.terraform_remote_state.management_account.outputs.guardduty_administrator_detector_ids
 }

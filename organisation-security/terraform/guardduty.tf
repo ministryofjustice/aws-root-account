@@ -93,7 +93,7 @@ module "guardduty_us_west_1" {
 
   providers = { aws.delegated_administrator = aws.us-west-1 }
 
-  administrator_detector_id = local.guardduty_administrator_detector_ids.guardduty_us_west_1
+  administrator_detector_id = local.guardduty_administrator_detector_ids.us_west_1
 
   # Utilise ThreatIntelSet
   enable_threatintelset = false
