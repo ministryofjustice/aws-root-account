@@ -31,3 +31,12 @@ data "aws_organizations_organizational_units" "modernisation_platform_member" {
 data "aws_organizations_organizational_units" "opg" {
   parent_id = local.ou_opg
 }
+
+data "terraform_remote_state" "management_account" {
+  backend = "s3"
+  config = {
+    bucket = "moj-aws-root-account-terraform-state"
+    key    = "management-account/terraform.tfstate"
+    region = "eu-west-2"
+  }
+}

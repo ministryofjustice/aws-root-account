@@ -142,4 +142,6 @@ locals {
       if account.status == "ACTIVE" && account.name != "organisation-security"
     }
   }
+
+  guardduty_administrator_detector_ids = data.terraform_remote_state.management_account.outputs.guardduty_administrator_detector_ids
 }
