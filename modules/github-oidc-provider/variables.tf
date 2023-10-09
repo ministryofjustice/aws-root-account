@@ -10,3 +10,8 @@ variable "repository_with_owner" {
 variable "repository_branch" {
   description = "GitHub repository branch name for access (e.g. main)"
 }
+
+variable "organisation_security_account_id" {
+  description = "Organisation Security account ID"
+  default     = ""
+}
