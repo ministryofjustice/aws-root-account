@@ -14,7 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3.4.0
       - run: rm -r modules/ # remove modules from being security checked
-      - run: rm -r terraform/ # remove legacy terraform dir from being security checked
       - uses: aquasecurity/tfsec-sarif-action@v0.1.4
         with:
           tfsec_args: --force-all-dirs --soft-fail -m CRITICAL
