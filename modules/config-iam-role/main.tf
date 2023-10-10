@@ -11,7 +11,7 @@ locals {
 
 # Assume role policy for AWS Config
 # See: https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html
-data "aws_iam_policy_document" "assume-role-policy" {
+data "aws_iam_policy_document" "assume_role_policy" {
   version = "2012-10-17"
 
   statement {
@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "assume-role-policy" {
 
 # IAM role policy to access the Config S3 bucket
 # See: https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html
-data "aws_iam_policy_document" "iam-role-policy-for-s3" {
+data "aws_iam_policy_document" "iam_role_policy_for_s3" {
   version = "2012-10-17"
 
   statement {
@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "iam-role-policy-for-s3" {
 
 # IAM role policy for publishing to the SNS topics
 # See: https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html
-data "aws_iam_policy_document" "iam-role-policy-for-sns" {
+data "aws_iam_policy_document" "iam_role_policy_for_sns" {
   version = "2012-10-17"
 
   statement {
@@ -67,38 +67,38 @@ data "aws_iam_policy_document" "iam-role-policy-for-sns" {
 }
 
 # Create IAM role policies: S3
-resource "aws_iam_policy" "policy-s3" {
+resource "aws_iam_policy" "policy_s3" {
   name   = "AWSConfigRoleS3Access"
-  policy = data.aws_iam_policy_document.iam-role-policy-for-s3.json
+  policy = data.aws_iam_policy_document.iam_role_policy_for_s3.json
 }
 
 # Create IAM role policies: SNS
-resource "aws_iam_policy" "policy-sns" {
+resource "aws_iam_policy" "policy_sns" {
   name   = "AWSConfigRoleSNSAccess"
-  policy = data.aws_iam_policy_document.iam-role-policy-for-sns.json
+  policy = data.aws_iam_policy_document.iam_role_policy_for_sns.json
 }
 
 # Create role for AWS Config to use
 resource "aws_iam_role" "config" {
   name               = "AWSConfigRole"
-  assume_role_policy = data.aws_iam_policy_document.assume-role-policy.json
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
 # Attach managed AWS Config policy
 # See: https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html
-resource "aws_iam_role_policy_attachment" "managed-policy" {
+resource "aws_iam_role_policy_attachment" "managed_policy" {
   role       = aws_iam_role.config.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
 }
 
 # Attach policy for S3 access
-resource "aws_iam_role_policy_attachment" "s3-policy" {
+resource "aws_iam_role_policy_attachment" "s3_policy" {
   role       = aws_iam_role.config.name
-  policy_arn = aws_iam_policy.policy-s3.arn
+  policy_arn = aws_iam_policy.policy_s3.arn
 }
 
 # Attach policy for SNS access
-resource "aws_iam_role_policy_attachment" "sns-policy" {
+resource "aws_iam_role_policy_attachment" "sns_policy" {
   role       = aws_iam_role.config.name
-  policy_arn = aws_iam_policy.policy-sns.arn
+  policy_arn = aws_iam_policy.policy_sns.arn
 }

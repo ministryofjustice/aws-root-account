@@ -12,7 +12,7 @@ locals {
 
 # S3 bucket policy for a logging bucket in another account
 # See: https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-policy.html
-data "aws_iam_policy_document" "bucket-policy" {
+data "aws_iam_policy_document" "bucket_policy" {
   version = "2012-10-17"
 
   # Get bucket ACL
@@ -86,7 +86,7 @@ resource "aws_s3_bucket" "bucket" {
   tags = var.tags
 }
 
-resource "aws_s3_bucket_policy" "bucket-policy" {
+resource "aws_s3_bucket_policy" "bucket_policy" {
   bucket = aws_s3_bucket.bucket.id
-  policy = data.aws_iam_policy_document.bucket-policy.json
+  policy = data.aws_iam_policy_document.bucket_policy.json
 }
