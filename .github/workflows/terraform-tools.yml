@@ -38,5 +38,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }} # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
       - run: rm -r modules/ # remove modules from being linted
-      - run: rm -r terraform/ # remove legacy terraform dir from being linted
       - run: tflint -c $(realpath .tflint.hcl) -f compact --recursive
