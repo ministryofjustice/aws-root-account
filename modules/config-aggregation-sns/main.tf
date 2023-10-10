@@ -15,13 +15,13 @@ locals {
 
 # SNS topic policy for a SNS topic in another account
 # See: https://docs.aws.amazon.com/config/latest/developerguide/sns-topic-policy.html
-data "aws_iam_policy_document" "sns-topic" {
+data "aws_iam_policy_document" "sns_topic" {
   version = "2012-10-17"
 
   statement {
     effect    = "Allow"
     actions   = ["SNS:Publish"]
-    resources = [aws_sns_topic.sns-topic.arn]
+    resources = [aws_sns_topic.sns_topic.arn]
 
     principals {
       type        = "AWS"
@@ -30,23 +30,23 @@ data "aws_iam_policy_document" "sns-topic" {
   }
 }
 
-resource "aws_sns_topic" "sns-topic" {
+resource "aws_sns_topic" "sns_topic" {
   name              = "config-sns-topic"
   kms_master_key_id = aws_kms_key.config.id
 
   tags = var.tags
 }
 
-resource "aws_sns_topic_policy" "sns-topic" {
-  arn    = aws_sns_topic.sns-topic.arn
-  policy = data.aws_iam_policy_document.sns-topic.json
+resource "aws_sns_topic_policy" "sns_topic" {
+  arn    = aws_sns_topic.sns_topic.arn
+  policy = data.aws_iam_policy_document.sns_topic.json
 }
 
 ##############################
 # KMS key for the SNS topic  #
 # for AWS Config             #
 ##############################
-data "aws_iam_policy_document" "kms-key-policy" {
+data "aws_iam_policy_document" "kms_key_policy" {
   statement {
     sid       = "Allow Config to use the key"
     effect    = "Allow"
@@ -80,7 +80,7 @@ resource "aws_kms_key" "config" {
   deletion_window_in_days = 30
   is_enabled              = true
   enable_key_rotation     = true
-  policy                  = data.aws_iam_policy_document.kms-key-policy.json
+  policy                  = data.aws_iam_policy_document.kms_key_policy.json
 
   tags = var.tags
 }
