@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "read_only_role" {
     actions = ["sts:AssumeRole"]
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.root.id}:root"]
+      identifiers = ["arn:aws:iam::${local.root_account_id}:root"]
     }
   }
 }

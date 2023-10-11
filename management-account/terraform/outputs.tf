@@ -20,3 +20,7 @@ output "guardduty_administrator_detector_ids" {
     "sa_east_1"      = module.guardduty_sa_east_1.administrator_detector_id
   }
 }
+
+output "organizations_organization" {
+  value = aws_organizations_organization.default
+}

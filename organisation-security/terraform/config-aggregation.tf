@@ -4,7 +4,7 @@
 # in that you can do MRMAA without delivering configuration changes to a central S3 bucket.
 locals {
   enrolled_into_config = [
-    { id = data.aws_caller_identity.root.id, name = "MoJ root account" }
+    { id = local.root_account_id, name = "MoJ root account" }
   ]
 }
 
