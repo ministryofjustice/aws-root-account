@@ -26,6 +26,11 @@ resource "aws_fms_policy" "eu_west_2_shield_advanced_auto_remediate" {
     type = "SHIELD_ADVANCED"
     managed_service_data = jsonencode({
       type = "SHIELD_ADVANCED"
+      automaticResponseConfiguration = {
+        automaticResponseAction = null
+        automaticResponseStatus = "IGNORED"
+      }
+      overrideCustomerWebaclClassic  = false
     })
   }
 }
@@ -86,6 +91,11 @@ resource "aws_fms_policy" "eu_west_1_shield_advanced_auto_remediate" {
     type = "SHIELD_ADVANCED"
     managed_service_data = jsonencode({
       type = "SHIELD_ADVANCED"
+      automaticResponseConfiguration = {
+        automaticResponseAction = null
+        automaticResponseStatus = "IGNORED"
+      }
+      overrideCustomerWebaclClassic  = false
     })
   }
 }

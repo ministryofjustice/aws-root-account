@@ -46,6 +46,7 @@ module "cloudtrail_s3_bucket" {
 
   bucket_name = "cloudtrail-${random_integer.suffix.result}"
   bucket_acl  = "log-delivery-write"
+  object_ownership = "ObjectWriter"
 
   attach_policy        = true
   policy               = data.aws_iam_policy_document.cloudtrail_s3_bucket.json
