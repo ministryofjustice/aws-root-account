@@ -32,11 +32,11 @@ module "github_actions_apply_role" {
 
   source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=9d9a2d23cf569348cbdb665c979fcbaed76bb2f4" # v3.1.0
 
-  github_repositories = ["ministryofjustice/aws-root-account:ref:refs/heads/main"]
+  github_repositories = ["ministryofjustice/aws-root-account"]
   role_name           = "github-actions-apply"
   policy_arns         = ["arn:aws:iam::aws:policy/AdministratorAccess"]
   policy_jsons        = [data.aws_iam_policy_document.oidc_assume_role_apply.json]
-  subject_claim       = "pull_request"
+  subject_claim       = "ref:refs/heads/main"
   tags                = { "Name" = "GitHub Actions Apply" }
 
 }
