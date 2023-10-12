@@ -19,7 +19,7 @@ jobs:
       run:
         working-directory: ./management-account/terraform
     steps:
-      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
         with:
           role-to-assume: arn:aws:iam::${{secrets.AWS_ROOT_ACCOUNT_ID}}:role/github-actions-plan

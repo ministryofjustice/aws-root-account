@@ -12,7 +12,7 @@ jobs:
     permissions:
       security-events: write
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v4
       - run: rm -r modules/ # remove modules from being security checked
       - uses: aquasecurity/tfsec-sarif-action@v0.1.4
         with:
@@ -24,7 +24,7 @@ jobs:
   tflint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v4
       - uses: actions/cache@v3.3.1
         with:
           path: ~/.tflint.d/plugins
