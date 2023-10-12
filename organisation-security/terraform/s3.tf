@@ -44,8 +44,8 @@ module "cloudtrail_replication_s3_bucket" {
 module "cloudtrail_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name = "cloudtrail-${random_integer.suffix.result}"
-  bucket_acl  = "log-delivery-write"
+  bucket_name      = "cloudtrail-${random_integer.suffix.result}"
+  bucket_acl       = "log-delivery-write"
   object_ownership = "ObjectWriter"
 
   attach_policy        = true
