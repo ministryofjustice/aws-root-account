@@ -22,7 +22,7 @@ resource "aws_s3_bucket_acl" "default" {
 resource "aws_s3_bucket_ownership_controls" "default" {
   bucket = aws_s3_bucket.default.id
   rule {
-    object_ownership = "ObjectWriter"
+    object_ownership = var.object_ownership
   }
 }
 
