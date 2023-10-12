@@ -136,11 +136,48 @@ module "terraform_state_s3_bucket" {
 
   bucket_name = "moj-aws-root-account-terraform-state"
 
+  attach_policy = true
+  policy        = data.aws_iam_policy_document.terraform_state_s3_bucket.json
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        sse_algorithm = "aws:kms"
+        sse_algorithm     = "aws:kms"
+        kms_master_key_id = resource.aws_kms_key.terraform_state_s3_bucket.id
       }
+    }
+  }
+}
+
+data "aws_iam_policy_document" "terraform_state_s3_bucket" {
+  statement {
+    sid    = "AllowReadAccessFromSecurityAccount"
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject"
+    ]
+    resources = [
+      module.terraform_state_s3_bucket.bucket.arn,
+      "${module.terraform_state_s3_bucket.bucket.arn}/*"
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${resource.aws_organizations_account.organisation_security.id}:root"]
+    }
+  }
+
+  statement {
+    sid    = "AllowAccessFromSecurityAccount"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = ["${module.terraform_state_s3_bucket.bucket.arn}/organisation-security/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${resource.aws_organizations_account.organisation_security.id}:root"]
     }
   }
 }

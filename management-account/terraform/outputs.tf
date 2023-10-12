@@ -22,5 +22,6 @@ output "guardduty_administrator_detector_ids" {
 }
 
 output "organizations_organization" {
-  value = aws_organizations_organization.default
+  value       = aws_organizations_organization.default
+  description = "Organization details"
 }
