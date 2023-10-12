@@ -23,9 +23,9 @@ module "cloudtrail_replication_s3_bucket" {
   providers = {
     aws = aws.eu-west-1
   }
-  source = "../../modules/s3"
-
-  bucket_name = "cloudtrail--replication20210315101340520100000002"
+  source           = "../../modules/s3"
+  object_ownership = "ObjectWriter"
+  bucket_name      = "cloudtrail--replication20210315101340520100000002"
 
   attach_policy        = true
   require_ssl_requests = true
@@ -44,8 +44,9 @@ module "cloudtrail_replication_s3_bucket" {
 module "cloudtrail_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name = "cloudtrail-20210315101356188000000003"
-  bucket_acl  = "log-delivery-write"
+  bucket_name      = "cloudtrail-20210315101356188000000003"
+  bucket_acl       = "log-delivery-write"
+  object_ownership = "ObjectWriter"
 
   attach_policy        = true
   policy               = data.aws_iam_policy_document.cloudtrail_s3_bucket.json
@@ -120,6 +121,7 @@ module "log_bucket_s3_bucket" {
 
   attach_policy        = true
   require_ssl_requests = true
+  object_ownership     = "ObjectWriter"
 
   server_side_encryption_configuration = {
     rule = {

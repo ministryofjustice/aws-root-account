@@ -61,3 +61,8 @@ variable "require_ssl_requests" {
   type    = bool
   default = false
 }
+
+variable "object_ownership" {
+  type    = string
+  default = "BucketOwnerEnforced"
+}
