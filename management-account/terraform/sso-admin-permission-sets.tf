@@ -651,6 +651,8 @@ data "aws_iam_policy_document" "techops_operator" {
       "codepipeline:RetryStageExecution",
       "codepipeline:PutApprovalResult",
       "ssm:PutParameter",
+      "directconnect:*",
+      "ec2:DescribeVpnGateways"
     ]
 
     resources = ["*"]
