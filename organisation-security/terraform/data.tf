@@ -1,15 +1,7 @@
 data "aws_caller_identity" "current" {}
 
-data "aws_caller_identity" "root" {
-  provider = aws.root
-}
-
-data "aws_organizations_organization" "default" {
-  provider = aws.root
-}
-
 data "aws_organizations_organizational_units" "organizational_units" {
-  parent_id = data.aws_organizations_organization.default.roots[0].id
+  parent_id = local.organizations_organization.roots[0].id
 }
 
 data "aws_organizations_organizational_units" "platforms_and_architecture" {
