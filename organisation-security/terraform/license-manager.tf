@@ -97,7 +97,7 @@ resource "aws_cloudformation_stack" "oracleblts" {
     IsDelegatedAdministrator = true
     ArtifactsS3Bucket        = "license-manager-artifact-bucket"
     AdministratorAccountId   = data.aws_caller_identity.current.id
-    OrganizationId           = data.aws_organizations_organization.default.id
+    OrganizationId           = local.organizations_organization.id
     TargetOUs                = local.ou_modernisation_platform_member_id
     TargetRegions            = "eu-west-2"
     TargetKey                = "tag:OracleDbLTS-ManagedInstance"

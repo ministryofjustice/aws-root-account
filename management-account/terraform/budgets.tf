@@ -101,7 +101,6 @@ resource "aws_budgets_budget" "laa" {
       aws_organizations_account.laa_staging.id,
       aws_organizations_account.laa_test.id,
       aws_organizations_account.laa_uat.id,
-      aws_organizations_account.legal_aid_agency.id,
     ]
   }
 

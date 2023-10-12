@@ -24,7 +24,8 @@ resource "aws_iam_account_password_policy" "default" {
 # OIDC Provider for GitHub actions #
 ####################################
 module "github_oidc" {
-  source                = "../../modules/github-oidc-provider"
-  repository_with_owner = "ministryofjustice/aws-root-account"
-  repository_branch     = "main"
+  source                           = "../../modules/github-oidc-provider"
+  repository_with_owner            = "ministryofjustice/aws-root-account"
+  repository_branch                = "main"
+  organisation_security_account_id = aws_organizations_account.organisation_security.id
 }

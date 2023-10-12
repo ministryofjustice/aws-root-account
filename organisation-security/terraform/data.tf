@@ -1,15 +1,7 @@
 data "aws_caller_identity" "current" {}
 
-data "aws_caller_identity" "root" {
-  provider = aws.root
-}
-
-data "aws_organizations_organization" "default" {
-  provider = aws.root
-}
-
 data "aws_organizations_organizational_units" "organizational_units" {
-  parent_id = data.aws_organizations_organization.default.roots[0].id
+  parent_id = local.organizations_organization.roots[0].id
 }
 
 data "aws_organizations_organizational_units" "platforms_and_architecture" {
@@ -30,4 +22,13 @@ data "aws_organizations_organizational_units" "modernisation_platform_member" {
 
 data "aws_organizations_organizational_units" "opg" {
   parent_id = local.ou_opg
+}
+
+data "terraform_remote_state" "management_account" {
+  backend = "s3"
+  config = {
+    bucket = "moj-aws-root-account-terraform-state"
+    key    = "management-account/terraform.tfstate"
+    region = "eu-west-2"
+  }
 }

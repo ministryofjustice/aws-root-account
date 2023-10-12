@@ -1,11 +1,19 @@
 locals {
+  organizations_organization = data.terraform_remote_state.management_account.outputs.organizations_organization
+
+  root_account_id = coalesce([
+    for account in local.organizations_organization.accounts :
+    account.id
+    if account.name == "MOJ Master"
+  ]...)
+
   organisation_security_account_id = coalesce([
-    for account in data.aws_organizations_organization.default.accounts :
+    for account in local.organizations_organization.accounts :
     account.id
     if account.name == "organisation-security"
   ]...)
 
-  organisation_account_numbers = [for account in data.aws_organizations_organization.default.accounts : account.id]
+  organisation_account_numbers = [for account in local.organizations_organization.accounts : account.id]
 
   # AWS Organizational Units
   ou_opg = coalesce([
@@ -137,9 +145,11 @@ locals {
   # Accounts map
   accounts = {
     active_only_not_self : {
-      for account in data.aws_organizations_organization.default.accounts :
+      for account in local.organizations_organization.accounts :
       account.name => account.id
       if account.status == "ACTIVE" && account.name != "organisation-security"
     }
   }
+
+  guardduty_administrator_detector_ids = data.terraform_remote_state.management_account.outputs.guardduty_administrator_detector_ids
 }

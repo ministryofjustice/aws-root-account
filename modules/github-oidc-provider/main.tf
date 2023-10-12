@@ -68,6 +68,14 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    resources = ["arn:aws:iam::${var.organisation_security_account_id}:role/ReadOnly"]
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "extra_permissions_plan" {
@@ -175,5 +183,13 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "sso:*AccountAssignment*"
     ]
     resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    resources = ["arn:aws:iam::${var.organisation_security_account_id}:role/ReadOnly"]
   }
 }
