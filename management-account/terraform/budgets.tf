@@ -45,8 +45,6 @@ resource "aws_budgets_budget" "hmpps_delius" {
       aws_organizations_account.alfresco_non_prod.id,
       aws_organizations_account.delius_core_non_prod.id,
       aws_organizations_account.hmpps_cr_jira_production.id,
-      aws_organizations_account.hmpps_cr_jitbit_non_production.id,
-      aws_organizations_account.hmpps_cr_jitbit_production.id,
       aws_organizations_account.hmpps_cr_unpaid_work_non_production.id,
       aws_organizations_account.hmpps_cr_unpaid_work_production.id,
       aws_organizations_account.hmpps_delius_mis_non_prod.id,
@@ -103,7 +101,6 @@ resource "aws_budgets_budget" "laa" {
       aws_organizations_account.laa_staging.id,
       aws_organizations_account.laa_test.id,
       aws_organizations_account.laa_uat.id,
-      aws_organizations_account.legal_aid_agency.id,
     ]
   }
 

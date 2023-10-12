@@ -39,8 +39,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
         aws_organizations_account.hmpps_cr_jira_production.id,
-        aws_organizations_account.hmpps_cr_jitbit_non_production.id,
-        aws_organizations_account.hmpps_cr_jitbit_production.id,
         aws_organizations_account.hmpps_cr_unpaid_work_non_production.id,
         aws_organizations_account.hmpps_cr_unpaid_work_production.id,
         aws_organizations_account.alfresco_non_prod.id,
@@ -65,8 +63,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.hmpps_cr_jira_production.id,
-        aws_organizations_account.hmpps_cr_jitbit_non_production.id,
-        aws_organizations_account.hmpps_cr_jitbit_production.id,
         aws_organizations_account.hmpps_cr_unpaid_work_non_production.id,
         aws_organizations_account.hmpps_cr_unpaid_work_production.id,
       ]
@@ -82,13 +78,11 @@ locals {
         aws_organizations_account.electronic_monitoring_case_management_dev.id,
         aws_organizations_account.electronic_monitoring_case_management_preprod.id,
         aws_organizations_account.electronic_monitoring_case_management_prod.id,
-        aws_organizations_account.electronic_monitoring_archive_and_query_service.id,
         aws_organizations_account.electronic_monitoring_identity_and_access_management.id,
         aws_organizations_account.electronic_monitoring_infrastructure_dev.id,
         aws_organizations_account.electronic_monitoring_monitoring_and_mapping_dev.id,
         aws_organizations_account.electronic_monitoring_case_management_networking_prod.id,
         aws_organizations_account.electronic_monitoring_case_management_management_prod.id,
-        aws_organizations_account.electronic_monitoring.id,
         aws_organizations_account.electronic_monitoring_protective_monitoring.id,
         aws_organizations_account.electronic_monitoring_shared_logging.id,
         aws_organizations_account.electronic_monitoring_shared_networking.id,
@@ -214,9 +208,7 @@ locals {
       github_team        = "secops",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
-        aws_organizations_account.security_operations_development.id,
         aws_organizations_account.security_operations_pre_production.id,
-        aws_organizations_account.security_operations_production.id,
       ]
     },
     {
@@ -329,13 +321,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.waf_viewer.arn,
       account_ids = [
         aws_organizations_account.organisation_security.id
-      ]
-    },
-    {
-      github_team        = "secops-dev",
-      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
-      account_ids = [
-        aws_organizations_account.security_operations_development.id
       ]
     },
     {

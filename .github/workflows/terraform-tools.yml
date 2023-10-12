@@ -12,9 +12,8 @@ jobs:
     permissions:
       security-events: write
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v4
       - run: rm -r modules/ # remove modules from being security checked
-      - run: rm -r terraform/ # remove legacy terraform dir from being security checked
       - uses: aquasecurity/tfsec-sarif-action@v0.1.4
         with:
           tfsec_args: --force-all-dirs --soft-fail -m CRITICAL
@@ -25,12 +24,12 @@ jobs:
   tflint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v4
       - uses: actions/cache@v3.3.1
         with:
           path: ~/.tflint.d/plugins
           key: tflint-${{ hashFiles('.tflint.hcl') }}
-      - uses: terraform-linters/setup-tflint@v3.0.0
+      - uses: terraform-linters/setup-tflint@v4.0.0
         with:
           tflint_version: latest
       - run: tflint --version
@@ -38,5 +37,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }} # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
       - run: rm -r modules/ # remove modules from being linted
-      - run: rm -r terraform/ # remove legacy terraform dir from being linted
       - run: tflint -c $(realpath .tflint.hcl) -f compact --recursive

@@ -9,7 +9,9 @@ data "aws_caller_identity" "current" {}
 ###############################
 
 # Enable Security Hub
-resource "aws_securityhub_account" "default" {}
+resource "aws_securityhub_account" "default" {
+  control_finding_generator = "STANDARD_CONTROL"
+}
 
 # Subscribe to AWS Foundational Security Best Practices v1.0.0
 resource "aws_securityhub_standards_subscription" "default_aws_foundational_security_best_practices" {
@@ -80,10 +82,11 @@ resource "aws_securityhub_organization_admin_account" "default" {
 # Configure organisational settings
 resource "aws_securityhub_organization_configuration" "default" {
   for_each    = var.is_delegated_administrator ? toset(["delegated_administrator"]) : []
-  auto_enable = false
+  auto_enable = true
 }
 
 # Add members from the organisation
+# This is now down automatically when accounts are created
 resource "aws_securityhub_member" "default" {
   depends_on = [aws_securityhub_account.default]
   for_each   = var.is_delegated_administrator ? var.enrolled_accounts : {}

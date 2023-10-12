@@ -107,9 +107,9 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_sso_administra
 
 module "modernisation_platform_github_actions_role" {
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v2.0.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v3.1.0"
 
-  github_repositories = ["ministryofjustice/modernisation-platform:*"]
+  github_repositories = ["ministryofjustice/modernisation-platform"]
   role_name           = "ModernisationPlatformGithubActionsRole"
   policy_arns         = [aws_iam_policy.terraform_organisation_management_policy.arn]
   policy_jsons        = [data.aws_iam_policy_document.modernisation_platform_github_actions_additional_policy.json]

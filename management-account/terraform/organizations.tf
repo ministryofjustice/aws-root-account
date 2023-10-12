@@ -12,6 +12,7 @@ resource "aws_organizations_organization" "default" {
     "inspector2.amazonaws.com",
     "ipam.amazonaws.com",
     "license-management.marketplace.amazonaws.com",
+    "license-manager-linux-subscriptions.amazonaws.com",
     "license-manager.amazonaws.com",
     "license-manager.member-account.amazonaws.com",
     "macie.amazonaws.com",
@@ -22,6 +23,7 @@ resource "aws_organizations_organization" "default" {
     "sso.amazonaws.com",
     "storage-lens.s3.amazonaws.com",
     "tagpolicies.tag.amazonaws.com",
+    "member.org.stacksets.cloudformation.amazonaws.com",
   ]
 
   enabled_policy_types = [
@@ -32,3 +34,12 @@ resource "aws_organizations_organization" "default" {
 
   feature_set = "ALL"
 }
+
+# Delegate Cloudformation Stacksets to organisation-security
+resource "aws_organizations_delegated_administrator" "stacksets_organisation_security" {
+  account_id        = aws_organizations_account.organisation_security.id
+  service_principal = "member.org.stacksets.cloudformation.amazonaws.com"
+}
+
+# Enable RAM sharing with the organization without requiring acceptors
+resource "aws_ram_sharing_with_organization" "default" {}

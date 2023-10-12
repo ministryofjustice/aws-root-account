@@ -13,27 +13,23 @@ resource "aws_iam_openid_connect_provider" "this" {
 # Create roles
 resource "aws_iam_role" "plan" {
   name               = "github-actions-plan"
-  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role_plan.json
 }
 
-data "aws_iam_policy_document" "github_oidc_assume_role" {
+data "aws_iam_policy_document" "github_oidc_assume_role_plan" {
   version = "2012-10-17"
-
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRoleWithWebIdentity"]
-
     principals {
       type        = "Federated"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"]
     }
-
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:aud"
       values   = ["sts.amazonaws.com"]
     }
-
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
@@ -42,14 +38,14 @@ data "aws_iam_policy_document" "github_oidc_assume_role" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "read_only" {
+resource "aws_iam_role_policy_attachment" "read_only_plan" {
   role       = aws_iam_role.plan.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 # Add actions missing from arn:aws:iam::aws:policy/ReadOnlyAccess
 resource "aws_iam_policy" "extra_permissions_plan" {
-  name        = "github-actions"
+  name        = "github-actions-plan"
   path        = "/"
   description = "A policy for extra permissions for GitHub Actions"
 
@@ -69,9 +65,16 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
       "identitystore:DescribeGroup",
       "logs:ListTagsForResource",
       "secretsmanager:GetSecretValue",
-      "kms:Decrypt" # for CommonFate
     ]
     resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    resources = ["arn:aws:iam::${var.organisation_security_account_id}:role/ReadOnly"]
   }
 }
 
@@ -84,7 +87,34 @@ resource "aws_iam_role_policy_attachment" "extra_permissions_plan" {
 
 resource "aws_iam_role" "apply" {
   name               = "github-actions-apply"
-  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.github_oidc_assume_role_apply.json
+}
+
+resource "aws_iam_role_policy_attachment" "read_only_apply" {
+  role       = aws_iam_role.apply.name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+data "aws_iam_policy_document" "github_oidc_assume_role_apply" {
+  version = "2012-10-17"
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:${var.repository_with_owner}:ref:refs/heads/main"]
+    }
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "apply" {
@@ -104,45 +134,62 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
   statement {
     effect = "Allow"
     actions = [
-      "iam:*",
+      "account:*AlternateContact",
+      "apigateway:*",
       "budgets:*",
-      "cloudtrail:*",
-      "logs:*",
-      "config:*",
       "ce:*",
+      "cloudtrail:*",
+      "config:*",
+      "cur:DescribeReportDefinitions",
+      "events:*",
       "fms:*",
       "guardduty:*",
+      "iam:*",
+      "identitystore:ListGroups",
+      "identitystore:GetGroupId",
+      "identitystore:DescribeGroup",
+      "kms:Decrypt",
       "lambda:*",
       "license-manager:*",
+      "logs:*",
+      "organizations:AddAccountToOrganization",
+      "organizations:CreateAccount",
+      "organizations:CreateOrganizationalUnit",
+      "organizations:CreatePolicy",
+      "organizations:DescribeAccount",
+      "organizations:DescribeCreateAccountStatus",
+      "organizations:DescribeOrganization",
+      "organizations:DisablePolicyType",
+      "organizations:EnablePolicyType",
+      "organizations:ListAccounts",
+      "organizations:ListAccountsForParent",
+      "organizations:ListOrganizationalUnitsForParent",
+      "organizations:ListParents",
+      "organizations:ListPoliciesForTarget",
+      "organizations:ListRoots",
+      "organizations:MoveAccount",
+      "organizations:MoveOrganizationalUnit",
+      "organizations:TagResource",
+      "organizations:UpdateOrganizationalUnit",
+      "organizations:UpdatePolicy",
+      "organizations:UntagResource",
       "route53:*",
       "s3:*",
       "secretsmanager:*",
       "securityhub:*",
       "sns:*",
       "sso-directory:*",
-      "organizations:DescribeAccount",
-      "organizations:DescribeCreateAccountStatus",
-      "organizations:ListAccounts",
-      "kms:Decrypt",
-      "organizations:ListAccountsForParent",
-      "organizations:ListOrganizationalUnitsForParent",
-      "organizations:CreateOrganizationalUnit",
-      "organizations:MoveAccount",
-      "organizations:MoveOrganizationalUnit",
-      "organizations:UpdateOrganizationalUnit",
-      "organizations:AddAccountToOrganization",
-      "organizations:EnablePolicyType",
-      "organizations:DisablePolicyType",
-      "organizations:ListPoliciesForTarget",
-      "organizations:ListRoots",
-      "organizations:DescribeOrganization",
-      "organizations:ListParents",
-      "organizations:TagResource",
-      "organizations:UntagResource",
-      "organizations:UpdatePolicy",
-      "organizations:CreatePolicy",
-      "organizations:CreateAccount"
+      "sso:*PermissionSet*",
+      "sso:*AccountAssignment*"
     ]
     resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    resources = ["arn:aws:iam::${var.organisation_security_account_id}:role/ReadOnly"]
   }
 }

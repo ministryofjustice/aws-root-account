@@ -177,6 +177,36 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platfo
   }
 }
 
+# Modernisation Platform data engineer
+resource "aws_ssoadmin_permission_set" "modernisation_platform_data_mwaa_user" {
+  name             = "modernisation-platform-mwaa-user"
+  description      = "Modernisation Platform: data engineering mwaa user"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_data_mwaa_user" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_data_mwaa_user.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_data_mwaa_user" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.modernisation_platform_data_mwaa_user.json
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_data_mwaa_user.arn
+}
+
+data "aws_iam_policy_document" "modernisation_platform_data_mwaa_user" {
+  statement {
+    actions = [
+      "airflow:CreateWebLoginToken"
+    ]
+    resources = ["arn:aws:airflow:*:*:role/*/User"]
+  }
+}
+
 # Modernisation Platform sandbox
 resource "aws_ssoadmin_permission_set" "modernisation_platform_sandbox" {
   name             = "modernisation-platform-sandbox"
@@ -249,7 +279,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platfo
   }
 }
 
-# Modernisation Platform reporting operations 
+# Modernisation Platform reporting operations
 resource "aws_ssoadmin_permission_set" "modernisation_platform_reporting_operations" {
   name             = "mp-reporting-operations"
   description      = "Modernisation Platform: reporting-operations tenancy"
@@ -575,6 +605,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg_viewer" {
 # - allow managing EC2 instances
 # - allow releasing of CodePipelines
 # - allow access to support:*
+# - allow updating SSM Parameters:*
 resource "aws_ssoadmin_permission_set" "techops_operator" {
   name             = "techops-operator"
   description      = "Technical Operations operator"
@@ -619,6 +650,7 @@ data "aws_iam_policy_document" "techops_operator" {
       "codepipeline:DisableStageTransition",
       "codepipeline:RetryStageExecution",
       "codepipeline:PutApprovalResult",
+      "ssm:PutParameter",
     ]
 
     resources = ["*"]

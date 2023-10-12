@@ -197,14 +197,16 @@ variable "finance_team" {
     # Finance business partners
     "NickiStowe",
     "TraceyBartonWilliams",
+    "BrianKing",
 
     # Digital finance team
     "TraceyCampbell",
-    "AdeoluAdelaja",
     "DavidCooper",
+    "DanielUkponmwan",
+    "MarkAstley",
 
     # Accounting
-    "AnthonyTimms",
+    "ColinMcDonald",
   ]
 }
 
