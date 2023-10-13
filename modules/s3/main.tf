@@ -4,6 +4,7 @@
 #tfsec:ignore:aws-s3-enable-bucket-logging
 resource "aws_s3_bucket" "default" {
   bucket        = var.bucket_name
+  bucket_prefix = var.bucket_prefix
   force_destroy = var.force_destroy
 
   tags = var.additional_tags
@@ -59,6 +60,37 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
         content {
           sse_algorithm     = apply_server_side_encryption_by_default.value.sse_algorithm
           kms_master_key_id = try(apply_server_side_encryption_by_default.value.kms_master_key_id, null)
+        }
+      }
+    }
+  }
+}
+
+#############################
+# Object Lock Configuration #
+#############################
+resource "aws_s3_bucket_object_lock_configuration" "guardduty_bucket" {
+  for_each = var.object_lock_enabled ? toset(["enabled"]) : []
+  bucket   = aws_s3_bucket.default.id
+
+  # rule {
+  #   # There are two modes of retention: Governance, or Compliance
+  #   # Governance is a soft retention period, whereas Compliance is a legal hold
+  #   # that can't be bypassed and requires you to delete an AWS account in its entirety to bypass it
+  #   # See: https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html
+  #   default_retention = var.object_lock_retention
+  # }
+
+  dynamic "rule" {
+    for_each = try(flatten([var.object_lock_retention["rule"]]), [])
+
+    content {
+      dynamic "default_retention" {
+        for_each = try([rule.value.default_retention], [])
+
+        content {
+          mode = default_retention.value.mode
+          days = default_retention.value.days
         }
       }
     }

@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "guardduty_publishing_destination_s3_bucket_polic
     sid       = "Allow GuardDuty to use the getBucketLocation operation"
     effect    = "Allow"
     actions   = ["s3:GetBucketLocation"]
-    resources = [aws_s3_bucket.guardduty_bucket.arn]
+    resources = [module.guardduty_publishing_destination_s3_bucket.bucket.arn]
 
     principals {
       type        = "Service"
@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "guardduty_publishing_destination_s3_bucket_polic
     sid       = "Allow GuardDuty to upload objects to the bucket"
     effect    = "Allow"
     actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.guardduty_bucket.arn}/*"]
+    resources = ["${module.guardduty_publishing_destination_s3_bucket.bucket.arn}/*"]
 
     principals {
       type        = "Service"
@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "guardduty_publishing_destination_s3_bucket_polic
     sid       = "Deny unencrypted object uploads"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.guardduty_bucket.arn}/*"]
+    resources = ["${module.guardduty_publishing_destination_s3_bucket.bucket.arn}/*"]
 
     principals {
       type        = "Service"
@@ -68,7 +68,7 @@ data "aws_iam_policy_document" "guardduty_publishing_destination_s3_bucket_polic
     sid       = "Deny incorrect encryption header"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.guardduty_bucket.arn}/*"]
+    resources = ["${module.guardduty_publishing_destination_s3_bucket.bucket.arn}/*"]
 
     principals {
       type        = "Service"
@@ -86,7 +86,7 @@ data "aws_iam_policy_document" "guardduty_publishing_destination_s3_bucket_polic
     sid       = "Deny non-HTTPS access"
     effect    = "Deny"
     actions   = ["s3:*"]
-    resources = ["${aws_s3_bucket.guardduty_bucket.arn}/*"]
+    resources = ["${module.guardduty_publishing_destination_s3_bucket.bucket.arn}/*"]
 
     principals {
       type        = "*"
@@ -101,64 +101,39 @@ data "aws_iam_policy_document" "guardduty_publishing_destination_s3_bucket_polic
   }
 }
 
-resource "aws_s3_bucket" "guardduty_bucket" {
+module "guardduty_publishing_destination_s3_bucket" {
+  source = "../../modules/s3"
 
   bucket_prefix = "moj-guardduty"
-  acl           = "private"
 
-  object_lock_configuration {
-    object_lock_enabled = "Enabled"
-    rule {
-      # There are two modes of retention: Governance, or Compliance
-      # Governance is a soft retention period, whereas Compliance is a legal hold
-      # that can't be bypassed and requires you to delete an AWS account in its entirety to bypass it
-      # See: https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html
-      default_retention {
+  attach_policy = true
+  policy        = data.aws_iam_policy_document.guardduty_publishing_destination_s3_bucket_policy.json
+
+  enable_versioning   = true
+  object_lock_enabled = true
+  object_lock_retention = {
+    rule = {
+      default_retention = {
         mode = "GOVERNANCE"
         days = 60
       }
     }
   }
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
         kms_master_key_id = aws_kms_key.guardduty.arn
         sse_algorithm     = "aws:kms"
       }
     }
   }
 
-  versioning {
-    enabled = true
-  }
-
-  tags = merge(
+  additional_tags = merge(
     local.tags_organisation_management, {
       component = "Security"
     }
   )
-}
-
-resource "aws_s3_bucket_public_access_block" "guardduty_bucket_public_access_block" {
-  bucket = aws_s3_bucket.guardduty_bucket.id
-
-  # Block public ACLs
-  block_public_acls = true
-
-  # Block public bucket policies
-  block_public_policy = true
-
-  # Ignore public ACLs
-  ignore_public_acls = true
-
-  # Restrict public bucket policies
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_policy" "guardduty_bucket_policy" {
-  bucket = aws_s3_bucket.guardduty_bucket.id
-  policy = data.aws_iam_policy_document.guardduty_publishing_destination_s3_bucket_policy.json
 }
 
 #########################################
