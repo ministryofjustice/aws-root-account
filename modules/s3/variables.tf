@@ -1,5 +1,11 @@
 variable "bucket_name" {
-  type = string
+  type    = string
+  default = null
+}
+
+variable "bucket_prefix" {
+  type    = string
+  default = null
 }
 
 variable "force_destroy" {
@@ -65,4 +71,14 @@ variable "require_ssl_requests" {
 variable "object_ownership" {
   type    = string
   default = "BucketOwnerEnforced"
+}
+
+variable "object_lock_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "object_lock_retention" {
+  type    = any
+  default = {}
 }

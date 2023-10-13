@@ -47,7 +47,7 @@ module "guardduty_us_east_1" {
   # Automatically enable GuardDuty for us-east-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
   administrator_tags = merge(
@@ -56,7 +56,7 @@ module "guardduty_us_east_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -75,7 +75,7 @@ module "guardduty_us_east_2" {
   # Automatically enable GuardDuty for us-east-2
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
   administrator_tags = merge(
@@ -84,7 +84,7 @@ module "guardduty_us_east_2" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -103,7 +103,7 @@ module "guardduty_us_west_1" {
   # Automatically enable GuardDuty for us-west-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
   administrator_tags = merge(
@@ -112,7 +112,7 @@ module "guardduty_us_west_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -131,7 +131,7 @@ module "guardduty_us_west_2" {
   # Automatically enable GuardDuty for us-west-2
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -141,7 +141,7 @@ module "guardduty_us_west_2" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -163,7 +163,7 @@ module "guardduty_ap_south_1" {
   # Automatically enable GuardDuty for ap-south-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -173,7 +173,7 @@ module "guardduty_ap_south_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -192,7 +192,7 @@ module "guardduty_ap_northeast_3" {
   # Automatically enable GuardDuty for ap-northeast-3
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -202,7 +202,7 @@ module "guardduty_ap_northeast_3" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -221,7 +221,7 @@ module "guardduty_ap_northeast_2" {
   # Automatically enable GuardDuty for ap-northeast-2
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -231,7 +231,7 @@ module "guardduty_ap_northeast_2" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -250,7 +250,7 @@ module "guardduty_ap_southeast_1" {
   # Automatically enable GuardDuty for ap-southeast-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -260,7 +260,7 @@ module "guardduty_ap_southeast_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -279,7 +279,7 @@ module "guardduty_ap_southeast_2" {
   # Automatically enable GuardDuty for ap-southeast-2
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -289,7 +289,7 @@ module "guardduty_ap_southeast_2" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -308,7 +308,7 @@ module "guardduty_ap_northeast_1" {
   # Automatically enable GuardDuty for ap-northeast-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -318,7 +318,7 @@ module "guardduty_ap_northeast_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -340,7 +340,7 @@ module "guardduty_ca_central_1" {
   # Automatically enable GuardDuty for ca-central-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -350,7 +350,7 @@ module "guardduty_ca_central_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -372,7 +372,7 @@ module "guardduty_eu_central_1" {
   # Automatically enable GuardDuty for eu-central-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -382,7 +382,7 @@ module "guardduty_eu_central_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -401,7 +401,7 @@ module "guardduty_eu_west_1" {
   # Automatically enable GuardDuty for eu-west-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -411,7 +411,7 @@ module "guardduty_eu_west_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -430,7 +430,7 @@ module "guardduty_eu_west_2" {
   # Automatically enable GuardDuty for eu-west-2
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -440,7 +440,7 @@ module "guardduty_eu_west_2" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -459,7 +459,7 @@ module "guardduty_eu_west_3" {
   # Automatically enable GuardDuty for eu-west-3
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -469,7 +469,7 @@ module "guardduty_eu_west_3" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -488,7 +488,7 @@ module "guardduty_eu_north_1" {
   # Automatically enable GuardDuty for eu-north-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -498,7 +498,7 @@ module "guardduty_eu_north_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
 
@@ -520,7 +520,7 @@ module "guardduty_sa_east_1" {
   # Automatically enable GuardDuty for sa-east-1
   auto_enable = true
 
-  destination_arn = aws_s3_bucket.guardduty_bucket.arn
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
   kms_key_arn     = aws_kms_key.guardduty.arn
 
 
@@ -530,6 +530,6 @@ module "guardduty_sa_east_1" {
   })
 
   depends_on = [
-    aws_s3_bucket_policy.guardduty_bucket_policy
+    module.guardduty_publishing_destination_s3_bucket
   ]
 }
