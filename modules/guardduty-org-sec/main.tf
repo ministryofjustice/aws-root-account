@@ -8,8 +8,8 @@
 resource "aws_guardduty_organization_configuration" "delegated_administrator" {
   provider = aws.delegated_administrator
 
-  detector_id = var.administrator_detector_id
-  auto_enable = var.auto_enable
+  detector_id                      = var.administrator_detector_id
+  auto_enable_organization_members = var.auto_enable ? "NEW" : "NONE"
 
   # Auto-enable S3 logs to be analysed for new accounts in the AWS Organization
   datasources {
