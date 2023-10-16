@@ -6,15 +6,15 @@
 module "oracle_rds_license_configurations" {
   source = "../../modules/license-configuration"
   for_each = {
-    "OracleDbSELicenseConfigurationRDS"  = { description = "Oracle Database Standard Edition (Amazon RDS)" },
-    "OracleDbSE1LicenseConfigurationRDS" = { description = "Oracle Database Standard Edition One (Amazon RDS)" },
+    "OracleDbSELicenseConfigurationRDS"   = { description = "Oracle Database Standard Edition (Amazon RDS)" },
+    "OracleDbSE1LicenseConfigurationRDS"  = { description = "Oracle Database Standard Edition One (Amazon RDS)" },
     "OracleDbSE2LicenseConfigurationRDS"  = { description = "Oracle Database Standard Edition Two (Amazon RDS)" },
-    "OracleDbEELicenseConfigurationRDS"  = { description = "Oracle Database Enterprise Edition (Amazon RDS)" },
+    "OracleDbEELicenseConfigurationRDS"   = { description = "Oracle Database Enterprise Edition (Amazon RDS)" },
     "OracleDbADGLicenseConfigurationRDS"  = { description = "Oracle Database Active Data Guard (Amazon RDS)" },
-    "OracleDbLSLicenseConfigurationRDS"  = { description = "Oracle Database Label Security (Amazon RDS)" },
-    "OracleDbOLAPLicenseConfigurationRDS"  = { description = "Oracle Database Oracle On-Line Analytical Processing (OLAP) (Amazon RDS)" },
-    "OracleDbDPLicenseConfigurationRDS"  = { description = "Oracle Database Diagnostic Pack for SQLT (Amazon RDS)" },
-    "OracleDbTPLicenseConfigurationRDS"  = { description = "Oracle Database Tuning Pack for SQLT (Amazon RDS)" }
+    "OracleDbLSLicenseConfigurationRDS"   = { description = "Oracle Database Label Security (Amazon RDS)" },
+    "OracleDbOLAPLicenseConfigurationRDS" = { description = "Oracle Database Oracle On-Line Analytical Processing (OLAP) (Amazon RDS)" },
+    "OracleDbDPLicenseConfigurationRDS"   = { description = "Oracle Database Diagnostic Pack for SQLT (Amazon RDS)" },
+    "OracleDbTPLicenseConfigurationRDS"   = { description = "Oracle Database Tuning Pack for SQLT (Amazon RDS)" }
   }
   name                     = each.value.description
   description              = each.value.description
