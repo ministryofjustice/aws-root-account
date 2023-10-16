@@ -1,73 +1,27 @@
-# Windows licensing
-resource "aws_licensemanager_license_configuration" "windows_server_datacenter_2019" {
-  name                     = "Windows Server Datacenter 2019 (EC2 and on-premises)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
-}
-
 # Oracle licensing
-resource "aws_licensemanager_license_configuration" "oracle_tuning_pack_for_sqlt" {
-  name                     = "Oracle Database Tuning Pack for SQLT (Amazon RDS)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
-}
 
-resource "aws_licensemanager_license_configuration" "oracle_diagnostic_pack_sqlt" {
-  name                     = "Oracle Database Diagnostic Pack for SQLT (Amazon RDS)"
+# Oracle RDS licensing
+# Note automated discovery for these exist in AWS but cannot be done through terraform and must be done manually in the console
+# https://docs.aws.amazon.com/license-manager/latest/userguide/automated-discovery.html
+module "oracle_rds_license_configurations" {
+  source = "../../modules/license-configuration"
+  for_each = {
+    "OracleDbSELicenseConfigurationRDS"   = { description = "Oracle Database Standard Edition (Amazon RDS)" },
+    "OracleDbSE1LicenseConfigurationRDS"  = { description = "Oracle Database Standard Edition One (Amazon RDS)" },
+    "OracleDbSE2LicenseConfigurationRDS"  = { description = "Oracle Database Standard Edition Two (Amazon RDS)" },
+    "OracleDbEELicenseConfigurationRDS"   = { description = "Oracle Database Enterprise Edition (Amazon RDS)" },
+    "OracleDbADGLicenseConfigurationRDS"  = { description = "Oracle Database Active Data Guard (Amazon RDS)" },
+    "OracleDbLSLicenseConfigurationRDS"   = { description = "Oracle Database Label Security (Amazon RDS)" },
+    "OracleDbOLAPLicenseConfigurationRDS" = { description = "Oracle Database Oracle On-Line Analytical Processing (OLAP) (Amazon RDS)" },
+    "OracleDbDPLicenseConfigurationRDS"   = { description = "Oracle Database Diagnostic Pack for SQLT (Amazon RDS)" },
+    "OracleDbTPLicenseConfigurationRDS"   = { description = "Oracle Database Tuning Pack for SQLT (Amazon RDS)" }
+  }
+  name                     = each.value.description
+  description              = each.value.description
   license_count            = 0
   license_count_hard_limit = false
   license_counting_type    = "vCPU"
-}
-
-resource "aws_licensemanager_license_configuration" "oracle_olap" {
-  name                     = "Oracle Database Oracle On-Line Analytical Processing (OLAP) (Amazon RDS)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
-}
-
-resource "aws_licensemanager_license_configuration" "oracle_label_security" {
-  name                     = "Oracle Database Label Security (Amazon RDS)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
-}
-
-resource "aws_licensemanager_license_configuration" "oracle_adg" {
-  name                     = "Oracle Database Active Data Guard (Amazon RDS)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
-}
-
-resource "aws_licensemanager_license_configuration" "oracle_se" {
-  name                     = "Oracle Database Standard Edition (Amazon RDS)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
-}
-
-resource "aws_licensemanager_license_configuration" "oracle_se1" {
-  name                     = "Oracle Database Standard Edition One (Amazon RDS)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
-}
-
-resource "aws_licensemanager_license_configuration" "oracle_se2" {
-  name                     = "Oracle Database Standard Edition Two (Amazon RDS)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
-}
-
-resource "aws_licensemanager_license_configuration" "oracle_ee" {
-  name                     = "Oracle Database Enterprise Edition (Amazon RDS)"
-  license_count            = 0
-  license_count_hard_limit = false
-  license_counting_type    = "vCPU"
+  principal                = local.organizations_organization.arn
 }
 
 # Oracle DB on EC2 licensing automation
