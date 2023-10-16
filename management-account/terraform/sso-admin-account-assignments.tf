@@ -42,7 +42,6 @@ locals {
         aws_organizations_account.hmpps_cr_unpaid_work_non_production.id,
         aws_organizations_account.hmpps_cr_unpaid_work_production.id,
         aws_organizations_account.alfresco_non_prod.id,
-        aws_organizations_account.delius_core_non_prod.id,
         aws_organizations_account.hmpps_delius_mis_non_prod.id,
         aws_organizations_account.hmpps_delius_pre_production.id,
         aws_organizations_account.hmpps_delius_stage.id,
