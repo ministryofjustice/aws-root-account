@@ -16,7 +16,7 @@ module "oracle_rds_license_configurations" {
     "OracleDbDPLicenseConfigurationRDS"   = { description = "Oracle Database Diagnostic Pack for SQLT (Amazon RDS)" },
     "OracleDbTPLicenseConfigurationRDS"   = { description = "Oracle Database Tuning Pack for SQLT (Amazon RDS)" }
   }
-  name                     = each.value.description
+  name                     = each.key
   description              = each.value.description
   license_count            = 0
   license_count_hard_limit = false
