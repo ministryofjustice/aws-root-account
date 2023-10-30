@@ -394,6 +394,12 @@ resource "aws_ssoadmin_managed_policy_attachment" "opg_operator" {
   permission_set_arn = aws_ssoadmin_permission_set.opg_operator.arn
 }
 
+resource "aws_ssoadmin_managed_policy_attachment" "opg_operator_billing_read_only_access" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.opg_operator.arn
+}
+
 resource "aws_ssoadmin_permission_set_inline_policy" "opg_operator" {
   instance_arn       = local.sso_admin_instance_arn
   inline_policy      = data.aws_iam_policy_document.opg_operator.json
@@ -408,31 +414,6 @@ data "aws_iam_policy_document" "opg_operator" {
     resources = ["*"]
   }
 
-  statement {
-    sid    = "ViewBillingInfo"
-    effect = "Allow"
-
-    actions = [
-      "account:GetAccountInformation",
-      "billing:*",
-      "budgets:*",
-      "ce:Describe*",
-      "ce:Get*",
-      "ce:List*",
-      "consolidatedbilling:Get*",
-      "consolidatedbilling:List*",
-      "cur:*",
-      "freetier:Get*",
-      "invoicing:Get*",
-      "invoicing:List*",
-      "payments:Get*",
-      "payments:List*",
-      "tax:Get*",
-      "tax:List*",
-    ]
-
-    resources = ["*"]
-  }
   statement {
     sid    = "UalCiIdentityCognitoAccess"
     effect = "Allow"
