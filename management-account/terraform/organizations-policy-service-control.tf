@@ -167,7 +167,7 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
     }
   }
 
-  # Deny anything apart from Network Manager in us-west-2
+  # Deny anything apart from Network Manager and S3 Global Endpoint Management Operations in us-west-2
   statement {
     effect = "Deny"
     not_actions = [
@@ -175,6 +175,16 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
       "cloudwatch:List*",     # To view the Network Manager log group
       "cloudwatch:Get*",      # To view the Network Manager log group
       "cloudwatch:Describe*", # To view the Network Manager log group
+      "s3:CreateMultiRegionAccessPoint",
+      "s3:DeleteMultiRegionAccessPoint",
+      "s3:DescribeMultiRegionAccessPointOperation",
+      "s3:GetMultiRegionAccessPoint",
+      "s3:GetMultiRegionAccessPointPolicy",
+      "s3:GetMultiRegionAccessPointPolicyStatus",
+      "s3:GetMultiRegionAccessPointRoutes",
+      "s3:ListMultiRegionAccessPoints",
+      "s3:PutMultiRegionAccessPointPolicy",
+      "s3:SubmitMultiRegionAccessPointRoutes"
     ]
     resources = ["*"]
 
