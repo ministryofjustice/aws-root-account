@@ -338,6 +338,28 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
     }
   }
 
+  # Deny everything aside from Bedrock in Germany unless requested by priveleged MP roles
+  statement {
+    effect = "Deny"
+    not_actions = [
+      "bedrock:*"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:RequestedRegion"
+      values = [
+        "eu-central-1"
+      ]
+    }
+    condition {
+      test     = "StringLike"
+      variable = "aws:PrincipalARN"
+      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
+    }
+  }
+
   # block changes to github-actions policy
   statement {
     effect = "Deny"
