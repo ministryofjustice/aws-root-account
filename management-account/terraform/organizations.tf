@@ -5,6 +5,7 @@ resource "aws_organizations_organization" "default" {
     "backup.amazonaws.com",
     "compute-optimizer.amazonaws.com",
     "config.amazonaws.com",
+    "cost-optimization-hub.bcm.amazonaws.com",
     "detective.amazonaws.com",
     "fms.amazonaws.com",
     "guardduty.amazonaws.com",
@@ -17,13 +18,13 @@ resource "aws_organizations_organization" "default" {
     "license-manager.member-account.amazonaws.com",
     "macie.amazonaws.com",
     "malware-protection.guardduty.amazonaws.com",
+    "member.org.stacksets.cloudformation.amazonaws.com",
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "securityhub.amazonaws.com",
     "sso.amazonaws.com",
     "storage-lens.s3.amazonaws.com",
     "tagpolicies.tag.amazonaws.com",
-    "member.org.stacksets.cloudformation.amazonaws.com",
   ]
 
   enabled_policy_types = [
