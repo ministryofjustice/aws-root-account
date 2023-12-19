@@ -39,6 +39,26 @@ resource "aws_iam_user_group_membership" "david_elliott" {
   ]
 }
 
+#################
+# Ewa Stempel #
+#################
+resource "aws_iam_user" "ewa_stempel" {
+  name          = "EwaStempel"
+  path          = "/"
+  force_destroy = true
+  tags          = {}
+}
+
+# User membership
+resource "aws_iam_user_group_membership" "ewa_stempel" {
+  user = aws_iam_user.ewa_stempel.name
+
+  groups = [
+    aws_iam_group.iam_user_change_password.name,
+    aws_iam_group.modernisation_platform_organisation_management.name,
+  ]
+}
+
 ###############
 # Jake Mulley #
 ###############
