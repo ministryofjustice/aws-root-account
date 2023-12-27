@@ -31,7 +31,7 @@ jobs:
           key: tflint-${{ hashFiles('.tflint.hcl') }}
       - uses: terraform-linters/setup-tflint@v4.0.0
         with:
-          tflint_version: latest
+          tflint_version: "v0.49.0"
       - run: tflint --version
       - run: tflint -c $(realpath .tflint.hcl) --init
         env:
