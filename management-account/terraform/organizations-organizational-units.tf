@@ -117,6 +117,13 @@ resource "aws_organizations_organizational_unit" "opg_digideps" {
   tags      = {}
 }
 
+# LPA Data Store
+resource "aws_organizations_organizational_unit" "opg_lpa_data_store" {
+  name      = "LPA Data Store"
+  parent_id = aws_organizations_organizational_unit.opg.id
+  tags      = {}
+}
+
 # LPA Refunds
 resource "aws_organizations_organizational_unit" "opg_lpa_refunds" {
   name      = "LPA Refunds"
