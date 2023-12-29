@@ -82,6 +82,11 @@ resource "aws_organizations_policy_attachment" "deny_aws_account_root_user_hmpps
   target_id = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
 }
 
+resource "aws_organizations_policy_attachment" "deny_aws_account_root_user_opg" {
+  policy_id = aws_organizations_policy.deny_aws_account_root_user.id
+  target_id = aws_organizations_organizational_unit.opg.id
+}
+
 resource "aws_organizations_policy_attachment" "deny_aws_account_root_user_cloud_platform_transit_gateways" {
   policy_id = aws_organizations_policy.deny_aws_account_root_user.id
   target_id = aws_organizations_account.cloud_platform_transit_gateways.id
