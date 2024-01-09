@@ -253,6 +253,13 @@ locals {
       ]
     },
     {
+      github_team        = "moj-official-techops-readonly",
+      permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_network_operations_centre.id,
+      ]
+    },
+    {
       github_team        = "moj-official-techops",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = flatten([
