@@ -260,6 +260,13 @@ locals {
       ])
     },
     {
+      github_team        = "moj-official-techops-readonly",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = flatten([
+        aws_organizations_account.moj_official_network_operations_centre.id,
+      ])
+    },
+    {
       github_team        = "cloud-ops-alz-admins",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
