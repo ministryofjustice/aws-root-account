@@ -180,7 +180,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "modernisation_platfo
 # Modernisation Platform data engineer
 resource "aws_ssoadmin_permission_set" "modernisation_platform_data_mwaa_user" {
   name             = "modernisation-platform-mwaa-user"
-  description      = "Modernisation Platform: data engineering mwaa user"
+  description      = "Modernisation Platform: Data Engineering MWAA User"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT8H"
   tags             = {}
@@ -199,6 +199,37 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_dat
 }
 
 data "aws_iam_policy_document" "modernisation_platform_data_mwaa_user" {
+  statement {
+    actions = [
+      "airflow:CreateWebLoginToken"
+    ]
+    resources = ["arn:aws:airflow:*:*:role/*/User"]
+  }
+}
+
+
+# PowerBI Author
+resource "aws_ssoadmin_permission_set" "modernisation_platform_data_powerbi_author" {
+  name             = "modernisation-platform-powerbi-author"
+  description      = "Modernisation Platform: Data Engineering PowerBI Author"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "modernisation_platform_data_powerbi_author" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_data_powerbi_author.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_data_powerbi_author" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.modernisation_platform_data_powerbi_author.json
+  permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_data_powerbi_author.arn
+}
+
+data "aws_iam_policy_document" "modernisation_platform_data_powerbi_author" {
   statement {
     actions = [
       "airflow:CreateWebLoginToken"
