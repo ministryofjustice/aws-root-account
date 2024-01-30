@@ -162,6 +162,8 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
   }
 }
 
+# Modernisation Platform end user permission sets are now managed in the modernisation-platform repository
+
 ################################
 # OPG specific permission sets #
 ################################
