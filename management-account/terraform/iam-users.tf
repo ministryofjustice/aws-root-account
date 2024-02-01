@@ -59,27 +59,6 @@ resource "aws_iam_user_group_membership" "ewa_stempel" {
   ]
 }
 
-###############
-# Jake Mulley #
-###############
-resource "aws_iam_user" "jake_mulley" {
-  name          = "JakeMulley"
-  path          = "/"
-  force_destroy = true
-  tags          = {}
-}
-
-# User membership
-resource "aws_iam_user_group_membership" "jake_mulley" {
-  user = aws_iam_user.jake_mulley.name
-
-  groups = [
-    aws_iam_group.admin.name,
-    aws_iam_group.billing_full_access.name,
-    aws_iam_group.iam_user_change_password.name,
-  ]
-}
-
 ##################
 # Jason Birchall #
 ##################
