@@ -101,6 +101,38 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_sso_administra
   policy_arn = aws_iam_policy.sso_administrator_policy.arn
 }
 
+#########################################
+# ModernisationPlatformSSOReadOnly #
+#########################################
+resource "aws_iam_role" "modernisation_platform_sso_readonly" {
+  name               = "ModernisationPlatformSSOReadOnly"
+  assume_role_policy = data.aws_iam_policy_document.modernisation_platform_sso_readonly.json
+}
+
+data "aws_iam_policy_document" "modernisation_platform_sso_readonly" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "ForAnyValue:StringLike"
+      values   = ["${data.aws_organizations_organization.root.id}/*/${aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id}/*"]
+      variable = "aws:PrincipalOrgPaths"
+    }
+  }
+}
+
+# Role policy attachments
+resource "aws_iam_role_policy_attachment" "modernisation_platform_sso_readonly" {
+  role       = aws_iam_role.modernisation_platform_sso_readonly.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSSSOReadOnly"
+}
+
 ##########################################
 # ModernisationPlatformGithubActionsRole #
 ##########################################
