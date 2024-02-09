@@ -152,7 +152,7 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_r
   policy_arn = "arn:aws:iam::aws:policy/AWSSSODirectoryReadOnly"
 }
 
-resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_readonly" {
+resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_readonly_additional" {
   role       = aws_iam_role.modernisation_platform_sso_readonly.name
   policy_arn = aws_iam_policy.modernisation_platform_sso_readonly_additional.arn
 }
