@@ -133,6 +133,11 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_sso_readonly" 
   policy_arn = "arn:aws:iam::aws:policy/AWSSSOReadOnly"
 }
 
+resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_readonly" {
+  role       = aws_iam_role.modernisation_platform_sso_readonly.name
+  policy_arn = "arn:aws:iam::aws:policy/AAWSSSODirectoryReadOnly"
+}
+
 ##########################################
 # ModernisationPlatformGithubActionsRole #
 ##########################################
