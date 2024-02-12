@@ -109,6 +109,11 @@ resource "aws_iam_role" "modernisation_platform_sso_readonly" {
   assume_role_policy = data.aws_iam_policy_document.modernisation_platform_sso_readonly.json
 }
 
+resource "aws_iam_policy" "modernisation_platform_sso_readonly_additional" {
+  name   = "ModernisationPlatformSSOReadOnlyAdditional"
+  policy = data.aws_iam_policy_document.modernisation_platform_sso_readonly_additional.json
+}
+
 data "aws_iam_policy_document" "modernisation_platform_sso_readonly" {
   statement {
     effect  = "Allow"
@@ -127,6 +132,15 @@ data "aws_iam_policy_document" "modernisation_platform_sso_readonly" {
   }
 }
 
+data "aws_iam_policy_document" "modernisation_platform_sso_readonly_additional" {
+  statement {
+    effect  = "Allow"
+    actions = ["identitystore:Get*"]
+
+    resources = ["arn:aws:identitystore::${data.aws_caller_identity.current.account_id}:identitystore/*"]
+  }
+}
+
 # Role policy attachments
 resource "aws_iam_role_policy_attachment" "modernisation_platform_sso_readonly" {
   role       = aws_iam_role.modernisation_platform_sso_readonly.name
@@ -136,6 +150,11 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_sso_readonly" 
 resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_readonly" {
   role       = aws_iam_role.modernisation_platform_sso_readonly.name
   policy_arn = "arn:aws:iam::aws:policy/AWSSSODirectoryReadOnly"
+}
+
+resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_readonly_additional" {
+  role       = aws_iam_role.modernisation_platform_sso_readonly.name
+  policy_arn = aws_iam_policy.modernisation_platform_sso_readonly_additional.arn
 }
 
 ##########################################
