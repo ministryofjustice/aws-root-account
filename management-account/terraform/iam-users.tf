@@ -163,6 +163,27 @@ resource "aws_iam_user_group_membership" "steve_marshall" {
   ]
 }
 
+##############
+# Ona Ojukwu #
+##############
+resource "aws_iam_user" "ona_ojukwu" {
+  name          = "OnaOjukwu"
+  path          = "/"
+  force_destroy = true
+  tags          = {}
+}
+
+# User membership
+resource "aws_iam_user_group_membership" "ona_ojukwu" {
+  user = aws_iam_user.ona_ojukwu.name
+
+  groups = [
+    aws_iam_group.billing_full_access.name,
+    aws_iam_group.iam_user_change_password.name,
+  ]
+}
+
+
 ################
 # Finance team #
 ################
