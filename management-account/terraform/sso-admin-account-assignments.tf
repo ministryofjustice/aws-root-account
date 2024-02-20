@@ -4,7 +4,6 @@ locals {
       github_team        = "webops",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
-        aws_organizations_account.moj_digital_services.id,
         aws_organizations_account.cloud_platform.id,
         aws_organizations_account.cloud_platform_ephemeral_test.id,
         aws_organizations_account.cloud_platform_transit_gateways.id
