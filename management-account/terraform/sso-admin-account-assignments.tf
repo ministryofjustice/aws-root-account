@@ -6,7 +6,6 @@ locals {
       account_ids = [
         aws_organizations_account.cloud_platform.id,
         aws_organizations_account.cloud_platform_ephemeral_test.id,
-        aws_organizations_account.cloud_platform_transit_gateways.id
       ]
     },
     {
@@ -176,7 +175,6 @@ locals {
       github_team        = "modernisation-platform-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
-        aws_organizations_account.cloud_platform_transit_gateways.id,
         aws_organizations_account.moj_official_production.id,
         aws_organizations_account.moj_official_shared_services.id,
       ]
