@@ -69,3 +69,9 @@ resource "aws_secretsmanager_secret" "aws_saml" {
 data "aws_secretsmanager_secret_version" "aws_saml" {
   secret_id = aws_secretsmanager_secret.aws_saml.id
 }
+
+# OIDC: Azure EntraID client ID and secrets
+resource "aws_secretsmanager_secret" "azure_entraid_oidc" {
+  name        = "azure_entraid_oidc"
+  description = "Azure client ID and secret for the Ministry of Justice owned OAuth app for AWS SSO"
+}
