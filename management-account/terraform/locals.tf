@@ -82,5 +82,6 @@ locals {
     auth0_saml          = sensitive(jsondecode(data.aws_secretsmanager_secret_version.auth0_saml.secret_string))
     github_saml         = sensitive(jsondecode(data.aws_secretsmanager_secret_version.github_saml.secret_string))
     aws_saml            = sensitive(jsondecode(data.aws_secretsmanager_secret_version.aws_saml.secret_string))
+    azure_entraid_oidc  = sensitive(jsondecode(data.aws_secretsmanager_secret_version.azure_entraid_oidc.secret_string))
   }
 }
