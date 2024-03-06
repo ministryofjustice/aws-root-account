@@ -75,3 +75,7 @@ resource "aws_secretsmanager_secret" "azure_entraid_oidc" {
   name        = "azure_entraid_oidc"
   description = "Azure client ID and secret for the Ministry of Justice owned OAuth app for AWS SSO"
 }
+
+data "aws_secretsmanager_secret_version" "azure_entraid_oidc" {
+  secret_id = aws_secretsmanager_secret.azure_entraid_oidc.id
+}
