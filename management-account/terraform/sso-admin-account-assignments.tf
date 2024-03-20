@@ -299,7 +299,8 @@ locals {
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
         aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
-        aws_organizations_account.moj_official_public_key_infrastructure.id
+        aws_organizations_account.moj_official_public_key_infrastructure.id,
+        aws_organizations_account.moj_official_shared_services.id,
       ]
     },
     {
