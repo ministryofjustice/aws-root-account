@@ -26,27 +26,6 @@ resource "aws_organizations_account" "moj_official_development" {
   }
 }
 
-resource "aws_organizations_account" "moj_official_network_operations_centre" {
-  name                       = "MOJ Official (Network Operations Centre)"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-networkopscentre")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.technology_services.id
-
-  tags = merge(local.tags_technology_services, {
-    is-production = true
-    application   = "Network Operations Centre"
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "moj_official_preproduction" {
   name                       = "MOJ Official (Pre-Production)"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-preprod")

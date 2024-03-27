@@ -212,7 +212,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
-        aws_organizations_account.moj_official_network_operations_centre.id,
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
         aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
@@ -227,7 +226,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
-        aws_organizations_account.moj_official_network_operations_centre.id,
         aws_organizations_account.workplace_tech_proof_of_concept_development.id,
         aws_organizations_account.wptpoc.id,
         aws_organizations_account.network_architecture.id,
@@ -238,7 +236,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
-        aws_organizations_account.moj_official_network_operations_centre.id,
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
         aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
@@ -254,13 +251,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = flatten([
         local.modernisation_platform_accounts.core_network_services_id
-      ])
-    },
-    {
-      github_team        = "moj-official-techops-readonly",
-      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = flatten([
-        aws_organizations_account.moj_official_network_operations_centre.id,
       ])
     },
     {
