@@ -13,7 +13,7 @@ locals {
 # Create IPAM
 resource "aws_vpc_ipam" "main" {
   description = "Multi Region IPAM"
-  dynamic operating_regions {
+  dynamic "operating_regions" {
     for_each = local.ipam_regions
     content {
       region_name = operating_regions.value
