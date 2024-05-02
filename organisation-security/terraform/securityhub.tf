@@ -21,15 +21,6 @@ module "securityhub_eu_west_1" {
   is_delegated_administrator = true
 }
 
-module "securityhub_eu_west_3" {
-  source = "../../modules/securityhub"
-  providers = {
-    aws = aws.eu-west-3
-  }
-
-  is_delegated_administrator = true
-}
-
 module "securityhub_eu_central_1" {
   source = "../../modules/securityhub"
   providers = {
