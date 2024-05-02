@@ -70,6 +70,7 @@ data "aws_iam_policy_document" "oidc_assume_role_apply" {
       "secretsmanager:*",
       "securityhub:*",
       "sns:*",
+      "ec2:*"
     ]
     resources = ["*"]
   }
