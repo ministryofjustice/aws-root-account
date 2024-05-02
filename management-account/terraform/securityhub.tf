@@ -19,15 +19,6 @@ module "securityhub_eu_west_1" {
   admin_account = aws_organizations_account.organisation_security.id
 }
 
-module "securityhub_eu_west_3" {
-  source = "../../modules/securityhub"
-  providers = {
-    aws = aws.eu-west-3
-  }
-
-  admin_account = aws_organizations_account.organisation_security.id
-}
-
 module "securityhub_eu_central_1" {
   source = "../../modules/securityhub"
   providers = {
