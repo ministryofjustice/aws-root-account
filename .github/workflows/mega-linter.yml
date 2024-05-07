@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: MegaLinter
-        uses: oxsecurity/megalinter@190cd0dad6dc52b2de5b810e3b290c3d6bdcc0f2 # v7.9.0
+        uses: oxsecurity/megalinter@03986e6993ccf699a22451118520680b438e7d2a # v7.11.1
         env:
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} # Validates all source when push on main, else just the git diff with main. Override with true if you always want to lint all sources
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
