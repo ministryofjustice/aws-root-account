@@ -6,6 +6,7 @@ locals {
   ipam_regions = [
     "eu-west-1",
     "eu-west-2",
+    "eu-west-3",
     "eu-central-1"
   ]
 }
