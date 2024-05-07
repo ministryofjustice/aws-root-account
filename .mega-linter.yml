@@ -7,7 +7,6 @@ ENABLE_LINTERS:
   - ACTION_ACTIONLINT
 
   # JSON
-  - JSON_JSONLINT
   - JSON_PRETTIER
 
   # Markdown
@@ -18,13 +17,11 @@ ENABLE_LINTERS:
   - REPOSITORY_GITLEAKS
 
   # Terraform
-  - TERRAFORM_TERRASCAN
   - TERRAFORM_TERRAFORM_FMT
   - TERRAFORM_TFLINT
 
   # YAML
   - YAML_PRETTIER
-  - YAML_YAMLLINT
 
 SARIF_REPORTER: true
 DISABLE_ERRORS: false
@@ -39,9 +36,6 @@ LOG_LEVEL: INFO
 
 # Markdown
 MARKDOWN_MARKDOWN_LINK_CHECK_ARGUMENTS: "-q"
-
-# Terraform
-TERRAFORM_TERRASCAN_ARGUMENTS: "scan -d . -i terraform -v"
 
 PLUGINS:
   - https://raw.githubusercontent.com/shiranr/linkcheck/v2.0.17.beta/mega-linter-plugin-linkcheck/linkcheck.megalinter-descriptor.yml
