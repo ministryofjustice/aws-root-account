@@ -33,9 +33,3 @@ GITHUB_STATUS_REPORTER: true
 GITHUB_COMMENT_REPORTER: true
 VALIDATE_ALL_CODEBASE: false
 LOG_LEVEL: INFO
-
-# Markdown
-MARKDOWN_MARKDOWN_LINK_CHECK_ARGUMENTS: "-q"
-
-PLUGINS:
-  - https://raw.githubusercontent.com/shiranr/linkcheck/v2.0.17.beta/mega-linter-plugin-linkcheck/linkcheck.megalinter-descriptor.yml
