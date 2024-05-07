@@ -160,6 +160,7 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
         "eu-central-1", # Europe (Frankfurt)
         "eu-west-1",    # Europe (Ireland)
         "eu-west-2",    # Europe (London)
+        "eu-west-3",    # Europe (Paris)
         "us-east-1",    # US East (N. Virginia) (for global services)
         "us-east-2",    # US East (Ohio) (for Chatbot)
         "us-west-2",    # US West (Oregon) (for Network Manager)
