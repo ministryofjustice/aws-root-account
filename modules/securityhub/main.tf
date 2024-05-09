@@ -11,6 +11,12 @@ data "aws_caller_identity" "current" {}
 # Enable Security Hub
 resource "aws_securityhub_account" "default" {
   control_finding_generator = "STANDARD_CONTROL"
+  lifecycle {
+    ignore_changes = [
+      # When importing this can't be changed without destroying the resource
+      enable_default_standards,
+    ]
+  }
 }
 
 # Subscribe to AWS Foundational Security Best Practices v1.0.0

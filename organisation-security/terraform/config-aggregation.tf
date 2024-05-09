@@ -80,6 +80,29 @@ module "config_aggregation_sns_eu_west_1" {
   )
 }
 
+# Configure an SNS topic in organisation-security for aggregated Config alerts for eu-west-3
+# Note this needs to be configured for each region, as AWS Config doesn't support
+# cross-region delivery to an SNS topic.
+module "config_aggregation_sns_eu_west_3" {
+  source = "../../modules/config-aggregation-sns"
+  providers = {
+    aws = aws.eu-west-3
+  }
+
+  # Specify account IDs that can send notifications to the topic
+  enrolled_account_ids = [
+    for account in local.enrolled_into_config :
+    account.id
+  ]
+
+  # Tags to apply, where applicable
+  tags = merge(
+    local.tags_organisation_management, {
+      component = "Security"
+    }
+  )
+}
+
 # Multi-region, Multi-account aggregation (MRMAA)
 ## Create an IAM role with appropriate permissions for AWS Config in organisation-security (delegated administrator)
 module "config_organisation_security_iam_role" {
@@ -107,6 +130,18 @@ module "config_organisation_security_eu_west_2" {
   sns_topic_arn  = module.config_aggregation_sns_eu_west_2.sns_topic_arn
   iam_role_arn   = module.config_organisation_security_iam_role.role_arn
   home_region    = "eu-west-2"
+}
+
+module "config_organisation_security_eu_west_3" {
+  source = "../../modules/config"
+  providers = {
+    aws = aws.eu-west-3
+  }
+
+  s3_bucket_name = module.config_aggregation_bucket.s3_bucket_name
+  sns_topic_arn  = module.config_aggregation_sns_eu_west_3.sns_topic_arn
+  iam_role_arn   = module.config_organisation_security_iam_role.role_arn
+  home_region    = "eu-west-3"
 }
 
 # Enable Multi-region, multi-account aggregation via AWS Organizations
