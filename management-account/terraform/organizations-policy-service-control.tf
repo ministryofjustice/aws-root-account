@@ -369,23 +369,6 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
       values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
     }
   }
-  # block changes to OIDC providers
-  statement {
-    effect = "Deny"
-    actions = [
-      "iam:AddClientIDToOpenIDConnectProvider",
-      "iam:CreateOpenIDConnectProvider",
-      "iam:DeleteOpenIDConnectProvider",
-      "iam:RemoveClientIDFromOpenIDConnectProvider",
-      "iam:UpdateOpenIDConnectProviderThumbprint"
-    ]
-    resources = ["*"]
-    condition {
-      test     = "StringNotLike"
-      variable = "aws:PrincipalARN"
-      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
-    }
-  }
 }
 
 resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou_scp" {
