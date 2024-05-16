@@ -32,3 +32,38 @@ resource "aws_vpc_ipam_scope" "private" {
   ipam_id     = aws_vpc_ipam.main.id
   description = "Private Scope"
 }
+
+# Create pools
+
+# Network Operations
+resource "aws_vpc_ipam_pool" "network_operations_centre" {
+  description = "Network Operations Centre"
+  address_family = "ipv4"
+  ipam_scope_id  = aws_vpc_ipam_scope.public.id
+  locale         = "eu-west-2"
+  aws_service = "ec2"
+  tags = { "owner" = "Networks"}
+}
+
+resource "aws_vpc_ipam_pool_cidr" "network_operations_centre" {
+  ipam_pool_id = aws_vpc_ipam_pool.network_operations_centre.id
+  cidr         = "51.149.252.0/24"
+}
+
+resource "aws_ram_resource_share" "network_operations_centre_byoip" {
+  name                      = "network_operations_centre_byoip"
+  allow_external_principals = false
+  permission_arns = [
+   "arn:aws:ram::aws:permission/AWSRAMDefaultPermissionsIpamPool"
+  ]
+}
+
+resource "aws_ram_principal_association" "network_operations_centre_byoip" {
+  principal          = local.workplace_tech_poc_development_account_id
+  resource_share_arn = aws_ram_resource_share.network_operations_centre_byoip.arn
+}
+
+resource "aws_ram_resource_association" "network_operations_centre_byoip" {
+  resource_arn       = aws_vpc_ipam_pool.network_operations_centre.arn
+  resource_share_arn = aws_ram_resource_share.network_operations_centre_byoip.arn
+}
