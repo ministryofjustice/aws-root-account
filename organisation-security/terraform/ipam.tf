@@ -37,12 +37,12 @@ resource "aws_vpc_ipam_scope" "private" {
 
 # Network Operations
 resource "aws_vpc_ipam_pool" "network_operations_centre" {
-  description = "Network Operations Centre"
+  description    = "Network Operations Centre"
   address_family = "ipv4"
   ipam_scope_id  = aws_vpc_ipam_scope.public.id
   locale         = "eu-west-2"
-  aws_service = "ec2"
-  tags = { "owner" = "Networks"}
+  aws_service    = "ec2"
+  tags           = { "owner" = "Networks" }
 }
 
 resource "aws_vpc_ipam_pool_cidr" "network_operations_centre" {
@@ -54,7 +54,7 @@ resource "aws_ram_resource_share" "network_operations_centre_byoip" {
   name                      = "network_operations_centre_byoip"
   allow_external_principals = false
   permission_arns = [
-   "arn:aws:ram::aws:permission/AWSRAMDefaultPermissionsIpamPool"
+    "arn:aws:ram::aws:permission/AWSRAMDefaultPermissionsIpamPool"
   ]
 }
 
