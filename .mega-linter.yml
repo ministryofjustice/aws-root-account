@@ -1,0 +1,35 @@
+---
+# Configuration file for MegaLinter
+# See all available variables at https://megalinter.io/latest/config-file/ and in linters documentation
+APPLY_FIXES: none
+ENABLE_LINTERS:
+  # GitHub Actions
+  - ACTION_ACTIONLINT
+
+  # JSON
+  - JSON_PRETTIER
+
+  # Markdown
+  - MARKDOWN_MARKDOWNLINT
+
+  # Repository
+  - REPOSITORY_TRIVY
+  - REPOSITORY_GITLEAKS
+
+  # Terraform
+  - TERRAFORM_TERRAFORM_FMT
+  - TERRAFORM_TFLINT
+
+  # YAML
+  - YAML_PRETTIER
+
+SARIF_REPORTER: true
+DISABLE_ERRORS: false
+MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
+SHOW_ELAPSED_TIME: true
+FILEIO_REPORTER: false
+PARALLEL: true
+GITHUB_STATUS_REPORTER: true
+GITHUB_COMMENT_REPORTER: true
+VALIDATE_ALL_CODEBASE: false
+LOG_LEVEL: INFO
