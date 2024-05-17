@@ -19,6 +19,12 @@ locals {
     if account.name == "Workplace Tech Proof Of Concept Development"
   ]...)
 
+  moj_network_operations_centre_production_account_id = coalesce([
+    for account in local.organizations_organization.accounts :
+    account.id
+    if account.name == "moj-network-operations-centre-production"
+  ]...)
+
   organisation_account_numbers = [for account in local.organizations_organization.accounts : account.id]
 
   # AWS Organizational Units
