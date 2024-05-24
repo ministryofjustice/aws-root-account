@@ -57,7 +57,7 @@ aws ec2 deprovision-public-ipv4-pool-cidr --region eu-west-2 --pool-id ipv4pool-
 
 To do this quickly for a whole range use a script similar to:
 
-```
+```shell
 region="eu-west-2"
 pool_id="ipv4pool-ec2-xxxxx"
 base_cidr="51.0.0"
