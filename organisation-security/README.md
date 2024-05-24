@@ -51,7 +51,7 @@ aws ec2 provision-public-ipv4-pool-cidr --region eu-west-2 --ipam-pool-id ipam-p
 
 To deprovision the range, you need to do it one IP at a time.
 
-```
+```shell
 aws ec2 deprovision-public-ipv4-pool-cidr --region eu-west-2 --pool-id ipv4pool-ec2-xxxxx --cidr 51.0.0.254/32
 ```
 
