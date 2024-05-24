@@ -8,7 +8,7 @@ See guidance here on how to BYOIP to AWS - https://docs.aws.amazon.com/vpc/lates
 
 #### Managing imported ranges
 
-Once the range has been assigned to a public IPAM pool as above, the pool can be shared to different accounts using RAM.  See ipam.tf for examples.
+Once the range has been assigned to a public IPAM pool as above, the pool can be shared to different accounts using RAM. See ipam.tf for examples.
 
 Before IPs can be used they must be provisioned to an account IPV4 CIDR pool at the account level.
 
@@ -22,7 +22,7 @@ aws ec2 create-public-ipv4-pool --region eu-west-2
     "PoolId": "ipv4pool-ec2-xxxxx"
 }
 
-$aws ec2 describe-public-ipv4-pools                
+$aws ec2 describe-public-ipv4-pools
 {
     "PublicIpv4Pools": [
         {
@@ -68,7 +68,7 @@ do
   ip="${base_cidr}.${i}/32"
   echo "Deprovisioning IP: $ip"
   aws ec2 deprovision-public-ipv4-pool-cidr --region $region --pool-id $pool_id --cidr $ip
-  
+
   if [ $? -ne 0 ]; then
     echo "Failed to deprovision IP: $ip" >&2
     # exit 1
