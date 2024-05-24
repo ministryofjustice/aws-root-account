@@ -43,7 +43,7 @@ $aws ec2 describe-public-ipv4-pools
 
 Get the IPAM pool ID from the IPAM console, use the IPV4 pool ID from above, then provision the range you want (you do not have to provision the whole range from the IPAM pool)
 
-```
+```shell
 aws ec2 provision-public-ipv4-pool-cidr --region eu-west-2 --ipam-pool-id ipam-pool-xxxx --pool-id ipv4pool-ec2-xxxxx --netmask-length 26
 ```
 
