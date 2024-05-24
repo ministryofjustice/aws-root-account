@@ -16,7 +16,7 @@ Before IPs can be used they must be provisioned to an account IPV4 CIDR pool at 
 
 In the account where you wish to use the IPs, ensure the IPAM pool has been shared to that account, then create a new IPV4 CIDR pool.
 
-```
+```shell
 aws ec2 create-public-ipv4-pool --region eu-west-2
 {
     "PoolId": "ipv4pool-ec2-xxxxx"
