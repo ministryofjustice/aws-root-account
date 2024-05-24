@@ -22,7 +22,7 @@ aws ec2 create-public-ipv4-pool --region eu-west-2
     "PoolId": "ipv4pool-ec2-xxxxx"
 }
 
-$aws ec2 describe-public-ipv4-pools
+aws ec2 describe-public-ipv4-pools
 {
     "PublicIpv4Pools": [
         {
