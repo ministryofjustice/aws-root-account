@@ -2,6 +2,20 @@ locals {
   sso_admin_account_assignments = [
     {
       github_team        = "aws-root-account-admin-team",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id
+      ]
+    },
+    {
+      github_team        = "aws-root-account-admin-team",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id
+      ]
+    },
+    {
+      github_team        = "aws-root-account-admin-team",
       permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn,
       account_ids = [
         aws_organizations_organization.default.master_account_id
