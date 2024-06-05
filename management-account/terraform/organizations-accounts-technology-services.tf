@@ -154,26 +154,6 @@ resource "aws_organizations_account" "workplace_tech_proof_of_concept_developmen
   }
 }
 
-resource "aws_organizations_account" "wptpoc" {
-  name                       = "WPTPOC"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "WPTPOC")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.technology_services.id
-
-  tags = merge(local.tags_technology_services, {
-    application = "Workplace Technology"
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "network_architecture" {
   name                       = "Network Architecture"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "network-architecture")
