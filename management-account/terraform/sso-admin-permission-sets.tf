@@ -53,6 +53,21 @@ resource "aws_ssoadmin_permission_set" "billing" {
   tags             = {}
 }
 
+resource "aws_ssoadmin_permission_set_inline_policy" "billing" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.billing.json
+  permission_set_arn = aws_ssoadmin_permission_set.billing.arn
+}
+
+data "aws_iam_policy_document" "billing" {
+  statement {
+    sid       = "BCMDataExports"
+    effect    = "Allow"
+    actions   = ["bcm-data-exports:*"]
+    resources = ["*"]
+  }
+}
+
 resource "aws_ssoadmin_managed_policy_attachment" "billing" {
   instance_arn       = local.sso_admin_instance_arn
   managed_policy_arn = "arn:aws:iam::aws:policy/job-function/Billing"
