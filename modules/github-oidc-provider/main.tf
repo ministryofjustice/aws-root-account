@@ -59,6 +59,7 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
     effect = "Allow"
     actions = [
       "account:GetAlternateContact",
+      "budgets:ListTagsForResource",
       "cur:DescribeReportDefinitions",
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
