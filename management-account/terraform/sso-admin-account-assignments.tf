@@ -290,7 +290,8 @@ locals {
       github_team        = "moj-official-techops",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = flatten([
-        local.modernisation_platform_accounts.core_network_services_id
+        local.modernisation_platform_accounts.core_network_services_id,
+        aws_organizations_account.organisation_security.id
       ])
     },
     {
