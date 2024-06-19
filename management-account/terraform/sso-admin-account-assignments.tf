@@ -242,7 +242,9 @@ locals {
       github_team        = "modernisation-platform-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_engineer.arn,
       account_ids = [
-        aws_organizations_account.modernisation_platform.id
+        aws_organizations_account.modernisation_platform.id,
+        aws_organizations_organization.default.master_account_id,
+        aws_organizations_account.organisation_security.id
       ]
     },
     {
