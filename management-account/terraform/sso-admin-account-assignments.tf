@@ -210,7 +210,16 @@ locals {
       github_team        = "organisation-security-auditor",
       permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
       account_ids = [
-        aws_organizations_account.organisation_security.id
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.cloud_platform.id
+      ]
+    },
+    {
+      github_team        = "organisation-security-auditor",
+      permission_set_arn = aws_ssoadmin_permission_set.view_only_access.arn,
+      account_ids = [
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.cloud_platform.id
       ]
     },
     {
