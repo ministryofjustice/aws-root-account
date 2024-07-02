@@ -4,7 +4,8 @@ locals {
       github_team        = "aws-root-account-admin-team",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
-        aws_organizations_organization.default.master_account_id
+        aws_organizations_organization.default.master_account_id,
+        aws_organizations_account.organisation_security.id,
       ]
     },
     {
