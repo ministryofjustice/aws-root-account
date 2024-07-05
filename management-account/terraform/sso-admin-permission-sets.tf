@@ -44,6 +44,34 @@ resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_read_only_directory" 
   permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn
 }
 
+# SSO Admin
+
+resource "aws_ssoadmin_permission_set" "aws_sso_admin" {
+  name             = "AWSSSOAdmin"
+  description      = "Admin access to AWS SSO"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT1H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_admin_lambda" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.aws_sso_admin.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_admin_sso" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSSSOMasterAccountAdministrator"
+  permission_set_arn = aws_ssoadmin_permission_set.aws_sso_admin.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_admin_read_only_access" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.aws_sso_admin.arn
+}
+
 # Billing Access
 resource "aws_ssoadmin_permission_set" "billing" {
   name             = "Billing"
