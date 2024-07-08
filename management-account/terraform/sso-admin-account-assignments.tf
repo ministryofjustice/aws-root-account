@@ -389,6 +389,13 @@ locals {
         aws_organizations_account.moj_official_development.id
       ]
     },
+    {
+      github_team        = "aws-sso-admin",
+      permission_set_arn = aws_ssoadmin_permission_set.aws_sso_admin.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id
+      ]
+    },
   ]
   sso_admin_account_assignments_expanded = flatten([
     for assignment in local.sso_admin_account_assignments : [
