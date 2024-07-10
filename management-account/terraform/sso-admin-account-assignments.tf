@@ -225,6 +225,13 @@ locals {
       ]
     },
     {
+      github_team        = "organisation-security-auditor",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.organisation_security.id,
+      ]
+    },
+    {
       github_team        = "modernisation-platform-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
