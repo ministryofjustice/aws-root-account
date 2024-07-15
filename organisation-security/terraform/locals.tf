@@ -128,7 +128,8 @@ locals {
         account_name == "Youth Justice Framework Dev" ||
         account_name == "Youth Justice Framework Eng Tools" ||
         account_name == "Youth Justice Framework Management" ||
-        account_name == "Youth Justice Framework Sandpit"
+        account_name == "Youth Justice Framework Sandpit" ||
+        account_name == "Cloud Platform Ephemeral Test"
       )
     ],
     organizational_units = flatten([
