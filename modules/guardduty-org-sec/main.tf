@@ -19,6 +19,21 @@ resource "aws_guardduty_organization_configuration" "delegated_administrator" {
   }
 }
 
+#######################################################################
+# Auto-enable EKS Monitoring for new accounts in the AWS Organization #
+#######################################################################
+# Note we are leaving installing the security agent add-on as a manual process
+resource "aws_guardduty_organization_configuration_feature" "eks_runtime_monitoring" {
+  detector_id = var.administrator_detector_id
+  name        = "EKS_RUNTIME_MONITORING"
+  auto_enable = "NEW"
+
+  additional_configuration {
+    name        = "EKS_ADDON_MANAGEMENT"
+    auto_enable = "NONE"
+  }
+}
+
 ####################################
 # GuardDuty publishing destination #
 ####################################
