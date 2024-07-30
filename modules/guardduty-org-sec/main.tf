@@ -24,6 +24,8 @@ resource "aws_guardduty_organization_configuration" "delegated_administrator" {
 #######################################################################
 # Note we are leaving installing the security agent add-on as a manual process
 resource "aws_guardduty_organization_configuration_feature" "eks_runtime_monitoring" {
+  provider = aws.delegated_administrator
+
   detector_id = var.administrator_detector_id
   name        = "EKS_RUNTIME_MONITORING"
   auto_enable = "NEW"
