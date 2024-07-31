@@ -202,7 +202,8 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
   statement {
     effect = "Deny"
     not_actions = [
-      "chatbot:*"
+      "chatbot:*",
+      "iam:PassRole"
     ]
     resources = ["*"]
 
