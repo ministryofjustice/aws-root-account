@@ -2,6 +2,7 @@
 # Inspector #
 #############
 
+
 # Delegate to organisation security account
 resource "aws_inspector2_delegated_admin_account" "eu_west_2" {
   provider   = aws.eu-west-2
