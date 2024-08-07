@@ -143,6 +143,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "cloudtrail:*",
       "config:*",
       "cur:DescribeReportDefinitions",
+      "cur:ListTagsForResource",
       "events:*",
       "fms:*",
       "guardduty:*",
