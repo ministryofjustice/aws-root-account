@@ -61,6 +61,7 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
       "account:GetAlternateContact",
       "budgets:ListTagsForResource",
       "cur:DescribeReportDefinitions",
+      "cur:ListTagsForResource",
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
