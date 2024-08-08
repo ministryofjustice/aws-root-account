@@ -466,7 +466,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer_additional_polic
     actions = [
       "kms:CreateGrant"
     ]
-    resources = ["arn:aws:kms:*:${local.environment_management.account_ids["core-shared-services-production"]}:key/*"]
+    resources = ["*"]
     condition {
       test     = "Bool"
       variable = "kms:GrantIsForAWSResource"
