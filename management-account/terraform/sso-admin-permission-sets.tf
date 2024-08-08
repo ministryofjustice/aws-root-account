@@ -176,6 +176,25 @@ resource "aws_ssoadmin_managed_policy_attachment" "view_only_access" {
 # Modernisation Platform engineer
 # This role is designed to be used as an alternative to a full on admin role
 
+locals {
+
+  app_name = try(regex("^bichard*.|^remote-supervisio*.", terraform.workspace), replace(terraform.workspace, "/-([[:alnum:]]+)$/", ""))
+
+  env_name = replace(terraform.workspace, "${local.app_name}-", "")
+
+  modernisation_platform_account = data.aws_caller_identity.modernisation-platform
+  environment_management         = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
+
+  defname = jsondecode(file("../../../../environments/${local.app_name}.json"))
+
+  sso_data = { for data in local.defname.environments :
+
+    data.name => data.access
+
+    if(data.name == local.env_name)
+  }
+}
+
 resource "aws_ssoadmin_permission_set" "modernisation_platform_engineer" {
   name             = "ModernisationPlatformEngineer"
   description      = "Modernisation Platform: engineer troubleshooting role"
@@ -195,7 +214,7 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_eng
   inline_policy      = data.aws_iam_policy_document.modernisation_platform_engineer.json
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_engineer.arn
 }
-# Define the main policy document combining both policies manually
+
 data "aws_iam_policy_document" "modernisation_platform_engineer" {
   statement {
     actions = [
@@ -484,6 +503,21 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       variable = "secretsmanager:ResourceTag/instance-management-policy"
       values   = ["full"]
     }
+  }
+    statement {
+    sid = "assumeRolesInSharedAccounts"
+    actions = [
+      "sts:AssumeRole"
+    ]
+    resources = [
+      "arn:aws:iam::*:role/ModernisationPlatformSSOReadOnly",
+      "arn:aws:iam::*:role/read-log-records",
+      "arn:aws:iam::*:role/member-delegation-read-only",
+      "arn:aws:iam::${local.environment_management.account_ids["core-shared-services-production"]}:role/member-shared-services",
+      "arn:aws:iam::${local.environment_management.account_ids["core-shared-services-production"]}:role/ad-fixngo-ec2-access",
+      "arn:aws:iam::${local.modernisation_platform_account.id}:role/modernisation-account-limited-read-member-access",
+      "arn:aws:iam::${local.modernisation_platform_account.id}:role/modernisation-account-terraform-state-member-access"
+    ]
   }
 }
 
