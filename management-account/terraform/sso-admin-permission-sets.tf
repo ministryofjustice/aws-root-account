@@ -195,14 +195,14 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_eng
   permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_engineer.arn
 }
 
-data "aws_iam_policy_document" "modernisation_platform_engineer" {
-  statement {
-    actions = [
-      "support:*"
-    ]
-    resources = ["*"]
-  }
-}
+# data "aws_iam_policy_document" "modernisation_platform_engineer" {
+#   statement {
+#     actions = [
+#       "support:*"
+#     ]
+#     resources = ["*"]
+#   }
+# }
 
 # Additional policy document for additional permissions 
 data "aws_iam_policy_document" "modernisation_platform_engineer_additional_policy" {
