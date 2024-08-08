@@ -292,7 +292,14 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "iam:CreateOpenIDConnectProvider",
       "iam:CreateSAMLProvider",
       "iam:CreateUser",
+      "iam:CreateServiceLinkedRole",
       "iam:CreateVirtualMFADevice",
+      "iam:CreateAccessKey",
+      "iam:DeleteAccessKey",
+      "iam:GetAccessKeyLastUsed",
+      "iam:GetUser",
+      "iam:ListAccessKeys",
+      "iam:UpdateAccessKey",
       "iam:DeactivateMFADevice",
       "iam:DeleteAccountAlias",
       "iam:DeleteAccountPasswordPolicy",
@@ -365,6 +372,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "ses:PutAccountDetails",
       "ssm:*",
       "ssm-guiconnect:*",
+      "sns:Publish",
       "sso:ListDirectoryAssociations",
       "support:*",
       "wellarchitected:Get*",
@@ -374,6 +382,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "states:List*",
       "states:Stop*",
       "states:Start*",
+      "kms:CreateGrant",
       "kinesisanalytics:StartApplication",
       "kinesisanalytics:StopApplication",
       "kinesisanalytics:CreateApplicationSnapshot",
@@ -403,88 +412,6 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
     resources = ["*"]
   }
 
-  statement {
-    sid    = "snsAllow"
-    effect = "Allow"
-    actions = [
-      "sns:Publish"
-    ]
-    resources = ["arn:aws:sns:*:*:Automation*"]
-  }
-
-  statement {
-    sid    = "lambdaAllow"
-    effect = "Allow"
-    actions = [
-      "lambda:InvokeFunction"
-    ]
-    resources = ["arn:aws:lambda:*:*:function:Automation*"]
-  }
-
-  statement {
-    sid    = "iamOnCicdMemberAllow"
-    effect = "Allow"
-    actions = [
-      "iam:CreateAccessKey",
-      "iam:DeleteAccessKey",
-      "iam:GetAccessKeyLastUsed",
-      "iam:GetUser",
-      "iam:ListAccessKeys",
-      "iam:UpdateAccessKey"
-    ]
-    resources = ["arn:aws:iam::*:user/cicd-member-user"]
-  }
-
-  statement {
-    sid    = "iamForECSAllow"
-    effect = "Allow"
-    actions = [
-      "iam:PassRole"
-    ]
-    resources = ["*"]
-    condition {
-      test     = "StringEquals"
-      variable = "iam:PassedToService"
-      values   = ["ecs.amazonaws.com"]
-    }
-  }
-
-  statement {
-    sid    = "cloudWatchCrossAccountAllow"
-    effect = "Allow"
-    actions = [
-      "iam:CreateServiceLinkedRole"
-    ]
-    resources = ["arn:aws:iam::*:role/aws-service-role/cloudwatch-crossaccount.amazonaws.com/AWSServiceRoleForCloudWatchCrossAccount"]
-  }
-
-  statement {
-    sid    = "coreSharedServicesCreateGrantAllow"
-    effect = "Allow"
-    actions = [
-      "kms:CreateGrant"
-    ]
-    resources = ["*"]
-    condition {
-      test     = "Bool"
-      variable = "kms:GrantIsForAWSResource"
-      values   = ["true"]
-    }
-  }
-
-  statement {
-    sid    = "SecretsManagerPut"
-    effect = "Allow"
-    actions = [
-      "secretsmanager:PutSecretValue",
-    ]
-    resources = ["*"]
-    condition {
-      test     = "StringEquals"
-      variable = "secretsmanager:ResourceTag/instance-management-policy"
-      values   = ["full"]
-    }
-  }
     statement {
     sid = "assumeRolesInSharedAccounts"
     actions = [
