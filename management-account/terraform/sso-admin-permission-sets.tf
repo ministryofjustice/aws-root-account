@@ -174,6 +174,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "view_only_access" {
 
 
 # Modernisation Platform engineer
+# This role is designed to be used as an alternative to a full on admin role
 
 resource "aws_ssoadmin_permission_set" "modernisation_platform_engineer" {
   name             = "ModernisationPlatformEngineer"
