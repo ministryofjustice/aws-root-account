@@ -411,18 +411,6 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
     ]
     resources = ["*"]
   }
-
-    statement {
-    sid = "assumeRolesInSharedAccounts"
-    actions = [
-      "sts:AssumeRole"
-    ]
-    resources = [
-      "arn:aws:iam::*:role/ModernisationPlatformSSOReadOnly",
-      "arn:aws:iam::*:role/read-log-records",
-      "arn:aws:iam::*:role/member-delegation-read-only"
-    ]
-  }
 }
 
 # Modernisation Platform end user permission sets are now managed in the modernisation-platform repository
