@@ -90,6 +90,6 @@ locals {
     "eks:eks-cluster-name",
     "karpenter.k8s.aws/ec2nodeclass",
     "karpenter.sh/nodeclaim",
-    "karpenter.sh/nodepool",
+    "karpenter.sh/nodepool"
   ])
 }
