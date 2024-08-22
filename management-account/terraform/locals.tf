@@ -84,4 +84,12 @@ locals {
     aws_saml            = sensitive(jsondecode(data.aws_secretsmanager_secret_version.aws_saml.secret_string))
     azure_entraid_oidc  = sensitive(jsondecode(data.aws_secretsmanager_secret_version.azure_entraid_oidc.secret_string))
   }
+
+  # Cost allocation tags
+  cost-allocation-tags = toset([
+    "eks:eks-cluster-name",
+    "karpenter.k8s.aws/ec2nodeclass",
+    "karpenter.sh/nodeclaim",
+    "karpenter.sh/nodepool",
+  ])
 }
