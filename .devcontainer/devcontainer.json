@@ -1,0 +1,19 @@
+{
+    "name": "aws-root-account",
+    "image": "ghcr.io/ministryofjustice/devcontainer-base:latest",
+    "features": {
+      "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+      "ghcr.io/ministryofjustice/devcontainer-feature/static-analysis:1": {},
+      "ghcr.io/ministryofjustice/devcontainer-feature/terraform:1": {}
+    },
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "EditorConfig.EditorConfig",
+          "GitHub.vscode-github-actions",
+          "GitHub.vscode-pull-request-github"
+        ]
+      }
+    }
+  }
+  
