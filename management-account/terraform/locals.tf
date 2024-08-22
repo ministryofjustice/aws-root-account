@@ -86,7 +86,7 @@ locals {
   }
 
   # Cost allocation tags
-  cost-allocation-tags = toset([
+  cost_allocation_tags = toset([
     "eks:eks-cluster-name",
     "karpenter.k8s.aws/ec2nodeclass",
     "karpenter.sh/nodeclaim",
