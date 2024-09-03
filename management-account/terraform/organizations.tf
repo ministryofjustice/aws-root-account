@@ -3,6 +3,7 @@ resource "aws_organizations_organization" "default" {
     "access-analyzer.amazonaws.com",
     "account.amazonaws.com",
     "backup.amazonaws.com",
+    "billing-cost-management.amazonaws.com",
     "compute-optimizer.amazonaws.com",
     "config.amazonaws.com",
     "cost-optimization-hub.bcm.amazonaws.com",
