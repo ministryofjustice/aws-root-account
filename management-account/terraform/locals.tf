@@ -84,4 +84,31 @@ locals {
     aws_saml            = sensitive(jsondecode(data.aws_secretsmanager_secret_version.aws_saml.secret_string))
     azure_entraid_oidc  = sensitive(jsondecode(data.aws_secretsmanager_secret_version.azure_entraid_oidc.secret_string))
   }
+
+  # Cost Allocation Tags
+  active_tags = [
+    "app.kubernetes.io/name",
+    "application",
+    "aws:createdBy",
+    "aws:eks:deployment",
+    "aws:eks:namespace",
+    "aws:eks:node",
+    "aws:eks:workload-name",
+    "aws:eks:workload-type",
+    "business-unit",
+    "component",
+    "eks:cluster-name",
+    "environment-name",
+    "infrastructure-support",
+    "is-production",
+    "kubernetes_cluster",
+    "kubernetes_namespace",
+    "kubernetes.io/namespace",
+    "namespace",
+    "owner",
+    "runbook",
+    "source-code",
+    "stack",
+    "Stack"
+  ]
 }
