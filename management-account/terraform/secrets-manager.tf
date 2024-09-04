@@ -82,11 +82,18 @@ data "aws_secretsmanager_secret_version" "azure_entraid_oidc" {
 
 # EntraID: Secrets for User Sync Lambda -- secrets values to be stored in a set of key-value pairs comprising tenant, application id and application secret
 
-resource "aws_secretsmanager_secret" "azure_entraid_group_sync" {
-  name        = "azure_entraid_oidc"
-  description = "Azure tenant ID, client ID and secret for the Ministry of Justice owned webapp for group membership syncing"
+removed {
+  from = aws_secretsmanager_secret.azure_entraid_group_sync
+
+  lifecycle {
+    destroy = false
+  }
 }
 
-data "aws_secretsmanager_secret_version" "azure_entraid_group_sync" {
-  secret_id = aws_secretsmanager_secret.azure_entraid_group_sync.id
+removed {
+  from = aws_secretsmanager_secret_version.azure_entraid_group_sync
+
+  lifecycle {
+    destroy = false
+  }
 }
