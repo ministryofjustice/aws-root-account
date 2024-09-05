@@ -76,9 +76,18 @@ resource "aws_secretsmanager_secret" "azure_entraid_oidc" {
   description = "Azure client ID and secret for the Ministry of Justice owned OAuth app for AWS SSO"
 }
 
+# Importing existing secret
+import {
+  to = aws_secretsmanager_secret.azure_entraid_oidc
+  id = "arn:aws:secretsmanager:eu-west-2:${data.aws_caller_identity.current.account_id}:secret:azure_entraid_oidc-tivo7F"
+}
+
 data "aws_secretsmanager_secret_version" "azure_entraid_oidc" {
   secret_id = aws_secretsmanager_secret.azure_entraid_oidc.id
 }
+
+
+
 
 # EntraID: Secrets for User Sync Lambda -- secrets values to be stored in a set of key-value pairs comprising tenant, application id and application secret
 
