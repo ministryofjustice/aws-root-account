@@ -168,11 +168,12 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
     }
   }
 
-  # Deny anything apart from Network Manager and S3 Global Endpoint Management Operations in us-west-2
+  # Deny anything apart from Network Manager, S3 Global Endpoint Management Operations and ChatBot in us-west-2
   statement {
     effect = "Deny"
     not_actions = [
       "networkmanager:*",
+      "chatbot:*",
       "cloudwatch:List*",     # To view the Network Manager log group
       "cloudwatch:Get*",      # To view the Network Manager log group
       "cloudwatch:Describe*", # To view the Network Manager log group
