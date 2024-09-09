@@ -8,3 +8,11 @@ module "scim" {
   sso_identity_store_id = local.sso_admin_identity_store_id
   not_dry_run           = true
 }
+
+module "entraid-scim" {
+  source = "github.com/ministryofjustice/moj-terraform-scim-entra-id"
+  # Required variables for the module
+  azure_tenant_id     = "your-tenant-id"
+  azure_client_id     = "your-client-id"
+  azure_client_secret = "your-client-secret"
+}
