@@ -10,8 +10,7 @@ module "scim" {
 }
 
 module "entraid-scim" {
-  source = "github.com/ministryofjustice/moj-terraform-scim-entra-id"
-  # Required variables for the module
+  source              = "github.com/ministryofjustice/moj-terraform-scim-entra-id"
   azure_tenant_id     = "your-tenant-id"
   azure_client_id     = "your-client-id"
   azure_client_secret = "your-client-secret"
