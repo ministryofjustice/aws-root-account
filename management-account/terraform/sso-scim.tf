@@ -9,7 +9,7 @@ module "scim" {
   not_dry_run           = true
 }
 
-module "entraid-scim" {
+module "entraid_scim" {
   source              = "github.com/ministryofjustice/moj-terraform-scim-entra-id"
   azure_tenant_id     = "your-tenant-id"
   azure_client_id     = "your-client-id"
