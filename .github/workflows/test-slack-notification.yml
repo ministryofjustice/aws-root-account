@@ -21,7 +21,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":x: *GitHub Workflow Failed!* \n\nA workflow has failed in the repository *<https://github.com/${{ github.repository }}|${{ github.repository }}>*.\n\n*Workflow:* `${{ github.workflow }}`\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ github.sha }}` - _${{ github.event.head_commit.message }}_\n*Author:* `${{ github.event.head_commit.author.name }}`"
+                    "text": ":x: *GitHub Workflow Failed!* \n\nA workflow has failed in the repository *<https://github.com/${{ github.repository }}|${{ github.repository }}>*.\n\n*Workflow:* `${{ github.workflow }}`\n*Branch:* `${{ github.head_ref }}`\n*Commit:* `${{ github.sha }}` - _${{ github.event.head_commit.message }}_\n*Author:* `${{ github.event.head_commit.author.name }}`"
                   }
                 },
                 {
