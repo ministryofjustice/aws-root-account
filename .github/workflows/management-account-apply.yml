@@ -3,10 +3,10 @@ name: terraform apply (management-account)
 on:
   push:
     paths:
-      - 'management-account/terraform/**'
-      - 'modules/**'
-      - '.github/workflows/management-account-plan.yml'
-      - '.github/workflows/management-account-apply.yml'
+      - "management-account/terraform/**"
+      - "modules/**"
+      - ".github/workflows/management-account-plan.yml"
+      - ".github/workflows/management-account-apply.yml"
     branches:
       - main
 
@@ -36,3 +36,13 @@ jobs:
       - run: terraform plan -no-color
       - run: terraform apply -auto-approve
         if: github.event.ref == 'refs/heads/main'
+
+      - name: Slack failure notification
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0 # v1.27.0
+        with:
+          payload: |
+            {"blocks":[{"type": "section","text": {"type": "mrkdwn","text": ":no_entry: Failed GitHub Action:"}},{"type": "section","fields":[{"type": "mrkdwn","text": "*Workflow:*\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }}>"},{"type": "mrkdwn","text": "*Job:*\n${{ github.job }}"},{"type": "mrkdwn","text": "*Repo:*\n${{ github.repository }}"}]}]}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
