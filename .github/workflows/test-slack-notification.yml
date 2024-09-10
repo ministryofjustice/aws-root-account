@@ -1,9 +1,8 @@
 name: 🧪 Test Slack Notification
 
 on:
-  pull_request_target:
-    branches:
-      - main
+  pull_request:
+    branches: [main]
 
 permissions: {}
 
@@ -22,17 +21,8 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":x: *GitHub Workflow Failed!* \n\nA workflow has failed in the repository *<https://github.com/${{ github.repository }}|${{ github.repository }}>*.\n\n*Workflow:* `${{ github.workflow }}`\n*Branch:* `${{ github.ref }}`\n*Commit:* `${{ github.sha }}` - _${{ github.event.head_commit.message }}_\n*Author:* `${{ github.event.head_commit.author.name }}`"
+                    "text": ":x: *GitHub Workflow Failed!* \n\nA workflow has failed in the repository *<https://github.com/${{ github.repository }}|${{ github.repository }}>*.\n\n*Workflow:* `${{ github.workflow }}`\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ github.sha }}` - _${{ github.event.head_commit.message }}_\n*Author:* `${{ github.event.head_commit.author.name }}`"
                   }
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Job ID:* `${{ github.run_id }}`\n*Timestamp:* `${{ github.event.timestamp }} UTC`"
-                    }
-                  ]
                 },
                 {
                   "type": "actions",
