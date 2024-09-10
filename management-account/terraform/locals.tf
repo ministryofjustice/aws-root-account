@@ -85,6 +85,13 @@ locals {
     azure_entraid_oidc  = sensitive(jsondecode(data.aws_secretsmanager_secret_version.azure_entraid_oidc.secret_string))
   }
 
+  # Azure Auth Details
+  azure = {
+    tenant_id     = jsondecode(data.aws_secretsmanager_secret_version.azure_aws_connectivity_details.secret_string)["AZURE_TENANT_ID"]
+    client_id     = jsondecode(data.aws_secretsmanager_secret_version.azure_aws_connectivity_details.secret_string)["AZURE_CLIENT_ID"]
+    client_secret = jsondecode(data.aws_secretsmanager_secret_version.azure_aws_connectivity_details.secret_string)["AZURE_CLIENT_SECRET"]
+  }
+
   # Cost Allocation Tags
   active_tags = [
     "app.kubernetes.io/name",
