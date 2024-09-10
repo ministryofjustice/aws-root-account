@@ -1,3 +1,4 @@
+# TODO: Delete once tested on push to main
 name: 🧪 Test Slack Notification
 
 on:
@@ -19,5 +20,5 @@ jobs:
           payload: |
             {"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":x: *GitHub Workflow Failed!* \n\nA workflow has failed in the repository *<https://github.com/${{ github.repository }}|${{ github.repository }}>*.\n\n*Workflow:* `${{ github.workflow }}`\n*Branch:* `${{ github.head_ref }}`\n*Commit:* `${{ github.sha }}` - _${{ github.event.head_commit.message }}_\n*Author:* `${{ github.event.head_commit.author.name }}`"}},{"type":"actions","elements":[{"type":"button","text":{"type":"plain_text","text":"View Workflow"},"url":"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}","style":"primary"},{"type":"button","text":{"type":"plain_text","text":"View Commit"},"url":"https://github.com/${{ github.repository }}/commit/${{ github.sha }}"}]}]}
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TESTING }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
