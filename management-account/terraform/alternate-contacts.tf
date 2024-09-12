@@ -7,6 +7,8 @@
 # This Terraform resource aligns the SECURITY alternate contact for all AWS accounts to match MOJ's Security Guidance
 # See: https://security-guidance.service.justice.gov.uk/baseline-aws-accounts/#baseline-for-amazon-web-services-accounts
 
+# TODO: Delete after testing has finished
+
 resource "aws_account_alternate_contact" "security" {
   for_each = local.accounts.active_only
 
