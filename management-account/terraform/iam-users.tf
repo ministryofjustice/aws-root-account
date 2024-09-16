@@ -120,28 +120,6 @@ resource "aws_iam_user_group_membership" "sablu_miah" {
   ]
 }
 
-##################
-# Steve Marshall #
-##################
-resource "aws_iam_user" "steve_marshall" {
-  name          = "SteveMarshall"
-  path          = "/"
-  force_destroy = true
-  tags          = {}
-}
-
-# User membership
-resource "aws_iam_user_group_membership" "steve_marshall" {
-  user = aws_iam_user.steve_marshall.name
-
-  groups = [
-    aws_iam_group.admin.name,
-    aws_iam_group.aws_organisations_admin.name,
-    aws_iam_group.billing_full_access.name,
-    aws_iam_group.iam_user_change_password.name,
-  ]
-}
-
 ##############
 # Ona Ojukwu #
 ##############
