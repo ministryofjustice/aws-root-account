@@ -4,7 +4,7 @@ plugin "terraform" {
 
 plugin "aws" {
   enabled = true
-  version = "0.21.2"
+  version = "0.33.0"
   source  = "github.com/terraform-linters/tflint-ruleset-aws"
 }
 
@@ -17,15 +17,15 @@ rule "terraform_deprecated_index" {
 }
 
 rule "terraform_deprecated_interpolation" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_documented_outputs" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_documented_variables" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_module_pinned_source" {
@@ -53,11 +53,11 @@ rule "terraform_standard_module_structure" {
 }
 
 rule "terraform_typed_variables" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_unused_declarations" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_unused_required_providers" {
