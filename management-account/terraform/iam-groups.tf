@@ -31,6 +31,20 @@ resource "aws_iam_group_policy_attachment" "aws_organisations_admin_custom" {
   policy_arn = aws_iam_policy.aws_organisations_admin.arn
 }
 
+################################
+# AWSOrganisationsListReadOnly #
+################################
+resource "aws_iam_group" "aws_organisations_listreadonly" {
+  name = "AWSOrganisationsListReadOnly"
+  path = "/"
+}
+
+# Group policy attachments
+resource "aws_iam_group_policy_attachment" "aws_organisations_listreadonly" {
+  group      = aws_iam_group.aws_organisations_listreadonly.name
+  policy_arn = aws_iam_policy.aws_organizations_list_read_only.arn
+}
+
 #####################
 # BillingFullAccess #
 #####################

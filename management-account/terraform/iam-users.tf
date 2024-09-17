@@ -182,3 +182,23 @@ resource "aws_iam_user_group_membership" "finance_team" {
     aws_iam_group.iam_user_change_password.name,
   ]
 }
+
+#####################
+# Cortex XSOAR user #
+#####################
+
+resource "aws_iam_user" "xsoar_integration" {
+  name          = "XsoarIntegration"
+  path          = "/"
+  force_destroy = true
+  tags          = {}
+}
+
+# User membership
+resource "aws_iam_user_group_membership" "xsoar_integration" {
+  user = aws_iam_user.xsoar_integration.name
+
+  groups = [
+    aws_iam_group.aws_organisations_listreadonly.name,
+  ]
+}
