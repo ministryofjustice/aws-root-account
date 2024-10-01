@@ -5,7 +5,7 @@ resource "aws_cur_report_definition" "no_integrations" {
   time_unit                  = "DAILY"
   format                     = "textORcsv"
   compression                = "ZIP"
-  additional_schema_elements = ["RESOURCES"]
+  additional_schema_elements = ["RESOURCES", "SPLIT_COST_ALLOCATION_DATA"]
   additional_artifacts       = []
   refresh_closed_reports     = true
   report_versioning          = "CREATE_NEW_REPORT"
@@ -23,7 +23,7 @@ resource "aws_cur_report_definition" "quicksight_integration" {
   time_unit                  = "DAILY"
   format                     = "textORcsv"
   compression                = "ZIP"
-  additional_schema_elements = ["RESOURCES"]
+  additional_schema_elements = ["RESOURCES", "SPLIT_COST_ALLOCATION_DATA"]
   additional_artifacts       = ["REDSHIFT", "QUICKSIGHT"]
   refresh_closed_reports     = true
   report_versioning          = "CREATE_NEW_REPORT"
@@ -32,4 +32,22 @@ resource "aws_cur_report_definition" "quicksight_integration" {
   s3_bucket = module.cur_reports_quicksight_s3_bucket.bucket_name
   s3_region = "eu-west-2"
   s3_prefix = "CUR"
+}
+
+resource "aws_cur_report_definition" "athena_integration" {
+  provider = aws.us-east-1
+
+  report_name                = "MOJ-CUR-ATHENA"
+  time_unit                  = "DAILY"
+  format                     = "textORcsv"
+  compression                = "ZIP"
+  additional_schema_elements = ["RESOURCES", "SPLIT_COST_ALLOCATION_DATA"]
+  additional_artifacts       = ["ATHENA"]
+  refresh_closed_reports     = true
+  report_versioning          = "OVERWRITE_REPORT"
+
+  # S3 configuration
+  s3_bucket = module.cur_reports_s3_bucket.bucket_name
+  s3_region = "eu-west-2"
+  s3_prefix = "CUR-ATHENA"
 }
