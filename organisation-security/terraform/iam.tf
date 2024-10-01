@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "oidc_assume_role_apply" {
       "ce:*",
       "cloudtrail:*",
       "config:*",
-      "cur:DescribeReportDefinitions",
+      "cur:*",
       "events:*",
       "fms:*",
       "guardduty:*",
