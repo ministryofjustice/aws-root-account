@@ -23,7 +23,7 @@ resource "aws_cur_report_definition" "quicksight_integration" {
   time_unit                  = "DAILY"
   format                     = "textORcsv"
   compression                = "ZIP"
-  additional_schema_elements = ["RESOURCES"]
+  additional_schema_elements = ["RESOURCES", "SPLIT_COST_ALLOCATION_DATA"]
   additional_artifacts       = ["REDSHIFT", "QUICKSIGHT"]
   refresh_closed_reports     = true
   report_versioning          = "CREATE_NEW_REPORT"
