@@ -186,9 +186,9 @@ resource "aws_s3_bucket_replication_configuration" "default" {
 # IAM Policy for Replication #
 ##############################
 resource "aws_iam_role" "replication_role" {
-  count = var.enable_replication ? 1 : 0  # Create the role only if replication is enabled
+  count = var.enable_replication ? 1 : 0 # Create the role only if replication is enabled
 
-  name               = "${coalesce(var.bucket_name, "default-bucket-name")}-replication-role"
+  name = "${coalesce(var.bucket_name, "default-bucket-name")}-replication-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -204,10 +204,10 @@ resource "aws_iam_role" "replication_role" {
 }
 
 resource "aws_iam_role_policy" "replication" {
-  count = var.enable_replication ? 1 : 0  # Attach policy only if replication is enabled
+  count = var.enable_replication ? 1 : 0 # Attach policy only if replication is enabled
 
-  name   = "${aws_iam_role.replication_role[count.index].name}-policy"  # Use count.index for referencing
-  role   = aws_iam_role.replication_role[count.index].id
+  name = "${aws_iam_role.replication_role[count.index].name}-policy"
+  role = aws_iam_role.replication_role[count.index].id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -224,7 +224,7 @@ resource "aws_iam_role_policy" "replication" {
       {
         Action   = ["s3:ReplicateObject", "s3:ReplicateDelete", "s3:ReplicateTags"],
         Effect   = "Allow",
-        Resource = "arn:aws:s3:::${var.replication_bucket_arn}"  # Ensure you reference the correct bucket ARN
+        Resource = "arn:aws:s3:::${var.replication_bucket_arn}"
       },
     ]
   })

@@ -188,13 +188,13 @@ data "aws_iam_policy_document" "terraform_state_s3_bucket" {
 module "cur_reports_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name             = "moj-cur-reports"
-  attach_policy           = true
-  policy                  = data.aws_iam_policy_document.cur_reports_s3_bucket.json
-  enable_replication      = true
-  replication_bucket_arn  = "arn:aws:s3:::moj-cur-reports-modplatform-20240930164810837800000001"
-  replication_role_arn    = module.cur_reports_s3_bucket.replication_role_arn
-  replication_rules       = [
+  bucket_name            = "moj-cur-reports"
+  attach_policy          = true
+  policy                 = data.aws_iam_policy_document.cur_reports_s3_bucket.json
+  enable_replication     = true
+  replication_bucket_arn = "arn:aws:s3:::moj-cur-reports-modplatform-20240930164810837800000001"
+  replication_role_arn   = module.cur_reports_s3_bucket.replication_role_arn
+  replication_rules      = [
     {
       id     = "replicate-cur-athena"
       prefix = "CUR-ATHENA/"
@@ -202,7 +202,6 @@ module "cur_reports_s3_bucket" {
     }
   ]
 }
-
 
 data "aws_iam_policy_document" "cur_reports_s3_bucket" {
   version = "2008-10-17"
