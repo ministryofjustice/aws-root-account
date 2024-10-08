@@ -82,3 +82,31 @@ variable "object_lock_retention" {
   type    = any
   default = {}
 }
+
+variable "enable_replication" {
+  description = "Whether to enable cross-account replication"
+  type        = bool
+  default     = false
+}
+
+variable "replication_bucket_arn" {
+  description = "ARN of the destination bucket for replication"
+  type        = string
+  default     = ""
+}
+
+variable "replication_role_arn" {
+  description = "ARN of the IAM role for S3 replication"
+  type        = string
+  default     = ""
+}
+
+variable "replication_rules" {
+  description = "Replication rules for the bucket"
+  type = list(object({
+    id     = string
+    prefix = string
+    status = string
+  }))
+  default = []
+}

@@ -153,3 +153,78 @@ resource "aws_s3_bucket_public_access_block" "default" {
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
 }
+
+###############################
+# Cross-Account Replication   #
+###############################
+resource "aws_s3_bucket_replication_configuration" "default" {
+  depends_on = [aws_s3_bucket_versioning.default]
+  for_each   = var.enable_replication ? toset(["enabled"]) : []
+
+  role   = var.replication_role_arn
+  bucket = aws_s3_bucket.default.id
+
+  dynamic "rule" {
+    for_each = var.replication_rules
+
+    content {
+      id     = rule.value.id
+      status = rule.value.status
+
+      filter {
+        prefix = rule.value.prefix
+      }
+
+      destination {
+        bucket = var.replication_bucket_arn
+      }
+    }
+  }
+}
+
+##############################
+# IAM Policy for Replication #
+##############################
+resource "aws_iam_role" "replication_role" {
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "s3.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  name = "${coalesce(var.bucket_name, "default-bucket-name")}-replication-role"
+}
+
+resource "aws_iam_role_policy" "replication" {
+  for_each = var.enable_replication ? toset(["enabled"]) : []
+
+  role = aws_iam_role.replication_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action   = ["s3:GetReplicationConfiguration", "s3:ListBucket"]
+        Effect   = "Allow"
+        Resource = aws_s3_bucket.default.arn
+      },
+      {
+        Action   = ["s3:GetObjectVersion", "s3:GetObjectVersionAcl"]
+        Effect   = "Allow"
+        Resource = "${aws_s3_bucket.default.arn}/*"
+      },
+      {
+        Action   = ["s3:ReplicateObject", "s3:ReplicateDelete", "s3:ReplicateTags"]
+        Effect   = "Allow"
+        Resource = var.replication_bucket_arn
+      }
+    ]
+  })
+}
