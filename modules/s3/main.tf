@@ -201,8 +201,6 @@ resource "aws_iam_role" "replication_role" {
       }
     ]
   })
-  
-  max_session_duration = 3600
 }
 
 resource "aws_iam_role_policy" "replication" {
