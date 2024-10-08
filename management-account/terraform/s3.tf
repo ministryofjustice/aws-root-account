@@ -194,7 +194,7 @@ module "cur_reports_s3_bucket" {
   enable_replication     = true
   replication_bucket_arn = "arn:aws:s3:::moj-cur-reports-modplatform-20240930164810837800000001"
   replication_role_arn   = module.cur_reports_s3_bucket.replication_role_arn
-  replication_rules      = [
+  replication_rules = [
     {
       id     = "replicate-cur-athena"
       prefix = "CUR-ATHENA/"

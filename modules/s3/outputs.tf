@@ -12,6 +12,6 @@ output "replication_configuration" {
 }
 
 output "replication_role_arn" {
-  value = length(aws_iam_role.replication_role) > 0 ? aws_iam_role.replication_role[0].arn : null
+  value       = length(aws_iam_role.replication_role) > 0 ? aws_iam_role.replication_role[0].arn : null
   description = "ARN of the replication role if it exists"
 }
