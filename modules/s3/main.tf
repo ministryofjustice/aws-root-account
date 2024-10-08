@@ -204,7 +204,6 @@ resource "aws_iam_role" "replication_role" {
 
 resource "aws_iam_role_policy" "replication" {
   for_each = var.enable_replication ? toset(["enabled"]) : []
-
   role = aws_iam_role.replication_role.id
 
   policy = jsonencode({
