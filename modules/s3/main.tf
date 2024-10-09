@@ -170,10 +170,7 @@ resource "aws_s3_bucket_replication_configuration" "default" {
     content {
       id     = rule.value.id
       status = rule.value.status
-
-      filter {
-        prefix = rule.value.prefix
-      }
+      prefix = rule.value.prefix
 
       destination {
         bucket = var.replication_bucket_arn
