@@ -153,3 +153,79 @@ resource "aws_s3_bucket_public_access_block" "default" {
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
 }
+
+###############################
+# Cross-Account Replication   #
+###############################
+resource "aws_s3_bucket_replication_configuration" "default" {
+  depends_on = [aws_s3_bucket_versioning.default]
+  for_each   = var.enable_replication ? toset(["enabled"]) : []
+
+  role   = var.replication_role_arn
+  bucket = aws_s3_bucket.default.id
+
+  dynamic "rule" {
+    for_each = var.replication_rules
+
+    content {
+      id     = rule.value.id
+      status = rule.value.status
+
+      filter {
+        prefix = rule.value.prefix
+      }
+
+      destination {
+        bucket = var.replication_bucket_arn
+      }
+    }
+  }
+}
+
+##############################
+# IAM Policy for Replication #
+##############################
+resource "aws_iam_role" "replication_role" {
+  count = var.enable_replication ? 1 : 0 # Create the role only if replication is enabled
+
+  name = "${coalesce(var.bucket_name, "default-bucket-name")}-replication-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "s3.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "replication" {
+  count = var.enable_replication ? 1 : 0 # Attach policy only if replication is enabled
+
+  name = "${aws_iam_role.replication_role[count.index].name}-policy"
+  role = aws_iam_role.replication_role[count.index].id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action   = ["s3:GetReplicationConfiguration", "s3:ListBucket"],
+        Effect   = "Allow",
+        Resource = "arn:aws:s3:::${var.bucket_name}"
+      },
+      {
+        Action   = ["s3:GetObjectVersion", "s3:GetObjectVersionAcl"],
+        Effect   = "Allow",
+        Resource = "arn:aws:s3:::${var.bucket_name}/*"
+      },
+      {
+        Action   = ["s3:ReplicateObject", "s3:ReplicateDelete", "s3:ReplicateTags"],
+        Effect   = "Allow",
+        Resource = "arn:aws:s3:::${var.replication_bucket_arn}"
+      },
+    ]
+  })
+}
