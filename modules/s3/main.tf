@@ -218,10 +218,10 @@ resource "aws_iam_role_policy" "replication" {
   role = aws_iam_role.replication_role[count.index].id
   policy = jsonencode(
     {
-      "Version": "2012-10-17",
-      "Statement": [
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-          Sid = "SourceBucketPermissions",
+          Sid    = "SourceBucketPermissions",
           Effect = "Allow",
           Action = [
             "s3:GetObjectVersionTagging",
@@ -236,7 +236,7 @@ resource "aws_iam_role_policy" "replication" {
           ]
         },
         {
-          Sid = "DestinationBucketPermissions",
+          Sid    = "DestinationBucketPermissions",
           Effect = "Allow",
           Action = [
             "s3:ReplicateObject",
@@ -250,21 +250,21 @@ resource "aws_iam_role_policy" "replication" {
           ]
         },
         {
-          Sid = "SourceBucketKMSKey",
+          Sid    = "SourceBucketKMSKey",
           Action = [
             "kms:Decrypt",
             "kms:GenerateDataKey"
           ],
-          Effect = "Allow",
+          Effect   = "Allow",
           Resource = var.source_kms_arn
         },
         {
-          Sid = "DestinationBucketKMSKey",
+          Sid    = "DestinationBucketKMSKey",
           Action = [
             "kms:Encrypt",
             "kms:GenerateDataKey"
           ],
-          Effect = "Allow",
+          Effect   = "Allow",
           Resource = var.destination_kms_arn
         }
       ]
