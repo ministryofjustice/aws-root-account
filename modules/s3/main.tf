@@ -250,7 +250,7 @@ resource "aws_iam_role_policy" "replication" {
           ]
         },
         {
-          Sid    = "SourceBucketKMSKey",
+          Sid = "SourceBucketKMSKey",
           Action = [
             "kms:Decrypt",
             "kms:GenerateDataKey"
@@ -259,7 +259,7 @@ resource "aws_iam_role_policy" "replication" {
           Resource = var.source_kms_arn
         },
         {
-          Sid    = "DestinationBucketKMSKey",
+          Sid = "DestinationBucketKMSKey",
           Action = [
             "kms:Encrypt",
             "kms:GenerateDataKey"
