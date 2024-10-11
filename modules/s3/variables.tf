@@ -116,12 +116,12 @@ variable "replication_rules" {
 
 variable "source_kms_arn" {
   description = "ARN of source bucket KMS key"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "destination_kms_arn" {
   description = "ARN of destination bucket KMS key"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
