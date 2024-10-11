@@ -171,6 +171,11 @@ resource "aws_s3_bucket_replication_configuration" "default" {
       id     = rule.value.id
       status = rule.value.status
 
+      source_selection_criteria {
+        sse_kms_encrypted_objects {
+          status = "Enabled"
+        }
+      }
       filter {
         prefix = rule.value.prefix
       }
