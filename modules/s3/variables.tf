@@ -104,9 +104,24 @@ variable "replication_role_arn" {
 variable "replication_rules" {
   description = "Replication rules for the bucket"
   type = list(object({
-    id     = string
-    prefix = string
-    status = string
+    id                 = string
+    prefix             = string
+    status             = string
+    deletemarker       = string
+    replica_kms_key_id = string
+    metrics            = string
   }))
   default = []
+}
+
+variable "source_kms_arn" {
+  description = "ARN of source bucket KMS key"
+  type = string
+  default = ""
+}
+
+variable "destination_kms_arn" {
+  description = "ARN of destination bucket KMS key"
+  type = string
+  default = ""
 }

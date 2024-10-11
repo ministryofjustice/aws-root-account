@@ -170,11 +170,23 @@ resource "aws_s3_bucket_replication_configuration" "default" {
     content {
       id     = rule.value.id
       status = rule.value.status
-      prefix = rule.value.prefix
 
+      filter {
+        prefix = rule.value.prefix
+      }
       destination {
         bucket = var.replication_bucket_arn
+        metrics {
+          status = rule.value.metrics
+        }
+        encryption_configuration {
+        replica_kms_key_id = rule.value.replica_kms_key_id
+        }
       }
+      delete_marker_replication {
+        status = rule.value.deletemarker
+      }
+      
     }
   }
 }
@@ -205,24 +217,57 @@ resource "aws_iam_role_policy" "replication" {
 
   name = "${aws_iam_role.replication_role[count.index].name}-policy"
   role = aws_iam_role.replication_role[count.index].id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
+  policy = jsonencode(
+  {
+    "Version": "2012-10-17",
+    "Statement": [
       {
-        Action   = ["s3:GetReplicationConfiguration", "s3:ListBucket"],
-        Effect   = "Allow",
-        Resource = "arn:aws:s3:::${var.bucket_name}"
+        Sid = "SourceBucketPermissions",
+        Effect = "Allow",
+        Action = [
+          "s3:GetObjectVersionTagging",
+          "s3:GetObjectVersionAcl",
+          "s3:ListBucket",
+          "s3:GetObjectVersionForReplication",
+          "s3:GetReplicationConfiguration"
+        ],
+        Resource = [
+          "arn:aws:s3:::${var.bucket_name}/*",
+          "arn:aws:s3:::${var.bucket_name}"
+        ]
       },
       {
-        Action   = ["s3:GetObjectVersion", "s3:GetObjectVersionAcl"],
-        Effect   = "Allow",
-        Resource = "arn:aws:s3:::${var.bucket_name}/*"
+        Sid = "DestinationBucketPermissions",
+        Effect = "Allow",
+        Action = [
+          "s3:ReplicateObject",
+          "s3:ObjectOwnerOverrideToBucketOwner",
+          "s3:GetObjectVersionTagging",
+          "s3:ReplicateTags",
+          "s3:ReplicateDelete"
+        ],
+        Resource = [
+          "arn:aws:s3:::${var.replication_bucket_arn}/*"
+        ]
       },
       {
-        Action   = ["s3:ReplicateObject", "s3:ReplicateDelete", "s3:ReplicateTags"],
-        Effect   = "Allow",
-        Resource = "arn:aws:s3:::${var.replication_bucket_arn}"
+        Sid = "SourceBucketKMSKey",
+        Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey"
+        ],
+        Effect = "Allow",
+        Resource = var.source_kms_arn
       },
+      {
+        Sid = "DestinationBucketKMSKey",
+        Action = [
+          "kms:Encrypt",
+          "kms:GenerateDataKey"
+        ],
+        Effect = "Allow",
+        Resource = var.destination_kms_arn
+      }
     ]
   })
 }

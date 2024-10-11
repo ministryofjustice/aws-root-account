@@ -41,6 +41,11 @@ locals {
 
   # Modernisation Platform account IDs
   modernisation_platform_accounts = {
+    core_logging_id = [
+      for account_name, account_id in local.accounts.active_only :
+      account_id
+      if account_name == "core-logging"
+    ]
     core_network_services_id = [
       for account_name, account_id in local.accounts.active_only :
       account_id
