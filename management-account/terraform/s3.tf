@@ -195,17 +195,22 @@ module "cur_reports_s3_bucket" {
   replication_bucket_arn = "arn:aws:s3:::moj-cur-reports-modplatform-20240930164810837800000001"
   replication_role_arn   = module.cur_reports_s3_bucket.replication_role_arn
   source_kms_arn         = "arn:aws:kms:*:${data.aws_caller_identity.current.account_id}:alias/aws/s3"
-  destination_kms_arn    = "arn:aws:kms:eu-west-2:${coalesce(local.modernisation_platform_accounts.core_logging_id...)}:alias/moj-cur-reports-key"
+  destination_kms_arn    = data.aws_kms_alias.moj_cur_reports_kms_alias.target_key_arn
   replication_rules = [
     {
       id                 = "replicate-cur-athena"
       prefix             = "CUR-ATHENA/"
       status             = "Enabled"
       deletemarker       = "Enabled"
-      replica_kms_key_id = "arn:aws:kms:eu-west-2:${coalesce(local.modernisation_platform_accounts.core_logging_id...)}:alias/moj-cur-reports-key"
+      replica_kms_key_id = data.aws_kms_alias.moj_cur_reports_kms_alias.target_key_arn
       metrics            = "Enabled"
     }
   ]
+}
+
+data "aws_kms_alias" "moj_cur_reports_kms_alias" {
+  provider = aws.core-logging
+  name     = "arn:aws:kms:eu-west-2:${coalesce(local.modernisation_platform_accounts.core_logging_id...)}:alias/moj-cur-reports-key"
 }
 
 data "aws_iam_policy_document" "cur_reports_s3_bucket" {

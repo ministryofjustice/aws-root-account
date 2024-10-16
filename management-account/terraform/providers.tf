@@ -127,3 +127,12 @@ provider "aws" {
   alias  = "sa-east-1"
   region = "sa-east-1"
 }
+
+# core-logging
+provider "aws" {
+  alias  = "core-logging"
+  region = "eu-west-2"
+  assume_role {
+    role_arn = "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.core_logging_id...)}:role/OrganizationAccountAccessRole"
+  }
+}
