@@ -9,6 +9,12 @@ locals {
     "eu-west-3",
     "eu-central-1"
   ]
+  ipam_pools = {
+    modernisation_platform = [
+      "modernisation-platform-live-data",
+      "modernisation-platform-non-live-data"
+    ]
+  }
 }
 
 # Create IPAM
@@ -71,4 +77,35 @@ resource "aws_ram_resource_association" "network_operations_centre_byoip" {
 resource "aws_ram_principal_association" "network_operations_centre_production_byoip" {
   principal          = local.moj_network_operations_centre_production_account_id
   resource_share_arn = aws_ram_resource_share.network_operations_centre_byoip.arn
+}
+
+# Modernisation Platform
+resource "aws_vpc_ipam_pool" "modernisation_platform_private" {
+  for_each       = toset(local.ipam_pools.modernisation_platform)
+  address_family = "ipv4"
+  description    = "Modernisation Platform"
+  ipam_scope_id  = aws_vpc_ipam.main.private_default_scope_id
+  tags = {
+    "owner" = "Modernisation Platform",
+    "name"  = each.value
+  }
+}
+
+resource "aws_ram_resource_share" "modernisation_platform_private" {
+  name                      = "modernisation_platform_private"
+  allow_external_principals = false
+  permission_arns = [
+    "arn:aws:ram::aws:permission/AWSRAMDefaultPermissionsIpamPool"
+  ]
+}
+
+resource "aws_ram_resource_association" "modernisation_platform_private" {
+  for_each           = toset(local.ipam_pools.modernisation_platform)
+  resource_arn       = aws_vpc_ipam_pool.modernisation_platform_private[each.key].arn
+  resource_share_arn = aws_ram_resource_share.modernisation_platform_private.arn
+}
+
+resource "aws_ram_principal_association" "modernisation_platform_private" {
+  principal          = local.ou_modernisation_platform_core_arn
+  resource_share_arn = aws_ram_resource_share.modernisation_platform_private.arn
 }
