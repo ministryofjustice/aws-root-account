@@ -194,7 +194,7 @@ module "cur_reports_s3_bucket" {
   enable_replication     = true
   replication_bucket_arn = "arn:aws:s3:::moj-cur-reports-modplatform-20240930164810837800000001"
   replication_role_arn   = module.cur_reports_s3_bucket.replication_role_arn
-  source_kms_arn         = "arn:aws:kms:*:${data.aws_caller_identity.current.account_id}:alias/aws/s3"
+  source_kms_arn         = data.aws_kms_alias.moj_cur_reports_kms_alias.target_key_arn
   destination_kms_arn    = data.aws_ssm_parameter.core_logging_kms_key_arn.value
   replication_rules = [
     {
@@ -210,6 +210,10 @@ module "cur_reports_s3_bucket" {
 
 data "aws_ssm_parameter" "core_logging_kms_key_arn" {
   name = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/core-logging-kms-key"
+}
+
+data "aws_kms_alias" "moj_cur_reports_kms_alias" {
+  name     = "alias/aws/s3"
 }
 
 data "aws_iam_policy_document" "cur_reports_s3_bucket" {
