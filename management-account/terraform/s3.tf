@@ -213,7 +213,7 @@ data "aws_ssm_parameter" "core_logging_kms_key_arn" {
 }
 
 data "aws_kms_alias" "moj_cur_reports_kms_alias" {
-  name     = "alias/aws/s3"
+  name = "alias/aws/s3"
 }
 
 data "aws_iam_policy_document" "cur_reports_s3_bucket" {
