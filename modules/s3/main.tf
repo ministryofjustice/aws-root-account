@@ -251,7 +251,8 @@ resource "aws_iam_role_policy" "replication" {
             "s3:ReplicateDelete"
           ],
           Resource = [
-            "arn:aws:s3:::${var.replication_bucket_arn}/*"
+            "${var.replication_bucket_arn}/*",
+            "${var.replication_bucket_arn}"
           ]
         },
         {
