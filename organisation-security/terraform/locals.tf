@@ -110,12 +110,6 @@ locals {
   #   ou.id
   # ]
 
-  ou_modernisation_platform_core_arn = coalesce([
-    for ou in data.aws_organizations_organizational_units.modernisation_platform.children :
-    ou.arn
-    if ou.name == "Modernisation Platform Core"
-  ]...)
-
   ou_modernisation_platform_member_arn = coalesce([
     for ou in data.aws_organizations_organizational_units.modernisation_platform.children :
     ou.arn
