@@ -277,7 +277,7 @@ Resources:
         - CAPABILITY_NAMED_IAM
       StackInstancesGroup:
         - Regions:
-            - !If [IsGovCloud, us-gov-west-1, us-east-1]
+            - !If [IsGovCloud, us-gov-west-1, eu-west-2]
           DeploymentTargets:
             OrganizationalUnitIds: !If [HasTargetOUs, !Ref TargetOUs, !Ref "AWS::NoValue"]
       TemplateBody: |
