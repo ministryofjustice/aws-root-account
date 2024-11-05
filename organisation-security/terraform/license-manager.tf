@@ -45,7 +45,6 @@ module "oracle_ec2_license_configurations" {
 
 # Cloudformation stack for Oracle Database auto detection
 resource "aws_cloudformation_stack" "oracleblts" {
-  provider     = aws.original-session
   name         = "OracleDbLTS"
   capabilities = ["CAPABILITY_NAMED_IAM"]
   parameters = {
@@ -69,7 +68,6 @@ resource "aws_cloudformation_stack" "oracleblts" {
 
 # Trigger automation
 resource "aws_ssm_association" "license_manager" {
-  provider         = aws.original-session
   name             = "OracleDbLTS-Orchestrate"
   association_name = "OracleDbLicenseTrackingSolutionAssociation"
 
