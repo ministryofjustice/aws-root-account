@@ -64,6 +64,11 @@ resource "aws_cloudformation_stack" "oracleblts" {
   depends_on = [
     module.oracle_ec2_license_configurations
   ]
+  timeouts {
+    create = "60m"
+    update = "60m"
+    delete = "60m"
+  }
 }
 
 # Trigger automation
