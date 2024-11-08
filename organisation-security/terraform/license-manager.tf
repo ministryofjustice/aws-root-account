@@ -81,9 +81,6 @@ resource "aws_ssm_association" "license_manager" {
   max_concurrency                  = 4
   max_errors                       = 4
   automation_target_parameter_name = "DeploymentTargets"
-  targets {
-    key = "ParameterValues"
-  }
 
   parameters = {
     AutomationAssumeRole = "arn:aws:iam::${data.aws_caller_identity.current.id}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
