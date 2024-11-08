@@ -81,19 +81,18 @@ resource "aws_ssm_association" "license_manager" {
   max_concurrency                  = 4
   max_errors                       = 4
   automation_target_parameter_name = "DeploymentTargets"
-  output_location {
-    s3_bucket_name = "license-manager-artifact-bucket"
+  targets {
+    key = "Parameter Values"
   }
 
-  targets {
-    key    = "tag:OracleDbLTS-ManagedInstance"
-    values = ["true"]
-  }
   parameters = {
     AutomationAssumeRole = "arn:aws:iam::${data.aws_caller_identity.current.id}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
+    TargetKey            = "tag:OracleDbLTS-ManagedInstance"
+    TargetValues         = "true"
     DeploymentTargets    = join(",", local.license_mamager_ous)
     # DeploymentTargets    = join(",", local.modernisation_platform_member_ous) #Key DeploymentTargets must have length less than or equal to 512
-    TargetRegions = "eu-west-2"
+    TargetRegions     = "eu-west-2"
+    ArtifactsS3Bucket = "license-manager-artifact-bucket"
   }
 
   depends_on = [
