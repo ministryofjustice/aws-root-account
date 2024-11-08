@@ -80,7 +80,15 @@ resource "aws_ssm_association" "license_manager" {
   # schedule_expression = "cron(25 10 ? * * *)"
   max_concurrency                  = 4
   max_errors                       = 4
-  automation_target_parameter_name = "InstanceId"
+  automation_target_parameter_name = "DeploymentTargets"
+  output_location {
+    s3_bucket_name = "license-manager-artifact-bucket"
+  }
+
+  targets {
+    key    = "tag:OracleDbLTS-ManagedInstance"
+    values = ["true"]
+  }
   parameters = {
     AutomationAssumeRole = "arn:aws:iam::${data.aws_caller_identity.current.id}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
     DeploymentTargets    = join(",", local.license_mamager_ous)
