@@ -82,8 +82,7 @@ resource "aws_ssm_association" "license_manager" {
   max_errors                       = 4
   automation_target_parameter_name = "DeploymentTargets"
   targets {
-    key    = "Parameter Values"
-    values = "true"
+    key = "ParameterValues"
   }
 
   parameters = {
@@ -94,6 +93,8 @@ resource "aws_ssm_association" "license_manager" {
     # DeploymentTargets    = join(",", local.modernisation_platform_member_ous) #Key DeploymentTargets must have length less than or equal to 512
     TargetRegions     = "eu-west-2"
     ArtifactsS3Bucket = "license-manager-artifact-bucket"
+    MaxConcurrency    = "4"
+    MaxErrors         = "4"
   }
 
   depends_on = [
