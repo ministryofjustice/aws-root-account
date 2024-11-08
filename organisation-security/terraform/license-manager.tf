@@ -82,8 +82,8 @@ resource "aws_ssm_association" "license_manager" {
   max_errors                       = 4
   automation_target_parameter_name = "DeploymentTargets"
   targets {
-    key = "Parameter Values"
-    values
+    key    = "Parameter Values"
+    values = ""
   }
 
   parameters = {
