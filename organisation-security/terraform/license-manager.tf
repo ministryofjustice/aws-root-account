@@ -83,6 +83,7 @@ resource "aws_ssm_association" "license_manager" {
   automation_target_parameter_name = "DeploymentTargets"
   targets {
     key = "Parameter Values"
+    values
   }
 
   parameters = {
