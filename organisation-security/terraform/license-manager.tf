@@ -72,34 +72,6 @@ resource "aws_cloudformation_stack" "oracleblts" {
   }
 }
 
-# now done in cloudformation above
-# Trigger automation
-# resource "aws_ssm_association" "license_manager" {
-#   name             = "OracleDbLTS-Orchestrate"
-#   association_name = "OracleDbLicenseTrackingSolutionAssociation"
-#
-#   schedule_expression = "cron(15 0 ? * MON *)"
-#   # schedule_expression = "cron(25 10 ? * * *)"
-#   max_concurrency                  = 4
-#   max_errors                       = 4
-#   automation_target_parameter_name = "DeploymentTargets"
-#
-#   parameters = {
-#     AutomationAssumeRole = "arn:aws:iam::${data.aws_caller_identity.current.id}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
-#     TargetKey            = "tag:OracleDbLTS-ManagedInstance"
-#     TargetValues         = "true"
-#     DeploymentTargets    = join(",", local.license_mamager_ous)
-#     # DeploymentTargets    = join(",", local.modernisation_platform_member_ous) #Key DeploymentTargets must have length less than or equal to 512
-#     TargetRegions     = "eu-west-2"
-#     ArtifactsS3Bucket = "license-manager-artifact-bucket"
-#     MaxConcurrency    = "4"
-#     MaxErrors         = "4"
-#   }
-
-#   depends_on = [
-#     aws_cloudformation_stack.oracleblts
-#   ]
-# }
 
 # Athena resources
 resource "aws_athena_database" "ssm_resource_sync" {
