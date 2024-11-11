@@ -1,16 +1,18 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: "CloudFormation template to deploy all the required resources for Oracle Database License Tracking Solution within an AWS Organization management account"
+Description: 'CloudFormation template to deploy all the required resources for Oracle Database License Tracking Solution within an AWS Organization management account'
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
-      - Label:
-          default: "Automation details"
+      - 
+        Label: 
+          default: 'Automation details'
         Parameters:
           - IsDelegatedAdministrator
           - AdministratorAccountId
           - OrganizationId
-      - Label:
-          default: "Targets"
+      - 
+        Label:
+          default: 'Targets'
         Parameters:
           - TargetOUs
           - TargetRegions
@@ -18,78 +20,91 @@ Metadata:
           - TargetValues
           - MaxConcurrency
           - MaxErrors
+          - Schedule
 
     ParameterLabels:
       IsDelegatedAdministrator:
-        default: "Is this a delegated administrator account"
+        default: 'Is this a delegated administrator account'
       AdministratorAccountId:
-        default: "Administrator Account Id"
+        default: 'Administrator Account Id'
       TargetOUs:
-        default: "Target Organizational Unit IDs"
+        default: 'Target Organizational Unit IDs'
       TargetRegions:
-        default: "Target Regions"
+        default: 'Target Regions'
       TargetKey:
-        default: "Target Key"
+        default: 'Target Key'
       TargetValues:
-        default: "Target Values"
+        default: 'Target Values'
       OrganizationId:
-        default: "Organization Id"
+        default: 'Organization Id'
       MaxConcurrency:
-        default: "Maximum Concurrency"
+        default: 'Maximum Concurrency'
       MaxErrors:
-        default: "Maximum Errors"
+        default: 'Maximum Errors'
+      Schedule:
+        default: 'CRON schedule for the association run'
 
 Parameters:
   IsDelegatedAdministrator:
     Type: String
     AllowedValues:
-      - "true"
-      - "false"
+    - 'true'
+    - 'false'
     Description: Specify if this solution is being deployed in a delegated adminstrator account. With this option you no longer need to be logged into the AWS Organizations management account to administer this solution.
   AdministratorAccountId:
     Description: (Required) AWS Organization's Management or Delegated Administrator account ID.
     Type: String
-    AllowedPattern: '^\d{12}$'
+    AllowedPattern : '^\d{12}$'
   TargetKey:
     Type: String
-    Description: Specify which instances have to be targeted for this solution. Allowed values - ParameterValues, ResourceGroup or begin with tag:(default), AWS::EC2::Instance, InstanceIds, instanceids. To target all instances use . Refer https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_Target.html for more details.
-    Default: "tag:OracleDbLTS-ManagedInstance"
+    Description: Specify which instances have to be targeted for this solution. Allowed values - ParameterValues, ResourceGroup or begin with tag:(default), AWS::EC2::Instance, InstanceIds, instanceids. To target all instances use InstanceIds. Refer https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_Target.html for more details.
+    Default: 'tag:OracleDbLTS-ManagedInstance'
   TargetValues:
     Type: String
     Description: Specify the values of the target keys specified above, default is true. To target all instances use *. Refer https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_Target.html for more details.
-    Default: "true"
+    Default: 'true'
   ArtifactsS3Bucket:
     Type: String
-    Description: "Specify the S3 bucket name where the license tracking solution scripts and ssm outputs will be stored (temporarily)"
+    Description: 'Specify the S3 bucket name where the license tracking solution scripts and ssm outputs will be stored (temporarily)'
   OrganizationId:
     Description: (Required) AWS Organization ID.
     Type: String
-    AllowedPattern: "^[o]+(-[a-z0-9]+)*$"
+    AllowedPattern: '^[o]+(-[a-z0-9]+)*$'
     ConstraintDescription: Provide a valid Organization ID (for eg. o-abc5drtefg)
   TargetOUs:
-    Description: (Required) Specify AWS organizational unit IDs within your AWS Organization whose accounts have the target instances (e.g., ou-abcd-1qwert43, ou-klhd-1fgdt78).
-    Type: CommaDelimitedList
-    AllowedPattern: ".+"
+    Description: (Required) Specify AWS organizational unit IDs within your AWS Organization whose accounts have the target instances (e.g., ou-abcd-1qwert43, ou-klhd-1fgdt78). 
+    Type: String
+    AllowedPattern : '.+'
   TargetRegions:
-    Type: CommaDelimitedList
-    Description: Specify all AWS Regions which needs to be managed by this solution
+    Type: String
+    Description: Specify all AWS Regions which needs to be managed by this solution (eg. us-east-1,us-east-2)
   MaxConcurrency:
     Type: String
-    Description: The maximum number of targets allowed to run this task in parallel. You can specify a number, such as 10, or a percentage, such as 10%. The default value is 4.
-    Default: "4"
+    Description: The maximum number of targets allowed to run this task in parallel. You can specify a number, such as 10, or a percentage, such as 10%. The default value is 100%.
+    Default: '100%'
+    AllowedPattern: '^([1-9][0-9]*|[1-9][0-9]%|[1-9]%|100%)$'
   MaxErrors:
     Type: String
-    Description: The number of errors that are allowed before the system stops running the automation on additional targets. You can specify a number, such as 10, or a percentage, such as 10%. The default value is 4.
-    Default: "4"
-
+    Description: The number of errors that are allowed before the system stops running the automation on additional targets. You can specify a number, such as 10, or a percentage, such as 10%. The default value is 50%.
+    Default: '50%'
+    AllowedPattern: '^([1-9][0-9]*|[1-9][0-9]%|[1-9]%|100%)$'
+  Schedule:
+    Type: String
+    Description: The CRON schedule for the State Manager association to run. For more details refer to https://docs.aws.amazon.com/systems-manager/latest/userguide/reference-cron-and-rate-expressions.html
+    Default: 'cron(0 0 ? * 3L *)'
+  
 Conditions:
-  IsGovCloud: !Equals [!Ref AWS::Partition, aws-us-gov]
+  IsGovCloud: 
+    !Equals [!Ref AWS::Partition, aws-us-gov]
+  
+  HasTargetOUs:
+    #!Not [!Equals [!Join ["", !Ref TargetOUs], '']]
+    !Not [!Equals [!Ref TargetOUs, '']]
 
-  HasTargetOUs: !Not [!Equals [!Join ["", !Ref TargetOUs], ""]]
+  IsDelegatedAdministrator: 
+    !Equals [!Ref IsDelegatedAdministrator,'true']
 
-  IsDelegatedAdministrator: !Equals [!Ref IsDelegatedAdministrator, "true"]
-
-Resources:
+Resources:    
   AutomationAdministrationRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -98,8 +113,8 @@ Resources:
       AssumeRolePolicyDocument: >-
         {"Version":"2012-10-17","Statement":[{"Sid":"","Effect":"Allow","Principal":{"Service":"ssm.amazonaws.com"},"Action":"sts:AssumeRole"}]}
       MaxSessionDuration: 3600
-      ManagedPolicyArns:
-        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonSSMAutomationRole"
+      ManagedPolicyArns: 
+      - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonSSMAutomationRole"
       Description: "OracleDbLTS-SystemsManagerAutomationAdministrationRole"
       Policies:
         - PolicyName: OracleDbLTS-AutomationAdministrationPolicy
@@ -108,63 +123,42 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - "organizations:ListAccountsForParent"
-                  - "tag:GetResources"
-                  - "ec2:DescribeInstances"
-                  - "ec2messages:GetEndpoint"
-                  - "ec2messages:AcknowledgeMessage"
-                  - "ec2messages:GetMessages"
-                  - "ec2messages:FailMessage"
-                  - "ec2messages:SendReply"
-                  - "cloudformation:*"
-                  - "resource-groups:ListGroupResources"
-                  - "license-manager:ListLicenseConfigurations"
-                  - "license-manager:UpdateLicenseSpecificationsForResource"
-                Resource: "*"
+                  - 'organizations:ListAccountsForParent'
+                  - 'organizations:ListOrganizationalUnitsForParent'
+                  - 'organizations:ListChildren'
+                  - 'tag:GetResources'
+                  - 'ec2:DescribeInstances'
+                  - 'ec2messages:GetEndpoint'
+                  - 'ec2messages:AcknowledgeMessage'
+                  - 'ec2messages:GetMessages'
+                  - 'ec2messages:FailMessage'
+                  - 'ec2messages:SendReply'
+                  - 'cloudformation:*'
+                  - 'resource-groups:ListGroupResources'
+                  - 'license-manager:ListLicenseConfigurations'
+                  - 'license-manager:UpdateLicenseSpecificationsForResource'
+                Resource: '*'
               - Effect: Allow
                 Action:
-                  - "s3:ListBucket"
-                  - "s3:GetObject"
-                  - "s3:DeleteObject"
-                  - "s3:PutObject"
-                  - "s3:PutObjectAcl"
-                Resource: !GetAtt ArtifactsS3.Arn
+                  - 'sts:AssumeRole'
+                Resource: !Sub 'arn:${AWS::Partition}:iam::*:role/OracleDbLTS-SystemsManagerAutomationExecutionRole'
               - Effect: Allow
                 Action:
-                  - "sts:AssumeRole"
-                Resource: !Sub "arn:${AWS::Partition}:iam::*:role/OracleDbLTS-SystemsManagerAutomationExecutionRole"
+                  - 's3:ListBucket'
+                  - 's3:GetObject'
+                  - 's3:DeleteObject'
+                  - 's3:PutObject'
+                  - 's3:PutObjectAcl'
+                Resource: 
+                  - !GetAtt ArtifactsS3.Arn
+                  - !Sub "arn:aws:s3:::${ArtifactsS3.Arn}/*"
               - Effect: Allow
                 Action:
-                  - "iam:PassRole"
-                Resource:
-                  - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
-                  - !Sub "arn:${AWS::Partition}:iam::*:role/OracleDbLTS-SystemsManagerAutomationExecutionRole"
-
-  StackSetAdministrationRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      Path: /
-      RoleName: OracleDbLTS-CloudFormation-StackSetAdministrationRole
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: cloudformation.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Policies:
-        - PolicyName: AdministrationPolicy
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - sts:AssumeRole
-                Resource:
-                  - "arn:*:iam::*:role/OracleDbLTS-CloudFormation-StackSetExecutionRole"
-      Description: OracleDbLTS-CloudFormation-StackSetAdministrationRole to enable use of CloudFormation Stacksets
-
+                  - 'iam:PassRole'
+                Resource: 
+                  - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole'
+                  - !Sub 'arn:${AWS::Partition}:iam::*:role/OracleDbLTS-SystemsManagerAutomationExecutionRole'
+  
   ArtifactsS3:
     Type: "AWS::S3::Bucket"
     Properties:
@@ -179,84 +173,90 @@ Resources:
     Type: "AWS::S3::BucketPolicy"
     Properties:
       Bucket: !Ref ArtifactsS3
-      PolicyDocument:
+      PolicyDocument: 
         Version: "2012-10-17"
-        Statement:
-          - Sid: "List"
-            Effect: "Allow"
-            Principal: "*"
-            Action:
-              - "s3:GetObject"
-              - "s3:ListBucket"
-              - "s3:PutObjectAcl"
-              - "s3:PutObject"
-              - "s3:DeleteObject"
-            Resource:
-              - !Sub "arn:${AWS::Partition}:s3:::${ArtifactsS3}/*"
-              - !Sub "arn:${AWS::Partition}:s3:::${ArtifactsS3}"
-            Condition:
-              StringEquals:
-                "aws:PrincipalOrgID": !Sub
+        Statement: 
+        - 
+          Sid: "List"
+          Effect: "Allow"
+          Principal: "*"
+          Action: 
+            - "s3:GetObject"
+            - "s3:ListBucket"
+            - "s3:PutObjectAcl"
+            - "s3:PutObject"
+            - "s3:DeleteObject"
+          Resource: 
+            - !Sub "arn:${AWS::Partition}:s3:::${ArtifactsS3}/*"
+            - !Sub "arn:${AWS::Partition}:s3:::${ArtifactsS3}"
+          Condition: 
+            StringEquals: 
+              "aws:PrincipalOrgID": 
+                !Sub 
                   - "${OrgID}"
                   - OrgID: !Ref OrganizationId
-
-  StackSetExecutionRole:
-    Type: "AWS::IAM::Role"
+  
+  OracleDbLTSUtilityFunctionRole:
+    Type: 'AWS::IAM::Role'
     Properties:
       Path: /
-      RoleName: OracleDbLTS-CloudFormation-StackSetExecutionRole
+      RoleName: OracleDbLTSUtilityFunctionRole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
             Principal:
-              AWS:
-                - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
-            Action:
-              - sts:AssumeRole
+              Service: [lambda.amazonaws.com]
+            Action: ['sts:AssumeRole']
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Path: /
       Policies:
-        - PolicyName: ExecutionPolicy
+        - PolicyName: OracleDbLTS-CreateAssociationPermissionManagementLambdaPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
-              - Sid: Sid0
-                Effect: Allow
-                Action:
-                  - "iam:CreateRole"
-                  - "iam:AttachRolePolicy"
-                  - "iam:PutRolePolicy"
-                  - "iam:PassRole"
-                  - "iam:DetachRolePolicy"
-                  - "iam:DeleteRolePolicy"
-                  - "iam:DeleteRole"
+              - Effect: Allow
+                Action: ['ssm:ListDocuments','organizations:ListAccounts']
+                Resource: '*'
+              - Effect: Allow
+                Action: ['ssm:DescribeDocument','ssm:ModifyDocumentPermission','ssm:DescribeDocumentPermission']
+                Resource: !Sub 'arn:${AWS::Partition}:ssm:*:*:document/DiscoverOracleDbLicenseTrackingSolutionDocument'
+              - Effect: Allow
+                Action: ['ssm:DescribeAssociation','iam:PassRole','ssm:CreateAssociation','ssm:UpdateAssociation','logs:CreateLogGroup','ssm:DeleteAssociation']
                 Resource:
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:*"
+                  - !Sub "arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:document/OracleDbLTS-Orchestrate"
+                  - !Sub "arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:association/*"
                   - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
-                  - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
-                  - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationExecutionRole"
-              - Sid: Sid1
-                Effect: Allow
+              - Effect: Allow
                 Action:
-                  - "ssm:CreateDocument"
-                  - "ssm:DeleteDocument"
-                Resource:
-                  - !Sub "arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:document/OracleDbLTS-DeleteInventory"
-                  - !Sub "arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:document/OracleDbLTS-ManageLicenceUtilization"
-              - Sid: Sid2
-                Effect: Allow
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - logs:CreateLogGroup
+                Resource: 
+                  - !Sub "arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/aws/lambda/OracleDbLTSUtilityFunction:*"
+                  - !Sub "arn:${AWS::Partition}:logs:*:${AWS::AccountId}:*"
+              - Effect: Allow
                 Action:
-                  - "iam:GetRolePolicy"
-                  - "iam:GetRole"
-                  - "ssm:ListTagsForResource"
-                  - "ssm:DescribeDocument"
+                  - organizations:ListAccountsForParent
+                  - organizations:ListOrganizationalUnitsForParent
+                  - ssm:ListAssociations
+                  - organizations:ListChildren
                 Resource: "*"
-              - Sid: Sid3
-                Effect: Allow
+              - Effect: Allow
                 Action:
-                  - "sns:*"
-                  - "cloudformation:*"
-                Resource: "*"
-      Description: OracleDbLTS-CloudFormation-StackSetExecutionRole to enable use of CloudFormation Stacksets
-    DependsOn: StackSetAdministrationRole
+                  - 's3:ListBucket'
+                  - 's3:GetObject'
+                  - 's3:DeleteObject'
+                  - 's3:PutObject'
+                  - 's3:PutObjectTagging'
+                  - 's3:ReplicateObject'
+                Resource: 
+                  - !GetAtt ArtifactsS3.Arn
+                  - !Sub "arn:aws:s3:::${ArtifactsS3.Arn}/*"
+                  - "arn:aws:s3:::pb-solution-artifacts/*"
+                  - "arn:aws:s3:::pb-solution-artifacts"
 
   AutomationPermissionsStackSet:
     Type: AWS::CloudFormation::StackSet
@@ -264,23 +264,29 @@ Resources:
       AutoDeployment:
         Enabled: true
         RetainStacksOnAccountRemoval: false
-      CallAs: !If [IsDelegatedAdministrator, DELEGATED_ADMIN, SELF]
+      CallAs: !If [IsDelegatedAdministrator,DELEGATED_ADMIN,SELF]
       StackSetName: OracleDbLTS-SystemsManagerAutomationPermissionsStackSet
+      OperationPreferences:
+          FailureTolerancePercentage: 50
+          MaxConcurrentPercentage: 100
+          RegionConcurrencyType: PARALLEL
       Parameters:
-        - ParameterKey: AccountId
-          ParameterValue: !Ref AdministratorAccountId
-        - ParameterKey: ArtifactsS3Bucket
+        - 
+          ParameterKey: AccountId
+          ParameterValue: !If [IsDelegatedAdministrator, !Ref AWS::AccountId , AdministratorAccountId]
+        -
+          ParameterKey: ArtifactsS3Bucket
           ParameterValue: !Ref ArtifactsS3Bucket
       PermissionModel: SERVICE_MANAGED
-      Capabilities:
+      Capabilities: 
         - CAPABILITY_IAM
         - CAPABILITY_NAMED_IAM
       StackInstancesGroup:
-        - Regions:
-            - !If [IsGovCloud, us-gov-west-1, eu-west-2]
+        - Regions: 
+          - !If [IsGovCloud, us-gov-west-1, us-east-1]
           DeploymentTargets:
-            OrganizationalUnitIds: !If [HasTargetOUs, !Ref TargetOUs, !Ref "AWS::NoValue"]
-      TemplateBody: |
+            OrganizationalUnitIds: !If [HasTargetOUs, !Split [",", !Ref TargetOUs], !Ref "AWS::NoValue"]
+      TemplateBody: !Sub |
         Parameters:
           AccountId:
             Description: (Required) Account ID where the OracleDb LTS solution is being deployed (AWS Organization management account or delegated administrator account).
@@ -289,6 +295,7 @@ Resources:
           ArtifactsS3Bucket:
             Type: String
             Description: Specify the S3 bucket name where the license tracking solution scripts and ssm outputs will be stored (temporarily)
+        
         Resources:
           AutomationExecutionRole:
             Type: 'AWS::IAM::Role'
@@ -330,6 +337,7 @@ Resources:
                           - 'license-manager:ListLicenseConfigurations'
                           - 'license-manager:UpdateLicenseSpecificationsForResource'
                           - 'license-manager:GetLicenseConfiguration'
+                          - 'iam:GetInstanceProfile'
                         Resource: '*'
                       - Effect: Allow
                         Action:
@@ -343,123 +351,450 @@ Resources:
                           - !Sub 'arn:${AWS::Partition}:s3:::${ArtifactsS3Bucket}'
                       - Effect: Allow
                         Action:
+                          - 'iam:AttachRolePolicy'
+                        Resource: '*'
+                        Condition:
+                          StringLike:
+                            'iam:PolicyARN': 'arn:${AWS::Partition}:iam::*:policy/OracleDbLTS-SSMS3BucketPolicy'
+                      - Effect: Allow
+                        Action:
                           - 'iam:PassRole'
                         Resource: !Sub >-
-                          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationExecutionRole
+                          arn:${AWS::Partition}:iam::*:role/OracleDbLTS-SystemsManagerAutomationExecutionRole
+          
+          S3BucketPolicyForInstance: 
+            Type: AWS::IAM::ManagedPolicy
+            Properties: 
+              Description: !Sub "Managed Policy to allow managed instances to access ${ArtifactsS3Bucket} bucket for the Oracle License Tracking Solution"
+              ManagedPolicyName: OracleDbLTS-SSMS3BucketPolicy
+              PolicyDocument: 
+                Version: '2012-10-17'
+                Statement:
+                - Sid: SSMS3BucketPolicy
+                  Effect: Allow
+                  Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:PutObjectAcl
+                  - s3:ListBucket
+                  - s3:DeleteObject
+                  Resource: !Sub >-
+                    - "arn:${AWS::Partition}:s3:::${ArtifactsS3Bucket}/*"
+                    - "arn:${AWS::Partition}:s3:::${ArtifactsS3Bucket}"
 
+  OracleDbLTSUtilityFunction:
+    Type: "AWS::Lambda::Function"
+    DependsOn: AutomationPermissionsStackSet
+    Properties:
+      Description: "Utility Lambda function to create the State Manager associations and copy some of the required scripts for the solution"
+      FunctionName: "OracleDbLTS-UtilityFunction"
+      Handler: "index.lambda_handler"
+      MemorySize: 128
+      Role: !GetAtt OracleDbLTSUtilityFunctionRole.Arn
+      Runtime: "python3.9"
+      Timeout: 30
+      Code: 
+        ZipFile: !Sub |
+          import boto3
+          import json
+          from botocore.exceptions import ClientError
+          import cfnresponse
+          import os
+
+          ssm_client = boto3.client('ssm')
+
+          #--------------------------------------------------
+          # function: does_oracledblts_association_exist
+          #--------------------------------------------------
+          def does_oracledblts_association_exist(association_name):
+
+            oracledblts_association_exists = False # prove otherwise
+
+            try:
+              association_id=[]
+              existing_oracledblts_associations = ssm_client.list_associations(
+                  AssociationFilterList=[{'key': 'AssociationName','value': association_name}]
+              )
+
+              for association in existing_oracledblts_associations['Associations']:
+                print(f"OracleDbLTS association already exists: {association['AssociationName']}.")
+                oracledblts_association_exists = True
+                association_id.append(association['AssociationId'])
+
+            except Exception as e:
+              print(f'does_oracledblts_association_exist: Exception listing associations: {str(e)}')
+
+            return association_id, oracledblts_association_exists
+
+
+          #--------------------------------------------------
+          # function: create_oracledblts_association
+          #--------------------------------------------------
+          def create_oracledblts_association(association_name,parameters):
+
+            try:
+              return ssm_client.create_association(
+                Name='OracleDbLTS-Orchestrate',
+                Parameters={
+                  'AutomationAssumeRole': parameters['AutomationAssumeRole'],
+                  'DeploymentTargets': parameters['TargetOUs'],
+                  'ArtifactsS3Bucket': parameters['ArtifactsS3Bucket'],
+                  'TargetRegions': parameters['TargetRegions'],
+                  'MaxConcurrency': parameters['MaxConcurrency'],
+                  'MaxErrors': parameters['MaxErrors'],
+                  'TargetKey': parameters['TargetKey'],
+                  'TargetValues': parameters['TargetValues']
+                },
+                AssociationName=association_name,
+                ScheduleExpression=parameters['Schedule'],
+                ApplyOnlyAtCronInterval=False,
+                ComplianceSeverity='CRITICAL'
+              )
+
+            except Exception as e:
+              print(f'Exception creating association: {str(e)}')
+
+
+          #--------------------------------------------------
+          # function: update_oracledblts_association
+          #--------------------------------------------------
+          def update_oracledblts_association(association_id,association_name,parameters):
+            
+            try:
+              return ssm_client.update_association(
+                AssociationId=association_id,
+                Name='OracleDbLTS-Orchestrate',
+                Parameters={
+                  'AutomationAssumeRole': parameters['AutomationAssumeRole'],
+                  'DeploymentTargets': parameters['TargetOUs'],
+                  'ArtifactsS3Bucket': parameters['ArtifactsS3Bucket'],
+                  'TargetRegions': parameters['TargetRegions'],
+                  'MaxConcurrency': parameters['MaxConcurrency'],
+                  'MaxErrors': parameters['MaxErrors'],
+                  'TargetKey': parameters['TargetKey'],
+                  'TargetValues': parameters['TargetValues']
+                },
+                AssociationName=association_name,
+                ScheduleExpression=parameters['Schedule'],
+                ApplyOnlyAtCronInterval=False
+              )
+
+            except Exception as e:
+              print(f'Exception updating association: {str(e)}')
+                
+
+          #--------------------------------------------------
+          # function: delete_oracledblts_association
+          #--------------------------------------------------
+          def delete_oracledblts_association():
+
+            association_exists = False
+            association_ids = []
+            
+            try:
+              # Get a list of existing OracleDbLTS associations.
+              existing_oracledblts_associations = ssm_client.list_associations(
+                  AssociationFilterList=[
+                    {'key': 'Name','value': 'OracleDbLTS-Orchestrate'}
+                  ]
+              )
+
+              for association in existing_oracledblts_associations['Associations']:
+                for target in association['Targets']:
+                  association_exists = True
+                  print('Association(s) exists, deleting it.')
+                  association_ids.append(association['AssociationId'])
+
+                  try:
+                    for aid in association_ids:  
+                      response = ssm_client.delete_association(
+                              Name='OracleDbLTS-Orchestrate',
+                              AssociationId=aid
+                      )
+                  except Exception as e:
+                    print(f'Exception deleting association: {str(e)}')
+
+                  break
+
+              if not association_exists:
+                  print('Association(s) does not exist, nothing to do.')
+
+            except Exception as e:
+              print(f'delete_oracledblts_association: Exception listing associations: {str(e)}')
+
+          #--------------------------------------------------
+          # function: get_child_ou_ids
+          #--------------------------------------------------
+
+          def get_child_ou_ids(parent_id):
+            org = boto3.client('organizations')
+            ouList = []
+            paginator=org.get_paginator('list_children')
+            iterator=paginator.paginate(
+              ParentId=parent_id,
+            ChildType='ORGANIZATIONAL_UNIT'
+            )
+
+            for page in iterator:
+              for ou in page['Children']:
+                ouList.append(ou['Id'])
+                ouList.extend(get_child_ou_ids(ou['Id']))
+
+            return ouList
+
+          #--------------------------------------------------
+          # function: s3_setup_utility
+          #--------------------------------------------------
+          def s3_setup_utility(target_bucket, action):
+            s3 = boto3.client('s3')
+            delim="/"
+            source_bucket="pb-solution-artifacts"
+            
+            if action in ['Create', 'Update']:
+              try:
+                # Copy the two scripts required by this solution to determine details of the database 
+                for obj in s3.list_objects_v2(Bucket=source_bucket,Prefix='oracle-db-lts/scripts/')['Contents']:
+                    keys=obj['Key'].split('/')
+                    keys.remove('oracle-db-lts')
+                    result = delim.join([str(e) for e in keys])
+                    
+                    s3.copy_object(
+                        Bucket=target_bucket,
+                        CopySource={'Bucket':source_bucket, 'Key': obj['Key']},
+                        Key=str(result)
+                    )
+                
+                # Create a folder ssm-output which the solution will use to store the licensing query output
+                s3.put_object(Bucket=target_bucket, Key=('ssm-output/'))
+                status="SUCCESS"
+
+              except Exception as e:
+                print(f'Exception setting up the artifacts bucket: {str(e)}')
+                status="FAILED"
+
+            else:
+              try:
+                s3.delete_objects(Bucket=target_bucket,Delete={'Objects': [
+                    {'Key': 'scripts/extractFeatureUsageDetails.py'},
+                    {'Key': 'scripts/extractOracleEditionDetails.py'},
+                    {'Key': 'scripts/'},
+                    {'Key': 'ssm-output/'}],
+                    'Quiet': True
+                  })
+                status="SUCCESS"
+              
+              except Exception as e:
+                print(f'Exception deleting contents of the artifacts bucket: {str(e)}')
+                status="FAILED"
+            
+            return status
+
+
+          #--------------------------------------------------
+          # function: phone_home_to_cloudformation
+          #--------------------------------------------------
+          def phone_home_to_cloudformation(event, context, status):
+
+            responseValue = "Success"
+            responseData = {}
+            responseData['Data'] = responseValue
+            cfnresponse.send(event, context, status, responseData, "OracleDbLTSUtilityFunction")
+
+
+          #--------------------------------------------------
+          # function: lambda_handler
+          #--------------------------------------------------
+          def lambda_handler(event, context):
+
+            try:
+
+              targetDeploymentList = []
+              lowCounter=1
+              maxCounter=lowCounter+49
+              association_name = 'OracleDbLicenseTrackingSolutionAssociation-'+str(lowCounter)+'-to-'+str(maxCounter)+'-OUs'
+              parameters = {}
+              parameters['AutomationAssumeRole'] = [event['ResourceProperties']['AutomationAssumeRole']]
+              parameters['TargetOUs'] = event['ResourceProperties']['TargetOUs'].split(",")
+              parameters['ArtifactsS3Bucket'] = [event['ResourceProperties']['ArtifactsS3Bucket']]
+              parameters['TargetRegions'] = event['ResourceProperties']['TargetRegions'].split(",")
+              parameters['MaxConcurrency'] = [event['ResourceProperties']['MaxConcurrency']]
+              parameters['MaxErrors'] = [event['ResourceProperties']['MaxErrors']]
+              parameters['TargetKey'] = [event['ResourceProperties']['TargetKey']]
+              parameters['TargetValues'] = [event['ResourceProperties']['TargetValues']]
+              parameters['Schedule'] = event['ResourceProperties']['Schedule']
+              
+              deploymentTargets = parameters['TargetOUs']
+
+              # Determine what action to take.
+              if event['RequestType'] in ['Create', 'Update']:
+                
+                for dt in deploymentTargets:
+                  targetDeploymentList.extend(get_child_ou_ids(dt))
+                  targetDeploymentList.append(dt)
+
+                targetList = [deploymentTargets[x:x+50] for x in range(0, len(deploymentTargets), 50)]
+                  
+                for t in targetList:
+                  lowCounter+=50
+                  maxCounter=lowCounter+49
+                  
+                  oracledblts_association_ids, oracledblts_association_exists = does_oracledblts_association_exist(association_name)
+                
+                  if not oracledblts_association_exists:
+                    print('Association(s)  for OracleDbLTS does NOT exist, creating it.')
+                    create_oracledblts_association(association_name,parameters)
+                  else:
+                    print(association_name+' association already exists, updating it.')
+                    for aid in oracledblts_association_ids:
+                      update_oracledblts_association(aid,association_name,parameters)
+                  
+                  status=s3_setup_utility(event['ResourceProperties']['ArtifactsS3Bucket'],event['RequestType'])
+
+              else:
+                delete_oracledblts_association()
+                status=s3_setup_utility(event['ResourceProperties']['ArtifactsS3Bucket'],event['RequestType'])
+              
+              if status=="SUCCESS":
+                # Send the status to CloudFormation.
+                phone_home_to_cloudformation(event, context, cfnresponse.SUCCESS)
+              else:
+                # Send the status to CloudFormation.
+                phone_home_to_cloudformation(event, context, cfnresponse.FAILED)
+            
+            except Exception as e:
+              print(f'OracleDbLTSUtilityFunction: Exception creating association: {str(e)}')
+              
+              # Send the status to CloudFormation.
+              phone_home_to_cloudformation(event, context, cfnresponse.FAILED)
+
+  OracleDbLTSUtilityCustomResource:
+    Type: Custom::OracleDbLTSUtilityFunction
+    Properties:
+      ServiceToken: !GetAtt OracleDbLTSUtilityFunction.Arn
+      AutomationAssumeRole: !GetAtt AutomationAdministrationRole.Arn
+      TargetOUs: !Ref TargetOUs
+      ArtifactsS3Bucket: !Ref ArtifactsS3Bucket
+      TargetRegions: !Ref TargetRegions
+      MaxConcurrency: !Ref MaxConcurrency
+      MaxErrors: !Ref MaxErrors
+      TargetKey: !Ref TargetKey
+      TargetValues: !Ref TargetValues
+      Schedule: !Ref Schedule
+      
   OracleDbLTSOrchestrate:
     Type: "AWS::SSM::Document"
     Properties:
       Name: "OracleDbLTS-Orchestrate"
       Content: !Sub |
-        {
-          "description": "Document to orchestrate the Oracle database License Tracking Solution",
-          "schemaVersion": "0.3",
-          "assumeRole": "{{ AutomationAssumeRole }}",
-          "parameters": {
-            "DeploymentTargets": {
-              "type": "StringList",
-              "description": "Specify the AWS Accounts/OUs where Oracle databases are deployed"
-            },
-            "TargetRegions": {
-              "type": "StringList",
-              "description": "Specify the AWS Regions where Oracle databases are deployed"
-            },
-            "TargetKey": {
-              "type": "String",
-              "default": "tag:OracleDbLTS-ManagedInstance",
-              "description": "(Optional) Specify the instances you want to target using Resource Groups, tags (use tag: format) or all instances with InstanceIds. Refer https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_StartAutomationExecution.html for more details."
-            },
-            "TargetValues": {
-              "type": "String",
-              "default": "true",
-              "description": "(Optional) Specify the values you want to target like tag value or * for all instances. Refer https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_StartAutomationExecution.html for more details."
-            },
-            "AutomationAssumeRole": {
-              "type": "String",
-              "description": "The IAM role required to execute this document",
-              "default" : "${AutomationAdministrationRole.Arn}"
-            },
-            "ArtifactsS3Bucket": {
-              "type": "String",
-              "description": "Specify the S3 bucket name where the license tracking solution scripts and ssm outputs will be stored (temporarily)",
-              "default": "${ArtifactsS3Bucket}"
-            },
-            "MaxConcurrency": {
-              "type": "String",
-              "default": "4"
-            },
-            "MaxErrors": {
-              "type": "String",
-              "default": "4"
-            }
-          },
-          "mainSteps": [
-            {
-              "name": "invokeOracleDbLTS_DeleteInventory",
-              "description": "This step invokes the OracleDbLTS-DeleteInventory Automation",
-              "action": "aws:executeAutomation",
-              "inputs": {
-                "RuntimeParameters": {
-                  "AutomationAssumeRole": [
-                    "{{ AutomationAssumeRole }}"
-                  ]
-                },
-                "DocumentName": "arn:${AWS::Partition}:ssm:{{global:REGION}}:${AWS::AccountId}:document/OracleDbLTS-DeleteInventory",
-                "TargetLocations": [
-                  {
-                    "Accounts": "{{ DeploymentTargets }}",
-                    "ExecutionRoleName": "OracleDbLTS-SystemsManagerAutomationExecutionRole",
-                    "Regions": "{{ TargetRegions }}",
-                    "TargetLocationMaxConcurrency": "{{ MaxConcurrency }}",
-                    "TargetLocationMaxErrors": "{{ MaxErrors }}"
-                  }
-                ]
+          {
+            "description": "Document to orchestrate the Oracle database License Tracking Solution",
+            "schemaVersion": "0.3",
+            "assumeRole": "{{ AutomationAssumeRole }}",
+            "parameters": {
+              "DeploymentTargets": {
+                "type": "StringList",
+                "description": "Specify the AWS Accounts/OUs where Oracle databases are deployed"
               },
-              "isCritical": true,
-              "onFailure": "Abort",
-              "nextStep": "invokeOracleDbLTS_ManageLicenceUtilizationAutomation"
+              "TargetRegions": {
+                "type": "StringList",
+                "description": "Specify the AWS Regions where Oracle databases are deployed"
+              },
+              "TargetKey": {
+                "type": "String",
+                "default": "tag:OracleDbLTS-ManagedInstance",
+                "description": "(Optional) Specify the instances you want to target using Resource Groups, tags (use tag: format) or all instances with InstanceIds. Refer https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_StartAutomationExecution.html for more details."
+              },
+              "TargetValues": {
+                "type": "String",
+                "default": "true",
+                "description": "(Optional) Specify the values you want to target like tag value or * for all instances. Refer https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_StartAutomationExecution.html for more details."
+              },
+              "AutomationAssumeRole": {
+                "type": "String",
+                "description": "The IAM role required to execute this document",
+                "default" : "${AutomationAdministrationRole.Arn}"
+              },
+              "ArtifactsS3Bucket": {
+                "type": "String",
+                "description": "Specify the S3 bucket name where the license tracking solution scripts and ssm outputs will be stored (temporarily)",
+                "default": "${ArtifactsS3Bucket}"
+              },
+              "MaxConcurrency": {
+                "type": "String",
+                "default": "4"
+              },
+              "MaxErrors": {
+                "type": "String",
+                "default": "4"
+              }
             },
-            {
-              "name": "invokeOracleDbLTS_ManageLicenceUtilizationAutomation",
-              "description": "This step invokes the OracleDbLTS-ManageLicenceUtilization Automation",
-              "action": "aws:executeAutomation",
-              "inputs": {
-                "RuntimeParameters": {
-                  "ArtifactsS3Bucket": [
-                    "{{ ArtifactsS3Bucket }}"
-                  ],
-                  "AutomationAssumeRole": [
-                    "{{ AutomationAssumeRole }}"
-                  ]
-                },
-                "DocumentName": "arn:${AWS::Partition}:ssm:{{global:REGION}}:${AWS::AccountId}:document/OracleDbLTS-ManageLicenceUtilization",
-                "TargetLocations": [
-                  {
-                    "Accounts": "{{ DeploymentTargets }}",
-                    "ExecutionRoleName": "OracleDbLTS-SystemsManagerAutomationExecutionRole",
-                    "Regions": "{{ TargetRegions }}",
-                    "TargetLocationMaxConcurrency": "{{ MaxConcurrency }}",
-                    "TargetLocationMaxErrors": "{{ MaxErrors }}"
-                  }
-                ],
-                "TargetParameterName": "InstanceId",
-                "Targets": [
-                  {
-                    "Key": "{{ TargetKey }}",
-                    "Values": [
-                      "{{ TargetValues }}"
+            "mainSteps": [
+              {
+                "name": "invokeOracleDbLTS_DeleteInventory",
+                "description": "This step invokes the OracleDbLTS-DeleteInventory Automation",
+                "action": "aws:executeAutomation",
+                "inputs": {
+                  "RuntimeParameters": {
+                    "AutomationAssumeRole": [
+                      "{{ AutomationAssumeRole }}"
                     ]
-                  }
-                ]
+                  },
+                  "DocumentName": "arn:${AWS::Partition}:ssm:{{global:REGION}}:${AWS::AccountId}:document/OracleDbLTS-DeleteInventory",
+                  "TargetLocations": [
+                    {
+                      "Accounts": "{{ DeploymentTargets }}",
+                      "ExecutionRoleName": "OracleDbLTS-SystemsManagerAutomationExecutionRole",
+                      "Regions": "{{ TargetRegions }}",
+                      "TargetLocationMaxConcurrency": "{{ MaxConcurrency }}",
+                      "TargetLocationMaxErrors": "{{ MaxErrors }}"
+                    }
+                  ]
+                },
+                "isCritical": true,
+                "onFailure": "Abort",
+                "nextStep": "invokeOracleDbLTS_ManageLicenceUtilizationAutomation"
               },
-              "isCritical": true,
-              "onFailure": "Abort",
-              "isEnd": true
-            }
-          ]
-        }
+              {
+                "name": "invokeOracleDbLTS_ManageLicenceUtilizationAutomation",
+                "description": "This step invokes the OracleDbLTS-ManageLicenceUtilization Automation",
+                "action": "aws:executeAutomation",
+                "inputs": {
+                  "RuntimeParameters": {
+                    "ArtifactsS3Bucket": [
+                      "{{ ArtifactsS3Bucket }}"
+                    ],
+                    "AutomationAssumeRole": [
+                      "{{ AutomationAssumeRole }}"
+                    ]
+                  },
+                  "DocumentName": "arn:${AWS::Partition}:ssm:{{global:REGION}}:${AWS::AccountId}:document/OracleDbLTS-ManageLicenceUtilization",
+                  "TargetLocations": [
+                    {
+                      "Accounts": "{{ DeploymentTargets }}",
+                      "ExecutionRoleName": "OracleDbLTS-SystemsManagerAutomationExecutionRole",
+                      "Regions": "{{ TargetRegions }}",
+                      "TargetLocationMaxConcurrency": "{{ MaxConcurrency }}",
+                      "TargetLocationMaxErrors": "{{ MaxErrors }}"
+                    }
+                  ],
+                  "TargetParameterName": "InstanceId",
+                  "Targets": [
+                    {
+                      "Key": "{{ TargetKey }}",
+                      "Values": [
+                        "{{ TargetValues }}"
+                      ]
+                    }
+                  ]
+                },
+                "isCritical": true,
+                "onFailure": "Abort",
+                "isEnd": true
+              }
+            ]
+          }
       DocumentType: "Automation"
+      UpdateMethod: "NewVersion"
       TargetType: "/AWS::EC2::Instance"
 
   OracleDbLTSDeleteInventory:
@@ -467,36 +802,37 @@ Resources:
     Properties:
       Name: "OracleDbLTS-DeleteInventory"
       Content: !Sub |
-        {
-          "description" : "Document to delete Inventory data for the Oracle database License Tracking Solution",
-          "schemaVersion" : "0.3",
-          "assumeRole" : "{{ AutomationAssumeRole }}",
-          "parameters" : {
-            "AutomationAssumeRole" : {
-              "type" : "String",
-              "description" : "The IAM role required to execute this document (select ${AutomationAdministrationRole} from the drop-down if you deployed this solution using CloudFormation)",
-              "default" : "${AutomationAdministrationRole.Arn}"
-            }
-          },
-          "mainSteps" : [ {
-            "name" : "deleteInventory",
-            "action" : "aws:executeScript",
-            "inputs" : {
-              "Runtime" : "python3.8",
-              "Handler" : "script_handler",
-              "Script" : "import sys\nimport boto3\nimport json\nimport botocore\nimport time\n\ndef script_handler(events, context):\n  client = boto3.client('ssm')\n  \n  #Oracle Server (edition) Details\n  get_ed_inventory_response = client.get_inventory_schema(\n    TypeName='Custom:OracleDatabaseProduct'\n  )\n  \n  if get_ed_inventory_response['Schemas']:\n    delete_ed_inventory_response = client.delete_inventory(\n      TypeName='Custom:OracleDatabaseProduct',\n      SchemaDeleteOption='DeleteSchema'\n    )\n    \n    ed_deletion_id = delete_ed_inventory_response['DeletionId']\n   \n    wait_loop = True\n    while wait_loop == True:\n      describe_ed_inventory_deletions_response = client.describe_inventory_deletions(\n        DeletionId=ed_deletion_id\n      )\n      if describe_ed_inventory_deletions_response['InventoryDeletions']:\n        if describe_ed_inventory_deletions_response['InventoryDeletions'][0]['LastStatus'] == \"Complete\":\n          print(\"Custom:OracleDatabaseProduct schema has been deleted successfuly. DeletionID: \"+ed_deletion_id)\n          wait_loop = False\n          break\n        else:\n          time.sleep(60)\n          break\n  else:\n    print(\"Custom:OracleDatabaseProduct type doesn't exist in the Inventory.\")\n  \n  #Oracle Feature Usage Details\n  get_fud_inventory_response = client.get_inventory_schema(\n    TypeName='Custom:OracleFeatureUsageDetails'\n  )\n  \n  if get_fud_inventory_response['Schemas']:\n    delete_fud_inventory_response = client.delete_inventory(\n      TypeName='Custom:OracleFeatureUsageDetails',\n      SchemaDeleteOption='DeleteSchema'\n    )\n    \n    fud_deletion_id = delete_fud_inventory_response['DeletionId']\n   \n    wait_loop = True\n    while wait_loop == True:\n      describe_fud_inventory_deletions_response = client.describe_inventory_deletions(\n        DeletionId=fud_deletion_id\n      )\n      if describe_fud_inventory_deletions_response['InventoryDeletions']:\n        if describe_fud_inventory_deletions_response['InventoryDeletions'][0]['LastStatus'] == \"Complete\":\n          print(\"Custom:OracleFeatureUsageDetails schema has been deleted successfuly. DeletionID: \"+fud_deletion_id)\n          wait_loop = False\n          break\n        else:\n          time.sleep(60)\n          break\n  else:\n    print(\"Custom:OracleFeatureUsageDetails type doesn't exist in the Inventory.\")"
+          {
+            "description" : "Document to delete Inventory data for the Oracle database License Tracking Solution",
+            "schemaVersion" : "0.3",
+            "assumeRole" : "{{ AutomationAssumeRole }}",
+            "parameters" : {
+              "AutomationAssumeRole" : {
+                "type" : "String",
+                "description" : "The IAM role required to execute this document (select ${AutomationAdministrationRole} from the drop-down if you deployed this solution using CloudFormation)",
+                "default" : "${AutomationAdministrationRole.Arn}"
+              }
             },
-            "outputs" : [ {
-              "Name" : "result",
-              "Selector" : "$.Payload.message",
-              "Type" : "String"
-            } ],
-            "isCritical" : true,
-            "onFailure" : "Abort",
-            "isEnd" : true
-          } ]
-        }
+            "mainSteps" : [ {
+              "name" : "deleteInventory",
+              "action" : "aws:executeScript",
+              "inputs" : {
+                "Runtime" : "python3.8",
+                "Handler" : "script_handler",
+                "Script" : "import sys\nimport boto3\nimport json\nimport botocore\nimport time\n\ndef script_handler(events, context):\n  client = boto3.client('ssm')\n  \n  #Oracle Server (edition) Details\n  get_ed_inventory_response = client.get_inventory_schema(\n    TypeName='Custom:OracleDatabaseProduct'\n  )\n  \n  if get_ed_inventory_response['Schemas']:\n    delete_ed_inventory_response = client.delete_inventory(\n      TypeName='Custom:OracleDatabaseProduct',\n      SchemaDeleteOption='DeleteSchema'\n    )\n    \n    ed_deletion_id = delete_ed_inventory_response['DeletionId']\n   \n    wait_loop = True\n    while wait_loop == True:\n      describe_ed_inventory_deletions_response = client.describe_inventory_deletions(\n        DeletionId=ed_deletion_id\n      )\n      if describe_ed_inventory_deletions_response['InventoryDeletions']:\n        if describe_ed_inventory_deletions_response['InventoryDeletions'][0]['LastStatus'] == \"Complete\":\n          print(\"Custom:OracleDatabaseProduct schema has been deleted successfuly. DeletionID: \"+ed_deletion_id)\n          wait_loop = False\n          break\n        else:\n          time.sleep(60)\n          break\n  else:\n    print(\"Custom:OracleDatabaseProduct type doesn't exist in the Inventory.\")\n  \n  #Oracle Feature Usage Details\n  get_fud_inventory_response = client.get_inventory_schema(\n    TypeName='Custom:OracleFeatureUsageDetails'\n  )\n  \n  if get_fud_inventory_response['Schemas']:\n    delete_fud_inventory_response = client.delete_inventory(\n      TypeName='Custom:OracleFeatureUsageDetails',\n      SchemaDeleteOption='DeleteSchema'\n    )\n    \n    fud_deletion_id = delete_fud_inventory_response['DeletionId']\n   \n    wait_loop = True\n    while wait_loop == True:\n      describe_fud_inventory_deletions_response = client.describe_inventory_deletions(\n        DeletionId=fud_deletion_id\n      )\n      if describe_fud_inventory_deletions_response['InventoryDeletions']:\n        if describe_fud_inventory_deletions_response['InventoryDeletions'][0]['LastStatus'] == \"Complete\":\n          print(\"Custom:OracleFeatureUsageDetails schema has been deleted successfuly. DeletionID: \"+fud_deletion_id)\n          wait_loop = False\n          break\n        else:\n          time.sleep(60)\n          break\n  else:\n    print(\"Custom:OracleFeatureUsageDetails type doesn't exist in the Inventory.\")"
+              },
+              "outputs" : [ {
+                "Name" : "result",
+                "Selector" : "$.Payload.message",
+                "Type" : "String"
+              } ],
+              "isCritical" : true,
+              "onFailure" : "Abort",
+              "isEnd" : true
+            } ]
+          }
       DocumentType: "Automation"
+      UpdateMethod: "NewVersion"
       TargetType: "/AWS::EC2::Instance"
 
   OracleDbLTSManageLicenceUtilization:
@@ -504,286 +840,288 @@ Resources:
     Properties:
       Name: "OracleDbLTS-ManageLicenceUtilization"
       Content: !Sub |
-        {
-          "description": "Document to discover and manage Oracle Database license utilization for the Oracle Db License Tracking Solution",
-          "schemaVersion": "0.3",
-          "assumeRole": "{{ AutomationAssumeRole }}",
-          "parameters": {
-            "InstanceId": {
-              "description": "(Required) Use * to target all instances in this account or you can specify an individual instance ID",
-              "type": "StringList",
-              "default": [
-                "*"
-              ],
-              "allowedPattern": "\\*|^[m]{0,1}i-[a-z0-9]{8,17}"
-            },
-            "AutomationAssumeRole": {
-              "type": "String",
-              "description": "The IAM role required to execute this document"
-            },
-            "ArtifactsS3Bucket": {
-              "type": "String",
-              "description": "Specify the S3 bucket name where the license tracking solution scripts and ssm outputs will be stored (temporarily)"
-            }
-          },
-          "mainSteps": [
-            {
-              "name": "removeLicenseConfigDataForInstance",
-              "action": "aws:executeScript",
-              "inputs": {
-                "Runtime": "python3.8",
-                "Handler": "script_handler",
-                "Script": "import boto3\nimport json\nimport botocore\n\ndef script_handler(events, context):\n\n  lmClient = boto3.client('license-manager')\n  currentLicenseList = {}\n  listResponse = lmClient.list_license_configurations()\n    \n  if listResponse['LicenseConfigurations']:\n    for config in listResponse['LicenseConfigurations']:\n      if config['Name']:\n        currentLicenseList[config['Name']] = config['LicenseConfigurationArn']\n\n  accountId =  events['accountId'] \n  region = events['region'] \n  instanceId = events['InstanceId'] \n  OracleDbXELicenseConfiguration = currentLicenseList['OracleDbXELicenseConfiguration']\n  OracleDbPELicenseConfiguration = currentLicenseList['OracleDbPELicenseConfiguration']\n  OracleDbEELicenseConfiguration = currentLicenseList['OracleDbEELicenseConfiguration']\n  OracleDbSE2LicenseConfiguration = currentLicenseList['OracleDbSE2LicenseConfiguration']\n  \n\n  ec2ARN = f\"arn:aws:ec2:{region}:{accountId}:instance/{instanceId[0]}\"\n  licenseConfigARN = ''\n  numberOfUpdates = 0\n  \n  try:\n    lmResponse = lmClient.list_license_specifications_for_resource(\n                  ResourceArn=ec2ARN,\n                  MaxResults=10\n                  )\n                  \n    if lmResponse['LicenseSpecifications']:\n      for spec in lmResponse['LicenseSpecifications']:\n        if spec['LicenseConfigurationArn']:\n          if (OracleDbXELicenseConfiguration and spec['LicenseConfigurationArn'] == OracleDbXELicenseConfiguration):\n            licenseConfigARN = OracleDbXELicenseConfiguration\n          \n          elif (OracleDbPELicenseConfiguration and spec['LicenseConfigurationArn'] == OracleDbPELicenseConfiguration):\n            licenseConfigARN = OracleDbPELicenseConfiguration\n                        \n          elif (OracleDbEELicenseConfiguration and spec['LicenseConfigurationArn'] == OracleDbEELicenseConfiguration):\n            licenseConfigARN = OracleDbEELicenseConfiguration\n          \n          elif (OracleDbSE2LicenseConfiguration and spec['LicenseConfigurationArn'] == OracleDbSE2LicenseConfiguration):\n            licenseConfigARN = OracleDbSE2LicenseConfiguration\n\n        if licenseConfigARN:\n          updateResponse = lmClient.update_license_specifications_for_resource(\n                        ResourceArn=ec2ARN,\n                        RemoveLicenseSpecifications=[\n                        {\n                            'LicenseConfigurationArn': licenseConfigARN\n                        }]);\n          numberOfUpdates = numberOfUpdates + 1\n          licenseConfigARN = ''                \n  \n  except botocore.exceptions.ClientError as error:\n    if 'Resource ARN is invalid' in error.response['Error']['Message']:\n      print('EC2 does not exist for this resource. Skipping this step') \n    \n  return {'message': f\"Removed {ec2ARN} from {numberOfUpdates} License Configuration(s)\" }",
-                "InputPayload": {
-                  "InstanceId": "{{ InstanceId }}",
-                  "accountId": "{{global:ACCOUNT_ID}}",
-                  "region": "{{global:REGION}}"
-                }
+          {
+            "description": "Document to discover and manage Oracle Database license utilization for the Oracle Db License Tracking Solution",
+            "schemaVersion": "0.3",
+            "assumeRole": "{{ AutomationAssumeRole }}",
+            "parameters": {
+              "InstanceId": {
+                "description": "(Required) Use * to target all instances in this account or you can specify an individual instance ID",
+                "type": "StringList",
+                "default": [
+                  "*"
+                ],
+                "allowedPattern": "\\*|^[m]{0,1}i-[a-z0-9]{8,17}"
+              },
+              "AutomationAssumeRole": {
+                "type": "String",
+                "description": "The IAM role required to execute this document"
+              },
+              "ArtifactsS3Bucket": {
+                "type": "String",
+                "description": "Specify the S3 bucket name where the license tracking solution scripts and ssm outputs will be stored (temporarily)"
               }
             },
-            {
-              "name": "assertInstanceEligibility",
-              "action": "aws:executeScript",
-              "description": "This step checks if the EC2 instance is eligible for this document. The two criteria for this are - (i) is a SSM managed instance and is currently online, (ii) is running on a Linux operating system",
-              "inputs": {
-                "Runtime": "python3.8",
-                "Handler": "script_handler",
-                "Script": "import sys\nimport boto3\nimport json\nimport botocore\n\ndef script_handler(events, context):\n  instanceId = events['instanceId']\n\n  client = boto3.client('ssm')\n  \n  response = client.describe_instance_information(\n    Filters=[\n        {\n            'Key': 'InstanceIds',\n            'Values': [\n                instanceId[0],\n            ]\n        },\n    ]\n  )\n  \n  if response[\"InstanceInformationList\"]:\n    if response[\"InstanceInformationList\"][0]['PingStatus'] == 'Online' and response[\"InstanceInformationList\"][0]['PlatformType'] == 'Linux':\n      status = f\"{instanceId[0]} is eligible for this automation execution\"\n    else:\n      raise Exception(f\"{instanceId[0]} currently appears to be unavilable for this automation\")\n  else:\n    raise Exception(f\"{instanceId[0]} is ineligible for this automation\")\n                    \n  return status",
-                "InputPayload": {
-                  "instanceId": "{{ InstanceId }}"
+            "mainSteps": [
+              {
+                "name": "removeLicenseConfigDataForInstance",
+                "action": "aws:executeScript",
+                "inputs": {
+                  "Runtime": "python3.8",
+                  "Handler": "script_handler",
+                  "Script": "import boto3\nimport json\nimport botocore\n\ndef script_handler(events, context):\n\n  lmClient = boto3.client('license-manager')\n  currentLicenseList = {}\n  listResponse = lmClient.list_license_configurations()\n    \n  if listResponse['LicenseConfigurations']:\n    for config in listResponse['LicenseConfigurations']:\n      if config['Name']:\n        currentLicenseList[config['Name']] = config['LicenseConfigurationArn']\n\n  accountId =  events['accountId'] \n  region = events['region'] \n  instanceId = events['InstanceId'] \n  OracleDbXELicenseConfiguration = currentLicenseList['OracleDbXELicenseConfiguration']\n  OracleDbPELicenseConfiguration = currentLicenseList['OracleDbPELicenseConfiguration']\n  OracleDbEELicenseConfiguration = currentLicenseList['OracleDbEELicenseConfiguration']\n  OracleDbSE2LicenseConfiguration = currentLicenseList['OracleDbSE2LicenseConfiguration']\n  \n\n  ec2ARN = f\"arn:${AWS::Partition}:ec2:{region}:{accountId}:instance/{instanceId[0]}\"\n  licenseConfigARN = ''\n  numberOfUpdates = 0\n  \n  try:\n    lmResponse = lmClient.list_license_specifications_for_resource(\n                  ResourceArn=ec2ARN,\n                  MaxResults=10\n                  )\n                  \n    if lmResponse['LicenseSpecifications']:\n      for spec in lmResponse['LicenseSpecifications']:\n        if spec['LicenseConfigurationArn']:\n          if (OracleDbXELicenseConfiguration and spec['LicenseConfigurationArn'] == OracleDbXELicenseConfiguration):\n            licenseConfigARN = OracleDbXELicenseConfiguration\n          \n          elif (OracleDbPELicenseConfiguration and spec['LicenseConfigurationArn'] == OracleDbPELicenseConfiguration):\n            licenseConfigARN = OracleDbPELicenseConfiguration\n                        \n          elif (OracleDbEELicenseConfiguration and spec['LicenseConfigurationArn'] == OracleDbEELicenseConfiguration):\n            licenseConfigARN = OracleDbEELicenseConfiguration\n          \n          elif (OracleDbSE2LicenseConfiguration and spec['LicenseConfigurationArn'] == OracleDbSE2LicenseConfiguration):\n            licenseConfigARN = OracleDbSE2LicenseConfiguration\n\n        if licenseConfigARN:\n          updateResponse = lmClient.update_license_specifications_for_resource(\n                        ResourceArn=ec2ARN,\n                        RemoveLicenseSpecifications=[\n                        {\n                            'LicenseConfigurationArn': licenseConfigARN\n                        }]);\n          numberOfUpdates = numberOfUpdates + 1\n          licenseConfigARN = ''                \n  \n  except botocore.exceptions.ClientError as error:\n    if 'Resource ARN is invalid' in error.response['Error']['Message']:\n      print('EC2 does not exist for this resource. Skipping this step') \n    \n  return {'message': f\"Removed {ec2ARN} from {numberOfUpdates} License Configuration(s)\" }",
+                  "InputPayload": {
+                    "InstanceId": "{{ InstanceId }}",
+                    "accountId": "{{global:ACCOUNT_ID}}",
+                    "region": "{{global:REGION}}"
+                  }
                 }
               },
-              "nextStep": "isOracleDbRunning",
-              "onFailure": "step:exitIfNoOracleDbFound",
-              "isCritical": false
-            },
-            {
-              "name": "isOracleDbRunning",
-              "description": "In this step we check if Oracle database is installed and running.",
-              "action": "aws:runCommand",
-              "inputs": {
-                "DocumentName": "AWS-RunShellScript",
-                "InstanceIds": "{{ InstanceId }}",
-                "Parameters": {
-                  "commands": [
-                    "process=$(ps -ef | grep pmon | grep -v grep >/dev/null); if [[ $? -ne 0 ]]; then exit 127; fi"
-                  ],
-                  "workingDirectory": [
-                    "/home/oracle"
-                  ],
-                  "executionTimeout": [
-                    "3600"
-                  ]
-                }
-              },
-              "outputs": [
-                {
-                  "Name": "result",
-                  "Type": "String",
-                  "Selector": "$.Output"
-                }
-              ],
-              "nextStep": "runOptionsPacksUsageStatistics",
-              "onFailure": "step:exitIfNoOracleDbFound",
-              "isCritical": true
-            },
-            {
-              "name": "runOptionsPacksUsageStatistics",
-              "description": "In this step options_packs_usage_statistics.sql is run to retrieve Oracle database details on the EC2 instance",
-              "action": "aws:runCommand",
-              "inputs": {
-                "DocumentName": "AWS-RunRemoteScript",
-                "InstanceIds": "{{ InstanceId }}",
-                "Parameters": {
-                  "sourceType": [
-                    "S3"
-                  ],
-                  "sourceInfo": [
-                    "{\"path\":\"https://s3.amazonaws.com/${ArtifactsS3Bucket}/scripts/options_packs_usage_statistics.sql\"}"
-                  ],
-                  "commandLine": [
-                    "chown oracle:oinstall options_packs_usage_statistics.sql && chmod 750 options_packs_usage_statistics.sql && runuser -l oracle -c \"sqlplus / as sysdba @options_packs_usage_statistics.sql\";"
-                  ],
-                  "workingDirectory": [
-                    "/home/oracle"
-                  ],
-                  "executionTimeout": [
-                    "3600"
-                  ]
-                }
-              },
-              "outputs": [
-                {
-                  "Name": "result",
-                  "Type": "String",
-                  "Selector": "$.Output"
-                }
-              ],
-              "nextStep": "runExtractOracleEditionDetails",
-              "onFailure": "Abort",
-              "isCritical": true
-            },
-            {
-              "name": "runExtractOracleEditionDetails",
-              "action": "aws:runCommand",
-              "inputs": {
-                "DocumentName": "AWS-RunRemoteScript",
-                "InstanceIds": "{{ InstanceId }}",
-                "Parameters": {
-                  "sourceType": [
-                    "S3"
-                  ],
-                  "sourceInfo": [
-                    "{\"path\":\"https://s3.amazonaws.com/${ArtifactsS3Bucket}/scripts/extractOracleEditionDetails.py\"}"
-                  ],
-                  "commandLine": [
-                    "python extractOracleEditionDetails.py"
-                  ],
-                  "workingDirectory": [
-                    "/home/oracle"
-                  ],
-                  "executionTimeout": [
-                    "3600"
-                  ]
-                }
-              }
-            },
-            {
-              "name": "getOracleEditionDetails",
-              "action": "aws:executeAwsApi",
-              "inputs": {
-                "Service": "ssm",
-                "Api": "ListCommandInvocations",
-                "CommandId": "{{ runExtractOracleEditionDetails.CommandId }}",
-                "Details": true
-              },
-              "outputs": [
-                {
-                  "Name": "editionDetails",
-                  "Type": "String",
-                  "Selector": "$.CommandInvocations.[0].CommandPlugins.[2].Output"
-                }
-              ]
-            },
-            {
-              "name": "runExtractFeatureUsageDetails",
-              "action": "aws:runCommand",
-              "inputs": {
-                "DocumentName": "AWS-RunRemoteScript",
-                "InstanceIds": "{{ InstanceId }}",
-                "Parameters": {
-                  "sourceType": [
-                    "S3"
-                  ],
-                  "sourceInfo": [
-                    "{\"path\":\"https://s3.amazonaws.com/${ArtifactsS3Bucket}/scripts/extractFeatureUsageDetails.py\"}"
-                  ],
-                  "commandLine": [
-                    "python extractFeatureUsageDetails.py"
-                  ],
-                  "workingDirectory": [
-                    "/home/oracle"
-                  ],
-                  "executionTimeout": [
-                    "3600"
-                  ]
+              {
+                "name": "assertInstanceEligibility",
+                "action": "aws:executeScript",
+                "description": "This step checks if the EC2 instance is eligible for this document. The three criteria for this are - (i) is a SSM managed instance and is currently online, (ii) is running on a Linux operating system, and (iii) attached instance role can access the artifacts bucket (if not then attach OracleDbLTS-SSMS3BucketPolicy to the instance role)",
+                "inputs": {
+                  "Runtime": "python3.8",
+                  "Handler": "script_handler",
+                  "Script": "import sys\nimport boto3\nimport json\nimport botocore\n\ndef script_handler(events, context):\n  instanceId = events['instanceId']\n  accountId = events['accountId']\n\n  ssm = boto3.client('ssm')\n  iam = boto3.client('iam')\n  ec2 = boto3.client('ec2')\n  \n  response = ssm.describe_instance_information(\n    Filters=[\n        {\n            'Key': 'InstanceIds',\n            'Values': [\n                instanceId[0],\n            ]\n        },\n    ]\n  )\n\n  instance_profile = ec2.describe_instances(\n    InstanceIds=[\n        instanceId[0],\n    ]\n  )\n  \n  if instance_profile[\"Reservations\"][0]['Instances'][0]['IamInstanceProfile']['Arn']:\n    try:\n      # Get IAM instance profile attached to the instance\n      iam_instance_profile = instance_profile[\"Reservations\"][0]['Instances'][0]['IamInstanceProfile']['Arn'].split(\"/\") \n      \n      instance_role = iam.get_instance_profile(\n        InstanceProfileName=iam_instance_profile[1]\n      )\n      \n      role_name = instance_role['InstanceProfile']['Roles'][0]['RoleName']\n      \n      # Attach policy to the instance role \n      attach_response = iam.attach_role_policy(\n        RoleName=role_name,\n        PolicyArn=f\"arn:${AWS::Partition}:iam::{accountId}:policy/OracleDbLTS-SSMS3BucketPolicy\"\n      )\n      \n      if response[\"ResponseMetadata\"][\"HttpStatusCode\"] == 200:\n        print(\"Attached OracleDbLTS-SSMS3BucketPolicy to \"+role_name)\n      else:\n        raise Exception(f\"Failed to attach OracleDbLTS-SSMS3BucketPolicy to \"+role_name)\n    except Exception as e:\n      print(\"Error: \",e)\n  else:\n    raise Exception(f\"{instanceId[0]} does not appear to have any instance profile\")\n  \n  \n  if response[\"InstanceInformationList\"]:\n    if response[\"InstanceInformationList\"][0]['PingStatus'] == 'Online' and response[\"InstanceInformationList\"][0]['PlatformType'] == 'Linux':\n      status = f\"{instanceId[0]} is eligible for this automation execution\"\n    else:\n      raise Exception(f\"{instanceId[0]} currently appears to be unavilable for this automation\")\n  else:\n    raise Exception(f\"{instanceId[0]} is ineligible for this automation\")\n\n  return status",
+                  "InputPayload": {
+                    "instanceId": "{{ InstanceId }}",
+                    "accountId": "{{global:ACCOUNT_ID}}"
+                  }
                 },
-                "OutputS3BucketName": "${ArtifactsS3Bucket}",
-                "OutputS3KeyPrefix": "ssm-output"
+                "nextStep": "isOracleDbRunning",
+                "onFailure": "step:exitIfNoOracleDbFound",
+                "isCritical": false
+              },
+              {
+                "name": "isOracleDbRunning",
+                "description": "In this step we check if Oracle database is installed and running.",
+                "action": "aws:runCommand",
+                "inputs": {
+                  "DocumentName": "AWS-RunShellScript",
+                  "InstanceIds": "{{ InstanceId }}",
+                  "Parameters": {
+                    "commands": [
+                      "process=$(ps -ef | grep pmon | grep -v grep >/dev/null); if [[ $? -ne 0 ]]; then echo \"No Oracle process(pmon) found in this host\" && exit 127; fi"
+                    ],
+                    "workingDirectory": [
+                      "/home/oracle"
+                    ],
+                    "executionTimeout": [
+                      "3600"
+                    ]
+                  }
+                },
+                "outputs": [
+                  {
+                    "Name": "result",
+                    "Type": "String",
+                    "Selector": "$.Output"
+                  }
+                ],
+                "nextStep": "runOptionsPacksUsageStatistics",
+                "onFailure": "step:exitIfNoOracleDbFound",
+                "isCritical": true
+              },
+              {
+                "name": "runOptionsPacksUsageStatistics",
+                "description": "In this step options_packs_usage_statistics.sql is run to retrieve Oracle database details on the EC2 instance",
+                "action": "aws:runCommand",
+                "inputs": {
+                  "DocumentName": "AWS-RunRemoteScript",
+                  "InstanceIds": "{{ InstanceId }}",
+                  "Parameters": {
+                    "sourceType": [
+                      "S3"
+                    ],
+                    "sourceInfo": [
+                      "{\"path\":\"https://${ArtifactsS3Bucket}.s3.${AWS::Region}.amazonaws.com/scripts/options_packs_usage_statistics.sql\"}"
+                    ],
+                    "commandLine": [
+                      "chown oracle:oinstall options_packs_usage_statistics.sql && chmod 750 options_packs_usage_statistics.sql && runuser -l oracle -c \"sqlplus / as sysdba @options_packs_usage_statistics.sql\";"
+                    ],
+                    "workingDirectory": [
+                      "/home/oracle"
+                    ],
+                    "executionTimeout": [
+                      "3600"
+                    ]
+                  }
+                },
+                "outputs": [
+                  {
+                    "Name": "result",
+                    "Type": "String",
+                    "Selector": "$.Output"
+                  }
+                ],
+                "nextStep": "runExtractOracleEditionDetails",
+                "onFailure": "Abort",
+                "isCritical": true
+              },
+              {
+                "name": "runExtractOracleEditionDetails",
+                "action": "aws:runCommand",
+                "inputs": {
+                  "DocumentName": "AWS-RunRemoteScript",
+                  "InstanceIds": "{{ InstanceId }}",
+                  "Parameters": {
+                    "sourceType": [
+                      "S3"
+                    ],
+                    "sourceInfo": [
+                      "{\"path\":\"https://${ArtifactsS3Bucket}.s3.${AWS::Region}.amazonaws.com/scripts/extractOracleEditionDetails.py\"}"
+                    ],
+                    "commandLine": [
+                      "python extractOracleEditionDetails.py"
+                    ],
+                    "workingDirectory": [
+                      "/home/oracle"
+                    ],
+                    "executionTimeout": [
+                      "3600"
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "getOracleEditionDetails",
+                "action": "aws:executeAwsApi",
+                "inputs": {
+                  "Service": "ssm",
+                  "Api": "ListCommandInvocations",
+                  "CommandId": "{{ runExtractOracleEditionDetails.CommandId }}",
+                  "Details": true
+                },
+                "outputs": [
+                  {
+                    "Name": "editionDetails",
+                    "Type": "String",
+                    "Selector": "$.CommandInvocations.[0].CommandPlugins.[2].Output"
+                  }
+                ]
+              },
+              {
+                "name": "runExtractFeatureUsageDetails",
+                "action": "aws:runCommand",
+                "inputs": {
+                  "DocumentName": "AWS-RunRemoteScript",
+                  "InstanceIds": "{{ InstanceId }}",
+                  "Parameters": {
+                    "sourceType": [
+                      "S3"
+                    ],
+                    "sourceInfo": [
+                      "{\"path\":\"https://${ArtifactsS3Bucket}.s3.${AWS::Region}.amazonaws.com/scripts/extractFeatureUsageDetails.py\"}"
+                    ],
+                    "commandLine": [
+                      "python extractFeatureUsageDetails.py"
+                    ],
+                    "workingDirectory": [
+                      "/home/oracle"
+                    ],
+                    "executionTimeout": [
+                      "3600"
+                    ]
+                  },
+                  "OutputS3BucketName": "${ArtifactsS3Bucket}",
+                  "OutputS3KeyPrefix": "ssm-output"
+                }
+              },
+              {
+                "name": "getOracleFeatureUsageDetails",
+                "action": "aws:executeScript",
+                "inputs": {
+                  "Runtime": "python3.8",
+                  "Handler": "script_handler",
+                  "Script": "import sys\nimport json\nimport csv\nimport time\nimport boto3\nimport botocore\n\ndef script_handler(event, context):\n    instanceId = event['InstanceId']\n    s3 = boto3.resource('s3')\n    client=boto3.client('s3')\n    s3_bucket = event['s3Bucket']\n    commandId = event['CommandId']\n\n    s3_key='ssm-output/'+commandId+'/'+instanceId[0]+'/awsrunShellScript/runShellScript/stdout'\n    key_to_delete='ssm-output/'+commandId+'/'+instanceId[0]+'/'\n    \n    time.sleep(1)\n    s3_object = s3.Bucket(s3_bucket).Object(s3_key)\n    file_content = s3_object.get()['Body'].read().decode('utf-8')\n    if file_content:\n        bucket_delete_response = s3.Object(s3_bucket, 'ssm-output/'+commandId+'/'+instanceId[0]+'/').delete()\n        bucket=s3.Bucket(s3_bucket)\n        obj = s3.Object(s3_bucket,key_to_delete)\n        \n        for obj in bucket.objects.filter(Prefix=key_to_delete):\n            print(obj.key)\n            try:\n                res=obj.delete()\n                print(res)\n            except:\n                print(\"error occurred while deleting\")\n\n    return {'featureUsageDetails': file_content}",
+                  "InputPayload": {
+                    "InstanceId": "{{ InstanceId }}",
+                    "s3Bucket": "{{ ArtifactsS3Bucket }}",
+                    "CommandId": "{{ runExtractFeatureUsageDetails.CommandId }}"
+                  }
+                },
+                "outputs": [
+                  {
+                    "Name": "featureUsageDetails",
+                    "Selector": "$.Payload.featureUsageDetails",
+                    "Type": "String"
+                  }
+                ]
+              },
+              {
+                "name": "updateInventory",
+                "action": "aws:executeScript",
+                "inputs": {
+                  "Runtime": "python3.8",
+                  "Handler": "script_handler",
+                  "Script": "import boto3\nimport json\nfrom datetime import datetime, timezone\nimport time\n  \nssm = boto3.client('ssm')\n\ndef script_handler(events, context):\n  editionDetails = events['editionDetails']\n  featureUsageDetails = events['featureUsageDetails']\n  editionDetailsList = list(eval(editionDetails))\n  featureUsageDetailsList = list(eval(featureUsageDetails))\n  timestamp = datetime.now(timezone.utc).isoformat()[:-13] + 'Z'\n  instanceId = events['InstanceId']\n  \n  ed_update_inventory_response = ssm.put_inventory(\n    InstanceId=instanceId[0],\n    Items=[\n        {\n            'TypeName': 'Custom:OracleDatabaseProduct',\n            'SchemaVersion': '1.0',\n            'CaptureTime': timestamp,\n            'Content': editionDetailsList\n        },\n    ]\n  )\n  \n  if \"HTTPStatusCode\" in ed_update_inventory_response[\"ResponseMetadata\"]:\n    httpStatusCode = ed_update_inventory_response[\"ResponseMetadata\"][\"HTTPStatusCode\"]\n    if httpStatusCode == 200:\n      ed_status = 'Successfully updated Inventory with Oracle server details'\n    else:\n      ed_status = 'Failed to update Inventory with Oracle server details'\n    print(ed_status)\n  else:\n    raise Exception(f\"It appears that this step couldn't be completed due to an unknown error. Please check the logs for more details\")\n  \n  time.sleep(2)\n  #Feature Usage Details  \n  fud_update_inventory_response = ssm.put_inventory(\n    InstanceId=instanceId[0],\n    Items=[\n        {\n            'TypeName': 'Custom:OracleFeatureUsageDetails',\n            'SchemaVersion': '1.0',\n            'CaptureTime': timestamp,\n            'Content': featureUsageDetailsList\n        },\n    ]\n  )\n    \n  if \"HTTPStatusCode\" in fud_update_inventory_response[\"ResponseMetadata\"]:\n    httpStatusCode = fud_update_inventory_response[\"ResponseMetadata\"][\"HTTPStatusCode\"]\n    if httpStatusCode == 200:\n      fud_status = 'Successfully updated Inventory with Oracle feature usage details'\n    else:\n      fud_status = 'Failed to update Inventory with Oracle feature usage details'\n    print(fud_status)\n  else:\n    raise Exception(f\"It appears that this step couldn't be completed due to an unknown error. Please check the logs for more details\")",
+                  "InputPayload": {
+                    "InstanceId": "{{ InstanceId }}",
+                    "editionDetails": "{{ getOracleEditionDetails.editionDetails }}",
+                    "featureUsageDetails": "{{ getOracleFeatureUsageDetails.featureUsageDetails }}"
+                  }
+                }
+              },
+              {
+                "name": "updateLicenseManagerConfiguration",
+                "action": "aws:executeScript",
+                "inputs": {
+                  "Runtime": "python3.8",
+                  "Handler": "script_handler",
+                  "Script": "import boto3\nimport json\nimport re\nfrom re import search\n\ndef script_handler(events, context):\n  \n  lmClient = boto3.client('license-manager')\n  currentLicenseList = {}\n  oracleInfo=events['editionDetails']\n  oracleInfoList=list(eval(events['editionDetails']))\n  editions = {1: 'Enterprise Edition',\n      2: 'Standard Edition',\n      3: 'Express Edition',\n      4: 'Personal Edition'}\n      \n  highestEdition = ''\n  for key, value in editions.items():\n    for instance in oracleInfoList:\n      if instance[\"BANNER\"]:\n        if search(value,instance[\"BANNER\"]):\n          highestEdition = value\n          break\n        else:\n            highestEdition = 'Standard Edition'\n    if highestEdition:\n        break\n          \n\n  listResponse = lmClient.list_license_configurations()\n    \n  if listResponse['LicenseConfigurations']:\n    for config in listResponse['LicenseConfigurations']:\n      if config['Name']:\n        currentLicenseList[config['Name']] = config['LicenseConfigurationArn']\n\n  accountId =  events['accountId'] \n  region = events['region'] \n  instanceId = events['InstanceId'] \n  OracleDbXELicenseConfiguration = currentLicenseList['OracleDbXELicenseConfiguration']\n  OracleDbPELicenseConfiguration = currentLicenseList['OracleDbPELicenseConfiguration']\n  OracleDbEELicenseConfiguration = currentLicenseList['OracleDbEELicenseConfiguration']\n  OracleDbSE2LicenseConfiguration = currentLicenseList['OracleDbSE2LicenseConfiguration']\n  \n  ec2ARN = f\"arn:${AWS::Partition}:ec2:{region}:{accountId}:instance/{instanceId[0]}\"\n  licenseConfigARN = ''\n  \n  if highestEdition == \"Enterprise Edition\" and OracleDbEELicenseConfiguration:\n    licenseConfigARN = OracleDbEELicenseConfiguration\n    \n  elif highestEdition == \"Standard Edition\" and OracleDbSE2LicenseConfiguration:\n    licenseConfigARN =  OracleDbSE2LicenseConfiguration\n    \n  elif highestEdition == \"Express Edition\" and OracleDbXELicenseConfiguration:\n    licenseConfigARN  = OracleDbXELicenseConfiguration\n          \n  elif highestEdition == \"Personal Edition\" and OracleDbPELicenseConfiguration:\n    licenseConfigARN  = OracleDbPELicenseConfiguration\n    \n  else:\n    raise Exception(f\"Sorry, No {highestEdition} License Configuration ARN has been supplied\")\n    \n    \n  if licenseConfigARN:\n    response = lmClient.update_license_specifications_for_resource(\n      ResourceArn=ec2ARN,\n      AddLicenseSpecifications=[\n      {\n          'LicenseConfigurationArn': licenseConfigARN\n      }]);\n    \n    if \"HTTPStatusCode\" in response[\"ResponseMetadata\"]:\n      httpStatusCode = response[\"ResponseMetadata\"][\"HTTPStatusCode\"]\n    if httpStatusCode == 200:\n      status = f\"Succesfully updated {licenseConfigARN} with {ec2ARN}\"\n    else:\n      status = f\"Failed to update {licenseConfigARN} with {ec2ARN}\"\n  else:\n    raise Exception(f\"It appears that this step couldn't be completed due to an unknown error. Please check the logs for more details\")\n  \n  return {'message': status}",
+                  "InputPayload": {
+                    "InstanceId": "{{ InstanceId }}",
+                    "accountId": "{{global:ACCOUNT_ID}}",
+                    "region": "{{global:REGION}}",
+                    "editionDetails": "{{ getOracleEditionDetails.editionDetails }}"
+                  }
+                },
+                "isEnd": false,
+                "onFailure": "Abort",
+                "nextStep": "cleanUp"
+              },
+              {
+                "name": "cleanUp",
+                "action": "aws:runCommand",
+                "inputs": {
+                  "DocumentName": "AWS-RunShellScript",
+                  "InstanceIds": "{{ InstanceId }}",
+                  "Parameters": {
+                    "commands": [
+                      "rm -f extractFeatureUsageDetails.py extractOracleEditionDetails.py options_packs_usage_statistics.sql options_packs_usage_statistics.txt"
+                    ],
+                    "workingDirectory": [
+                      "/home/oracle"
+                    ]
+                  }
+                },
+                "isCritical": false,
+                "onFailure": "Continue",
+                "isEnd": true
+              },
+              {
+                "name": "exitIfNoOracleDbFound",
+                "action": "aws:executeScript",
+                "inputs": {
+                  "Runtime": "python3.8",
+                  "Handler": "script_handler",
+                  "Script": "import sys\nimport json\n\ndef script_handler(events, context):\n  return {'message': 'Instance is either ineligible for this solution or there was no Oracle database process running on the instance'}"
+                },
+                "isEnd": true,
+                "onFailure": "Abort",
+                "outputs": [
+                  {
+                    "Name": "message",
+                    "Selector": "$.Output",
+                    "Type": "String"
+                  }
+                ],
+                "description": "This step is triggered if the instance is either ineligible for this solution or there was no Oracle database process running on the instance."
               }
-            },
-            {
-              "name": "getOracleFeatureUsageDetails",
-              "action": "aws:executeScript",
-              "inputs": {
-                "Runtime": "python3.8",
-                "Handler": "script_handler",
-                "Script": "import sys\nimport json\nimport csv\nimport time\nimport boto3\nimport botocore\n\ndef script_handler(event, context):\n    instanceId = event['InstanceId']\n    s3 = boto3.resource('s3')\n    client=boto3.client('s3')\n    s3_bucket = event['s3Bucket']\n    commandId = event['CommandId']\n\n    s3_key='ssm-output/'+commandId+'/'+instanceId[0]+'/awsrunShellScript/runShellScript/stdout'\n    key_to_delete='ssm-output/'+commandId+'/'+instanceId[0]+'/'\n    \n    time.sleep(1)\n    s3_object = s3.Bucket(s3_bucket).Object(s3_key)\n    file_content = s3_object.get()['Body'].read().decode('utf-8')\n    if file_content:\n        bucket_delete_response = s3.Object(s3_bucket, 'ssm-output/'+commandId+'/'+instanceId[0]+'/').delete()\n        bucket=s3.Bucket(s3_bucket)\n        obj = s3.Object(s3_bucket,key_to_delete)\n        \n        for obj in bucket.objects.filter(Prefix=key_to_delete):\n            print(obj.key)\n            try:\n                res=obj.delete()\n                print(res)\n            except:\n                print(\"error occurred while deleting\")\n\n    return {'featureUsageDetails': file_content}",
-                "InputPayload": {
-                  "InstanceId": "{{ InstanceId }}",
-                  "s3Bucket": "{{ ArtifactsS3Bucket }}",
-                  "CommandId": "{{ runExtractFeatureUsageDetails.CommandId }}"
-                }
-              },
-              "outputs": [
-                {
-                  "Name": "featureUsageDetails",
-                  "Selector": "$.Payload.featureUsageDetails",
-                  "Type": "String"
-                }
-              ]
-            },
-            {
-              "name": "updateInventory",
-              "action": "aws:executeScript",
-              "inputs": {
-                "Runtime": "python3.8",
-                "Handler": "script_handler",
-                "Script": "import boto3\nimport json\nfrom datetime import datetime, timezone\nimport time\n  \nssm = boto3.client('ssm')\n\ndef script_handler(events, context):\n  editionDetails = events['editionDetails']\n  featureUsageDetails = events['featureUsageDetails']\n  editionDetailsList = list(eval(editionDetails))\n  featureUsageDetailsList = list(eval(featureUsageDetails))\n  timestamp = datetime.now(timezone.utc).isoformat()[:-13] + 'Z'\n  instanceId = events['InstanceId']\n  \n  ed_update_inventory_response = ssm.put_inventory(\n    InstanceId=instanceId[0],\n    Items=[\n        {\n            'TypeName': 'Custom:OracleDatabaseProduct',\n            'SchemaVersion': '1.0',\n            'CaptureTime': timestamp,\n            'Content': editionDetailsList\n        },\n    ]\n  )\n  \n  if \"HTTPStatusCode\" in ed_update_inventory_response[\"ResponseMetadata\"]:\n    httpStatusCode = ed_update_inventory_response[\"ResponseMetadata\"][\"HTTPStatusCode\"]\n    if httpStatusCode == 200:\n      ed_status = 'Successfully updated Inventory with Oracle server details'\n    else:\n      ed_status = 'Failed to update Inventory with Oracle server details'\n    print(ed_status)\n  else:\n    raise Exception(f\"It appears that this step couldn't be completed due to an unknown error. Please check the logs for more details\")\n  \n  time.sleep(2)\n  #Feature Usage Details  \n  fud_update_inventory_response = ssm.put_inventory(\n    InstanceId=instanceId[0],\n    Items=[\n        {\n            'TypeName': 'Custom:OracleFeatureUsageDetails',\n            'SchemaVersion': '1.0',\n            'CaptureTime': timestamp,\n            'Content': featureUsageDetailsList\n        },\n    ]\n  )\n    \n  if \"HTTPStatusCode\" in fud_update_inventory_response[\"ResponseMetadata\"]:\n    httpStatusCode = fud_update_inventory_response[\"ResponseMetadata\"][\"HTTPStatusCode\"]\n    if httpStatusCode == 200:\n      fud_status = 'Successfully updated Inventory with Oracle feature usage details'\n    else:\n      fud_status = 'Failed to update Inventory with Oracle feature usage details'\n    print(fud_status)\n  else:\n    raise Exception(f\"It appears that this step couldn't be completed due to an unknown error. Please check the logs for more details\")",
-                "InputPayload": {
-                  "InstanceId": "{{ InstanceId }}",
-                  "editionDetails": "{{ getOracleEditionDetails.editionDetails }}",
-                  "featureUsageDetails": "{{ getOracleFeatureUsageDetails.featureUsageDetails }}"
-                }
-              }
-            },
-            {
-              "name": "updateLicenseManagerConfiguration",
-              "action": "aws:executeScript",
-              "inputs": {
-                "Runtime": "python3.8",
-                "Handler": "script_handler",
-                "Script": "import boto3\nimport json\nimport re\nfrom re import search\n\ndef script_handler(events, context):\n  \n  lmClient = boto3.client('license-manager')\n  currentLicenseList = {}\n  oracleInfo=events['editionDetails']\n  oracleInfoList=list(eval(events['editionDetails']))\n  editions = {1: 'Enterprise Edition',\n      2: 'Standard Edition',\n      3: 'Express Edition',\n      4: 'Personal Edition'}\n      \n  highestEdition = ''\n  for key, value in editions.items():\n    for instance in oracleInfoList:\n      if instance[\"BANNER\"]:\n        if search(value,instance[\"BANNER\"]):\n          highestEdition = value\n          break\n        else:\n            highestEdition = 'Standard Edition'\n    if highestEdition:\n        break\n          \n\n  listResponse = lmClient.list_license_configurations()\n    \n  if listResponse['LicenseConfigurations']:\n    for config in listResponse['LicenseConfigurations']:\n      if config['Name']:\n        currentLicenseList[config['Name']] = config['LicenseConfigurationArn']\n\n  accountId =  events['accountId'] \n  region = events['region'] \n  instanceId = events['InstanceId'] \n  OracleDbXELicenseConfiguration = currentLicenseList['OracleDbXELicenseConfiguration']\n  OracleDbPELicenseConfiguration = currentLicenseList['OracleDbPELicenseConfiguration']\n  OracleDbEELicenseConfiguration = currentLicenseList['OracleDbEELicenseConfiguration']\n  OracleDbSE2LicenseConfiguration = currentLicenseList['OracleDbSE2LicenseConfiguration']\n  \n  ec2ARN = f\"arn:aws:ec2:{region}:{accountId}:instance/{instanceId[0]}\"\n  licenseConfigARN = ''\n  \n  if highestEdition == \"Enterprise Edition\" and OracleDbEELicenseConfiguration:\n    licenseConfigARN = OracleDbEELicenseConfiguration\n    \n  elif highestEdition == \"Standard Edition\" and OracleDbSE2LicenseConfiguration:\n    licenseConfigARN =  OracleDbSE2LicenseConfiguration\n    \n  elif highestEdition == \"Express Edition\" and OracleDbXELicenseConfiguration:\n    licenseConfigARN  = OracleDbXELicenseConfiguration\n          \n  elif highestEdition == \"Personal Edition\" and OracleDbPELicenseConfiguration:\n    licenseConfigARN  = OracleDbPELicenseConfiguration\n    \n  else:\n    raise Exception(f\"Sorry, No {highestEdition} License Configuration ARN has been supplied\")\n    \n    \n  if licenseConfigARN:\n    response = lmClient.update_license_specifications_for_resource(\n      ResourceArn=ec2ARN,\n      AddLicenseSpecifications=[\n      {\n          'LicenseConfigurationArn': licenseConfigARN\n      }]);\n    \n    if \"HTTPStatusCode\" in response[\"ResponseMetadata\"]:\n      httpStatusCode = response[\"ResponseMetadata\"][\"HTTPStatusCode\"]\n    if httpStatusCode == 200:\n      status = f\"Succesfully updated {licenseConfigARN} with {ec2ARN}\"\n    else:\n      status = f\"Failed to update {licenseConfigARN} with {ec2ARN}\"\n  else:\n    raise Exception(f\"It appears that this step couldn't be completed due to an unknown error. Please check the logs for more details\")\n  \n  return {'message': status}",
-                "InputPayload": {
-                  "InstanceId": "{{ InstanceId }}",
-                  "accountId": "{{global:ACCOUNT_ID}}",
-                  "region": "{{global:REGION}}",
-                  "editionDetails": "{{ getOracleEditionDetails.editionDetails }}"
-                }
-              },
-              "isEnd": false,
-              "onFailure": "Abort",
-              "nextStep": "cleanUp"
-            },
-            {
-              "name": "cleanUp",
-              "action": "aws:runCommand",
-              "inputs": {
-                "DocumentName": "AWS-RunShellScript",
-                "InstanceIds": "{{ InstanceId }}",
-                "Parameters": {
-                  "commands": [
-                    "rm -f extractFeatureUsageDetails.py extractOracleEditionDetails.py options_packs_usage_statistics.sql options_packs_usage_statistics.txt"
-                  ],
-                  "workingDirectory": [
-                    "/home/oracle"
-                  ]
-                }
-              },
-              "isCritical": false,
-              "onFailure": "Continue",
-              "isEnd": true
-            },
-            {
-              "name": "exitIfNoOracleDbFound",
-              "action": "aws:executeScript",
-              "inputs": {
-                "Runtime": "python3.8",
-                "Handler": "script_handler",
-                "Script": "import sys\nimport json\n\ndef script_handler(events, context):\n  return {'message': 'Instance is either ineligible for this solution or there was no Oracle database process running on the instance'}"
-              },
-              "isEnd": true,
-              "onFailure": "Abort",
-              "outputs": [
-                {
-                  "Name": "message",
-                  "Selector": "$.Output",
-                  "Type": "String"
-                }
-              ],
-              "description": "This step is triggered if the instance is either ineligible for this solution or there was no Oracle database process running on the instance."
-            }
-          ]
-        }
+            ]
+          }
       DocumentType: "Automation"
+      UpdateMethod: "NewVersion"
       TargetType: "/AWS::EC2::Instance"
