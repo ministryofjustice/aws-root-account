@@ -43,6 +43,14 @@ module "oracle_ec2_license_configurations" {
   principal                = local.ou_modernisation_platform_member_arn
 }
 
+# Upload the YAML file to the existing S3 bucket
+resource "aws_s3_bucket_object" "oracle_db_lts_orchestrate" {
+  bucket = "license-manager-artifact-bucket" # Existing S3 bucket name
+  key    = "OracleDbLTS-Orchestrate.yaml"
+  source = file("${path.module}/cloudformation/OracleDbLTS-Orchestrate.yaml")
+  acl    = "private"
+}
+
 # Cloudformation stack for Oracle Database auto detection
 resource "aws_cloudformation_stack" "oracleblts" {
   name         = "OracleDbLTS"
@@ -60,7 +68,7 @@ resource "aws_cloudformation_stack" "oracleblts" {
     MaxErrors                = 4
     Schedule                 = "cron(15 0 ? * MON *)"
   }
-  template_body = file("${path.module}/cloudformation/OracleDbLTS-Orchestrate.yaml")
+  template_url = "https://${aws_s3_bucket_object.oracle_db_lts_orchestrate.bucket}.s3.eu-west-2.amazonaws.com/${aws_s3_bucket_object.oracle_db_lts_orchestrate.key}"
 
   depends_on = [
     module.oracle_ec2_license_configurations
