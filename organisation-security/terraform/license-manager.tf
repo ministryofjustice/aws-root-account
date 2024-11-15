@@ -47,7 +47,7 @@ module "oracle_ec2_license_configurations" {
 resource "aws_s3_object" "oracle_db_lts_orchestrate_upload" {
   bucket = "license-manager-artifact-bucket" # Existing S3 bucket name
   key    = "OracleDbLTS-Orchestrate.yaml"
-  source = filemd5("${path.module}/cloudformation/OracleDbLTS-Orchestrate.yaml")
+  source = file("${path.module}/cloudformation/OracleDbLTS-Orchestrate.yaml")
   acl    = "private"
 }
 
