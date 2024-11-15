@@ -68,7 +68,7 @@ resource "aws_cloudformation_stack" "oracleblts" {
     MaxErrors                = 4
     Schedule                 = "cron(15 0 ? * MON *)"
   }
-  template_url = "https://${aws_s3_object.oracle_db_lts_orchestrate_upload.bucket}.s3.eu-west-2.amazonaws.com/${aws_s3_object.oracle_db_lts_orchestrat_upload.key}"
+  template_url = "https://${aws_s3_object.oracle_db_lts_orchestrate_upload.bucket}.s3.eu-west-2.amazonaws.com/${aws_s3_object.oracle_db_lts_orchestrate_upload.key}"
 
   depends_on = [
     module.oracle_ec2_license_configurations
