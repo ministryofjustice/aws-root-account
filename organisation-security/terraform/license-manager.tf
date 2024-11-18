@@ -46,8 +46,8 @@ module "oracle_ec2_license_configurations" {
 # Upload the YAML file to the existing S3 bucket
 resource "aws_s3_object" "oracle_db_lts_orch" {
   bucket = "license-manager-artifact-bucket" # Existing S3 bucket name
-  key    = "OracleDbLTS-Orchestrate.yaml"
-  source = file("${path.module}/cloudformation/OracleDbLTS-Orch.yaml")
+  key    = "OracleDbLTS-Orch.yaml"
+  source = file("./cloudformation/OracleDbLTS-Orch.yaml")
   acl    = "private"
 }
 
