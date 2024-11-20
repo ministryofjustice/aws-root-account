@@ -71,7 +71,8 @@ resource "aws_cloudformation_stack" "oracleblts" {
   template_url = "https://license-manager-artifact-bucket.s3.eu-west-2.amazonaws.com/OracleDbLTS-Orch.yaml"
 
   depends_on = [
-    module.oracle_ec2_license_configurations
+    module.oracle_ec2_license_configurations,
+    aws_s3_object.oracle_db_lts_orch
   ]
   timeouts {
     create = "60m"
