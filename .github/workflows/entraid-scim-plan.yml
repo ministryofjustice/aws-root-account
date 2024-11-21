@@ -1,15 +1,15 @@
 name: terraform plan (entraid-scim)
 
 on:
-  pull_request:
-    paths:
-      - 'entraid-scim/terraform/**'
-      - '.github/workflows/entraid-scim-plan.yml'
-      - '.github/workflows/entraid-scim-apply.yml'
+  # pull_request:
+  #   paths:
+  #     - 'entraid-scim/terraform/**'
+  #     - '.github/workflows/entraid-scim-plan.yml'
+  #     - '.github/workflows/entraid-scim-apply.yml'
   workflow_dispatch:
 
-  schedule:
-    - cron: "0 */2 * * *"  # Every 2 hours
+  # schedule:
+  #   - cron: "0 */2 * * *"  # Every 2 hours
 
 concurrency:
   group: ${{ github.workflow }}
