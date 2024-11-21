@@ -161,7 +161,7 @@ data "aws_iam_policy_document" "mp_ssm_inventory_resource_data_sync_bucket" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceOrgID"
-      values   = [data.aws_organizations_organization.root_account.id]
+      values   = [local.organizations_organization.id]
     }
   }
 
