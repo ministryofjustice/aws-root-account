@@ -17,7 +17,7 @@ locals {
     flatten([group_data.members, group_data.owners])
   ])
 
-    group_memberships = flatten([
+  group_memberships = flatten([
     for group_name, group_data in data.azuread_group.entraid_group_data : [
       for member in distinct(concat(group_data.members, group_data.owners)) : {
         group_name  = group_name

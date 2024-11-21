@@ -8,8 +8,8 @@ data "azuread_group" "entraid_group_data" {
 }
 
 data "azuread_user" "entraid_group_members" {
-  for_each = toset(flatten(local.azuread_group_members))
-  object_id       = each.value
+  for_each  = toset(flatten(local.azuread_group_members))
+  object_id = each.value
 }
 
 resource "aws_identitystore_group" "groups" {

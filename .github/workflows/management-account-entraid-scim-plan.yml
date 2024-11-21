@@ -10,6 +10,9 @@ on:
   schedule:
     - cron: "0 */2 * * *"  # Every 2 hours
 
+    concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 jobs:
   plan:
     runs-on: ubuntu-latest
