@@ -212,8 +212,8 @@ data "aws_iam_policy_document" "mp_ssm_inventory_resource_data_sync_kms" {
     }
     condition {
       test     = "StringEquals"
-      variable = "aws:SourceAccount"
-      values   = local.organisation_account_numbers
+      variable = "aws:SourceOrgID"
+      values   = [local.organizations_organization.id]
     }
     condition {
       test     = "ArnLike"
