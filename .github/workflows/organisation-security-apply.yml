@@ -39,7 +39,7 @@ jobs:
 
       - name: Save Commit Header
         run: |
-          echo "COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)" >> "${GITHUB_ENV}"
       - name: Slack failure notification
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0 # v1.27.0
