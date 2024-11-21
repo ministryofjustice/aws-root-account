@@ -186,7 +186,7 @@ resource "aws_kms_key" "mp_ssm_inventory_resource_data_sync" {
 }
 
 resource "aws_kms_alias" "mp_ssm_inventory_resource_data_sync" {
-  name          = "alias/mp-ssm-resource-data-sync"
+  name          = "alias/mp-ssm-inventory-resource-data-sync"
   target_key_id = aws_kms_key.mp_ssm_inventory_resource_data_sync.key_id
 }
 
