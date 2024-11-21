@@ -1,11 +1,11 @@
-name: terraform plan (management-account/entraid-scim)
+name: terraform plan (entraid-scim)
 
 on:
   pull_request:
     paths:
-      - 'management-account/terraform/entraid-scim/**å'
-      - '.github/workflows/management-account-entraid-scim-plan.yml'
-      - '.github/workflows/management-account-entraid-scim-apply.yml'
+      - 'entraid-scim/terraform/**'
+      - '.github/workflows/entraid-scim-plan.yml'
+      - '.github/workflows/entraid-scim-apply.yml'
   workflow_dispatch:
 
   schedule:
@@ -24,7 +24,7 @@ jobs:
       contents: read
     defaults:
       run:
-        working-directory: ./management-account/terraform/entraid-scim
+        working-directory: ./entraid-scim/terraform
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
