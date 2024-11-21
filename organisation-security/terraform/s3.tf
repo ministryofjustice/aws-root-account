@@ -141,7 +141,7 @@ data "aws_iam_policy_document" "mp_ssm_inventory_resource_data_sync_bucket" {
       identifiers = ["ssm.amazonaws.com"]
     }
     actions   = ["s3:GetBucketAcl"]
-    resources = ["arn:aws:s3:::ssm-inventory-sync-bucket-euw2"]
+    resources = ["arn:aws:s3:::mp-ssm-inventory-resource-data-sync-${random_integer.suffix.result}"]
   }
 
   statement {
@@ -152,7 +152,7 @@ data "aws_iam_policy_document" "mp_ssm_inventory_resource_data_sync_bucket" {
       identifiers = ["ssm.amazonaws.com"]
     }
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::ssm-inventory-sync-bucket-euw2/*/accountid=*/*"]
+    resources = ["arn:aws:s3:::mp-ssm-inventory-resource-data-sync-${random_integer.suffix.result}/*/accountid=*/*"]
     condition {
       test     = "StringEquals"
       variable = "s3:x-amz-acl"
@@ -173,7 +173,7 @@ data "aws_iam_policy_document" "mp_ssm_inventory_resource_data_sync_bucket" {
       identifiers = ["ssm.amazonaws.com"]
     }
     actions   = ["s3:PutObjectTagging"]
-    resources = ["arn:aws:s3:::ssm-inventory-sync-bucket-euw2/*/accountid=*/*"]
+    resources = ["arn:aws:s3:::mp-ssm-inventory-resource-data-sync-${random_integer.suffix.result}/*/accountid=*/*"]
   }
 }
 
