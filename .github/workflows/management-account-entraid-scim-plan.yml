@@ -7,17 +7,18 @@ on:
       - '.github/workflows/management-account-entraid-scim-plan.yml'
       - '.github/workflows/management-account-entraid-scim-apply.yml'
   workflow_dispatch:
+
   schedule:
     - cron: "0 */2 * * *"  # Every 2 hours
 
-    concurrency:
+concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
 jobs:
   plan:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name != 'schedule' || github.ref == 'refs/heads/main'  # Run on cron only for main branch
+    if:
+      github.event_name != 'schedule' || github.ref == 'refs/heads/main'
     permissions:
       id-token: write
       contents: read
