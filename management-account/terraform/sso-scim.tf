@@ -18,8 +18,8 @@ module "entraid_scim" {
 }
 
 module "aws_sso_entraid_integration_scim" {
-  source = "github.com/ministryofjustice/moj-terraform-scim-entra-id"
   # tflint-ignore: terraform_module_pinned_source
+  source = "github.com/ministryofjustice/moj-terraform-scim-entra-id"
   azure_tenant_id     = jsondecode(data.aws_secretsmanager_secret_version.aws_sso_entraid_integration.secret_string)["tenant_id"]
   azure_client_id     = jsondecode(data.aws_secretsmanager_secret_version.aws_sso_entraid_integration.secret_string)["client_id"]
   azure_client_secret = jsondecode(data.aws_secretsmanager_secret_version.aws_sso_entraid_integration.secret_string)["client_secret"]
