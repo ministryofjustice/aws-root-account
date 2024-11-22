@@ -100,3 +100,7 @@ resource "aws_secretsmanager_secret" "aws_sso_entraid_integration" {
   name        = "aws-sso-entraid-integration"
   description = "Azure client ID and secret for the Ministry of Justice owned OAuth app for AWS SSO"
 }
+
+data "aws_secretsmanager_secret_version" "aws_sso_entraid_integration" {
+  secret_id = aws_secretsmanager_secret.aws_sso_entraid_integration.id
+}
