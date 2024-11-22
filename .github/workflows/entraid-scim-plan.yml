@@ -1,24 +1,15 @@
 name: terraform plan (entraid-scim)
 
 on:
-  # pull_request:
-  #   paths:
-  #     - 'entraid-scim/terraform/**'
-  #     - '.github/workflows/entraid-scim-plan.yml'
-  #     - '.github/workflows/entraid-scim-apply.yml'
   workflow_dispatch:
-
-  # schedule:
-  #   - cron: "0 */2 * * *"  # Every 2 hours
 
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
+
 jobs:
   plan:
     runs-on: ubuntu-latest
-    if:
-      github.event_name != 'schedule' || github.ref == 'refs/heads/main'
     permissions:
       id-token: write
       contents: read
@@ -26,18 +17,68 @@ jobs:
       run:
         working-directory: ./entraid-scim/terraform
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+      - uses: actions/checkout@v4.2.2
+
+      - uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
-          role-to-assume: arn:aws:iam::${{secrets.AWS_ROOT_ACCOUNT_ID}}:role/github-actions-plan
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ROOT_ACCOUNT_ID }}:role/github-actions-plan
           role-session-name: GitHubActions
           aws-region: eu-west-2
-      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+
+      - uses: hashicorp/setup-terraform@v3.1.2
         with:
           terraform_version: 1.7.5
-      - run: terraform fmt -check
-        continue-on-error: true
-      - run: terraform init
-      - run: terraform validate -no-color
-      - run: terraform plan -no-color
 
+      - name: Run terraform fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Run terraform init
+        run: terraform init
+
+      - name: Run terraform validate
+        run: terraform validate -no-color
+
+      - name: Run terraform plan and capture output
+        run: terraform plan -no-color > plan_output.txt
+
+      - name: Retrieve Slack Bot Token from AWS Secrets Manager
+        id: get_slack_bot_token
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: |
+            SLACK_INCOMING_WEBHOOK,aws-root-account-notifications-incoming-slack-webhook
+
+      - name: Send initial message to Slack
+        id: slack_message
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": ":information_source: Terraform Plan completed for *<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>* at `${{ github.ref_name }}`.\n*Workflow:* `${{ github.workflow }}`\n*Run ID:* `${{ github.run_id }}`\n*Initiated by:* `${{ github.actor }}`"
+            }
+
+
+      - name: Read plan output
+        id: read_plan_output
+        run: |
+          # Read the plan output
+          CONTENT=$(cat plan_output.txt)
+          # Escape backslashes and double quotes for JSON
+          CONTENT_ESCAPED=$(echo "$CONTENT" | sed 's/\\/\\\\/g; s/"/\\"/g')
+          # Save the escaped content to the GITHUB_ENV file
+          echo "content=$CONTENT_ESCAPED" >> $GITHUB_OUTPUT
+
+      - name: Send Terraform plan output to Slack
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "channel": "${{ secrets.SLACK_CHANNEL_ID }}",
+              "text": "```\n${{ steps.read_plan_output.outputs.content }}\n```",
+              "thread_ts: "${{ steps.slack_message.outputs.ts }}"
+            }
