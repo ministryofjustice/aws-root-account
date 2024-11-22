@@ -31,7 +31,7 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v3.1.2
         with:
-          terraform_version: 1.7.5
+          terraform_version: latest
 
       - name: Run terraform fmt
         run: terraform fmt -check
@@ -49,6 +49,8 @@ jobs:
         with:
           secret-ids: |
             SLACK_INCOMING_WEBHOOK,aws-root-account-notifications-incoming-slack-webhook
+            aws-root-account-notifications-slack-information
+          parse-json-secrets: true
 
       - name: Send initial message to Slack
         id: slack_message
@@ -66,17 +68,13 @@ jobs:
           # Run Terraform plan and save to plan_output.txt
           terraform plan -no-color > plan_output.txt
 
-          # Create the payload JSON file
-          echo '{
-            "text": "```"'
-          cat plan_output.txt
-          echo '```",
-            "thread_ts": "'"${{ steps.slack_message.outputs.ts }}"'"
-          }' > slack_plan_payload.json
-
       - name: Send Terraform plan output to Slack
         uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
         with:
-          webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
-          webhook-type: incoming-webhook
-          payload_file_path: slack_plan_payload.json
+          token: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_BOT_TOKEN }}
+          method: files.uploadV2
+          payload: |
+            channel: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_CHANNEL }}
+            initial_comment: Terraform output attached!
+            file: "plan_output.txt"
+            filename: "plan-output-${{ github.run_id }}.txt"
