@@ -55,7 +55,7 @@ jobs:
 
       - name: Send initial message to Slack
         id: slack_message
-        uses: slackapi/slack-github-action@v1.27.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
           webhook-type: incoming-webhook
@@ -76,7 +76,7 @@ jobs:
           echo "content=$CONTENT_ESCAPED" >> $GITHUB_OUTPUT
 
       - name: Send Terraform plan output to Slack
-        uses: slackapi/slack-github-action@v1.27.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
           webhook-type: incoming-webhook
