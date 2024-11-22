@@ -116,7 +116,6 @@ module "mp_ssm_inventory_resource_data_sync_s3_bucket" {
   source = "../../modules/s3"
 
   bucket_name = "mp-ssm-inventory-resource-data-sync-${random_integer.suffix.result}"
-  bucket_acl  = "private"
 
   attach_policy        = true
   policy               = data.aws_iam_policy_document.mp_ssm_inventory_resource_data_sync_bucket.json
