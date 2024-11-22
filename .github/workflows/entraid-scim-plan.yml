@@ -2,6 +2,10 @@ name: terraform plan (entraid-scim)
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'entraid-scim/terraform/**'
+      - '.github/workflows/entraid-scim-plan.yml'
 
 concurrency:
   group: ${{ github.workflow }}
