@@ -43,9 +43,6 @@ jobs:
       - name: Run terraform validate
         run: terraform validate -no-color
 
-      - name: Run terraform plan and capture output
-        run: terraform plan -no-color > plan_output.txt
-
       - name: Retrieve Slack Bot Token from AWS Secrets Manager
         id: get_slack_bot_token
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
@@ -55,7 +52,7 @@ jobs:
 
       - name: Send initial message to Slack
         id: slack_message
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
         with:
           webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
           webhook-type: incoming-webhook
@@ -64,25 +61,22 @@ jobs:
               "text": ":information_source: Terraform Plan completed for *<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>* at `${{ github.ref_name }}`.\n*Workflow:* `${{ github.workflow }}`\n*Run ID:* `${{ github.run_id }}`\n*Initiated by:* `${{ github.actor }}`"
             }
 
-
-      - name: Read plan output
-        id: read_plan_output
+      - name: Run terraform plan and generate JSON payload
         run: |
-          # Read the plan output
-          CONTENT=$(cat plan_output.txt)
-          # Escape backslashes and double quotes for JSON
-          CONTENT_ESCAPED=$(echo "$CONTENT" | sed 's/\\/\\\\/g; s/"/\\"/g')
-          # Save the escaped content to the GITHUB_ENV file
-          echo "content=$CONTENT_ESCAPED" >> $GITHUB_OUTPUT
+          # Run Terraform plan and save to plan_output.txt
+          terraform plan -no-color > plan_output.txt
+
+          # Create the payload JSON file
+          echo '{
+            "text": "```"'
+          cat plan_output.txt
+          echo '```",
+            "thread_ts": "'"${{ steps.slack_message.outputs.ts }}"'"
+          }' > slack_plan_payload.json
 
       - name: Send Terraform plan output to Slack
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
         with:
           webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
           webhook-type: incoming-webhook
-          payload: |
-            {
-              "channel": "${{ secrets.SLACK_CHANNEL_ID }}",
-              "text": "```\n${{ steps.read_plan_output.outputs.content }}\n```",
-              "thread_ts: "${{ steps.slack_message.outputs.ts }}"
-            }
+          payload_file_path: slack_plan_payload.json
