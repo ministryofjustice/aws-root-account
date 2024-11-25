@@ -52,34 +52,34 @@ resource "aws_s3_object" "oracle_db_lts_orch" {
 }
 
 # Cloudformation stack for Oracle Database auto detection
-resource "aws_cloudformation_stack" "oracleblts" {
-  name         = "OracleDbLTS"
-  capabilities = ["CAPABILITY_NAMED_IAM"]
-  parameters = {
-    IsDelegatedAdministrator = true
-    ArtifactsS3Bucket        = "license-manager-artifact-bucket"
-    AdministratorAccountId   = data.aws_caller_identity.current.id
-    OrganizationId           = local.organizations_organization.id
-    TargetOUs                = local.ou_modernisation_platform_member_id
-    TargetRegions            = "eu-west-2"
-    TargetKey                = "tag:OracleDbLTS-ManagedInstance"
-    TargetValues             = true
-    MaxConcurrency           = 4
-    MaxErrors                = 4
-    Schedule                 = "cron(15 0 ? * MON *)"
-  }
-  template_url = "https://aws-license-manager-service-643d94b3-abff-46cd-as.s3.eu-west-2.amazonaws.com/OracleDbLTS-Orch.yaml"
+# resource "aws_cloudformation_stack" "oracleblts" {
+#   name         = "OracleDbLTS"
+#   capabilities = ["CAPABILITY_NAMED_IAM"]
+#   parameters = {
+#     IsDelegatedAdministrator = true
+#     ArtifactsS3Bucket        = "license-manager-artifact-bucket"
+#     AdministratorAccountId   = data.aws_caller_identity.current.id
+#     OrganizationId           = local.organizations_organization.id
+#     TargetOUs                = local.ou_modernisation_platform_member_id
+#     TargetRegions            = "eu-west-2"
+#     TargetKey                = "tag:OracleDbLTS-ManagedInstance"
+#     TargetValues             = true
+#     MaxConcurrency           = 4
+#     MaxErrors                = 4
+#     Schedule                 = "cron(15 0 ? * MON *)"
+#   }
+#   template_url = "https://aws-license-manager-service-643d94b3-abff-46cd-as.s3.eu-west-2.amazonaws.com/OracleDbLTS-Orch.yaml"
 
-  depends_on = [
-    module.oracle_ec2_license_configurations,
-    aws_s3_object.oracle_db_lts_orch
-  ]
-  timeouts {
-    create = "60m"
-    update = "60m"
-    delete = "60m"
-  }
-}
+#   depends_on = [
+#     module.oracle_ec2_license_configurations,
+#     aws_s3_object.oracle_db_lts_orch
+#   ]
+#   timeouts {
+#     create = "60m"
+#     update = "60m"
+#     delete = "60m"
+#   }
+# }
 
 
 # Athena resources
