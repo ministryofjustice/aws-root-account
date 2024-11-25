@@ -71,7 +71,7 @@ jobs:
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             len=$(cat plan_output.txt | wc -c)
             echo '```'
-            head -c 65476 tfplan.txt | sed -n '/Terraform will perform/,$p'
+            head -c 65476 plan_output.txt | sed -n '/Terraform will perform/,$p'
             echo
             echo '```'
           }
@@ -88,7 +88,7 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             thread_ts: "${{ steps.slack_message.outputs.ts }}"
-            text: "```\n ${{ env.TF_PLAN_OUT}} \n ``` "
+            text: "${{ env.TF_PLAN_OUT}}"
 
       # - name: Send Terraform plan output to Slack
       #   uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
