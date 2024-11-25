@@ -79,14 +79,25 @@ jobs:
           comment >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      - name: Send Terraform plan output to Slack
+      - name: Send final message to Slack
+        id: second-slack-message
         uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
         with:
-          errors: true
-          token: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_BOT_TOKEN }}
-          method: files.uploadV2
+          webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
+          webhook-type: incoming-webhook
           payload: |
-            channel: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_CHANNEL }}
-            initial_comment: Terraform output attached!
-            file: ${{env.TF_PLAN_OUT}}
-            filename: plan-output.txt
+            thread_ts: "${{ steps.slack_message.outputs.ts }}"
+            text: "```\n ${{ env.TF_PLAN_OUT}} \n ``` "
+
+      # - name: Send Terraform plan output to Slack
+      #   uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
+      #   with:
+      #     errors: true
+      #     token: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_BOT_TOKEN }}
+      #     method: files.uploadV2
+      #     payload: |
+      #       channel: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_CHANNEL }}
+      #       initial_comment: Terraform output attached!
+      #       file: ${{env.TF_PLAN_OUT}}
+      #       filename: plan-output.txt
+
