@@ -67,6 +67,17 @@ jobs:
         run: |
           # Run Terraform plan and save to plan_output.txt
           terraform plan -no-color > plan_output.txt
+          comment() {
+            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            len=$(cat plan_output.txt | wc -c)
+            echo '```'
+            head -c 65476 tfplan.txt | sed -n '/Terraform will perform/,$p'
+            echo
+            echo '```'
+          }
+          echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
+          comment >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       - name: Send Terraform plan output to Slack
         uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
@@ -77,5 +88,5 @@ jobs:
           payload: |
             channel: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_CHANNEL }}
             initial_comment: Terraform output attached!
-            file: plan_output.txt
+            file: ${{env.TF_PLAN_OUT}}
             filename: plan-output.txt
