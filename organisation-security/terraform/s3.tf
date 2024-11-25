@@ -112,23 +112,55 @@ module "athena_results_s3_bucket" {
 }
 
 # MP SSM Inventory Resource Data Sync S3 bucket - for syncing Modernisation Platform inventory data centrally (Similar to what's been built in organisation-security/terraform/ssm.tf but keeping this separate for now)
-module "mp_ssm_inventory_resource_data_sync_s3_bucket" {
-  source = "../../modules/s3"
-
-  bucket_name = "mp-ssm-inventory-resource-data-sync-${random_integer.suffix.result}"
-
-  attach_policy        = true
-  policy               = data.aws_iam_policy_document.mp_ssm_inventory_resource_data_sync_bucket.json
-  require_ssl_requests = true
-
-  server_side_encryption_configuration = {
-    rule = {
-      apply_server_side_encryption_by_default = {
-        sse_algorithm = "aws:kms"
+module "mp_ssm_inventory_resource_data_sync_s3" {
+  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=52a40b0dd18aaef0d7c5565d93cc8997aad79636" # v8.2.0
+  providers = {
+    aws.bucket-replication = aws.eu-west-1
+  }
+  bucket_policy       = [data.aws_iam_policy_document.mp_ssm_inventory_resource_data_sync_bucket.json]
+  bucket_name         = "mp-ssm-inventory-resource-data-sync-${random_integer.suffix.result}"
+  custom_kms_key      = aws_kms_key.mp_ssm_inventory_resource_data_sync.arn
+  replication_enabled = false
+  ownership_controls  = "BucketOwnerEnforced"
+  lifecycle_rule = [
+    {
+      id      = "main"
+      enabled = "Enabled"
+      tags    = {}
+      transition = [
+        {
+          days          = 90
+          storage_class = "STANDARD_IA"
+          }, {
+          days          = 700
+          storage_class = "GLACIER"
+        }
+      ]
+      expiration = {
+        days = 730
+      }
+      noncurrent_version_transition = [
+        {
+          days          = 90
+          storage_class = "STANDARD_IA"
+          }, {
+          days          = 700
+          storage_class = "GLACIER"
+        }
+      ]
+      noncurrent_version_expiration = {
+        days = 730
       }
     }
+  ]
+  tags = {
+    business-unit = "Platforms"
+    application   = "Modernisation Platform"
+    is-production = true
+    owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
   }
 }
+
 
 # MP SSM Inventory Resource Data Sync S3 bucket policy
 data "aws_iam_policy_document" "mp_ssm_inventory_resource_data_sync_bucket" {
