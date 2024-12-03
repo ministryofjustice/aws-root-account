@@ -415,7 +415,7 @@ locals {
     },
     {
       github_team        = "operations-engineering",
-      permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn,
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
         aws_organizations_organization.default.master_account_id
       ]
