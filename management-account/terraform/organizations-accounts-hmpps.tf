@@ -42,26 +42,6 @@ resource "aws_organizations_account" "hmpps_engineering_production" {
   }
 }
 
-resource "aws_organizations_account" "hmpps_performance_hub" {
-  name                       = "HMPPS Performance Hub"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-performance-hub")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.hmpps.id
-
-  tags = merge(local.tags_hmpps, {
-
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "hmpps_probation_production" {
   name                       = "HMPPS Probation Production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-probation-prod")
