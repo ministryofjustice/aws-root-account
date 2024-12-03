@@ -406,7 +406,7 @@ Resources:
       MemorySize: 256
       Role: !GetAtt OracleDbLTSUtilityFunctionRole.Arn
       Runtime: "python3.9"
-      Timeout: 60
+      Timeout: 900
       Code:
         ZipFile: !Sub |
           import boto3
@@ -641,7 +641,7 @@ Resources:
 
               # Determine what action to take.
               if event['RequestType'] in ['Create', 'Update']:
-                print(event)
+                print(deploymentTargets)
                 for dt in deploymentTargets:
                   targetDeploymentList.extend(get_child_ou_ids(dt))
                   targetDeploymentList.append(dt)
@@ -694,7 +694,7 @@ Resources:
       TargetKey: !Ref TargetKey
       TargetValues: !Ref TargetValues
       Schedule: !Ref Schedule
-      ServiceTimeout: 120
+      ServiceTimeout: 1000
 
   OracleDbLTSOrchestrate:
     Type: "AWS::SSM::Document"
