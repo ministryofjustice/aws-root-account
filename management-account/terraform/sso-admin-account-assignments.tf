@@ -411,6 +411,13 @@ locals {
         aws_organizations_organization.default.master_account_id
       ]
     },
+    {
+      github_team        = "operations-engineering",
+      permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id
+      ]
+    },
   ]
   sso_admin_account_assignments_expanded = flatten([
     for assignment in local.sso_admin_account_assignments : [
