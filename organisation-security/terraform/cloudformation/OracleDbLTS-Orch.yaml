@@ -154,30 +154,6 @@ Resources:
                 Resource:
                   - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
                   - !Sub "arn:${AWS::Partition}:iam::*:role/OracleDbLTS-SystemsManagerAutomationExecutionRole"
-  StackSetAdministrationRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      Path: /
-      RoleName: OracleDbLTS-CloudFormation-StackSetAdministrationRole
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: cloudformation.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Policies:
-        - PolicyName: AdministrationPolicy
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - sts:AssumeRole
-                Resource:
-                  - "arn:*:iam::*:role/OracleDbLTS-CloudFormation-StackSetExecutionRole"
-      Description: OracleDbLTS-CloudFormation-StackSetAdministrationRole to enable use of CloudFormation Stacksets
 
   ArtifactsS3:
     Type: "AWS::S3::Bucket"
@@ -217,7 +193,6 @@ Resources:
   OracleDbLTSUtilityFunctionRole:
     Type: "AWS::IAM::Role"
     Properties:
-      Path: /
       RoleName: OracleDbLTSUtilityFunctionRole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -228,6 +203,7 @@ Resources:
             Action: ["sts:AssumeRole"]
       ManagedPolicyArns:
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Path: /
       Policies:
         - PolicyName: OracleDbLTS-CreateAssociationPermissionManagementLambdaPolicy
           PolicyDocument:
@@ -287,64 +263,6 @@ Resources:
                   - !Sub "arn:aws:s3:::${ArtifactsS3.Arn}/*"
                   - "arn:aws:s3:::pb-solution-artifacts/*"
                   - "arn:aws:s3:::pb-solution-artifacts"
-
-  StackSetExecutionRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      Path: /
-      RoleName: OracleDbLTS-CloudFormation-StackSetExecutionRole
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              AWS:
-                - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
-            Action:
-              - sts:AssumeRole
-      Policies:
-        - PolicyName: ExecutionPolicy
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Sid: Sid0
-                Effect: Allow
-                Action:
-                  - "iam:CreateRole"
-                  - "iam:AttachRolePolicy"
-                  - "iam:PutRolePolicy"
-                  - "iam:PassRole"
-                  - "iam:DetachRolePolicy"
-                  - "iam:DeleteRolePolicy"
-                  - "iam:DeleteRole"
-                Resource:
-                  - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
-                  - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationAdministrationRole"
-                  - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/OracleDbLTS-SystemsManagerAutomationExecutionRole"
-              - Sid: Sid1
-                Effect: Allow
-                Action:
-                  - "ssm:CreateDocument"
-                  - "ssm:DeleteDocument"
-                Resource:
-                  - !Sub "arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:document/OracleDbLTS-DeleteInventory"
-                  - !Sub "arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:document/OracleDbLTS-ManageLicenceUtilization"
-              - Sid: Sid2
-                Effect: Allow
-                Action:
-                  - "iam:GetRolePolicy"
-                  - "iam:GetRole"
-                  - "ssm:ListTagsForResource"
-                  - "ssm:DescribeDocument"
-                Resource: "*"
-              - Sid: Sid3
-                Effect: Allow
-                Action:
-                  - "sns:*"
-                  - "cloudformation:*"
-                Resource: "*"
-      Description: OracleDbLTS-CloudFormation-StackSetExecutionRole to enable use of CloudFormation Stacksets
-    DependsOn: StackSetAdministrationRole
 
   AutomationPermissionsStackSet:
     Type: AWS::CloudFormation::StackSet
@@ -485,10 +403,10 @@ Resources:
       Description: "Utility Lambda function to create the State Manager associations and copy some of the required scripts for the solution"
       FunctionName: "OracleDbLTS-UtilityFunction"
       Handler: "index.lambda_handler"
-      MemorySize: 128
+      MemorySize: 256
       Role: !GetAtt OracleDbLTSUtilityFunctionRole.Arn
       Runtime: "python3.9"
-      Timeout: 30
+      Timeout: 60
       Code:
         ZipFile: !Sub |
           import boto3
@@ -701,7 +619,7 @@ Resources:
           # function: lambda_handler
           #--------------------------------------------------
           def lambda_handler(event, context):
-
+            print(event)
             try:
 
               targetDeploymentList = []
@@ -723,7 +641,7 @@ Resources:
 
               # Determine what action to take.
               if event['RequestType'] in ['Create', 'Update']:
-                
+                print(event)
                 for dt in deploymentTargets:
                   targetDeploymentList.extend(get_child_ou_ids(dt))
                   targetDeploymentList.append(dt)
@@ -776,6 +694,7 @@ Resources:
       TargetKey: !Ref TargetKey
       TargetValues: !Ref TargetValues
       Schedule: !Ref Schedule
+      ServiceTimeout: 120
 
   OracleDbLTSOrchestrate:
     Type: "AWS::SSM::Document"
