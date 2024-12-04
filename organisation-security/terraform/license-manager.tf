@@ -49,6 +49,7 @@ resource "aws_s3_object" "oracle_db_lts_orch" {
   key    = "OracleDbLTS-Orch.yaml"
   source = "./cloudformation/OracleDbLTS-Orch.yaml"
   acl    = "private"
+  etag   = filemd5("./cloudformation/OracleDbLTS-Orch.yaml")
 }
 
 # Cloudformation stack for Oracle Database auto detection
@@ -60,7 +61,7 @@ resource "aws_cloudformation_stack" "oracleblts" {
     ArtifactsS3Bucket        = "license-manager-artifact-bucket"
     AdministratorAccountId   = data.aws_caller_identity.current.id
     OrganizationId           = local.organizations_organization.id
-    TargetOUs                = local.ou_modernisation_platform_member_id
+    TargetOUs                = local.license_mamager_ous
     TargetRegions            = "eu-west-2"
     TargetKey                = "tag:OracleDbLTS-ManagedInstance"
     TargetValues             = true
