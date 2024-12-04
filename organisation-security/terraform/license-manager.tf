@@ -75,7 +75,7 @@ resource "aws_cloudformation_stack" "oracleblts" {
     aws_s3_object.oracle_db_lts_orch
   ]
   timeouts {
-    create = "60m"
+    create = "120m"
     update = "60m"
     delete = "60m"
   }
