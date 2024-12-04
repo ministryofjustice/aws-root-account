@@ -104,7 +104,7 @@ locals {
     local.ou_ccms_ebs,
     local.ou_oasys
   ]
-  license_manager_ous_string = join(",", local.license_manager_ous)
+  license_manager_ous_string = join(",", local.license_mamager_ous)
 
 
   # modernisation_platform_member_ous = [
