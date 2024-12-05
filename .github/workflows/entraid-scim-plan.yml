@@ -1,0 +1,105 @@
+name: terraform plan (entraid-scim)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'entraid-scim/terraform/**'
+      - '.github/workflows/entraid-scim-plan.yml'
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: ./entraid-scim/terraform
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ROOT_ACCOUNT_ID }}:role/github-actions-plan
+          role-session-name: GitHubActions
+          aws-region: eu-west-2
+
+      - uses: hashicorp/setup-terraform@v3.1.2
+        with:
+          terraform_version: latest
+
+      - name: Run terraform fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Run terraform init
+        run: terraform init
+
+      - name: Run terraform validate
+        run: terraform validate -no-color
+
+      - name: Retrieve Slack Bot Token from AWS Secrets Manager
+        id: get_slack_bot_token
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: |
+            SLACK_INCOMING_WEBHOOK,aws-root-account-notifications-incoming-slack-webhook
+            aws-root-account-notifications-slack-information
+          parse-json-secrets: true
+
+      - name: Send initial message to Slack
+        id: slack_message
+        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
+        with:
+          webhook: ${{ env.SLACK_INCOMING_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": ":information_source: Terraform Plan completed for *<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>* at `${{ github.ref_name }}`.\n*Workflow:* `${{ github.workflow }}`\n*Run ID:* `${{ github.run_id }}`\n*Initiated by:* `${{ github.actor }}`"
+            }
+
+      - name: Run terraform plan and generate JSON payload
+        run: |
+          # Run Terraform plan and save to plan_output.txt
+          terraform plan -no-color > plan_output.txt
+          comment() {
+            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            len=$(cat plan_output.txt | wc -c)
+            echo '```'
+            head -c 65476 plan_output.txt | sed -n '/Terraform will perform/,$p'
+            echo
+            echo '```'
+          }
+          echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
+          comment >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Send final message to Slack
+        id: second-slack-message
+        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
+        with:
+          errors: true
+          token: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_BOT_TOKEN }}
+          method: chat.postMessage
+          payload: |
+            channel: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_CHANNEL }}
+            thread_ts: "${{ steps.slack_message.outputs.ts }}"
+            text: "TEST"
+
+      # - name: Send Terraform plan output to Slack
+      #   uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d #v2.0.0
+      #   with:
+      #     errors: true
+      #     token: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_BOT_TOKEN }}
+      #     method: files.uploadV2
+      #     payload: |
+      #       channel: ${{ env.AWS_ROOT_ACCOUNT_NOTIFICATIONS_SLACK_INFORMATION_SLACK_CHANNEL }}
+      #       initial_comment: Terraform output attached!
+      #       file: ${{env.TF_PLAN_OUT}}
+      #       filename: plan-output.txt
+
