@@ -151,6 +151,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
+      "identitystore:CreateGroup",
       "kms:Decrypt",
       "lambda:*",
       "license-manager:*",
