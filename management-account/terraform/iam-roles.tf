@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "modernisation_platform_sso_administrator" {
     actions = ["sts:AssumeRole"]
 
     principals {
-      type        = "AWS"
+      type = "AWS"
       identifiers = [
         "arn:aws:iam::${aws_organizations_account.modernisation_platform.id}:root",
         "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.sprinkler_id...)}:role/github-actions"
@@ -188,4 +188,76 @@ data "aws_iam_policy_document" "modernisation_platform_github_actions_additional
 
     resources = [module.modernisation_platform_github_actions_role.role]
   }
+}
+
+##########################################
+# AnalyticalPlatformIdentityCenterRole   #
+##########################################
+
+data "aws_iam_policy_document" "analytical_platform_identity_center" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${local.accounts.active_only["analytical-platform-data-production"]}:role/prod_control_panel_api20210906102154527600000001",
+        "arn:aws:iam::${local.accounts.active_only["analytical-platform-development"]}:role/dev_control_panel_api20230420142935268800000001"
+      ]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "analytical_platform_identity_center" {
+  #checkov:skip=CKV_AWS_158:Won't implement
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "identitystore:CreateGroup",
+      "identitystore:CreateGroupMembership",
+      "identitystore:CreateUser",
+      "identitystore:DeleteGroup",
+      "identitystore:DeleteGroupMembership",
+      "identitystore:DeleteUser",
+      "identitystore:DescribeGroup",
+      "identitystore:DescribeGroupMembership",
+      "identitystore:ListGroupMemberships",
+      "identitystore:ListGroups",
+      "identitystore:ListUsers",
+      "identitystore:DescribeUser",
+    ]
+    resources = [
+      "arn:aws:identitystore::${data.aws_caller_identity.current.account_id}:identitystore/*",
+      "arn:aws:identitystore:::user/*",
+      "arn:aws:identitystore:::group/*",
+      "arn:aws:identitystore:::membership/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sso:ListInstances",
+    ]
+    resources = [
+      "arn:aws:sso:::instance/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "analytical_platform_identity_center" {
+  name   = "AnalyticalPlatformIdentityCenter"
+  policy = data.aws_iam_policy_document.analytical_platform_identity_center.json
+}
+
+resource "aws_iam_role" "analytical_platform_identity_center" {
+  name               = "AnalyticalPlatformIdentityCenter"
+  assume_role_policy = data.aws_iam_policy_document.analytical_platform_identity_center.json
+}
+
+resource "aws_iam_role_policy_attachment" "analytical_platform_identity_center" {
+  role       = aws_iam_role.analytical_platform_identity_center.name
+  policy_arn = aws_iam_policy.analytical_platform_identity_center.arn
 }
