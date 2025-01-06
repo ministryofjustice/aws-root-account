@@ -194,7 +194,7 @@ data "aws_iam_policy_document" "modernisation_platform_github_actions_additional
 # AnalyticalPlatformIdentityCenterRole   #
 ##########################################
 
-data "aws_iam_policy_document" "analytical_platform_identity_center" {
+data "aws_iam_policy_document" "analytical_platform_identity_center_assume_role" {
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
@@ -254,7 +254,7 @@ resource "aws_iam_policy" "analytical_platform_identity_center" {
 
 resource "aws_iam_role" "analytical_platform_identity_center" {
   name               = "AnalyticalPlatformIdentityCenter"
-  assume_role_policy = data.aws_iam_policy_document.analytical_platform_identity_center.json
+  assume_role_policy = data.aws_iam_policy_document.analytical_platform_identity_center_assume_role.json
 }
 
 resource "aws_iam_role_policy_attachment" "analytical_platform_identity_center" {
