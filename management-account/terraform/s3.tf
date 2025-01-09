@@ -282,3 +282,41 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
     }
   }
 }
+
+# moj-cur-reports-greenopspoc bucket for GreenOps PoC reports
+module "cur_reports_greenopspoc_s3_bucket" {
+  source = "../../modules/s3"
+
+  bucket_name   = "moj-cur-reports-greenopspoc"
+  attach_policy = true
+  policy        = data.aws_iam_policy_document.cur_reports_greenopspoc_s3_policy
+}
+
+data "aws_iam_policy_document" "cur_reports_greenopspoc_s3_policy" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketPolicy",
+      "s3:GetBucketAcl"
+    ]
+    resources = ["arn:aws:s3:::moj-cur-reports-greenopspoc"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::386209384616:root"]
+    }
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["arn:aws:s3:::moj-cur-reports-greenopspoc/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::386209384616:root"]
+    }
+  }
+}
