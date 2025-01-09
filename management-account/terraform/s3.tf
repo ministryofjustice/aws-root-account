@@ -289,7 +289,7 @@ module "cur_reports_greenopspoc_s3_bucket" {
 
   bucket_name   = "moj-cur-reports-greenopspoc"
   attach_policy = true
-  policy        = data.aws_iam_policy_document.cur_reports_greenopspoc_s3_policy
+  policy        = data.aws_iam_policy_document.cur_reports_greenopspoc_s3_policy.json
 }
 
 data "aws_iam_policy_document" "cur_reports_greenopspoc_s3_policy" {
