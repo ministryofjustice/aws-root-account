@@ -59,27 +59,6 @@ resource "aws_iam_user_group_membership" "ewa_stempel" {
   ]
 }
 
-##################
-# Jason Birchall #
-##################
-resource "aws_iam_user" "jason_birchall" {
-  name          = "JasonBirchall"
-  path          = "/"
-  force_destroy = true
-  tags          = {}
-}
-
-# User membership
-resource "aws_iam_user_group_membership" "jason_birchall" {
-  user = aws_iam_user.jason_birchall.name
-
-  groups = [
-    aws_iam_group.admin.name,
-    aws_iam_group.aws_organisations_admin.name,
-    aws_iam_group.iam_user_change_password.name,
-  ]
-}
-
 ###############################################
 # ModernisationPlatformOrganisationManagement #
 ###############################################
@@ -202,3 +181,4 @@ resource "aws_iam_user_group_membership" "xsoar_integration" {
     aws_iam_group.aws_organisations_listreadonly.name,
   ]
 }
+
