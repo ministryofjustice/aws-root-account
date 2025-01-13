@@ -58,14 +58,17 @@ locals {
       github_team        = "operations-engineering",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
-        aws_organizations_account.moj_digital_services.id
+        aws_organizations_account.moj_digital_services.id,
+        aws_organizations_account.tacticalproducts.id,
+        aws_organizations_account.youth_justice_framework_management.id
       ]
     },
     {
       github_team        = "operations-engineering",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
-        aws_organizations_account.moj_digital_services.id
+        aws_organizations_account.moj_digital_services.id,
+        aws_organizations_organization.default.master_account_id
       ]
     },
     {
@@ -420,21 +423,7 @@ locals {
       account_ids = [
         aws_organizations_organization.default.master_account_id
       ]
-    },
-    {
-      github_team        = "operations-engineering",
-      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id
-      ]
-    },
-    {
-      github_team        = "operations-engineering",
-      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
-      account_ids = [
-        aws_organizations_account.tacticalproducts.id
-      ]
-    },
+    }
   ]
   sso_admin_account_assignments_expanded = flatten([
     for assignment in local.sso_admin_account_assignments : [
