@@ -227,6 +227,11 @@ data "aws_iam_policy_document" "analytical_platform_identity_center" {
       "identitystore:ListGroups",
       "identitystore:ListUsers",
       "identitystore:DescribeUser",
+      "identitystore:GetUserId",
+      "identitystore:GetGroupId",
+      "identitystore:UpdateGroup",
+      "identitystore:GetGroupMembershipId",
+      "identitystore:UpdateUser",
     ]
     resources = [
       "arn:aws:identitystore::${data.aws_caller_identity.current.account_id}:identitystore/*",
