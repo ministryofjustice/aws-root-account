@@ -289,9 +289,9 @@ module "cur_reports_greenopspoc_s3_bucket" {
   providers = {
     aws.bucket-replication = aws
   }
-  bucket_name   = "moj-cur-reports-greenopspoc"
-  bucket_policy         = [data.aws_iam_policy_document.cur_reports_greenopspoc_s3_policy.json]
-  ownership_controls  = "BucketOwnerEnforced"
+  bucket_name        = "moj-cur-reports-greenopspoc"
+  bucket_policy      = [data.aws_iam_policy_document.cur_reports_greenopspoc_s3_policy.json]
+  ownership_controls = "BucketOwnerEnforced"
 
   tags = {
     business-unit = "Platforms"
