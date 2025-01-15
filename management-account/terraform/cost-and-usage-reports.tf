@@ -53,23 +53,19 @@ resource "aws_cur_report_definition" "athena_integration" {
 }
 
 
-# resource "aws_cur_report_definition" "moj_cur_report" {
-#   provider = aws.us-east-1
+resource "aws_cur_report_definition" "moj_cur_report" {
+  provider = aws.us-east-1
 
-#   report_name                = "MOJ-CUR-GREENOPSPOC"
-#   time_unit                  = "DAILY"
-#   format                     = "textORcsv"
-#   compression                = "ZIP"
-#   additional_schema_elements = ["RESOURCES"]
-#   report_versioning          = "OVERWRITE_REPORT"
+  report_name                = "MOJ-CUR-GREENOPSPOC"
+  time_unit                  = "DAILY"
+  format                     = "textORcsv"
+  compression                = "ZIP"
+  additional_schema_elements = ["RESOURCES"]
+  report_versioning          = "OVERWRITE_REPORT"
 
-#   # S3 configuration
-#   s3_bucket = module.cur_reports_greenopspoc_s3_bucket.bucket.name
-#   s3_region = "eu-west-2"
-#   s3_prefix = "moj-cost-and-usage-reports/"
-# }
-
-output "s3_bucket_name" {
-  value = module.cur_reports_greenopspoc_s3_bucket.bucket
-  
+  # S3 configuration
+  s3_bucket = module.cur_reports_greenopspoc_s3_bucket.bucket.bucket
+  s3_region = "eu-west-2"
+  s3_prefix = "moj-cost-and-usage-reports/"
 }
+
