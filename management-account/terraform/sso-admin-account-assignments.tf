@@ -266,7 +266,8 @@ locals {
       github_team        = "modernisation-platform-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
-        aws_organizations_account.modernisation_platform.id
+        aws_organizations_account.modernisation_platform.id,
+        aws_organizations_account.youth_justice_framework_management.id
       ]
     },
     {
