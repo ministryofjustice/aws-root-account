@@ -259,7 +259,7 @@ locals {
       account_ids = [
         aws_organizations_account.modernisation_platform.id,
         aws_organizations_organization.default.master_account_id,
-        aws_organizations_account.organisation_security.id
+        aws_organizations_account.organisation_security.id,
         aws_organizations_account.youth_justice_framework_management.id
       ]
     },
