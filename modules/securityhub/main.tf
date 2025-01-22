@@ -10,8 +10,7 @@ data "aws_caller_identity" "current" {}
 
 # Enable Security Hub
 resource "aws_securityhub_account" "default" {
-  # Consolidated Control Findings has been enabled manually, as no Terraform support currently exists for enabling it centrally.
-  control_finding_generator = "SECURITY_CONTROL"
+  control_finding_generator = "STANDARD_CONTROL"
   lifecycle {
     ignore_changes = [
       # When importing this can't be changed without destroying the resource
