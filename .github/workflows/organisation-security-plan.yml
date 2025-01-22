@@ -32,5 +32,4 @@ jobs:
         continue-on-error: true
       - run: terraform init
       - run: terraform validate -no-color
-      - run: terraform plan -no-color
-   
+      - run: terraform plan -no-color | ./scripts/redaction.sh
