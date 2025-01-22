@@ -145,6 +145,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "cur:DescribeReportDefinitions",
       "cur:ListTagsForResource",
       "cur:PutReportDefinition",
+      "cur:DeleteReportDefinition",
       "events:*",
       "fms:*",
       "guardduty:*",
