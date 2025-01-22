@@ -215,6 +215,12 @@ data "aws_iam_policy_document" "terraform_organisation_management_policy" {
   }
 
   statement {
+    effect    = "Allow"
+    actions   = ["s3:DeleteObject"]
+    resources = ["arn:aws:s3:::modernisation-platform-terraform-state/*.tflock"]
+  }
+
+  statement {
     effect = "Allow"
     actions = [
       "s3:PutObject",
