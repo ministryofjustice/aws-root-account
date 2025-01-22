@@ -60,7 +60,7 @@ resource "aws_cur_report_definition" "moj_cur_report" {
   time_unit                  = "DAILY"
   format                     = "textORcsv"
   compression                = "ZIP"
-  additional_schema_elements = ["RESOURCES"]
+  additional_schema_elements = ["RESOURCES", "SPLIT_COST_ALLOCATION_DATA"]
   report_versioning          = "CREATE_NEW_REPORT"
 
   # S3 configuration
