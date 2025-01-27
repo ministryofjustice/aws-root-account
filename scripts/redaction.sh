@@ -7,4 +7,7 @@ sed -u -E \
     -e "s/\$(AWS_ACCESS_KEY_ID)=.*/\$(AWS_ACCESS_KEY_ID)=<REDACTED>/g" \
     -e "s/\[id=[^]]*\]/\[id=<REDACTED>]/g" \
     -e "s/::[0-9]{12}:/::REDACTED:/g" \
-    -e "s/:[0-9]{12}:/:REDACTED:/g"
+    -e "s/:[0-9]{12}:/:REDACTED:/g" \
+    -e "s/\"id\" = \"[0-9]{12}\"/\"id\" = \"<REDACTED>\"/g" \
+    -e "s/\"email\" = \"[^\"]*\"/\"email\" = \"<REDACTED>\"/g" \
+    
