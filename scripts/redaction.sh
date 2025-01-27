@@ -9,5 +9,4 @@ sed -u -E \
     -e "s/::[0-9]{12}:/::REDACTED:/g" \
     -e "s/:[0-9]{12}:/:REDACTED:/g" \
     -e "s/\"id\" = \"[0-9]{12}\"/\"id\" = \"<REDACTED>\"/g" \
-    -e "s/\"email\" = \"[^\"]*\"/\"email\" = \"<REDACTED>\"/g" \
-    
+    -e "s/\"email\" = \"[^\"]*\"/\"email\" = \"<REDACTED>\"/g" 
