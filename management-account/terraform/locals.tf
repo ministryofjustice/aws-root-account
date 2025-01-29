@@ -81,6 +81,7 @@ locals {
     is-production          = true
     owner                  = "Hosting Leads: hosting-leads@digital.justice.gov.uk"
     source-code            = "github.com/ministryofjustice/aws-root-account"
+    maditory-infrastructure = true
   }
 
   # SSO
