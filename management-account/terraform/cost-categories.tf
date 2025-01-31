@@ -10,7 +10,8 @@ data "aws_organizations_organizational_unit_descendant_accounts" "modernisation_
 }
 
 resource "aws_ce_cost_category" "modernisation_platform" {
-  name = "Modernisation Platform"
+  name         = "Modernisation Platform"
+  rule_version = "CostCategoryExpression.v1"
   rule {
     rule {
       dimension {
