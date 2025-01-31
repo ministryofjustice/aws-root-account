@@ -2,7 +2,7 @@ data "aws_organizations_organization" "org" {}
 
 data "aws_organizations_organizational_unit" "modernisation_platform" {
   parent_id = data.aws_organizations_organization.org.roots[0].id
-  name      = "Modernisation Platform"
+  name      = "Platforms & Architecture"
 }
 
 data "aws_organizations_organizational_unit_descendant_accounts" "modernisation_platform" {
