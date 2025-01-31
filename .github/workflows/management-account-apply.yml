@@ -33,10 +33,12 @@ jobs:
         continue-on-error: true
       - run: terraform init
       - run: terraform validate -no-color
-      - run: |
+      - name: Terraform plan
+        run: |
           set -o pipefail
           terraform plan | ../../scripts/redaction.sh
-      - run: |
+      - name: Terraform apply
+        run: |
           set -o pipefail
           terraform apply | ../../scripts/redaction.sh
         if: github.event.ref == 'refs/heads/main'
