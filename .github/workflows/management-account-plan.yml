@@ -3,10 +3,10 @@ name: terraform plan (management-account)
 on:
   pull_request:
     paths:
-      - 'management-account/terraform/**'
-      - 'modules/**'
-      - '.github/workflows/management-account-plan.yml'
-      - '.github/workflows/management-account-apply.yml'
+      - "management-account/terraform/**"
+      - "modules/**"
+      - ".github/workflows/management-account-plan.yml"
+      - ".github/workflows/management-account-apply.yml"
   workflow_dispatch:
 
 jobs:
@@ -32,5 +32,6 @@ jobs:
         continue-on-error: true
       - run: terraform init
       - run: terraform validate -no-color
-      - run: terraform plan -no-color | ../../scripts/redaction.sh
-   
+      - run: |
+          set -o pipefail
+          terraform plan | ../../scripts/redaction.sh
