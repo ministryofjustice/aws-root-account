@@ -33,8 +33,14 @@ jobs:
         continue-on-error: true
       - run: terraform init
       - run: terraform validate -no-color
-      - run: terraform plan -no-color | ../../scripts/redaction.sh
-      - run: terraform apply -auto-approve | ../../scripts/redaction.sh
+      - name: Terraform plan
+        run: |
+          set -o pipefail
+          terraform plan | ../../scripts/redaction.sh
+      - name: Terraform apply
+        run: |
+          set -o pipefail
+          terraform apply | ../../scripts/redaction.sh
         if: github.event.ref == 'refs/heads/main'
 
       - name: Slack failure notification

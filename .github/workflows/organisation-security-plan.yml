@@ -3,10 +3,10 @@ name: terraform plan (organisation-security)
 on:
   pull_request:
     paths:
-      - 'organisation-security/terraform/**'
-      - 'modules/**'
-      - '.github/workflows/organisation-security-plan.yml'
-      - '.github/workflows/organisation-security-apply.yml'
+      - "organisation-security/terraform/**"
+      - "modules/**"
+      - ".github/workflows/organisation-security-plan.yml"
+      - ".github/workflows/organisation-security-apply.yml"
   workflow_dispatch:
 
 jobs:
@@ -32,4 +32,7 @@ jobs:
         continue-on-error: true
       - run: terraform init
       - run: terraform validate -no-color
-      - run: terraform plan -no-color | ../../scripts/redaction.sh
+      - name: Terraform plan
+        run: |
+          set -o pipefail
+          terraform plan | ../../scripts/redaction.sh
