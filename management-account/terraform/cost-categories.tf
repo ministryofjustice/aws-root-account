@@ -7,6 +7,7 @@ resource "aws_ce_cost_category" "modernisation_platform" {
   rule_version    = "CostCategoryExpression.v1"
   effective_start = "2024-01-01T00:00:00Z"
   rule {
+    value = "Modernisation Platform"
     rule {
       dimension {
         key           = "LINKED_ACCOUNT"
