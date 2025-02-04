@@ -34,7 +34,7 @@ resource "aws_ce_cost_category" "business_unit" {
   name            = "Business Unit"
   default_value   = "Uncategorised Business Unit"
   rule_version    = "CostCategoryExpression.v1"
-  effective_start = "2024-01-01T00:00:00Z"
+  effective_start = "2024-02-01T00:00:00Z"
 
   # Rule 1: Priortise the `business-unit` Tag For Allocating Cost
   rule {
