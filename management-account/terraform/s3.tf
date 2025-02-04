@@ -325,6 +325,7 @@ data "aws_iam_policy_document" "cur_reports_greenopspoc_s3_policy" {
     effect = "Allow"
     actions = [
       "s3:GetBucketPolicy",
+      "s3:GetObjectTagging",
       "s3:GetBucketAcl"
     ]
     resources = ["arn:aws:s3:::moj-cur-reports-greenopspoc"]
