@@ -38,6 +38,7 @@ resource "aws_ce_cost_category" "business_unit" {
 
   # Rule 1: Priortise the `business-unit` Tag For Allocating Cost
   rule {
+    type  = "REGULAR"
     value = "HMPPS"
     rule {
       tags {
@@ -48,8 +49,8 @@ resource "aws_ce_cost_category" "business_unit" {
     }
   }
 
-
   rule {
+    type  = "REGULAR"
     value = "Platforms"
     rule {
       tags {
@@ -61,6 +62,7 @@ resource "aws_ce_cost_category" "business_unit" {
   }
 
   rule {
+    type  = "REGULAR"
     value = "LAA"
     rule {
       tags {
@@ -72,6 +74,7 @@ resource "aws_ce_cost_category" "business_unit" {
   }
 
   rule {
+    type  = "REGULAR"
     value = "OPG"
     rule {
       tags {
@@ -83,6 +86,7 @@ resource "aws_ce_cost_category" "business_unit" {
   }
 
   rule {
+    type  = "REGULAR"
     value = "HQ"
     rule {
       tags {
@@ -94,6 +98,7 @@ resource "aws_ce_cost_category" "business_unit" {
   }
 
   rule {
+    type  = "REGULAR"
     value = "CICA"
     rule {
       tags {
@@ -105,6 +110,7 @@ resource "aws_ce_cost_category" "business_unit" {
   }
 
   rule {
+    type  = "REGULAR"
     value = "HMCTS"
     rule {
       tags {
