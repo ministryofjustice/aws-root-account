@@ -248,6 +248,7 @@ data "aws_iam_policy_document" "cur_reports_s3_bucket" {
     effect = "Allow"
     actions = [
       "s3:GetObject",
+      "s3:GetObjectTagging",
       "s3:ListBucket"
     ]
     resources = [
