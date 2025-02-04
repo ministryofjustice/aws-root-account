@@ -36,7 +36,7 @@ resource "aws_organizations_policy" "mandatory_tags" {
     },
     "service-area": {
       "tag_key": {
-        ""@@assign": "service-area"
+        "@@assign": "service-area"
       }
     },
     "application": {
