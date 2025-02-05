@@ -1,36 +1,36 @@
 locals {
   business_units = {
     "CICA" = {
-      tags         = ["CICA", "cica"]
-      aws_accounts = data.aws_organizations_organizational_unit_descendant_accounts.cica.accounts[*].id
+      businss_unit_tag_values = ["CICA", "cica"]
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.cica.accounts[*].id
     },
     "HMCTS" = {
-      tags         = ["HMCTS"]
-      aws_accounts = data.aws_organizations_organizational_unit_descendant_accounts.hmcts.accounts[*].id
+      businss_unit_tag_values = ["HMCTS"]
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmcts.accounts[*].id
     },
     "HMPPS" = {
-      tags         = ["HMPPS", "hmpps"]
-      aws_accounts = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
+      businss_unit_tag_values = ["HMPPS", "hmpps"]
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
     },
     "HQ" = {
-      tags         = ["HQ", "MoJO-HQ", "hq"]
-      aws_accounts = []
+      businss_unit_tag_values = ["HQ", "MoJO-HQ", "hq"]
+      aws_accounts            = []
     },
     "LAA" = {
-      tags         = ["LAA", "laa", "legal-aid-agency"]
-      aws_accounts = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id
+      businss_unit_tag_values = ["LAA", "laa", "legal-aid-agency"]
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id
     },
     "OPG" = {
-      tags         = ["OPG", "opg"]
-      aws_accounts = data.aws_organizations_organizational_unit_descendant_accounts.opg.accounts[*].id
+      businss_unit_tag_values = ["OPG", "opg"]
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.opg.accounts[*].id
     },
     "Platforms" = {
-      tags         = ["Platform", "Platforms", "platforms"]
-      aws_accounts = []
+      businss_unit_tag_values = ["Platform", "Platforms", "platforms"]
+      aws_accounts            = []
     },
     "YJB" = {
-      tags         = ["YJB", "yjb"]
-      aws_accounts = data.aws_organizations_organizational_unit_descendant_accounts.yjb.accounts[*].id
+      businss_unit_tag_values = ["YJB", "yjb"]
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.yjb.accounts[*].id
     },
   }
 }
@@ -38,30 +38,6 @@ locals {
 import {
   to = aws_ce_cost_category.business_unit
   id = "arn:aws:ce::${data.aws_caller_identity.current.account_id}:costcategory/c52f8445-757f-404e-bb15-5009ba09fe15"
-}
-
-data "aws_organizations_organizational_unit_descendant_accounts" "hmpps" {
-  parent_id = aws_organizations_organizational_unit.hmpps.id
-}
-
-data "aws_organizations_organizational_unit_descendant_accounts" "laa" {
-  parent_id = aws_organizations_organizational_unit.laa.id
-}
-
-data "aws_organizations_organizational_unit_descendant_accounts" "opg" {
-  parent_id = aws_organizations_organizational_unit.opg.id
-}
-
-data "aws_organizations_organizational_unit_descendant_accounts" "cica" {
-  parent_id = aws_organizations_organizational_unit.cica.id
-}
-
-data "aws_organizations_organizational_unit_descendant_accounts" "hmcts" {
-  parent_id = aws_organizations_organizational_unit.hmcts.id
-}
-
-data "aws_organizations_organizational_unit_descendant_accounts" "yjb" {
-  parent_id = aws_organizations_organizational_unit.yjb.id
 }
 
 resource "aws_ce_cost_category" "business_unit" {
@@ -80,7 +56,7 @@ resource "aws_ce_cost_category" "business_unit" {
       rule {
         tags {
           key           = "business-unit"
-          values        = rule.value.tags
+          values        = rule.value.businss_unit_tag_values
           match_options = ["EQUALS"]
         }
       }
@@ -114,5 +90,4 @@ resource "aws_ce_cost_category" "business_unit" {
     }
   }
 }
-
 
