@@ -78,16 +78,5 @@ resource "aws_ce_cost_category" "business_unit" {
       }
     }
   }
-
-  # Rule 3: Default for resources without `business-unit` Tag
-  rule {
-    value = "No business-unit Tag"
-    rule {
-      tags {
-        key           = "business-unit"
-        match_options = ["ABSENT"]
-      }
-    }
-  }
 }
 
