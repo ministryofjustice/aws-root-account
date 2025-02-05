@@ -48,7 +48,7 @@ resource "aws_ce_cost_category" "business_unit" {
 
   # Rule 1: Prioritize the `business-unit` Tag for Allocating Cost
   dynamic "rule" {
-    for_each = local.business_units
+    for_each = { for k, v in local.business_units : k => v if length(v.businss_unit_tag_values) > 0 }
     content {
       type  = "REGULAR"
       value = rule.key
@@ -65,7 +65,7 @@ resource "aws_ce_cost_category" "business_unit" {
 
   # Rule 2: If No `business-unit` Tag, Assign Cost Based on the Organizational Unit
   dynamic "rule" {
-    for_each = local.business_units
+    for_each = { for k, v in local.business_units : k => v if length(v.aws_accounts) > 0 }
     content {
       value = rule.key
 
