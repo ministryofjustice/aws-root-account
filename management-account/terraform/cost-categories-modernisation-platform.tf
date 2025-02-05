@@ -1,7 +1,3 @@
-data "aws_organizations_organizational_unit_descendant_accounts" "modernisation_platform" {
-  parent_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
-}
-
 resource "aws_ce_cost_category" "modernisation_platform" {
   name            = "Modernisation Platform"
   rule_version    = "CostCategoryExpression.v1"
