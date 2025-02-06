@@ -302,12 +302,12 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
 }
 
 # moj-cur-reports-greenopspoc bucket for GreenOps PoC reports
-module "cur_reports_greenopspoc_s3_bucket" {
+module "cur_reports_v2_hourly_s3_bucket" {
   source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=52a40b0dd18aaef0d7c5565d93cc8997aad79636" # v8.2.0"
   providers = {
     aws.bucket-replication = aws
   }
-  bucket_name        = "moj-cur-reports-greenopspoc"
+  bucket_name        = "moj-cur-reports-v2-hourly"
   bucket_policy      = [data.aws_iam_policy_document.cur_reports_greenopspoc_s3_policy.json]
   ownership_controls = "BucketOwnerEnforced"
 
@@ -319,7 +319,7 @@ module "cur_reports_greenopspoc_s3_bucket" {
   }
 }
 
-data "aws_iam_policy_document" "cur_reports_greenopspoc_s3_policy" {
+data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
   version = "2012-10-17"
 
   statement {
@@ -328,7 +328,7 @@ data "aws_iam_policy_document" "cur_reports_greenopspoc_s3_policy" {
       "s3:GetBucketPolicy",
       "s3:GetBucketAcl"
     ]
-    resources = ["arn:aws:s3:::moj-cur-reports-greenopspoc"]
+    resources = ["arn:aws:s3:::moj-cur-reports-v2-hourly"]
 
     principals {
       type        = "AWS"
@@ -339,7 +339,7 @@ data "aws_iam_policy_document" "cur_reports_greenopspoc_s3_policy" {
   statement {
     effect    = "Allow"
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::moj-cur-reports-greenopspoc/*"]
+    resources = ["arn:aws:s3:::moj-cur-reports-v2-hourly/*"]
 
     principals {
       type        = "AWS"
