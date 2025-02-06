@@ -28,6 +28,8 @@ resource "aws_organizations_policy" "mandatory_tags" {
           "HMPPS",
           "OPG",
           "LAA",
+          "Central Digital",
+          "Technology Services",
           "HMCTS",
           "CICA",
           "Platforms"
