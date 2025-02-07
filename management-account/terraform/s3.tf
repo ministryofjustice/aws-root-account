@@ -307,7 +307,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
 
   bucket_name        = "moj-cur-reports-v2-hourly"
   attach_policy      = true
-  policy             = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy
+  policy             = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
 }
 
 data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
