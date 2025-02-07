@@ -61,10 +61,11 @@ resource "aws_cur_report_definition" "moj_cur_report" {
   format                     = "Parquet"
   compression                = "Parquet"
   additional_schema_elements = ["RESOURCES", "SPLIT_COST_ALLOCATION_DATA"]
+  additional_artifacts       = ["ATHENA"]
   report_versioning          = "OVERWRITE_REPORT"
 
   # S3 configuration
-  s3_bucket = module.cur_reports_v2_hourly_s3_bucket.bucket.bucket
+  s3_bucket = module.cur_reports_v2_hourly_s3_bucket.bucket
   s3_region = "eu-west-2"
   s3_prefix = "moj-cost-and-usage-reports/"
 }
