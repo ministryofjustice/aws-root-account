@@ -303,11 +303,20 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
 
 # moj-cur-reports-greenops
 module "cur_reports_v2_hourly_s3_bucket" {
-  source = "../../modules/s3"
-
+  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=52a40b0dd18aaef0d7c5565d93cc8997aad79636" # v8.2.0"
+  providers = {
+    aws.bucket-replication = aws
+  }
   bucket_name        = "moj-cur-reports-v2-hourly"
-  attach_policy      = true
-  policy             = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
+  bucket_policy      = [data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json]
+  ownership_controls = "BucketOwnerEnforced"
+
+  tags = {
+    business-unit = "Platforms"
+    application   = "Modernisation Platform"
+    is-production = false
+    owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
+  }
 }
 
 data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
