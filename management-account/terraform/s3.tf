@@ -301,7 +301,7 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
   }
 }
 
-# moj-cur-reports-greenopspoc bucket for GreenOps PoC reports
+# moj-cur-reports-greenops
 module "cur_reports_v2_hourly_s3_bucket" {
   source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=52a40b0dd18aaef0d7c5565d93cc8997aad79636" # v8.2.0"
   providers = {
