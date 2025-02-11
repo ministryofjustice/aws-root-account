@@ -308,7 +308,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
     aws.bucket-replication = aws
   }
   bucket_name        = "moj_cur_reports_v2_hourly"
-  bucket_policy      = [data.aws_iam_policy_document.cur_reports_greenopspoc_s3_policy.json]
+  bucket_policy      = [data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json]
   ownership_controls = "BucketOwnerEnforced"
 
   tags = {
