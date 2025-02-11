@@ -314,7 +314,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
   tags = {
     business-unit = "Platforms"
     application   = "Modernisation Platform"
-    is-production = false
+    is-production = true
     owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
   }
 }
