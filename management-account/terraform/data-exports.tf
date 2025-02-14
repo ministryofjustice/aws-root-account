@@ -2,7 +2,7 @@ resource "aws_bcmdataexports_export" "moj_cur_report" {
   export {
     name = "MOJ-CUR-V2-HOURLY"
     data_query {
-      query_statement = "SELECT * FROM COST_AND_USAGE_REPORT"
+      query_statement = "SELECT identity_line_item_id, identity_time_interval FROM COST_AND_USAGE_REPORT"
       table_configurations = {
         COST_AND_USAGE_REPORT = {
           TIME_GRANULARITY                      = "HOURLY",
