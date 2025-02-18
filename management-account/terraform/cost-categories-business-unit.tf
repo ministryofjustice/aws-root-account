@@ -1,5 +1,9 @@
 locals {
   business_units = {
+    "Central Digital" = {
+      businss_unit_tag_values = ["Central Digital", "central-digital", "CJSE"]
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.central_digital[*].id
+    },
     "CICA" = {
       businss_unit_tag_values = ["CICA", "cica"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.cica.accounts[*].id
@@ -25,8 +29,12 @@ locals {
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.opg.accounts[*].id
     },
     "Platforms" = {
-      businss_unit_tag_values = ["Platform", "Platforms", "platforms"]
+      businss_unit_tag_values = ["Platforms", "Platform", "platforms"]
       aws_accounts            = []
+    },
+    "Technology Services" = {
+      businss_unit_tag_values = ["Technology Services", "technology-services"]
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.technology_services.accounts[*].id
     },
     "YJB" = {
       businss_unit_tag_values = ["YJB", "yjb"]
