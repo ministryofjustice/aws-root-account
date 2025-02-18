@@ -2,7 +2,7 @@ locals {
   business_units = {
     "Central Digital" = {
       businss_unit_tag_values = ["Central Digital", "central-digital", "CJSE"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.central_digital[*].id
+      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
     },
     "CICA" = {
       businss_unit_tag_values = ["CICA", "cica"]
