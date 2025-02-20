@@ -144,6 +144,30 @@ resource "aws_ssoadmin_managed_policy_attachment" "security_audit_inspector_v2" 
   permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn
 }
 
+resource "aws_ssoadmin_permission_set_inline_policy" "security_audit_additional" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.security_audit.json
+  permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn
+}
+
+data "aws_iam_policy_document" "security_audit" {
+  statement {
+    actions = [
+      "support:*"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "SecurityAuditAdditionalAllow"
+    effect = "Allow"
+    actions = [
+      "es:ESHttpGet"
+    ]
+    resources = ["*"]
+  }
+}
+
 # Support
 resource "aws_ssoadmin_permission_set" "support" {
   name             = "Support"
