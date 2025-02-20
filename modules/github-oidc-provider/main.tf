@@ -138,6 +138,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
     actions = [
       "account:*AlternateContact",
       "apigateway:*",
+      "bcm-data-exports:CreateExport",
       "budgets:*",
       "ce:*",
       "cloudtrail:*",
