@@ -1,6 +1,6 @@
 resource "aws_bcmdataexports_export" "moj_cur_report" {
   export {
-    
+
     name = "MOJ-CUR-V2-HOURLY"
     data_query {
       query_statement = <<-EOF
@@ -54,9 +54,9 @@ resource "aws_bcmdataexports_export" "moj_cur_report" {
     }
     destination_configurations {
       s3_destination {
-        s3_bucket    = module.cur_reports_v2_hourly_s3_bucket.bucket.bucket
-        s3_prefix    = "moj-cost-and-usage-reports/"
-        s3_region    = "eu-west-2"
+        s3_bucket = module.cur_reports_v2_hourly_s3_bucket.bucket.bucket
+        s3_prefix = "moj-cost-and-usage-reports/"
+        s3_region = "eu-west-2"
         s3_output_configurations {
           overwrite   = "OVERWRITE_REPORT"
           format      = "PARQUET"

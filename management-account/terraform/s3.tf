@@ -348,8 +348,8 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
   }
 
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:PutObject",
       "s3:GetBucketLocation",
       "s3:ListBucket"
@@ -363,5 +363,5 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
       identifiers = ["bcm-data-exports.amazonaws.com"]
     }
 
-}
+  }
 }
