@@ -346,4 +346,22 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
       identifiers = ["arn:aws:iam::386209384616:root"]
     }
   }
+
+  statement {
+    effect    = "Allow"
+    actions   = [
+      "s3:PutObject",
+      "s3:GetBucketLocation",
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-cur-reports-v2-hourly",
+      "arn:aws:s3:::moj-cur-reports-v2-hourly/*"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["bcm-data-exports.amazonaws.com"]
+    }
+
+}
 }
