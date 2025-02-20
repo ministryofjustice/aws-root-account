@@ -1,4 +1,4 @@
-resource "aws_bcmdataexports_export" "moj_cur_report" {
+resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
   export {
 
     name = "MOJ-CUR-V2-HOURLY"
