@@ -162,7 +162,9 @@ data "aws_iam_policy_document" "security_audit" {
     sid    = "SecurityAuditAdditionalAllow"
     effect = "Allow"
     actions = [
-      "es:ESHttpGet"
+      "es:ESHttpGet",
+      "es:Get*",
+      "cloudwatch:Get*"
     ]
     resources = ["*"]
   }
