@@ -75,6 +75,7 @@ resource "aws_ce_cost_category" "business_unit" {
   dynamic "rule" {
     for_each = { for k, v in local.business_units : k => v if length(v.aws_accounts) > 0 }
     content {
+      type  = "REGULAR"
       value = rule.key
 
       rule {
