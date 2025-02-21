@@ -164,7 +164,10 @@ data "aws_iam_policy_document" "security_audit" {
     actions = [
       "es:ESHttpGet",
       "es:Get*",
-      "cloudwatch:Get*"
+      "cloudwatch:Get*",
+      "aoss:List*",
+      "aoss:Get*",
+      "aoss:BatchGet*"
     ]
     resources = ["*"]
   }
