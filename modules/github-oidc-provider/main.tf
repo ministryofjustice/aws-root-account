@@ -59,6 +59,9 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
     effect = "Allow"
     actions = [
       "account:GetAlternateContact",
+      "bcm-data-exports:GetExport",
+      "bcm-data-exports:ListExports",
+      "bcm-data-exports:ListTagsForResource",
       "budgets:ListTagsForResource",
       "cur:DescribeReportDefinitions",
       "cur:ListTagsForResource",
@@ -138,12 +141,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
     actions = [
       "account:*AlternateContact",
       "apigateway:*",
-      "bcm-data-exports:CreateExport",
-      "bcm-data-exports:GetExport",
-      "bcm-data-exports:ListExports",
-      "bcm-data-exports:DeleteExport",
-      "bcm-data-exports:UpdateExport",
-      "bcm-data-exports:DescribeExport",
+      "bcm-data-exports:*",
       "budgets:*",
       "ce:*",
       "cloudtrail:*",

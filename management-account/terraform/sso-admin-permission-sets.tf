@@ -252,6 +252,8 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "athena:Get*",
       "athena:List*",
       "athena:St*",
+      "bcm-data-exports:ListTagsForResource",
+      "bcm-data-exports:ListExports",
       "aws-marketplace:ViewSubscriptions",
       "cloudwatch:DisableAlarmActions",
       "cloudwatch:EnableAlarmActions",
