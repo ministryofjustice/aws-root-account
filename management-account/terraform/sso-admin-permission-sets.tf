@@ -162,12 +162,16 @@ data "aws_iam_policy_document" "security_audit" {
     sid    = "SecurityAuditAdditionalAllow"
     effect = "Allow"
     actions = [
+      "aoss:BatchGet*",
+      "aoss:Get*",
+      "aoss:List*",
+      "cloudwatch:Get*",
+      "es:Describe*",
       "es:ESHttpGet",
       "es:Get*",
-      "cloudwatch:Get*",
-      "aoss:List*",
-      "aoss:Get*",
-      "aoss:BatchGet*"
+      "es:List",
+      "osis:Get",
+      "osis:List"
     ]
     resources = ["*"]
   }
