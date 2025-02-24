@@ -25,6 +25,12 @@ locals {
     if account.name == "moj-network-operations-centre-production"
   ]...)
 
+  cloud_platform_account_id = coalesce([
+    for account in local.organizations_organization.accounts :
+    account.id
+    if account.name == "Cloud Platform"
+  ]...)
+
   organisation_account_numbers = [for account in local.organizations_organization.accounts : account.id]
 
   # AWS Organizational Units

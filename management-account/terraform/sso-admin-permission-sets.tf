@@ -144,6 +144,39 @@ resource "aws_ssoadmin_managed_policy_attachment" "security_audit_inspector_v2" 
   permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn
 }
 
+resource "aws_ssoadmin_permission_set_inline_policy" "security_audit_additional" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.security_audit.json
+  permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn
+}
+
+data "aws_iam_policy_document" "security_audit" {
+  statement {
+    actions = [
+      "support:*"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "SecurityAuditAdditionalAllow"
+    effect = "Allow"
+    actions = [
+      "aoss:BatchGet*",
+      "aoss:Get*",
+      "aoss:List*",
+      "cloudwatch:Get*",
+      "es:Describe*",
+      "es:ESHttpGet",
+      "es:Get*",
+      "es:List",
+      "osis:Get",
+      "osis:List"
+    ]
+    resources = ["*"]
+  }
+}
+
 # Support
 resource "aws_ssoadmin_permission_set" "support" {
   name             = "Support"
@@ -223,6 +256,8 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "athena:Get*",
       "athena:List*",
       "athena:St*",
+      "bcm-data-exports:ListTagsForResource",
+      "bcm-data-exports:ListExports",
       "aws-marketplace:ViewSubscriptions",
       "cloudwatch:DisableAlarmActions",
       "cloudwatch:EnableAlarmActions",
