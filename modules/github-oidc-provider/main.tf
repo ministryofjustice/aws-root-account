@@ -61,6 +61,7 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
       "account:GetAlternateContact",
       "bcm-data-exports:GetExport",
       "bcm-data-exports:ListExports",
+      "bcm-data-exports:ListTagsForResource",
       "budgets:ListTagsForResource",
       "cur:DescribeReportDefinitions",
       "cur:ListTagsForResource",
