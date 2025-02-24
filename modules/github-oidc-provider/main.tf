@@ -59,6 +59,8 @@ data "aws_iam_policy_document" "extra_permissions_plan" {
     effect = "Allow"
     actions = [
       "account:GetAlternateContact",
+      "bcm-data-exports:GetExport",
+      "bcm-data-exports:ListExports",
       "budgets:ListTagsForResource",
       "cur:DescribeReportDefinitions",
       "cur:ListTagsForResource",
