@@ -141,6 +141,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "bcm-data-exports:CreateExport",
       "bcm-data-exports:GetExport",
       "bcm-data-exports:ListExports",
+      "bcm-data-exports:ListTagsForResource",
       "bcm-data-exports:DeleteExport",
       "bcm-data-exports:UpdateExport",
       "bcm-data-exports:DescribeExport",
