@@ -370,6 +370,13 @@ locals {
       ]
     },
     {
+      github_team        = "moj-official-sharedservices-noc",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_shared_services.id,
+      ]
+    },
+    {
       github_team        = "modernisation-platform-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn,
       account_ids = [
