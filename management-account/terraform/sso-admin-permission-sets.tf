@@ -134,13 +134,14 @@ resource "aws_ssoadmin_permission_set_inline_policy" "read_only_access_custom" {
       {
         Effect = "Allow",
         Action = [
-          "export:GetExport",
-          "export:ListExports",
-          "export:GetExecution",
-          "export:ListExecutions",
-          "export:ListTagsForResource",
-          "table:GetTable",
-          "table:ListTables"
+
+          "bcm-data-exports:GetExport",
+          "bcm-data-exports:ListExports",
+          "bcm-data-exports:GetExecution",
+          "bcm-data-exports:ListExecutions",
+          "bcm-data-exports:GetTable",
+          "bcm-data-exports:ListTables",
+          "bcm-data-exports:ListTagsForResource"
         ],
         Resource = "*"
       }
@@ -281,11 +282,13 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "athena:Get*",
       "athena:List*",
       "athena:St*",
-      "export:GetExport",
-      "export:ListExports",
-      "export:GetExecution",
-      "export:ListExecutions",
-      "export:ListTagsForResource",
+      "bcm-data-exports:GetExport",
+      "bcm-data-exports:ListExports",
+      "bcm-data-exports:GetExecution",
+      "bcm-data-exports:ListExecutions",
+      "bcm-data-exports:GetTable",
+      "bcm-data-exports:ListTables",
+      "bcm-data-exports:ListTagsForResource",
       "aws-marketplace:ViewSubscriptions",
       "cloudwatch:DisableAlarmActions",
       "cloudwatch:EnableAlarmActions",
@@ -360,8 +363,6 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "sns:Publish",
       "sso:ListDirectoryAssociations",
       "support:*",
-      "table:GetTable",
-      "table:ListTables",
       "wellarchitected:Get*",
       "wellarchitected:List*",
       "wellarchitected:ExportLens",
