@@ -123,7 +123,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "read_only_access" {
   permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn
 }
 
-# Additional custom read-only permissions for Data Exports
+# Custom read-only permissions for Data Exports
 resource "aws_ssoadmin_permission_set_inline_policy" "read_only_access_custom" {
   instance_arn       = local.sso_admin_instance_arn
   permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn
