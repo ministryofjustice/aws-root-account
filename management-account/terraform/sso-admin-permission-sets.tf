@@ -141,7 +141,8 @@ resource "aws_ssoadmin_permission_set_inline_policy" "read_only_access_custom" {
           "bcm-data-exports:ListExecutions",
           "bcm-data-exports:GetTable",
           "bcm-data-exports:ListTables",
-          "bcm-data-exports:ListTagsForResource"
+          "bcm-data-exports:ListTagsForResource",
+          "cur:DescribeReportDefinitions"
         ],
         Resource = "*"
       }
