@@ -123,6 +123,31 @@ resource "aws_ssoadmin_managed_policy_attachment" "read_only_access" {
   permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn
 }
 
+# Additional custom read-only permissions for Data Exports
+resource "aws_ssoadmin_permission_set_inline_policy" "read_only_access_custom" {
+  instance_arn       = local.sso_admin_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn
+
+  inline_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "export:GetExport",
+          "export:ListExports",
+          "export:GetExecution",
+          "export:ListExecutions",
+          "export:ListTagsForResource",
+          "table:GetTable",
+          "table:ListTables"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Security Audit
 resource "aws_ssoadmin_permission_set" "security_audit" {
   name             = "SecurityAudit"
@@ -256,8 +281,11 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "athena:Get*",
       "athena:List*",
       "athena:St*",
-      "bcm-data-exports:ListTagsForResource",
-      "bcm-data-exports:ListExports",
+      "export:GetExport",
+      "export:ListExports",
+      "export:GetExecution",
+      "export:ListExecutions",
+      "export:ListTagsForResource",
       "aws-marketplace:ViewSubscriptions",
       "cloudwatch:DisableAlarmActions",
       "cloudwatch:EnableAlarmActions",
@@ -332,6 +360,8 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "sns:Publish",
       "sso:ListDirectoryAssociations",
       "support:*",
+      "table:GetTable",
+      "table:ListTables",
       "wellarchitected:Get*",
       "wellarchitected:List*",
       "wellarchitected:ExportLens",
