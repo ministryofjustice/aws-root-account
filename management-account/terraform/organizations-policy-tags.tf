@@ -24,7 +24,6 @@ resource "aws_organizations_policy" "mandatory_tags" {
       },
       "tag_value": {
         "@@assign": [
-          "HQ",
           "HMPPS",
           "OPG",
           "LAA",
