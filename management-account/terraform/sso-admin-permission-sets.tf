@@ -123,6 +123,33 @@ resource "aws_ssoadmin_managed_policy_attachment" "read_only_access" {
   permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn
 }
 
+# Custom read-only permissions for Data Exports
+resource "aws_ssoadmin_permission_set_inline_policy" "read_only_access_custom" {
+  instance_arn       = local.sso_admin_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn
+
+  inline_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+
+          "bcm-data-exports:GetExport",
+          "bcm-data-exports:ListExports",
+          "bcm-data-exports:GetExecution",
+          "bcm-data-exports:ListExecutions",
+          "bcm-data-exports:GetTable",
+          "bcm-data-exports:ListTables",
+          "bcm-data-exports:ListTagsForResource",
+          "cur:DescribeReportDefinitions"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Security Audit
 resource "aws_ssoadmin_permission_set" "security_audit" {
   name             = "SecurityAudit"
@@ -256,8 +283,13 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "athena:Get*",
       "athena:List*",
       "athena:St*",
-      "bcm-data-exports:ListTagsForResource",
+      "bcm-data-exports:GetExport",
       "bcm-data-exports:ListExports",
+      "bcm-data-exports:GetExecution",
+      "bcm-data-exports:ListExecutions",
+      "bcm-data-exports:GetTable",
+      "bcm-data-exports:ListTables",
+      "bcm-data-exports:ListTagsForResource",
       "aws-marketplace:ViewSubscriptions",
       "cloudwatch:DisableAlarmActions",
       "cloudwatch:EnableAlarmActions",
