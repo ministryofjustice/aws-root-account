@@ -132,8 +132,8 @@ resource "aws_ssoadmin_permission_set_inline_policy" "read_only_access_custom" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "export:GetExport",
           "export:ListExports",
           "export:GetExecution",
