@@ -16,10 +16,6 @@ locals {
       businss_unit_tag_values = ["HMPPS", "hmpps"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
     },
-    "HQ" = {
-      businss_unit_tag_values = ["HQ", "MoJO-HQ", "hq"]
-      aws_accounts            = []
-    },
     "LAA" = {
       businss_unit_tag_values = ["LAA", "laa", "legal-aid-agency"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id

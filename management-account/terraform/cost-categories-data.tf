@@ -2,6 +2,10 @@ data "aws_organizations_organizational_unit_descendant_accounts" "modernisation_
   parent_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
 
+data "aws_organizations_organizational_unit_descendant_accounts" "cloud_platform" {
+  parent_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
+}
+
 data "aws_organizations_organizational_unit_descendant_accounts" "central_digital" {
   parent_id = aws_organizations_organizational_unit.central_digital.id
 }
