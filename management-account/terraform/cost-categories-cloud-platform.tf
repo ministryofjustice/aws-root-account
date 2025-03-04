@@ -1,7 +1,7 @@
 resource "aws_ce_cost_category" "cloud_platform" {
-  name            = "Cloud Platform"
-  rule_version    = "CostCategoryExpression.v1"
-  effective_start = "2024-01-01T00:00:00Z"
+  name         = "Cloud Platform"
+  rule_version = "CostCategoryExpression.v1"
+
   rule {
     type  = "REGULAR"
     value = "Cloud Platform"

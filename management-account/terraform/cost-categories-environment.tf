@@ -1,7 +1,7 @@
 resource "aws_ce_cost_category" "environment" {
-  name            = "Environment"
-  rule_version    = "CostCategoryExpression.v1"
-  effective_start = "2025-01-01T00:00:00Z"
+  name         = "Environment"
+  rule_version = "CostCategoryExpression.v1"
+
   rule {
     type  = "REGULAR"
     value = "Production"
@@ -13,7 +13,6 @@ resource "aws_ce_cost_category" "environment" {
       }
     }
   }
-
 
   rule {
     type  = "REGULAR"
