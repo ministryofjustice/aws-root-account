@@ -1,8 +1,7 @@
 resource "aws_ce_cost_category" "strategic_hosting_platform" {
-  name            = "Strategic Hosting Platform"
-  default_value   = "Off Strategic Hosting Platform"
-  rule_version    = "CostCategoryExpression.v1"
-  effective_start = "2024-02-01T00:00:00Z"
+  name          = "Strategic Hosting Platform"
+  default_value = "Off Strategic Hosting Platform"
+  rule_version  = "CostCategoryExpression.v1"
 
   rule {
     type  = "REGULAR"
