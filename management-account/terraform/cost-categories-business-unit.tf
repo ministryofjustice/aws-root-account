@@ -45,9 +45,10 @@ import {
 }
 
 resource "aws_ce_cost_category" "business_unit" {
-  name          = "Business Unit"
-  default_value = "Uncategorised Business Unit"
-  rule_version  = "CostCategoryExpression.v1"
+  name            = "Business Unit"
+  default_value   = "Uncategorised Business Unit"
+  rule_version    = "CostCategoryExpression.v1"
+  effective_start = "2025-02-01T00:00:00Z"
 
   # Rule 1: Prioritize the `business-unit` Tag for Allocating Cost
   dynamic "rule" {
