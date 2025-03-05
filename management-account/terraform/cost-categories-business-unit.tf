@@ -28,10 +28,10 @@ locals {
       tagged_aws_accounts = [
         for k, v in data.awscc_organizations_account.all :
         v.id
-        if one(flatten([
+        if contains(["HMPPS", "hmpps"], try(one(flatten([
           for tag in coalesce(v.tags, []) :
           tag.value if tag.key == "business-unit"
-        ])) == "HMPPS"
+        ])), ""))
       ]
     },
     "LAA" = {
