@@ -36,9 +36,7 @@ locals {
       businss_unit_tag_values = ["HMPPS", "hmpps"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
       tagged_aws_accounts = [
-        for k, v in local.all_aws_accounts_with_business_unit_tag :
-        v.id
-        if v.business_unit == "HMPPS"
+        for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)
       ]
     },
     "LAA" = {
