@@ -10,10 +10,10 @@ locals {
     for k, v in data.awscc_organizations_account.all :
     k => {
       "id" = v.id
-      "business_unit" = one(flatten([
+      "business_unit" = coalesce(one(flatten([
         for tag in coalesce(v.tags, []) :
         tag.value if tag.key == "business-unit"
-      ]))
+      ])), "Uncategorised Business Unit") # 👈 coalesce() needs a non-empty string and we don't want to return null because we want to use the value with contains()
     }
   }
   business_units = {
