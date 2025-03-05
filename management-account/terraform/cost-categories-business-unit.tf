@@ -6,6 +6,16 @@ data "awscc_organizations_account" "all" {
 }
 
 locals {
+  all_aws_accounts_with_business_unit_tag = {
+    for k, v in data.awscc_organizations_account.all :
+    k => {
+      "id" = v.id
+      "business_unit" = one(flatten([
+        for tag in coalesce(v.tags, []) :
+        tag.value if tag.key == "business-unit"
+      ]))
+    }
+  }
   business_units = {
     "Central Digital" = {
       businss_unit_tag_values = ["Central Digital", "central-digital", "CJSE"]
@@ -26,12 +36,9 @@ locals {
       businss_unit_tag_values = ["HMPPS", "hmpps"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
       tagged_aws_accounts = [
-        for k, v in data.awscc_organizations_account.all :
+        for k, v in local.all_aws_accounts_with_business_unit_tag :
         v.id
-        if contains(["HMPPS", "hmpps"], try(one(flatten([
-          for tag in coalesce(v.tags, []) :
-          tag.value if tag.key == "business-unit"
-        ])), ""))
+        if v.business_unit == "HMPPS"
       ]
     },
     "LAA" = {
