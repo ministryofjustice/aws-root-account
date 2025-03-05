@@ -20,49 +20,47 @@ locals {
     "Central Digital" = {
       businss_unit_tag_values = ["Central Digital", "central-digital", "CJSE"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
-      tagged_aws_accounts     = []
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Central Digital", "central-digital", "CJSE"], v.business_unit)]
     },
     "CICA" = {
       businss_unit_tag_values = ["CICA", "cica"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.cica.accounts[*].id
-      tagged_aws_accounts     = []
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["CICA", "cica"], v.business_unit)]
     },
     "HMCTS" = {
       businss_unit_tag_values = ["HMCTS"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmcts.accounts[*].id
-      tagged_aws_accounts     = []
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMCTS"], v.business_unit)]
     },
     "HMPPS" = {
       businss_unit_tag_values = ["HMPPS", "hmpps"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
-      tagged_aws_accounts = [
-        for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)
-      ]
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)]
     },
     "LAA" = {
       businss_unit_tag_values = ["LAA", "laa", "legal-aid-agency"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id
-      tagged_aws_accounts     = []
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["LAA", "laa", "legal-aid-agency"], v.business_unit)]
     },
     "OPG" = {
       businss_unit_tag_values = ["OPG", "opg"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.opg.accounts[*].id
-      tagged_aws_accounts     = []
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["OPG", "opg"], v.business_unit)]
     },
     "Platforms" = {
       businss_unit_tag_values = ["Platforms", "Platform", "platforms"]
       aws_accounts            = []
-      tagged_aws_accounts     = []
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Platforms", "Platform", "platforms"], v.business_unit)]
     },
     "Technology Services" = {
       businss_unit_tag_values = ["Technology Services", "technology-services"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.technology_services.accounts[*].id
-      tagged_aws_accounts     = []
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Technology Services", "technology-services"], v.business_unit)]
     },
     "YJB" = {
       businss_unit_tag_values = ["YJB", "yjb"]
       aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.yjb.accounts[*].id
-      tagged_aws_accounts     = []
+      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["YJB", "yjb"], v.business_unit)]
     },
   }
 }
