@@ -4,6 +4,10 @@ provider "aws" {
   region = "eu-west-2"
 }
 
+provider "awscc" {
+  region = "eu-west-2"
+}
+
 # us-* providers
 
 provider "aws" {
