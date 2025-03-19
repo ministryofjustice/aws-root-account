@@ -48,7 +48,7 @@ resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
           TIME_GRANULARITY                      = "HOURLY",
           INCLUDE_RESOURCES                     = "TRUE",
           INCLUDE_MANUAL_DISCOUNT_COMPATIBILITY = "FALSE",
-          INCLUDE_SPLIT_COST_ALLOCATION_DATA    = "FALSE",
+          INCLUDE_SPLIT_COST_ALLOCATION_DATA    = "TRUE",
         }
       }
     }
