@@ -369,7 +369,8 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
     effect = "Allow"
     actions = [
       "s3:GetObject",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:GetObjectTagging"
     ]
     resources = [
       "arn:aws:s3:::moj-cur-reports-v2-hourly",
