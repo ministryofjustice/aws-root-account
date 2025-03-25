@@ -364,4 +364,21 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
     }
 
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-cur-reports-v2-hourly",
+      "arn:aws:s3:::moj-cur-reports-v2-hourly/*"
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::211125434264:root"]
+    }
+  }
 }
