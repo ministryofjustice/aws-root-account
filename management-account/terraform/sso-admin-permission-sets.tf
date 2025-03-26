@@ -323,6 +323,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "ecr:BatchCheckLayerAvailability",
       "ecr:BatchDeleteImage",
       "ecr:CompleteLayerUpload",
+      "ecr:GetAuthorizationToken",
       "ecr:InitiateLayerUpload",
       "ecr:PutImage",
       "ecr:UploadLayerPart",
