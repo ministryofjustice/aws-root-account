@@ -1,6 +1,5 @@
 resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
   export {
-
     name = "MOJ-CUR-V2-HOURLY"
     data_query {
       query_statement = <<-EOF
@@ -40,7 +39,11 @@ resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
           savings_plan_offering_type, savings_plan_payment_option, savings_plan_purchase_term, 
           savings_plan_recurring_commitment_for_billing_period, savings_plan_region, savings_plan_savings_plan_a_r_n, 
           savings_plan_savings_plan_effective_cost, savings_plan_savings_plan_rate, savings_plan_start_time, 
-          savings_plan_total_commitment_to_date, savings_plan_used_commitment 
+          savings_plan_total_commitment_to_date, savings_plan_used_commitment, 
+          split_line_item_actual_usage,  split_line_item_net_split_cost, 
+          split_line_item_net_unused_cost,  split_line_item_parent_resource_id, split_line_item_public_on_demand_split_cost, 
+          split_line_item_public_on_demand_unused_cost, split_line_item_reserved_usage, split_line_item_split_cost , split_line_item_split_usage, 
+          split_line_item_split_usage_ratio, split_line_item_unused_cost 
         FROM COST_AND_USAGE_REPORT
       EOF
       table_configurations = {
@@ -65,7 +68,6 @@ resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
         }
       }
     }
-
     refresh_cadence {
       frequency = "SYNCHRONOUS"
     }
