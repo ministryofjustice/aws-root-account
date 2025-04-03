@@ -384,9 +384,9 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
   }
 }
 
-# moj-xdr-template-storage
-module "xdr_template_storage" {
+# cf-template-storage
+module "cf_template_storage" {
   source          = "../../modules/s3"
   additional_tags = local.root_account
-  bucket_prefix   = "xdr_template_storage"
+  bucket_prefix   = "cf-template-storage"
 }
