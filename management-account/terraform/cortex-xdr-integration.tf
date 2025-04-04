@@ -38,7 +38,7 @@ resource "aws_cloudformation_stack" "cortex_xdr_stack" {
 }
 
 resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
-  depends_on = [ aws_cloudformation_stack.cortex_xdr_stack ]
+  depends_on = [aws_cloudformation_stack.cortex_xdr_stack]
   lifecycle {
     ignore_changes = [parameters]
   }
