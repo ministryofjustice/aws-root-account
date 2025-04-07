@@ -52,5 +52,5 @@ The scripts in this folder can be used to update the aws account root account em
 2. Run `./request_update_mp_emails.sh`- this will start the process and multiple emails will be sent to `aws@digital.justice.gov.uk` with an OTP for each account.
     - You will need admin credentials for `moj-master` `Administrator Access` set in your env
 3. Run the `gmail-reader.py` script - this will update `aws_mp_accounts.csv` with the OTPs
-    - You will need to have a suitable python environment set up and have the dependencies insttaled in `requirements.txt`
+    - You will need to have a suitable python environment set up and have the dependencies installed in `requirements.txt`
 4. Run the `./accept_update_mp_accounts.sh` - this will confirm the account email change and multiple emails will be sent to `aws@digital.justice.gov.uk`to confirm

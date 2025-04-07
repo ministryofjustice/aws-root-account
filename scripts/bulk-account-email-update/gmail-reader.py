@@ -115,7 +115,7 @@ if __name__ == "__main__":
     gmail_service = authenticate_gmail()
 
     # Path to the CSV file
-    csv_file_path = '/Users/richard.green/Desktop/account-email-update/aws_mp_accounts.csv'
+    csv_file_path = './aws_mp_accounts.csv'
 
     # Fetch OTPs and update the CSV file
     get_otp_from_emails(gmail_service, csv_file_path)
