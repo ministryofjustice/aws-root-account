@@ -1,15 +1,12 @@
 
-## Scripts to bulk update root account emails
+# Scripts to bulk update root account emails
 
 The scripts in this folder can be used to update the aws account root account emails in bulk. This was used as part of issue [#9527](https://github.com/ministryofjustice/modernisation-platform/issues/9527) where we needed to remove the additional `+mp` tag in our emails which would not have been compatible with o365.
 
-##### Notes
-
-- This was performed as an ad-hoc local operation. We do not expect to repeat this process but we are leaving the code here just in case it's useful in future.
-
-- As the name suggests the `gmail-reader.py` script will only work for gmail. In future we will be migrating to o365. A similar Microsoft API might be able to be utilised but this would require a major update to this script.
-
-- All the other scripts are also focused on targetting emails with `+mp` in them but this regex could be easily updated as needed.
+>**Notes**
+>-  This was performed as an ad-hoc local operation. We do not expect to repeat this process but we are leaving the code here just in case it's useful in future.
+>- As the name suggests the `gmail-reader.py` script will only work for gmail. In future we will be migrating to o365. A similar Microsoft API might be able to be utilised but this would require a major update to this script.
+>- All the other scripts are also focused on targetting emails with `+mp` in them but this regex could be easily updated as needed.
 
 ## Pre-requisites
 
@@ -20,7 +17,7 @@ The scripts in this folder can be used to update the aws account root account em
 3. You'll need to set up credentials to allow Google to access your inbox as follows:
 
 
-    ##### Step 1: Enable Gmail API for Your Personal Account
+    **Step 1: Enable Gmail API for Your Personal Account**
 
     - Go to the Google Cloud Console.
     - Click Select a project (top bar) → New Project.
@@ -28,7 +25,7 @@ The scripts in this folder can be used to update the aws account root account em
     - In the left menu, go to APIs & Services > Library.
     - Search for "Gmail API" → Click Enable.
 
-    ##### Step 2: Create OAuth Credentials for Your Personal Inbox
+    **Step 2: Create OAuth Credentials for Your Personal Inbox**
     - Go to APIs & Services > Credentials.
     - Click Create Credentials → Select OAuth Client ID.
     - If prompted, configure the OAuth Consent Screen:
@@ -41,7 +38,7 @@ The scripts in this folder can be used to update the aws account root account em
     - Under Test Users, add your own email.
     - Click Save & Continue → Click Back to Dashboard.
 
-    ##### Step 3: Download credentials.json
+    **Step 3: Download credentials.json**
     - Go to APIs & Services > Credentials.
     - Under "OAuth 2.0 Client IDs", find your Desktop App.
     - Click Download JSON and save it as credentials.json in your script directory.
