@@ -389,7 +389,7 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
 module "focus_reports_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name            = "focus-reports"
+  bucket_prefix = "focus-reports"
   enable_replication     = true
   replication_bucket_arn = "arn:aws:s3:::coat-production-focus-reports"
   replication_role_arn   = module.focus_reports_s3_bucket.replication_role_arn
