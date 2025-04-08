@@ -208,7 +208,7 @@ module "cur_reports_s3_bucket" {
   ]
 }
 
-data "aws_ssm_parameter" "coat_prod_focus_kms_key_arn" {
+data "aws_ssm_parameter" "core_logging_kms_key_arn" {
   name = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/core-logging-kms-key"
 }
 
