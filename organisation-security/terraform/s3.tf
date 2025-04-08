@@ -18,6 +18,13 @@ resource "random_integer" "suffix" {
   max = 90000000000
 }
 
+# cf-template-storage
+module "cf_template_storage" {
+  source          = "../../modules/s3"
+  additional_tags = local.tags_organisation_management
+  bucket_prefix   = "cf-template-storage"
+}
+
 # cloudtrail--replication
 module "cloudtrail_replication_s3_bucket" {
   providers = {
