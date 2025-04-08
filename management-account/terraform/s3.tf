@@ -390,6 +390,7 @@ module "focus_reports_s3_bucket" {
   source = "../../modules/s3"
 
   bucket_prefix = "focus-reports"
+  enable_versioning = true
   enable_replication     = true
   replication_bucket_arn = "arn:aws:s3:::coat-production-focus-reports"
   replication_role_arn   = module.focus_reports_s3_bucket.replication_role_arn
