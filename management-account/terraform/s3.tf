@@ -208,7 +208,7 @@ module "cur_reports_s3_bucket" {
   ]
 }
 
-data "aws_ssm_parameter" "core_logging_kms_key_arn" {
+data "aws_ssm_parameter" "coat_prod_focus_kms_key_arn" {
   name = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/core-logging-kms-key"
 }
 
@@ -387,18 +387,6 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
 # moj-focus-reports-greenops
 
 module "focus_reports_s3_bucket" {
-  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=52a40b0dd18aaef0d7c5565d93cc8997aad79636" # v8.2.0"
-  providers = {
-    aws.bucket-replication = aws
-  }
-  bucket_name        = "focus-reports"
-  ownership_controls = "BucketOwnerEnforced"
-
-  tags = {
-    business-unit = "Platforms"
-    application   = "Modernisation Platform"
-    is-production = true
-    owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
-  }
+  source = "../../modules/s3"
+  bucket_name            = "focus-reports"
 }
-
