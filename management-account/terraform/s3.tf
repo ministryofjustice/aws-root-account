@@ -388,5 +388,5 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
 
 module "focus_reports_s3_bucket" {
   source = "../../modules/s3"
-  bucket_name            = "focus-reports"
+  bucket_name = "focus-reports"
 }
