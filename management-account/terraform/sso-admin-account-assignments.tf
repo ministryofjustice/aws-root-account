@@ -50,8 +50,21 @@ locals {
       github_team        = "webops",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
-        aws_organizations_account.cloud_platform.id,
         aws_organizations_account.cloud_platform_ephemeral_test.id,
+      ]
+    },
+    {
+      github_team        = "cloud-platform-engineers",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.cloud_platform.id,
+      ]
+    },
+    {
+      github_team        = "webops",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.cloud_platform.id,
       ]
     },
     {
