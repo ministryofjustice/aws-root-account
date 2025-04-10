@@ -409,7 +409,8 @@ data "aws_iam_policy_document" "focus_reports_s3_bucket" {
 module "focus_reports_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_nam = "moj-focus-1-reports"
+  bucket_name = "moj-focus-1-reports"
+  
   attach_policy = true
   policy = data.aws_iam_policy_document.focus_reports_s3_bucket.json
 }
