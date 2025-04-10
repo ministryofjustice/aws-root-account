@@ -134,9 +134,7 @@ module "mp_ssm_inventory_resource_data_sync_s3" {
       id      = "main"
       enabled = "Enabled"
       tags    = {}
-      filter = {
-        prefix = ""
-      }
+      prefix  = ""
       transition = [
         {
           days          = 90
