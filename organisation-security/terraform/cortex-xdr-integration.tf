@@ -23,3 +23,13 @@ resource "aws_ssm_parameter" "cortex_xdr_uuids" {
     xdr_stack_set = random_uuid.cortex_xdr_stack_set.result
   })
 }
+
+resource "aws_cloudformation_stack" "cortex_xdr_stack" {
+  name = "cortex-xdr-cloud-app"
+  parameters = {
+    CortexXDRRoleName = "CortexXDRCloudApp",
+    ExternalID        = sensitive(random_uuid.cortex_xdr_stack.result)
+  }
+  tags          = local.tags_organisation_management
+  template_body = data.aws_s3_object.cortex_xdr_templates["cortex-xdr-root-account.template"].body
+}
