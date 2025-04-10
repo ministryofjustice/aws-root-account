@@ -120,7 +120,7 @@ module "athena_results_s3_bucket" {
 
 # MP SSM Inventory Resource Data Sync S3 bucket - for syncing Modernisation Platform inventory data centrally (Similar to what's been built in organisation-security/terraform/ssm.tf but keeping this separate for now)
 module "mp_ssm_inventory_resource_data_sync_s3" {
-  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=52a40b0dd18aaef0d7c5565d93cc8997aad79636" # v8.2.0
+  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=474f27a3f9bf542a8826c76fb049cc84b5cf136f" # v8.2.1
   providers = {
     aws.bucket-replication = aws.eu-west-1
   }
@@ -134,6 +134,9 @@ module "mp_ssm_inventory_resource_data_sync_s3" {
       id      = "main"
       enabled = "Enabled"
       tags    = {}
+      filter = {
+        prefix = ""
+      }
       transition = [
         {
           days          = 90
