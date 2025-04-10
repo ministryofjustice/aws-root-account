@@ -25,7 +25,8 @@ resource "aws_ssm_parameter" "cortex_xdr_uuids" {
 }
 
 resource "aws_cloudformation_stack" "cortex_xdr_stack" {
-  name = "cortex-xdr-cloud-app"
+  capabilities = ["CAPABILITY_NAMED_IAM"]
+  name         = "cortex-xdr-cloud-app"
   parameters = {
     CortexXDRRoleName = "CortexXDRCloudApp",
     ExternalID        = sensitive(random_uuid.cortex_xdr_stack.result)
