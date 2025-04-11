@@ -37,10 +37,16 @@ resource "aws_organizations_organization" "default" {
   feature_set = "ALL"
 }
 
-# Delegate Cloudformation Stacksets to organisation-security
+# Delegate self-managed CloudFormation Stack Sets to organisation-security
 resource "aws_organizations_delegated_administrator" "stacksets_organisation_security" {
   account_id        = aws_organizations_account.organisation_security.id
   service_principal = "member.org.stacksets.cloudformation.amazonaws.com"
+}
+
+# Delegate service-managed CloudFormation Stack Sets to organisation-security
+resource "aws_organizations_delegated_administrator" "service_managed_stacksets_organisation_security" {
+  account_id        = aws_organizations_account.organisation_security.id
+  service_principal = "stacksets.cloudformation.amazonaws.com"
 }
 
 # Enable RAM sharing with the organization without requiring acceptors
