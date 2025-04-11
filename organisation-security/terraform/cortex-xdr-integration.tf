@@ -26,11 +26,40 @@ resource "aws_ssm_parameter" "cortex_xdr_uuids" {
 
 resource "aws_cloudformation_stack" "cortex_xdr_stack" {
   capabilities = ["CAPABILITY_NAMED_IAM"]
-  name         = "cortex-xdr-cloud-app"
+  name         = "CortexXDRCloudApp"
   parameters = {
     CortexXDRRoleName = "CortexXDRCloudApp",
     ExternalID        = sensitive(random_uuid.cortex_xdr_stack.result)
   }
   tags          = local.tags_organisation_management
   template_body = data.aws_s3_object.cortex_xdr_templates["cortex-xdr-root-account.template"].body
+}
+
+resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
+  depends_on = [aws_cloudformation_stack.cortex_xdr_stack]
+  lifecycle {
+    ignore_changes = [parameters]
+  }
+  auto_deployment {
+    enabled                          = true
+    retain_stacks_on_account_removal = true
+  }
+  call_as      = "DELEGATED_ADMIN"
+  capabilities = ["CAPABILITY_NAMED_IAM"]
+  description  = "AWS CloudFormation Stack Set used by XSIAM/XDR"
+  name         = "CortexXDRCloudAppStackSet"
+  parameters = {
+    CortexXDRRoleName = "CortexXDRCloudApp",
+    ExternalID        = sensitive(random_uuid.cortex_xdr_stack_set.result)
+  }
+  permission_model = "SERVICE_MANAGED"
+  template_body    = jsonencode(data.aws_s3_object.cortex_xdr_templates["cortex-xdr-subordinate-account.template"].body)
+  tags             = local.tags_organisation_management
+}
+
+resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
+  deployment_targets {
+    organizational_unit_ids = [local.organizations_organization.roots[0].id]
+  }
+  stack_set_name = "cortex-xdr-cloud-app-stack-set"
 }
