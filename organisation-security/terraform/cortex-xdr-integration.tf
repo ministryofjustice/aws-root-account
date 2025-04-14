@@ -61,5 +61,6 @@ resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
   deployment_targets {
     organizational_unit_ids = [local.organizations_organization.roots[0].id]
   }
+  call_as        = "DELEGATED_ADMIN"
   stack_set_name = aws_cloudformation_stack_set.cortex_xdr_stack_set.name
 }
