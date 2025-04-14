@@ -53,7 +53,7 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
     ExternalID        = sensitive(random_uuid.cortex_xdr_stack_set.result)
   }
   permission_model = "SERVICE_MANAGED"
-  template_body    = jsonencode(data.aws_s3_object.cortex_xdr_templates["cortex-xdr-subordinate-account.template"].body)
+  template_body    = data.aws_s3_object.cortex_xdr_templates["cortex-xdr-subordinate-account.template"].body
   tags             = local.tags_organisation_management
 }
 
