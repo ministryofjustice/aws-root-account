@@ -87,6 +87,9 @@ resource "aws_bcmdataexports_export" "focus_report" {
         ResourceType, ServiceCategory, ServiceName, SkuId, SkuPriceId, SubAccountId, SubAccountName, Tags, x_CostCategories, x_Discounts, 
         x_Operation, x_ServiceCode, x_UsageType FROM FOCUS_1_0_AWS
       EOF
+      table_configurations = {
+        FOCUS_1_0_AWS = {}
+      }
     }
     destination_configurations {
       s3_destination {
