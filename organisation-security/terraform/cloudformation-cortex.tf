@@ -44,12 +44,16 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
     enabled                          = true
     retain_stacks_on_account_removal = true
   }
+  operation_preferences {
+    failure_tolerance_percentage = 0
+    max_concurrency_percentage   = 10
+  }
   call_as      = "DELEGATED_ADMIN"
   capabilities = ["CAPABILITY_NAMED_IAM"]
   description  = "AWS CloudFormation Stack Set used by XSIAM/XDR"
   name         = "CortexXDRCloudAppStackSet"
   parameters = {
-    CortexXDRRoleName = "CortexXDRCloudApp",
+    CortexXDRRoleName = "CortexXDRCloudAppStackSet",
     ExternalID        = sensitive(random_uuid.cortex_xdr_stack_set.result)
   }
   permission_model = "SERVICE_MANAGED"
