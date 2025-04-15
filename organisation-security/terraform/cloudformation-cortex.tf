@@ -46,7 +46,7 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
   }
   operation_preferences {
     failure_tolerance_percentage = 0
-    max_concurrency_percentage   = 10
+    max_concurrent_percentage    = 10
   }
   call_as      = "DELEGATED_ADMIN"
   capabilities = ["CAPABILITY_NAMED_IAM"]
