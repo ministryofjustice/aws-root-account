@@ -404,6 +404,23 @@ data "aws_iam_policy_document" "focus_reports_s3_bucket" {
       identifiers = ["bcm-data-exports.amazonaws.com"]
     }
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:GetObjectTagging"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-focus-1-reports",
+      "arn:aws:s3:::moj-focus-1-reports/*"
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::279191903737:root"]
+    }
+  }
 }
 
 module "focus_reports_s3_bucket" {
