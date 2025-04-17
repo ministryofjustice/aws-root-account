@@ -25,8 +25,9 @@ resource "aws_ssm_parameter" "cortex_xdr_uuids" {
 }
 
 resource "aws_cloudformation_stack" "cortex_xdr_stack" {
-  capabilities = ["CAPABILITY_NAMED_IAM"]
-  name         = "CortexXDRCloudApp"
+  administration_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/stacksets.cloudformation.amazonaws.com/AWSServiceRoleForCloudFormationStackSetsOrgAdmin"
+  capabilities            = ["CAPABILITY_NAMED_IAM"]
+  name                    = "CortexXDRCloudApp"
   parameters = {
     CortexXDRRoleName = "CortexXDRCloudApp",
     ExternalID        = sensitive(random_uuid.cortex_xdr_stack.result)
