@@ -34,6 +34,42 @@ locals {
   organisation_account_numbers = [for account in local.organizations_organization.accounts : account.id]
 
   # AWS Organizational Units
+  ## Central Digital
+  ou_central_digital_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "Central Digital"
+  ]...)
+
+  ## Criminal Injuries Compensation Authority
+  ou_cica_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "CICA"
+  ]...)
+
+  ## HM Courts & Tribunal Service
+  ou_hmcts_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "HMCTS"
+  ]...)
+
+  ## HM Prison and Probation Service
+  ou_hmpps_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "HMPPS"
+  ]...)
+
+  ## Legal Aid Agency
+  ou_laa = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "LAA"
+  ]...)
+
+  ## Office of the Public Guardian
   ou_opg = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
@@ -64,6 +100,21 @@ locals {
     if ou.name == "Sirius"
   ]...)
 
+  ## Organisation Management
+  ou_organisation_management = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "Organisation Management"
+  ]...)
+
+  ## Security Engineering
+  ou_security_engineering_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "Security Engineering"
+  ]...)
+
+  ## Platforms and Architecture
   ou_platforms_and_architecture_id = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
@@ -88,16 +139,18 @@ locals {
     if ou.name == "Modernisation Platform Member"
   ]...)
 
+  ## Technology Services
   ou_technology_services = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
     if ou.name == "Technology Services"
   ]...)
 
-  ou_laa = coalesce([
+  ## Youth Justice Board
+  ou_yjb_id = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
-    if ou.name == "LAA"
+    if ou.name == "YJB"
   ]...)
 
   # ous for license manager
