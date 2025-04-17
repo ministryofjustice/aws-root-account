@@ -48,10 +48,11 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
     failure_tolerance_percentage = 0
     max_concurrent_percentage    = 10
   }
-  call_as      = "DELEGATED_ADMIN"
-  capabilities = ["CAPABILITY_NAMED_IAM"]
-  description  = "AWS CloudFormation Stack Set used by XSIAM/XDR"
-  name         = "CortexXDRCloudAppStackSet"
+  administration_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/stacksets.cloudformation.amazonaws.com/AWSServiceRoleForCloudFormationStackSetsOrgAdmin"
+  call_as                 = "DELEGATED_ADMIN"
+  capabilities            = ["CAPABILITY_NAMED_IAM"]
+  description             = "AWS CloudFormation Stack Set used by XSIAM/XDR"
+  name                    = "CortexXDRCloudAppStackSet"
   parameters = {
     CortexXDRRoleName = "CortexXDRCloudAppStackSet",
     ExternalID        = sensitive(random_uuid.cortex_xdr_stack_set.result)
