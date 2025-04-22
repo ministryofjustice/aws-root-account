@@ -426,8 +426,35 @@ data "aws_iam_policy_document" "focus_reports_s3_bucket" {
 module "focus_reports_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name   = "moj-focus-1-reports"
+  bucket_name= "moj-focus-1-reports"
   force_destroy = true
   attach_policy = true
   policy = data.aws_iam_policy_document.focus_reports_s3_bucket.json
+  enable_versioning = true
+
+  enable_replication     = true
+  replication_bucket_arn = "arn:aws:s3:::coat-production-focus-reports"
+  replication_role_arn   = module.focus_reports_s3_bucket.replication_role_arn
+  destination_kms_arn    = "arn:aws:kms:eu-west-2:279191903737:key/807c9d94-a20e-4df4-b5a9-d8e08bd24323"
+  source_kms_arn         = module.focus_s3_kms.key_arn
+
+  replication_rules = [
+    {
+      id                 = "replicate-focus-reports"
+      prefix             = "moj-focus-reports/"
+      status             = "Enabled"
+      deletemarker       = "Enabled"
+      replica_kms_key_id = "arn:aws:kms:eu-west-2:279191903737:key/807c9d94-a20e-4df4-b5a9-d8e08bd24323"
+      metrics            = "Enabled"
+    }
+  ]
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.focus_s3_kms.key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 }
