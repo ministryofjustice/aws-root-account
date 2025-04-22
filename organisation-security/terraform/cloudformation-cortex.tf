@@ -38,7 +38,7 @@ resource "aws_cloudformation_stack" "cortex_xdr_stack" {
 resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
   depends_on = [aws_cloudformation_stack.cortex_xdr_stack]
   lifecycle {
-    ignore_changes = [parameters]
+    ignore_changes = [parameters, administration_role_arn]
   }
   auto_deployment {
     enabled                          = true
@@ -48,7 +48,6 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
     failure_tolerance_percentage = 0
     max_concurrent_percentage    = 10
   }
-  administration_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/stacksets.cloudformation.amazonaws.com/AWSServiceRoleForCloudFormationStackSetsOrgAdmin"
   call_as                 = "DELEGATED_ADMIN"
   capabilities            = ["CAPABILITY_NAMED_IAM"]
   description             = "AWS CloudFormation Stack Set used by XSIAM/XDR"
