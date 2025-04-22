@@ -60,6 +60,7 @@ data "aws_iam_policy_document" "oidc_assume_role_apply" {
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
       "kms:Decrypt",
+      "kms:CreateKey",
       "lambda:*",
       "license-manager:*",
       "logs:*",
