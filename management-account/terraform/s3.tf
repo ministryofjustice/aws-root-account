@@ -385,11 +385,51 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
 }
 
 # moj-focus-reports-greenops
+data "aws_iam_policy_document" "focus_reports_s3_bucket" {
+  version = "2008-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetBucketLocation",
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-focus-1-reports",
+      "arn:aws:s3:::moj-focus-1-reports/*"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["bcm-data-exports.amazonaws.com"]
+    }
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:GetObjectTagging"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-focus-1-reports",
+      "arn:aws:s3:::moj-focus-1-reports/*"
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::279191903737:root"]
+    }
+  }
+}
 
 module "focus_reports_s3_bucket" {
   source = "../../modules/s3"
 
   bucket_name= "moj-focus-1-reports"
+  force_destroy = true
+  attach_policy = true
+  policy = data.aws_iam_policy_document.focus_reports_s3_bucket.json
   enable_versioning = true
 
   enable_replication     = true
