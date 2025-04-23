@@ -303,19 +303,38 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
 
 # moj-cur-reports-greenops
 module "cur_reports_v2_hourly_s3_bucket" {
-  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=52a40b0dd18aaef0d7c5565d93cc8997aad79636" # v8.2.0"
-  providers = {
-    aws.bucket-replication = aws
-  }
-  bucket_name        = "moj-cur-reports-v2-hourly"
-  bucket_policy      = [data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json]
-  ownership_controls = "BucketOwnerEnforced"
+  source = "../../modules/s3"
 
-  tags = {
-    business-unit = "Platforms"
-    application   = "Modernisation Platform"
-    is-production = true
-    owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
+  bucket_name= "moj-cur-reports-v2-hourly"
+  force_destroy = true
+  attach_policy = true
+  policy = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
+  enable_versioning = true
+
+  enable_replication     = true
+  replication_bucket_arn = "arn:aws:s3:::coat-production-cur-v2-hourly"
+  replication_role_arn   = module.cur_reports_v2_hourly_s3_bucket.replication_role_arn
+  destination_kms_arn    = "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
+  source_kms_arn         = module.cur_v2_s3_kms.key_arn
+
+  replication_rules = [
+    {
+      id                 = "replicate-cur-v2-reports"
+      prefix             = "moj-cost-and-usage-reports/"
+      status             = "Enabled"
+      deletemarker       = "Enabled"
+      replica_kms_key_id = "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
+      metrics            = "Enabled"
+    }
+  ]
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.cur_v2_s3_kms.key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
   }
 }
 
