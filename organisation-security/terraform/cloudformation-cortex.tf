@@ -44,10 +44,6 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
     enabled                          = true
     retain_stacks_on_account_removal = true
   }
-  operation_preferences {
-    failure_tolerance_percentage = 100
-    max_concurrent_percentage    = 33
-  }
   call_as      = "DELEGATED_ADMIN"
   capabilities = ["CAPABILITY_NAMED_IAM"]
   description  = "AWS CloudFormation Stack Set used by XSIAM/XDR"
@@ -74,6 +70,10 @@ resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
       local.ou_technology_services,
       local.ou_yjb_id
     ]
+  }
+  operation_preferences {
+    failure_tolerance_percentage = 100
+    max_concurrent_percentage    = 33
   }
   call_as        = "DELEGATED_ADMIN"
   stack_set_name = aws_cloudformation_stack_set.cortex_xdr_stack_set.name
