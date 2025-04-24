@@ -44,6 +44,12 @@ resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_read_only_directory" 
   permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn
 }
 
+resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_read_only_ec2" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn
+}
+
 # SSO Admin
 
 resource "aws_ssoadmin_permission_set" "aws_sso_admin" {
