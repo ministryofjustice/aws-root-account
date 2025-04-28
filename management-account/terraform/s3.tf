@@ -381,7 +381,6 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
       type        = "Service"
       identifiers = ["bcm-data-exports.amazonaws.com"]
     }
-
   }
 
   statement {
@@ -398,7 +397,7 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::211125434264:root"]
+      identifiers = ["arn:aws:iam::279191903737:root"]
     }
   }
 }
