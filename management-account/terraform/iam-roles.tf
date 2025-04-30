@@ -105,7 +105,7 @@ data "aws_iam_policy_document" "coat_github_actions_read_only" {
 }
 
 # Role policy attachments
-resource "aws_iam_role_policy_attachment" "aws_organizations_list_read_only" {
+resource "aws_iam_role_policy_attachment" "organizations_list_read_only" {
   role       = aws_iam_role.coat_github_actions_read_only.name
   policy_arn = aws_iam_policy.aws_organizations_list_read_only.arn
 }
