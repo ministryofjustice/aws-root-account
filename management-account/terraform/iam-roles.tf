@@ -78,7 +78,7 @@ resource "aws_iam_role"  "coat_github_actions_read_only" {
   assume_role_policy = data.aws_iam_policy_document.coat_github_actions_read_only.json
 }
 
-data "aws_iam_policy_document" "coat_github_actions_read_only"
+data "aws_iam_policy_document" "coat_github_actions_read_only" {
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRoleWithWebIdentity"]
@@ -88,6 +88,7 @@ data "aws_iam_policy_document" "coat_github_actions_read_only"
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
       ]
+    }
 
     condition {
       test     = "StringEquals"
@@ -104,12 +105,12 @@ data "aws_iam_policy_document" "coat_github_actions_read_only"
 }
 
 # Role policy attachments
-resource "aws_iam_role_policy_attachment" "coat_github_actions_read_only" {
+resource "aws_iam_role_policy_attachment" "aws_organizations_list_read_only" {
   role       = aws_iam_role.coat_github_actions_read_only.name
   policy_arn = aws_iam_policy.aws_organizations_list_read_only.arn
 }
 
-resource "aws_iam_role_policy_attachment" "coat_github_actions_read_only" {
+resource "aws_iam_role_policy_attachment" "cost_optimizer_read_only" {
   role       = aws_iam_role.coat_github_actions_read_only.name
   policy_arn = aws_iam_policy.cost_optimizer_read_only.arn
 }
