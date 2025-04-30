@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "aws_organizations_list_read_only" {
 #######################
 resource "aws_iam_policy" "cost_optimizer_read_only" {
   name        = "CostOptimizerReadOnly"
-  description = Read-only access to Cost Optimization Hub
+  description = "Read-only access to Cost Optimization Hub"
   path        = "/"
   policy      = data.aws_iam_policy_document.cost_optimizer_read_only.json
   tags        = {}
