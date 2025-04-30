@@ -57,6 +57,29 @@ data "aws_iam_policy_document" "aws_organizations_list_read_only" {
   }
 }
 
+#######################
+# CostOptimizerReadOnly
+#######################
+resource "aws_iam_policy" "cost_optimizer_read_only" {
+  name        = "CostOptimizerReadOnly"
+  description = Read-only access to Cost Optimization Hub
+  path        = "/"
+  policy      = data.aws_iam_policy_document.cost_optimizer_read_only.json
+  tags        = {}
+}
+
+data "aws_iam_policy_document" "cost_optimizer_read_only" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    actions = ["cost-optimization-hub:ListRecommendations"]
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = ["*"]
+  }
+}
+
 #####################
 # BillingFullAccess #
 #####################

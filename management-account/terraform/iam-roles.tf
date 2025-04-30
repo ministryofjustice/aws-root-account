@@ -70,6 +70,49 @@ data "aws_iam_policy_document" "lambda_basic_execution_test" {
     }
   }
 }
+#########################################
+# CoatGithubActionsReadonlyRole
+#########################################
+resource "aws_iam_role"  "coat_github_actions_read_only" {
+  name               = "CoatGithubActionsReadonlyRole"
+  assume_role_policy = data.aws_iam_policy_document.coat_github_actions_read_only.json
+}
+
+data "aws_iam_policy_document" "coat_github_actions_read_only"
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type = "Federated"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
+      ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:ministryofjustice/operations-engineering:ref:refs/heads/main"]
+    }
+  }
+}
+
+# Role policy attachments
+resource "aws_iam_role_policy_attachment" "coat_github_actions_read_only" {
+  role       = aws_iam_role.coat_github_actions_read_only.name
+  policy_arn = aws_iam_policy.aws_organizations_list_read_only.arn
+}
+
+resource "aws_iam_role_policy_attachment" "coat_github_actions_read_only" {
+  role       = aws_iam_role.coat_github_actions_read_only.name
+  policy_arn = aws_iam_policy.cost_optimizer_read_only.arn
+}
 
 #########################################
 # ModernisationPlatformSSOAdministrator #
