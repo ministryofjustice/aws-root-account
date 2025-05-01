@@ -99,7 +99,7 @@ data "aws_iam_policy_document" "coat_github_actions_read_only" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:ministryofjustice/operations-engineering:ref:refs/heads/main"]
+      values   = ["repo:ministryofjustice/cloud-optimisation-and-accountability:ref:refs/heads/main"]
     }
   }
 }
