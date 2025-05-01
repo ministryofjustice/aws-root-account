@@ -21,3 +21,5 @@ resource "aws_ram_principal_association" "default" {
   principal          = var.principal
   resource_share_arn = aws_ram_resource_share.default.arn
 }
+
+
