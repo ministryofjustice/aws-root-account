@@ -78,3 +78,5 @@ resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
   call_as        = "DELEGATED_ADMIN"
   stack_set_name = aws_cloudformation_stack_set.cortex_xdr_stack_set.name
 }
+
+
