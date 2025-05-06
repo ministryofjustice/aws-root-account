@@ -305,10 +305,10 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
 module "cur_reports_v2_hourly_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name= "moj-cur-reports-v2-hourly"
-  force_destroy = true
-  attach_policy = true
-  policy = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
+  bucket_name       = "moj-cur-reports-v2-hourly"
+  force_destroy     = true
+  attach_policy     = true
+  policy            = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
   enable_versioning = true
 
   enable_replication     = true
@@ -444,10 +444,10 @@ data "aws_iam_policy_document" "focus_reports_s3_bucket" {
 module "focus_reports_s3_bucket" {
   source = "../../modules/s3"
 
-  bucket_name= "moj-focus-1-reports"
-  force_destroy = true
-  attach_policy = true
-  policy = data.aws_iam_policy_document.focus_reports_s3_bucket.json
+  bucket_name       = "moj-focus-1-reports"
+  force_destroy     = true
+  attach_policy     = true
+  policy            = data.aws_iam_policy_document.focus_reports_s3_bucket.json
   enable_versioning = true
 
   enable_replication     = true
