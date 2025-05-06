@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "lambda_basic_execution_test" {
 #########################################
 # CoatGithubActionsReadonlyRole
 #########################################
-resource "aws_iam_role"  "coat_github_actions_read_only" {
+resource "aws_iam_role" "coat_github_actions_read_only" {
   name               = "CoatGithubActionsReadonlyRole"
   assume_role_policy = data.aws_iam_policy_document.coat_github_actions_read_only.json
 }

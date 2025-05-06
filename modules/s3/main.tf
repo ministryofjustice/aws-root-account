@@ -14,7 +14,7 @@ resource "aws_s3_bucket" "default" {
 # Bucket ACL #
 ##############
 resource "aws_s3_bucket_acl" "default" {
-  count = var.object_ownership == "BucketOwnerEnforced" ? 0 : 1
+  count  = var.object_ownership == "BucketOwnerEnforced" ? 0 : 1
   bucket = aws_s3_bucket.default.id
   acl    = var.bucket_acl
 }
