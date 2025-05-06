@@ -132,4 +132,14 @@ locals {
     "stack",
     "Stack"
   ]
+  # LAA Data Location locals
+
+  laa_lz_data_locations = try(jsondecode(aws_secretsmanager_secret_version.laa_lz_laa_lz_data_locations.secret_string).locations, [])
+  laa_lz_data_locations_resources = flatten([
+    for location in local.laa_lz_data_locations : [
+      "arn:aws:s3:::${location}",
+      "arn:aws:s3:::${location}/*"
+    ]
+  ])
 }
+

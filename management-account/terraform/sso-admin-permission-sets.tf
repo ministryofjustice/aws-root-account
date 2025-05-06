@@ -802,3 +802,39 @@ data "aws_iam_policy_document" "waf_viewer_shield" {
     resources = ["*"]
   }
 }
+
+#########################################
+#   laa landing zone  permission sets   #
+#########################################
+
+# S3 Read Access
+#
+# This role provides read-only access to specific S3 buckets.
+resource "aws_ssoadmin_permission_set" "laa_lz_s3_read_access" {
+  name             = "laa-lz-s3-read-access"
+  description      = "A role that provides read-only access to specific LAA LZ S3 buckets"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "s3_read_access_inline" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.laa_lz_s3_read_access.json
+  permission_set_arn = aws_ssoadmin_permission_set.laa_lz_s3_read_access.arn
+}
+
+data "aws_iam_policy_document" "laa_lz_s3_read_access" {
+  statement {
+    sid = "AllowListAndReadObjects"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:GetBucketLocation",
+      "s3:ListBucket",
+      "s3:ListBucketVersions"
+    ]
+
+    resources = local.laa_lz_data_locations_resources
+  }
+}
