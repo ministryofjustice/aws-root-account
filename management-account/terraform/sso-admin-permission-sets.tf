@@ -826,6 +826,14 @@ resource "aws_ssoadmin_permission_set_inline_policy" "s3_read_access_inline" {
 
 data "aws_iam_policy_document" "laa_lz_s3_read_access" {
   statement {
+    sid = "AllowListAllBucketsForConsole"
+    actions = [
+      "s3:ListAllMyBuckets"
+    ]
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = ["*"]
+  }
+  statement {
     sid = "AllowListAndReadObjects"
     actions = [
       "s3:GetObject",

@@ -122,3 +122,13 @@ resource "aws_secretsmanager_secret_version" "laa_lz_data_locations" {
     ]
   }
 }
+
+# Retrieving LAA Existing Secret
+
+data "aws_secretsmanager_secret" "laa_lz_data_locations" {
+  name = "laa-landing-zone-data-locations"
+}
+
+data "aws_secretsmanager_secret_version" "laa_lz_data_locations_version" {
+  secret_id = data.aws_secretsmanager_secret.laa_lz_data_locations.id
+}
