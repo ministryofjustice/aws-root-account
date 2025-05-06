@@ -444,13 +444,6 @@ locals {
       account_ids = [
         aws_organizations_organization.default.master_account_id
       ]
-    },
-    {
-      github_team        = "azure-aws-sso-laa-readers",
-      permission_set_arn = aws_ssoadmin_permission_set.laa_lz_s3_read_access.arn,
-      account_ids = [
-        aws_organizations_account.laa_production.id
-      ]
     }
   ]
   sso_admin_account_assignments_expanded = flatten([
