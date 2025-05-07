@@ -836,13 +836,27 @@ data "aws_iam_policy_document" "laa_lz_s3_read_access" {
   statement {
     sid = "AllowListAndReadObjects"
     actions = [
-      "s3:GetObject",
-      "s3:GetObjectVersion",
-      "s3:GetBucketLocation",
+      "s3:ListBucketVersions",
       "s3:ListBucket",
-      "s3:ListBucketVersions"
+      "s3:GetObjectVersion",
+      "s3:GetObject",
+      "s3:GetBucketLocation",
+      "s3:GetBucketObjectLockConfiguration",
+      "s3:GetBucketVersioning",
+      "s3:GetBucketOwnershipControls"
     ]
 
     resources = local.laa_lz_data_locations_resources
+  }
+  statement {
+    sid    = "AllowS3DecryptWithCMK"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey"
+    ]
+    resources = [
+      "arn:aws:kms:eu-west-2:${local.aws_organizations_account.laa_production.id}:alias/s3"
+    ]
   }
 }
