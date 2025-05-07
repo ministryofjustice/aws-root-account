@@ -856,7 +856,7 @@ data "aws_iam_policy_document" "laa_lz_s3_read_access" {
       "kms:DescribeKey"
     ]
     resources = [
-      "arn:aws:kms:eu-west-2:${local.aws_organizations_account.laa_production.id}:alias/s3"
+      "arn:aws:kms:eu-west-2:${aws_organizations_account.laa_production.id}:alias/s3"
     ]
   }
 }
