@@ -425,7 +425,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
     resources = ["arn:aws:dynamodb:eu-west-2:${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:table/modernisation-platform-terraform-state-lock"]
   }
   statement {
-    sid    = "VisualEditor0"
+    sid    = "ManageModernisationPlatformAccounts"
     effect = "Allow"
     actions = [
       "organizations:RemoveAccountFromOrganization",
