@@ -433,7 +433,10 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "organizations:CloseAccount",
       "organizations:MoveAccount"
     ]
-    resources = ["arn:aws:organizations::${data.aws_caller_identity.current.account_id}:ou/o-o-b2fpbzyd95/ou-ou-j1kx-qxsrh1gv"]
+    resources = [
+      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:ou/o-o-b2fpbzyd95/ou-ou-j1kx-qxsrh1gv",
+      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:account/o-b2fpbzyd95/*"
+    ]
   }
   statement {
     effect = "Allow"
