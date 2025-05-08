@@ -425,6 +425,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
     resources = ["arn:aws:dynamodb:eu-west-2:${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:table/modernisation-platform-terraform-state-lock"]
   }
   statement {
+    sid    = "ManageModernisationPlatformAccounts"
     effect = "Allow"
     actions = [
       "organizations:RemoveAccountFromOrganization",
@@ -432,9 +433,10 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "organizations:CloseAccount",
       "organizations:MoveAccount"
     ]
-    resources = ["arn:aws:organizations::${data.aws_caller_identity.current.account_id}:ou/${aws_organizations_organization.default.id}/${aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id}"]
-
-
+    resources = [
+      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:ou/${aws_organizations_organization.default.id}/${aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id}",
+      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:account/${aws_organizations_organization.default.id}/*"
+    ]
   }
   statement {
     effect = "Allow"
