@@ -434,8 +434,8 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "organizations:MoveAccount"
     ]
     resources = [
-      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:ou/o-o-b2fpbzyd95/ou-ou-j1kx-qxsrh1gv",
-      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:account/o-b2fpbzyd95/*"
+      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:ou/${aws_organizations_organization.default.id}/${aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id}",
+      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:account/${aws_organizations_organization.default.id}/*"
     ]
   }
   statement {
