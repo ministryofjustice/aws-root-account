@@ -444,15 +444,6 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:account/${aws_organizations_organization.default.id}/*"
     ]
   }
-
-  statement {
-    sid = "ManageModernisationPlatformAccounts"
-    effect = "Allow"
-    actions = [
-      "organizations:LeaveOrganization"
-    ]
-    resources = ["*"]
-  }
 }
 
 # Modernisation Platform end user permission sets are now managed in the modernisation-platform repository
