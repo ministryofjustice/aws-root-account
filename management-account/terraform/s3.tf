@@ -441,6 +441,13 @@ data "aws_iam_policy_document" "focus_reports_s3_bucket" {
   }
 }
 
+# cf-template-storage
+module "cf_template_storage" {
+  source          = "../../modules/s3"
+  additional_tags = local.tags_organisation_management
+  bucket_prefix   = "cf-template-storage"
+}
+
 module "focus_reports_s3_bucket" {
   source = "../../modules/s3"
 

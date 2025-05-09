@@ -9,6 +9,9 @@ terraform {
       source  = "hashicorp/awscc"
       version = "~> 1.31.0"
     }
-
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6.3"
+    }
   }
 }
