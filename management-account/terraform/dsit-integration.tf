@@ -1,6 +1,6 @@
 # Infrastructure to integrate cost reporting with DSIT central account: Data export, S3, and bucket replication
 
-module "dsit_infra" {
+module "dsit_cost_integration" {
 source = "github.com/co-cddo/terraform-aws-focus?ref=v1.1.0"
 
 destination_account_id = "203341582084"
