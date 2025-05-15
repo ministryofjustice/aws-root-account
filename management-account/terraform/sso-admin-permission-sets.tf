@@ -884,9 +884,3 @@ resource "aws_ssoadmin_managed_policy_attachment" "laa_security_audit_inspector_
   managed_policy_arn = "arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess"
   permission_set_arn = aws_ssoadmin_permission_set.laa_security_audit.arn
 }
-
-resource "aws_ssoadmin_permission_set_inline_policy" "laa_security_audit_additional" {
-  instance_arn       = local.sso_admin_instance_arn
-  inline_policy      = data.aws_iam_policy_document.security_audit.json
-  permission_set_arn = aws_ssoadmin_permission_set.laa_security_audit.arn
-}
