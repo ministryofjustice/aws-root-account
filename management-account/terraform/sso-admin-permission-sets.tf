@@ -862,3 +862,25 @@ data "aws_iam_policy_document" "laa_lz_s3_read_access" {
     ]
   }
 }
+
+
+# LAA Security Audit
+
+resource "aws_ssoadmin_permission_set" "laa_security_audit" {
+  name             = "LAA SecurityAudit"
+  description      = "LAA Security auditor access"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT1H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "laa_security_audit" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/SecurityAudit"
+  permission_set_arn = aws_ssoadmin_permission_set.laa_security_audit.arn
+}
+resource "aws_ssoadmin_managed_policy_attachment" "laa_security_audit_inspector_v2" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.laa_security_audit.arn
+}
