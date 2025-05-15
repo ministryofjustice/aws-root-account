@@ -309,14 +309,6 @@ resource "aws_organizations_policy" "modernisation_platform_member_ou_scp" {
 }
 
 data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
-  # Deny creation of peering connections anywhere
-  statement {
-    effect = "Deny"
-    actions = [
-      "ec2:CreateVpcPeeringConnection",
-    ]
-    resources = ["*"]
-  }
   # Deny creation of VPCs or Subnets outside of eu-west-2
   statement {
     effect = "Deny"
