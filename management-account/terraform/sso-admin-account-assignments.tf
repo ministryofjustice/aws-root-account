@@ -411,6 +411,14 @@ locals {
       ]
     },
     {
+      github_team        = "laa-internal-analysis",
+      permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
+      account_ids = [
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.cloud_platform.id
+      ]
+    },
+    {
       github_team        = "modernisation-platform",
       permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
       account_ids = [
