@@ -867,7 +867,7 @@ data "aws_iam_policy_document" "laa_lz_s3_read_access" {
 # LAA Security Audit
 
 resource "aws_ssoadmin_permission_set" "laa_security_audit" {
-  name             = "LAA SecurityAudit"
+  name             = "LAASecurityAudit"
   description      = "LAA Security auditor access"
   instance_arn     = local.sso_admin_instance_arn
   session_duration = "PT1H"
