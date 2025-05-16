@@ -120,6 +120,12 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_on_all_resource
   target_id = aws_organizations_organizational_unit.closed_accounts.id
 }
 
+# Attach policy to disabled accounts
+resource "aws_organizations_policy_attachment" "disabled_accounts" {
+  policy_id = aws_organizations_policy.deny_all_actions_on_all_resources.id
+  target_id = aws_organizations_organizational_unit.disabled_accounts.id
+}
+
 ##############################################
 # Deny non-EU and non-"us-east-1" operations #
 ##############################################
@@ -374,4 +380,46 @@ resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou
 
   target_id = each.value
   policy_id = aws_organizations_policy.modernisation_platform_member_ou_scp.id
+}
+
+data "aws_iam_policy_document" "freeze_new_compute" {
+  statement {
+    sid    = "FreezeNewCompute"
+    effect = "Deny"
+
+    actions = [
+      "ec2:RunInstances",
+      "ec2:StartInstances",
+      "lambda:CreateFunction",
+      "ecs:CreateService",
+      "eks:CreateCluster",
+      "rds:CreateDBInstance",
+      "rds:StartDBInstance",
+      "emr:RunJobFlow",
+      "batch:SubmitJob",
+      "apprunner:Create*",
+      "lightsail:*Instance*"
+    ]
+
+    resources = ["*"]
+
+  }
+}
+
+resource "aws_organizations_policy" "freeze_new_compute" {
+  name        = "FreezeNewCompute"
+  description = "Denies new compute instances"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "LAA"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.freeze_new_compute.json
+}
+
+resource "aws_organizations_policy_attachment" "freeze_new_compute" {
+  policy_id = aws_organizations_policy.freeze_new_compute.id
+  target_id = aws_organizations_account.laa_production.id
 }
