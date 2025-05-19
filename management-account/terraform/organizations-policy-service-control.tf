@@ -143,7 +143,8 @@ data "aws_iam_policy_document" "deny_all_actions_accept_sso" {
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::*:role/AWSReservedSSO_*",
-        "arn:aws:iam::*:role/OrganizationAccountAccessRole"
+        "arn:aws:iam::*:role/OrganizationAccountAccessRole",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/eu-west-2/AWSReservedSSO_*"
       ]
     }
   }
