@@ -919,4 +919,24 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = ["*"]
   }
+  statement {
+    sid    = "AllowSnapshotCopy"
+    effect = "Allow"
+    actions = [
+      "ec2:CopySnapshot"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowKMSKeyUseForSnapshotCopy"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:Encrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = ["arn:aws:kms:*:*:key/*"]
+  }
 }
