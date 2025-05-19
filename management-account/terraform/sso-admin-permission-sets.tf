@@ -884,3 +884,59 @@ resource "aws_ssoadmin_managed_policy_attachment" "laa_security_audit_inspector_
   managed_policy_arn = "arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess"
   permission_set_arn = aws_ssoadmin_permission_set.laa_security_audit.arn
 }
+
+# LAA Read Only
+
+resource "aws_ssoadmin_permission_set" "laa_read_only" {
+  name             = "LAAReadOnly"
+  description      = "LAA Read only access"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT1H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "laa_read_only" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.laa_read_only.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "laa_read_only_additional" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.laa_read_only_additional.json
+  permission_set_arn = aws_ssoadmin_permission_set.laa_read_only.arn
+}
+
+data "aws_iam_policy_document" "laa_read_only_additional" {
+  statement {
+    sid = "DenyS3GetorPut"
+    effect = "Deny"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:PutObject",
+    ]
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowSnapshotCopy"
+    effect = "Allow"
+    actions = [
+      "ec2:CopySnapshot"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowKMSKeyUseForSnapshotCopy"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:Encrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = ["arn:aws:kms:*:*:key/*"]
+  }
+}
