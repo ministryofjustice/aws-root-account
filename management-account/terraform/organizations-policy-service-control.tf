@@ -381,3 +381,37 @@ resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou
   target_id = each.value
   policy_id = aws_organizations_policy.modernisation_platform_member_ou_scp.id
 }
+
+
+# LAA Deny actions
+resource "aws_organizations_policy" "deny_all_actions_by_users" {
+  name        = "Deny all actions by users"
+  description = "Denies the ability to do anything with a user"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.deny_all_actions_by_users.json
+}
+
+data "aws_iam_policy_document" "deny_all_actions_by_users" {
+  statement {
+    effect    = "Deny"
+    actions   = ["*"]
+    resources = ["*"]
+ condition {
+      test     = "StringLike"
+      variable = "aws:PrincipalArn"
+      values   = ["arn:aws:iam::*:user/*"]
+    }
+}
+}
+
+# Attach policy to laa production
+resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
+  policy_id = aws_organizations_policy.deny_all_actions_by_users.id
+  target_id = aws_organizations_account.laa_production.id
+}
