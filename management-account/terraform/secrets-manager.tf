@@ -96,7 +96,3 @@ data "aws_secretsmanager_secret_version" "azure_aws_connectivity_details" {
   secret_id = data.aws_secretsmanager_secret.azure_aws_connectivity_details.id
 }
 
-resource "aws_secretsmanager_secret" "aws_sso_entraid_integration" {
-  name        = "aws-sso-entraid-integration"
-  description = "Azure client ID and secret for the Ministry of Justice owned OAuth app for AWS SSO"
-}
