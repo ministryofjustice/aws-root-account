@@ -138,7 +138,7 @@ data "aws_iam_policy_document" "deny_all_actions_accept_sso" {
     effect    = "Deny"
     actions   = ["*"]
     resources = ["*"]
-  condition {
+    condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
       values = [
@@ -432,12 +432,12 @@ data "aws_iam_policy_document" "deny_all_actions_by_users" {
     effect    = "Deny"
     actions   = ["*"]
     resources = ["*"]
- condition {
+    condition {
       test     = "StringLike"
       variable = "aws:PrincipalArn"
       values   = ["arn:aws:iam::*:user/*"]
     }
-}
+  }
 }
 
 # Attach policy to laa production

@@ -425,7 +425,7 @@ locals {
         aws_organizations_account.laa_production.id
       ]
     },
-        {
+    {
       github_team        = "laa-lz-admin",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [

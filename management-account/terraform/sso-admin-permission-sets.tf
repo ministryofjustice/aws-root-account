@@ -863,9 +863,7 @@ data "aws_iam_policy_document" "laa_lz_s3_read_access" {
   }
 }
 
-
 # LAA Security Audit
-
 resource "aws_ssoadmin_permission_set" "laa_security_audit" {
   name             = "LAASecurityAudit"
   description      = "LAA Security auditor access"
@@ -909,7 +907,7 @@ resource "aws_ssoadmin_permission_set_inline_policy" "laa_read_only_additional" 
 
 data "aws_iam_policy_document" "laa_read_only_additional" {
   statement {
-    sid = "DenyS3GetorPut"
+    sid    = "DenyS3GetorPut"
     effect = "Deny"
     actions = [
       "s3:GetObject",
@@ -923,7 +921,17 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     sid    = "AllowSnapshotCopy"
     effect = "Allow"
     actions = [
-      "ec2:CopySnapshot"
+      "ec2:CopySnapshot",
+      "ec2:ModifySnapshotAttribute",
+      "ec2:CreateImage",
+      "ec2:RegisterImage",
+      "ec2:ModifyImageAttribute",
+      "ec2:CreateSnapshot",
+      "ec2:CreateTags",
+      "rds:CopyDBSnapshot",
+      "rds:ModifyDBSnapshotAttribute",
+      "backup:ListRecoveryPoints",
+      "backup:CopyRecoveryPoint"
     ]
     resources = ["*"]
   }
@@ -935,7 +943,8 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "kms:Encrypt",
       "kms:ReEncrypt*",
       "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+      "kms:DescribeKey",
+      "kms:CreateGrant"
     ]
     resources = ["arn:aws:kms:*:*:key/*"]
   }
