@@ -924,6 +924,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "ec2:CopySnapshot",
       "ec2:ModifySnapshotAttribute",
       "ec2:CreateImage",
+      "ec2:RegisterImage",
       "ec2:ModifyImageAttribute",
       "ec2:CreateSnapshot",
       "ec2:CreateTags",
