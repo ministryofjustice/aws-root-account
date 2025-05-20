@@ -923,7 +923,12 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     sid    = "AllowSnapshotCopy"
     effect = "Allow"
     actions = [
-      "ec2:CopySnapshot"
+      "ec2:CopySnapshot",
+      "ec2:ModifySnapshotAttribute",
+      "rds:CopyDBSnapshot",
+      "rds:ModifyDBSnapshotAttribute",
+      "backup:ListRecoveryPoints",
+      "backup:CopyRecoveryPoint"
     ]
     resources = ["*"]
   }
@@ -935,7 +940,8 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "kms:Encrypt",
       "kms:ReEncrypt*",
       "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+      "kms:DescribeKey",
+      "kms:CreateGrant"
     ]
     resources = ["arn:aws:kms:*:*:key/*"]
   }
