@@ -418,20 +418,20 @@ locals {
         aws_organizations_account.cloud_platform.id
       ]
     },
-    # {
-    #   github_team        = "laa-lz-read-only",
-    #   permission_set_arn = aws_ssoadmin_permission_set.laa_read_only.arn,
-    #   account_ids = [
-    #     aws_organizations_account.laa_production.id
-    #   ]
-    # },
-    #     {
-    #   github_team        = "laa-lz-admin",
-    #   permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
-    #   account_ids = [
-    #     aws_organizations_account.laa_production.id
-    #   ]
-    # },
+    {
+      github_team        = "laa-lz-read-only",
+      permission_set_arn = aws_ssoadmin_permission_set.laa_read_only.arn,
+      account_ids = [
+        aws_organizations_account.laa_production.id
+      ]
+    },
+        {
+      github_team        = "laa-lz-admin",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.laa_production.id
+      ]
+    },
     {
       github_team        = "modernisation-platform",
       permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
