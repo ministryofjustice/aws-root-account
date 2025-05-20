@@ -411,6 +411,28 @@ locals {
       ]
     },
     {
+      github_team        = "laa-internal-analysis",
+      permission_set_arn = aws_ssoadmin_permission_set.laa_security_audit.arn,
+      account_ids = [
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.cloud_platform.id
+      ]
+    },
+    {
+      github_team        = "laa-lz-read-only",
+      permission_set_arn = aws_ssoadmin_permission_set.laa_read_only.arn,
+      account_ids = [
+        aws_organizations_account.laa_production.id
+      ]
+    },
+        {
+      github_team        = "laa-lz-admin",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.laa_production.id
+      ]
+    },
+    {
       github_team        = "modernisation-platform",
       permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
       account_ids = [
@@ -451,7 +473,14 @@ locals {
       account_ids = [
         aws_organizations_organization.default.master_account_id
       ]
-    }
+    },
+    {
+      github_team        = "azure-aws-sso-laa-readers",
+      permission_set_arn = aws_ssoadmin_permission_set.laa_lz_s3_read_access.arn,
+      account_ids = [
+        aws_organizations_account.laa_production.id,
+      ]
+    },
   ]
   sso_admin_account_assignments_expanded = flatten([
     for assignment in local.sso_admin_account_assignments : [

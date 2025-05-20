@@ -9,8 +9,6 @@ data "aws_s3_object" "cortex_xdr_templates" {
   key      = each.key
 }
 
-resource "random_uuid" "cortex_xdr_stack" {}
-
 resource "random_uuid" "cortex_xdr_stack_set" {}
 
 resource "aws_ssm_parameter" "cortex_xdr_uuids" {
@@ -19,34 +17,17 @@ resource "aws_ssm_parameter" "cortex_xdr_uuids" {
   tags        = local.tags_organisation_management
   type        = "SecureString"
   value = jsonencode({
-    xdr_stack     = random_uuid.cortex_xdr_stack.result,
     xdr_stack_set = random_uuid.cortex_xdr_stack_set.result
   })
 }
 
-resource "aws_cloudformation_stack" "cortex_xdr_stack" {
-  capabilities = ["CAPABILITY_NAMED_IAM"]
-  name         = "CortexXDRCloudApp"
-  parameters = {
-    CortexXDRRoleName = "CortexXDRCloudApp",
-    ExternalID        = sensitive(random_uuid.cortex_xdr_stack.result)
-  }
-  tags          = local.tags_organisation_management
-  template_body = data.aws_s3_object.cortex_xdr_templates["cortex-xdr-root-account.template"].body
-}
-
 resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
-  depends_on = [aws_cloudformation_stack.cortex_xdr_stack]
   lifecycle {
-    ignore_changes = [parameters]
+    ignore_changes = [parameters, administration_role_arn]
   }
   auto_deployment {
     enabled                          = true
     retain_stacks_on_account_removal = true
-  }
-  operation_preferences {
-    failure_tolerance_percentage = 0
-    max_concurrent_percentage    = 10
   }
   call_as      = "DELEGATED_ADMIN"
   capabilities = ["CAPABILITY_NAMED_IAM"]
@@ -63,7 +44,21 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
 
 resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
   deployment_targets {
-    organizational_unit_ids = [local.organizations_organization.roots[0].id]
+    organizational_unit_ids = [
+      local.ou_central_digital_id,
+      local.ou_cica_id,
+      local.ou_hmcts_id,
+      local.ou_hmpps_id,
+      local.ou_laa,
+      local.ou_platforms_and_architecture_id,
+      local.ou_security_engineering_id,
+      local.ou_technology_services,
+      local.ou_yjb_id
+    ]
+  }
+  operation_preferences {
+    failure_tolerance_percentage = 100
+    max_concurrent_percentage    = 33
   }
   call_as        = "DELEGATED_ADMIN"
   stack_set_name = aws_cloudformation_stack_set.cortex_xdr_stack_set.name
