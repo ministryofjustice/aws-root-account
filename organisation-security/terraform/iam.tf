@@ -1,3 +1,11 @@
+# Enable Centralised Root Account management
+resource "aws_iam_organizations_features" "root_iam" {
+  enabled_features = [
+    "RootCredentialsManagement",
+    "RootSessions"
+  ]
+}
+
 ####################################
 # OIDC Provider for GitHub actions #
 ####################################
