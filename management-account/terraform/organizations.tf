@@ -44,6 +44,14 @@ resource "aws_organizations_delegated_administrator" "stacksets_organisation_sec
   service_principal = "member.org.stacksets.cloudformation.amazonaws.com"
 }
 
+# Enable Centralised Root Account management
+resource "aws_iam_organizations_features" "root_iam" {
+  enabled_features = [
+    "RootCredentialsManagement",
+    "RootSessions"
+  ]
+}
+
 # Delegate Centralised IAM to organisation-security
 resource "aws_organizations_delegated_administrator" "iam_organisation_security" {
   account_id        = aws_organizations_account.organisation_security.id
