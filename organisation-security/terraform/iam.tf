@@ -89,18 +89,7 @@ resource "aws_iam_user" "xsiam_integration" {
   tags          = {}
 }
 
-resource "aws_iam_user_policy" "xsiam_integration_assume_readonly" {
-  name = "AssumeReadOnlyRole"
-  user = aws_iam_user.xsiam_integration.name
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect   = "Allow"
-        Action   = "sts:AssumeRole"
-        Resource = aws_iam_role.read_only.arn
-      }
-    ]
-  })
+resource "aws_iam_user_policy_attachment" "xsiam_integration" {
+  user       = aws_iam_user.xsiam_integration.name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
