@@ -11,8 +11,9 @@ data "aws_iam_policy_document" "read_only_role" {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${local.root_account_id}:root"]
+      type = "AWS"
+      identifiers = ["arn:aws:iam::${local.root_account_id}:root",
+      "arn:aws:iam::${local.organisation_security_account_id}:user/XsiamIntegration"]
     }
   }
 }

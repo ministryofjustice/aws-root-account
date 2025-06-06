@@ -75,3 +75,32 @@ data "aws_iam_policy_document" "oidc_assume_role_apply" {
     resources = ["*"]
   }
 }
+
+###########################
+# Xsiam Integration User #
+###########################
+
+# This will be used as a way for the Xsiam Security Hub Event Collector https://xsoar.pan.dev/docs/reference/integrations/aws-security-hub-event-collector 
+# to authenticate with the org-security account.
+resource "aws_iam_user" "xsiam_integration" {
+  name          = "XsiamIntegration"
+  path          = "/"
+  force_destroy = true
+  tags          = {}
+}
+
+resource "aws_iam_user_policy" "xsiam_integration_assume_readonly" {
+  name = "AssumeReadOnlyRole"
+  user = aws_iam_user.xsiam_integration.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "sts:AssumeRole"
+        Resource = aws_iam_role.read_only.arn
+      }
+    ]
+  })
+}
