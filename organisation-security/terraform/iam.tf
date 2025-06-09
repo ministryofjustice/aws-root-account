@@ -105,5 +105,5 @@ data "aws_iam_policy_document" "xsiam_integration" {
 }
 resource "aws_iam_user_policy_attachment" "xsiam_integration" {
   user       = aws_iam_user.xsiam_integration.name
-  policy_arn = aws_iam_access_policy.xsiam_integration.arn
+  policy_arn = aws_iam_policy.xsiam_integration.arn
 }
