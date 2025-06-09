@@ -89,9 +89,8 @@ resource "aws_iam_user" "xsiam_integration" {
   tags          = {}
 }
 
-resource "aws_iam_access_policy" "xsiam_integration" {
+resource "aws_iam_policy" "xsiam_integration" {
   name   = "XsiamIntegrationAccessPolicy"
-  user   = aws_iam_user.xsiam_integration.name
   policy = data.aws_iam_policy_document.xsiam_integration.json
 }
 
