@@ -89,7 +89,21 @@ resource "aws_iam_user" "xsiam_integration" {
   tags          = {}
 }
 
+resource "aws_iam_policy" "xsiam_integration" {
+  name   = "XsiamIntegrationAccessPolicy"
+  policy = data.aws_iam_policy_document.xsiam_integration.json
+}
+
+data "aws_iam_policy_document" "xsiam_integration" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "securityhub:GetFindings"
+    ]
+    resources = ["*"]
+  }
+}
 resource "aws_iam_user_policy_attachment" "xsiam_integration" {
   user       = aws_iam_user.xsiam_integration.name
-  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  policy_arn = aws_iam_policy.xsiam_integration.arn
 }
