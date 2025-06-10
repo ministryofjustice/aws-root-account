@@ -130,16 +130,7 @@ variable "finance_team" {
   default = [
     # Finance business partners
     "NickiStowe",
-    "CherylJackson",
-
-    # Digital finance team
-    "TraceyCampbell",
-    "DavidCooper",
-    "MarkAstley",
-    "AkaashRameshan",
-
-    # Accounting
-    "ColinMcDonald",
+    "MatthewTansini",
   ]
 }
 
