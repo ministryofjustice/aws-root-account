@@ -18,49 +18,58 @@ locals {
   }
   business_units = {
     "Central Digital" = {
-      businss_unit_tag_values = ["Central Digital", "central-digital", "CJSE"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Central Digital", "central-digital", "CJSE"], v.business_unit)]
+      business_unit_tag_values      = ["Central Digital", "central-digital", "CJSE"]
+      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
+      untagged_aws_account_prefixes = ["analytical-platform-", "cdpt-chaps-", "cdpt-ifs-", "data-platform-", "genesys-call-centre-data-"]
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Central Digital", "central-digital", "CJSE"], v.business_unit)]
     },
     "CICA" = {
-      businss_unit_tag_values = ["CICA", "cica"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.cica.accounts[*].id
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["CICA", "cica"], v.business_unit)]
+      business_unit_tag_values      = ["CICA", "cica"]
+      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.cica.accounts[*].id
+      untagged_aws_account_prefixes = []
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["CICA", "cica"], v.business_unit)]
     },
     "HMCTS" = {
-      businss_unit_tag_values = ["HMCTS"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmcts.accounts[*].id
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMCTS"], v.business_unit)]
+      business_unit_tag_values      = ["HMCTS"]
+      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.hmcts.accounts[*].id
+      untagged_aws_account_prefixes = []
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMCTS"], v.business_unit)]
     },
     "HMPPS" = {
-      businss_unit_tag_values = ["HMPPS", "hmpps"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)]
+      business_unit_tag_values      = ["HMPPS", "hmpps"]
+      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
+      untagged_aws_account_prefixes = []
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)]
     },
     "LAA" = {
-      businss_unit_tag_values = ["LAA", "laa", "legal-aid-agency"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["LAA", "laa", "legal-aid-agency"], v.business_unit)]
+      business_unit_tag_values      = ["LAA", "laa", "legal-aid-agency"]
+      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id
+      untagged_aws_account_prefixes = []
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["LAA", "laa", "legal-aid-agency"], v.business_unit)]
     },
     "OPG" = {
-      businss_unit_tag_values = ["OPG", "opg"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.opg.accounts[*].id
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["OPG", "opg"], v.business_unit)]
+      business_unit_tag_values      = ["OPG", "opg"]
+      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.opg.accounts[*].id
+      untagged_aws_account_prefixes = []
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["OPG", "opg"], v.business_unit)]
     },
     "Platforms" = {
-      businss_unit_tag_values = ["Platforms", "Platform", "platforms"]
-      aws_accounts            = []
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Platforms", "Platform", "platforms"], v.business_unit)]
+      business_unit_tag_values      = ["Platforms", "Platform", "platforms"]
+      aws_descendant_accounts       = []
+      untagged_aws_account_prefixes = ["Security Operations Pre Production"]
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Platforms", "Platform", "platforms"], v.business_unit)]
     },
     "Technology Services" = {
-      businss_unit_tag_values = ["Technology Services", "technology-services"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.technology_services.accounts[*].id
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Technology Services", "technology-services"], v.business_unit)]
+      business_unit_tag_values      = ["Technology Services", "technology-services"]
+      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.technology_services.accounts[*].id
+      untagged_aws_account_prefixes = ["moj-network-operations-centre-"]
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Technology Services", "technology-services"], v.business_unit)]
     },
     "YJB" = {
-      businss_unit_tag_values = ["YJB", "yjb"]
-      aws_accounts            = data.aws_organizations_organizational_unit_descendant_accounts.yjb.accounts[*].id
-      tagged_aws_accounts     = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["YJB", "yjb"], v.business_unit)]
+      business_unit_tag_values      = ["YJB", "yjb"]
+      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.yjb.accounts[*].id
+      untagged_aws_account_prefixes = []
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["YJB", "yjb"], v.business_unit)]
     },
   }
 }
@@ -76,9 +85,9 @@ resource "aws_ce_cost_category" "business_unit" {
   rule_version    = "CostCategoryExpression.v1"
   effective_start = "2025-02-01T00:00:00Z"
 
-  # Rule 1: Prioritize the Resources `business-unit` Tag for Allocating Cost
+  # Rule 1: Prioritize the Resource `business-unit` Cost Allocation Tag to assign cost
   dynamic "rule" {
-    for_each = { for k, v in local.business_units : k => v if length(v.businss_unit_tag_values) > 0 }
+    for_each = { for k, v in local.business_units : k => v if length(v.business_unit_tag_values) > 0 }
     content {
       type  = "REGULAR"
       value = rule.key
@@ -86,8 +95,28 @@ resource "aws_ce_cost_category" "business_unit" {
       rule {
         tags {
           key           = "business-unit"
-          values        = rule.value.businss_unit_tag_values
+          values        = rule.value.business_unit_tag_values
           match_options = ["EQUALS"]
+        }
+      }
+    }
+  }
+
+  # Rule 1.5: Temporary Correction: Assign Cost Category Based on Account Prefixes
+  # Due to organisational structure change some accounts currently have the wrong `business-unit` tag
+  # so Rule 2 would assign cost incorrectly. This temporary rule allows us to correctly assign cost
+  # and give teams time to correct their account `business-unit` tags.
+  dynamic "rule" {
+    for_each = { for k, v in local.business_units : k => v if length(v.untagged_aws_account_prefixes) > 0 }
+    content {
+      type  = "REGULAR"
+      value = rule.key
+
+      rule {
+        dimension {
+          key           = "LINKED_ACCOUNT_NAME"
+          values        = rule.value.untagged_aws_account_prefixes
+          match_options = ["STARTS_WITH"]
         }
       }
     }
@@ -110,9 +139,9 @@ resource "aws_ce_cost_category" "business_unit" {
     }
   }
 
-  # Rule 3: If No `business-unit` Tag, Assign Cost Based on the Organizational Unit
+  # Rule 3: If No Account `business-unit` Tag, Assign Cost Based on the Organizational Unit
   dynamic "rule" {
-    for_each = { for k, v in local.business_units : k => v if length(v.aws_accounts) > 0 }
+    for_each = { for k, v in local.business_units : k => v if length(v.aws_descendant_accounts) > 0 }
     content {
       type  = "REGULAR"
       value = rule.key
@@ -120,7 +149,7 @@ resource "aws_ce_cost_category" "business_unit" {
       rule {
         dimension {
           key           = "LINKED_ACCOUNT"
-          values        = rule.value.aws_accounts
+          values        = rule.value.aws_descendant_accounts
           match_options = ["EQUALS"]
         }
       }
