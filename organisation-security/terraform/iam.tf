@@ -98,7 +98,10 @@ data "aws_iam_policy_document" "xsiam_integration" {
   statement {
     effect = "Allow"
     actions = [
-      "securityhub:GetFindings"
+      "securityhub:GetFindings",
+      "guardduty:ListDetectors",
+      "guardduty:ListFindings",
+      "guardduty:GetFindings"
     ]
     resources = ["*"]
   }
