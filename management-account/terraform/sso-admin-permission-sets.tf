@@ -300,6 +300,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "cloudformation:DeleteStack",
       "cloudformation:DeleteStackInstances",
       "cloudformation:DeleteStackSet",
+      "cloudformation:CreateStackInstances",
       "cloudwatch:DisableAlarmActions",
       "cloudwatch:EnableAlarmActions",
       "cloudwatch:PutDashboard",
