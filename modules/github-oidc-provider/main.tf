@@ -141,6 +141,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
     actions = [
       "account:*AlternateContact",
       "apigateway:*",
+      "backup:UpdateGlobalSettings",
       "bcm-data-exports:*",
       "budgets:*",
       "ce:*",
