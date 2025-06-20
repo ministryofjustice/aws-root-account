@@ -3,7 +3,7 @@ resource "aws_backup_global_settings" "eu_west_1" {
 
   global_settings = {
     "isCrossAccountBackupEnabled" = "true"
-    "isMpaEnabled"                = "true"
+    "isMpaEnabled"                = "false"
   }
 
   depends_on = [aws_organizations_organization.default]
