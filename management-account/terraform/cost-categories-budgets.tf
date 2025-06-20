@@ -3,6 +3,7 @@ resource "aws_ce_cost_category" "budgets" {
   rule_version = "CostCategoryExpression.v1"
 
   rule {
+    type  = "REGULAR" 
     value = "OPG"
 
     rule {
@@ -15,6 +16,7 @@ resource "aws_ce_cost_category" "budgets" {
   }
 
   rule {
+    type  = "REGULAR" 
     value = "Electronic Monitoring"
 
     rule {
@@ -27,6 +29,7 @@ resource "aws_ce_cost_category" "budgets" {
   }
 
   rule {
+    type  = "REGULAR" 
     value = "Engineering"
 
     rule {
