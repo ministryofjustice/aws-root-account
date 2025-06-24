@@ -23,7 +23,7 @@ resource "aws_ce_cost_category" "budgets" {
       dimension {
         key           = "LINKED_ACCOUNT_NAME"
         match_options = ["STARTS_WITH"]
-        values        = ["Electronic Monitoring*", "electronic-monitring*"]
+        values        = ["Electronic Monitoring", "electronic-monitring"]
       }
     }
   }
