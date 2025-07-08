@@ -85,24 +85,7 @@ resource "aws_ce_cost_category" "business_unit" {
   rule_version    = "CostCategoryExpression.v1"
   effective_start = "2025-02-01T00:00:00Z"
 
-  # Rule 1: Prioritize the Resource `business-unit` Cost Allocation Tag to assign cost
-  dynamic "rule" {
-    for_each = { for k, v in local.business_units : k => v if length(v.business_unit_tag_values) > 0 }
-    content {
-      type  = "REGULAR"
-      value = rule.key
-
-      rule {
-        tags {
-          key           = "business-unit"
-          values        = rule.value.business_unit_tag_values
-          match_options = ["EQUALS"]
-        }
-      }
-    }
-  }
-
-  # Rule 1.5: Temporary Correction: Assign Cost Category Based on Account Prefixes
+  # Rule 0: Temporary Correction: Assign Cost Category Based on Account Prefixes
   # Due to organisational structure change some accounts currently have the wrong `business-unit` tag
   # so Rule 2 would assign cost incorrectly. This temporary rule allows us to correctly assign cost
   # and give teams time to correct their account `business-unit` tags.
@@ -117,6 +100,23 @@ resource "aws_ce_cost_category" "business_unit" {
           key           = "LINKED_ACCOUNT_NAME"
           values        = rule.value.untagged_aws_account_prefixes
           match_options = ["STARTS_WITH"]
+        }
+      }
+    }
+  }
+
+  # Rule 1: Prioritize the Resource `business-unit` Cost Allocation Tag to assign cost
+  dynamic "rule" {
+    for_each = { for k, v in local.business_units : k => v if length(v.business_unit_tag_values) > 0 }
+    content {
+      type  = "REGULAR"
+      value = rule.key
+
+      rule {
+        tags {
+          key           = "business-unit"
+          values        = rule.value.business_unit_tag_values
+          match_options = ["EQUALS"]
         }
       }
     }
