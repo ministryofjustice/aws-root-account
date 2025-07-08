@@ -87,7 +87,7 @@ resource "aws_ce_cost_category" "business_unit" {
 
   # Rule 0: Temporary Correction: Assign Cost Category Based on Account Prefixes
   # Due to organisational structure change some accounts currently have the wrong `business-unit` tag
-  # so Rule 2 would assign cost incorrectly. This temporary rule allows us to correctly assign cost
+  # and resource level BU tag for MP created accounts. This temporary rule allows us to correctly assign cost
   # and give teams time to correct their account `business-unit` tags.
   dynamic "rule" {
     for_each = { for k, v in local.business_units : k => v if length(v.untagged_aws_account_prefixes) > 0 }
@@ -105,7 +105,7 @@ resource "aws_ce_cost_category" "business_unit" {
     }
   }
 
-  # Rule 1: Prioritize the Resource `business-unit` Cost Allocation Tag to assign cost
+  # Rule 1: Use the Resource `business-unit` Cost Allocation Tag to assign cost
   dynamic "rule" {
     for_each = { for k, v in local.business_units : k => v if length(v.business_unit_tag_values) > 0 }
     content {
