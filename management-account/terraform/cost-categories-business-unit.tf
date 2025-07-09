@@ -156,3 +156,4 @@ resource "aws_ce_cost_category" "business_unit" {
     }
   }
 }
+
