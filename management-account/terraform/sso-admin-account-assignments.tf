@@ -3,11 +3,12 @@ locals {
     {
       github_team        = "aws-root-account-admin-team",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id,
-        aws_organizations_account.organisation_security.id,
-        aws_organizations_account.organisation_logging.id,
-      ]
+      account_ids        = data.aws_organizations_organizational_unit_descendant_accounts.all_accounts.accounts[*].id
+    },
+    {
+      github_team        = "aws-root-account-admin-team",
+      permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
+      account_ids        = data.aws_organizations_organizational_unit_descendant_accounts.all_accounts.accounts[*].id
     },
     {
       github_team        = "aws-root-account-admin-team",
@@ -15,35 +16,6 @@ locals {
       account_ids = [
         aws_organizations_organization.default.master_account_id,
         aws_organizations_account.organisation_security.id,
-      ]
-    },
-    {
-      github_team        = "aws-root-account-admin-team",
-      permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id,
-        aws_organizations_account.organisation_security.id,
-      ]
-    },
-    {
-      github_team        = "aws-root-account-admin-team",
-      permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id
-      ]
-    },
-    {
-      github_team        = "aws-root-account-admin-team",
-      permission_set_arn = aws_ssoadmin_permission_set.view_only_access.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id
-      ]
-    },
-    {
-      github_team        = "aws-root-account-admin-team",
-      permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id
       ]
     },
     {
@@ -513,4 +485,10 @@ resource "aws_ssoadmin_account_assignment" "github_team_access" {
   principal_type     = "GROUP"
   target_id          = each.value.account_id
   target_type        = "AWS_ACCOUNT"
+}
+
+data "aws_organizations_organization" "org" {}
+
+data "aws_organizations_organizational_unit_descendant_accounts" "all_accounts" {
+  parent_id = data.aws_organizations_organization.org.roots[0].id
 }
