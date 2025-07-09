@@ -487,8 +487,3 @@ resource "aws_ssoadmin_account_assignment" "github_team_access" {
   target_type        = "AWS_ACCOUNT"
 }
 
-data "aws_organizations_organization" "org" {}
-
-data "aws_organizations_organizational_unit_descendant_accounts" "all_accounts" {
-  parent_id = data.aws_organizations_organization.org.roots[0].id
-}
