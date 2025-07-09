@@ -3,12 +3,12 @@ locals {
     {
       github_team        = "aws-root-account-admin-team",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids        = data.aws_organizations_organizational_unit_descendant_accounts.all_accounts.accounts[*].id
+      account_ids        = local.accounts.active_only_account_ids
     },
     {
       github_team        = "aws-root-account-admin-team",
       permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
-      account_ids        = data.aws_organizations_organizational_unit_descendant_accounts.all_accounts.accounts[*].id
+      account_ids        = local.accounts.active_only_account_ids
     },
     {
       github_team        = "aws-root-account-admin-team",
