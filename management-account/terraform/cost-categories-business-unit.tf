@@ -105,7 +105,7 @@ resource "aws_ce_cost_category" "business_unit" {
     }
   }
 
-  # Rule 1: Prioritize the Resource `business-unit` Cost Allocation Tag to assign cost
+  # Rule 1: Use the Resource `business-unit` Cost Allocation Tag to assign cost
   dynamic "rule" {
     for_each = { for k, v in local.business_units : k => v if length(v.business_unit_tag_values) > 0 }
     content {
