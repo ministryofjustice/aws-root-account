@@ -20,7 +20,7 @@ locals {
     "Central Digital" = {
       business_unit_tag_values      = ["Central Digital", "central-digital", "CJSE"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
-      untagged_aws_account_prefixes = ["analytical-platform-", "cdpt-chaps-", "cdpt-ifs-", "data-platform-", "genesys-call-centre-data-"]
+      untagged_aws_account_prefixes = ["analytical-platform-", "cdpt-chaps-", "cdpt-ifs-", "data-platform-", "genesys-call-centre-data-", "bichard7"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Central Digital", "central-digital", "CJSE"], v.business_unit)]
     },
     "CICA" = {
@@ -38,13 +38,13 @@ locals {
     "HMPPS" = {
       business_unit_tag_values      = ["HMPPS", "hmpps"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
-      untagged_aws_account_prefixes = []
+      untagged_aws_account_prefixes = ["delius", "electronic-monitoring", "digital-prison", "nomis"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)]
     },
     "LAA" = {
       business_unit_tag_values      = ["LAA", "laa", "legal-aid-agency"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id
-      untagged_aws_account_prefixes = []
+      untagged_aws_account_prefixes = ["mlra", "ccms", "laa-ccms"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["LAA", "laa", "legal-aid-agency"], v.business_unit)]
     },
     "OPG" = {
@@ -68,7 +68,7 @@ locals {
     "YJB" = {
       business_unit_tag_values      = ["YJB", "yjb"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.yjb.accounts[*].id
-      untagged_aws_account_prefixes = []
+      untagged_aws_account_prefixes = ["youth-justice"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["YJB", "yjb"], v.business_unit)]
     },
   }
