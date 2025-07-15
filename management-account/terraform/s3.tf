@@ -465,3 +465,42 @@ module "focus_reports_s3_bucket" {
     }
   }
 }
+
+# moj-cur-reports-greenops without kms 
+module "cur_v2_hourly_without_kms" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "4.3.0"
+
+  bucket = "moj-cur-reports-v2-hourly-witout-kms"
+
+  force_destroy = true
+
+  attach_deny_insecure_transport_policy = true
+  attach_policy                         = true
+
+  policy = templatefile("${path.module}/templates/moj-cur-v2-hourly-without-kms-bucket-policy.json", {})
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  versioning = {
+    status = "Enabled"
+  }
+
+  lifecycle_rule = [
+    {
+      id      = "DeleteOldVersions"
+      enabled = true
+      noncurrent_version_expiration = {
+        days = 1
+      }
+    }
+  ]
+}
