@@ -13,8 +13,8 @@
         "s3:GetReplicationConfiguration"
       ],
       "Resource": [
-        "arn:aws:s3:::moj-cur-reports-v2-hourly-witout-kms/*",
-        "arn:aws:s3:::moj-cur-reports-v2-hourly-witout-kms"
+        "arn:aws:s3:::moj-cur-reports-v2-hourly-without-kms/*",
+        "arn:aws:s3:::moj-cur-reports-v2-hourly-without-kms"
       ],
       "Principal": {
         "Service": ["bcm-data-exports.amazonaws.com"]
@@ -30,7 +30,7 @@
         "s3:ReplicateTags",
         "s3:ReplicateDelete"
       ],
-      "Resource": ["arn:aws:s3:::moj-cur-reports-v2-hourly-witout-kms"],
+      "Resource": ["arn:aws:s3:::moj-cur-reports-v2-hourly-without-kms"],
       "Principal": {
         "Service": ["bcm-data-exports.amazonaws.com"]
       }

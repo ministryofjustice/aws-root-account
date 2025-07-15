@@ -473,7 +473,7 @@ module "cur_v2_hourly_without_kms" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.3.0"
 
-  bucket = "moj-cur-reports-v2-hourly-witout-kms"
+  bucket = "moj-cur-reports-v2-hourly-without-kms"
 
   force_destroy = true
 
