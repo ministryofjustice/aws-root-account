@@ -243,24 +243,6 @@ data "aws_iam_policy_document" "cur_reports_s3_bucket" {
       identifiers = ["arn:aws:iam::386209384616:root"]
     }
   }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:GetObject",
-      "s3:GetObjectTagging",
-      "s3:ListBucket"
-    ]
-    resources = [
-      "arn:aws:s3:::moj-cur-reports",
-      "arn:aws:s3:::moj-cur-reports/*"
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::083957762049:root"]
-    }
-  }
 }
 
 # moj-cur-reports-quicksight
