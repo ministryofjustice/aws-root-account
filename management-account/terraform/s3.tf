@@ -547,12 +547,11 @@ module "cur_reports_v2_hourly_ap_poc_s3_bucket" {
 
   replication_rules = [
     {
-      id                 = "replicate-cur-v2-reports"
-      prefix             = "moj-cost-and-usage-reports/"
-      status             = "Enabled"
-      deletemarker       = "Enabled"
-      replica_kms_key_id = "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
-      metrics            = "Enabled"
+      id           = "replicate-cur-v2-reports"
+      prefix       = "moj-cost-and-usage-reports/"
+      status       = "Enabled"
+      deletemarker = "Enabled"
+      metrics      = "Enabled"
     }
   ]
 
