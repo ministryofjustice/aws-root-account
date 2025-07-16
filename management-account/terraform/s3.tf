@@ -544,8 +544,6 @@ module "cur_reports_v2_hourly_ap_poc_s3_bucket" {
   enable_replication     = true
   replication_bucket_arn = "arn:aws:s3:::coat-production-cur-v2-hourly"
   replication_role_arn   = module.cur_reports_v2_hourly_ap_poc_s3_bucket.replication_role_arn
-  # destination_kms_arn    = "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
-  # source_kms_arn         = module.cur_v2_s3_kms.key_arn
 
   replication_rules = [
     {
@@ -561,7 +559,6 @@ module "cur_reports_v2_hourly_ap_poc_s3_bucket" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        # kms_master_key_id = module.cur_v2_s3_kms.key_arn
         sse_algorithm = "AES256"
       }
     }
