@@ -542,7 +542,7 @@ module "cur_reports_v2_hourly_ap_poc_s3_bucket" {
   enable_versioning = true
 
   enable_replication     = true
-  replication_bucket_arn = "arn:aws:s3:::coat-production-cur-v2-hourly"
+  replication_bucket_arn = "arn:aws:s3:::mojap-coat-cur-v2-hourly"
   replication_role_arn   = module.cur_reports_v2_hourly_ap_poc_s3_bucket.replication_role_arn
 
   replication_rules = [
