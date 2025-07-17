@@ -423,6 +423,71 @@ data "aws_iam_policy_document" "focus_reports_s3_bucket" {
   }
 }
 
+data "aws_iam_policy_document" "cur_reports_v2_hourly_ap_poc_s3_policy" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketPolicy",
+      "s3:GetBucketAcl"
+    ]
+    resources = ["arn:aws:s3:::moj-cur-reports-v2-hourly-replication-to-ap-poc"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::386209384616:root"]
+    }
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["arn:aws:s3:::moj-cur-reports-v2-hourly-replication-to-ap-poc/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::386209384616:root"]
+    }
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetBucketLocation",
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-cur-reports-v2-hourly-replication-to-ap-poc",
+      "arn:aws:s3:::moj-cur-reports-v2-hourly-replication-to-ap-poc/*"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["bcm-data-exports.amazonaws.com"]
+    }
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:GetObjectTagging"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-cur-reports-v2-hourly-replication-to-ap-poc",
+      "arn:aws:s3:::moj-cur-reports-v2-hourly-replication-to-ap-poc/*"
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::279191903737:root"]
+    }
+  }
+}
+
+
 # cf-template-storage
 module "cf_template_storage" {
   source          = "../../modules/s3"
@@ -461,6 +526,40 @@ module "focus_reports_s3_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = module.focus_s3_kms.key_arn
         sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}
+
+# moj-cur-reports-greenops without kms for AP PoC 
+module "cur_reports_v2_hourly_ap_poc_s3_bucket" {
+  source = "../../modules/s3"
+
+  bucket_name       = "moj-cur-reports-v2-hourly-replication-to-ap-poc"
+  force_destroy     = true
+  attach_policy     = true
+  policy            = data.aws_iam_policy_document.cur_reports_v2_hourly_ap_poc_s3_policy.json
+  enable_versioning = true
+
+  enable_replication     = true
+  replication_bucket_arn = "arn:aws:s3:::mojap-coat-cur-v2-hourly"
+  replication_role_arn   = module.cur_reports_v2_hourly_ap_poc_s3_bucket.replication_role_arn
+
+  replication_rules = [
+    {
+      id                 = "replicate-cur-v2-reports"
+      prefix             = "moj-cost-and-usage-reports/"
+      status             = "Enabled"
+      deletemarker       = "Enabled"
+      replica_kms_key_id = ""
+      metrics            = "Enabled"
+    }
+  ]
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256"
       }
     }
   }
