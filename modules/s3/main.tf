@@ -170,9 +170,12 @@ resource "aws_s3_bucket_replication_configuration" "default" {
       id     = rule.value.id
       status = rule.value.status
 
-      source_selection_criteria {
-        sse_kms_encrypted_objects {
-          status = try(rule.value.kms_encrypted_objects, "Enabled")
+      dynamic "source_selection_criteria" {
+        for_each = rule.value.kms_encrypted_objects == "Enabled" ? [1] : []
+        content {
+          sse_kms_encrypted_objects {
+            status = rule.value.kms_encrypted_objects
+          }
         }
       }
       filter {
@@ -183,8 +186,11 @@ resource "aws_s3_bucket_replication_configuration" "default" {
         metrics {
           status = rule.value.metrics
         }
-        encryption_configuration {
-          replica_kms_key_id = rule.value.replica_kms_key_id
+        dynamic "encryption_configuration" {
+          for_each = rule.value.replica_kms_key_id != "" ? [1] : []
+          content {
+            replica_kms_key_id = rule.value.replica_kms_key_id
+          }
         }
       }
       delete_marker_replication {
@@ -216,7 +222,7 @@ resource "aws_iam_role" "replication_role" {
 }
 
 resource "aws_iam_role_policy" "replication" {
-  count = var.enable_replication ? 1 : 0 # Attach policy only if replication is enabled
+  count = var.enable_replication && var.enable_replication_ap_poc ? 0 : 1 # Attach policy only if replication is enabled
 
   name = "${aws_iam_role.replication_role[count.index].name}-policy"
   role = aws_iam_role.replication_role[count.index].id
@@ -275,3 +281,48 @@ resource "aws_iam_role_policy" "replication" {
       ]
   })
 }
+
+
+resource "aws_iam_role_policy" "replication_ap_poc" {
+  count = var.enable_replication && var.enable_replication_ap_poc ? 1 : 0 # Attach policy only if replication is enabled
+
+  name = "${aws_iam_role.replication_role[count.index].name}-policy"
+  role = aws_iam_role.replication_role[count.index].id
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          Sid    = "SourceBucketPermissions",
+          Effect = "Allow",
+          Action = [
+            "s3:GetObjectVersionTagging",
+            "s3:GetObjectVersionAcl",
+            "s3:ListBucket",
+            "s3:GetObjectVersionForReplication",
+            "s3:GetReplicationConfiguration"
+          ],
+          Resource = [
+            "arn:aws:s3:::${var.bucket_name}/*",
+            "arn:aws:s3:::${var.bucket_name}"
+          ]
+        },
+        {
+          Sid    = "DestinationBucketPermissions",
+          Effect = "Allow",
+          Action = [
+            "s3:ReplicateObject",
+            "s3:ObjectOwnerOverrideToBucketOwner",
+            "s3:GetObjectVersionTagging",
+            "s3:ReplicateTags",
+            "s3:ReplicateDelete"
+          ],
+          Resource = [
+            "${var.replication_bucket_arn}/*",
+            "${var.replication_bucket_arn}"
+          ]
+        }
+      ]
+  })
+}
+
