@@ -222,7 +222,7 @@ resource "aws_iam_role" "replication_role" {
 }
 
 resource "aws_iam_role_policy" "replication" {
-  count = !(var.enable_replication && var.enable_replication_ap_poc) ? 1 : 0 # Attach policy only if replication is enabled
+  count = var.enable_replication && var.enable_replication_ap_poc == false ? 1 : 0 # Attach policy only if replication is enabled
 
   name = "${aws_iam_role.replication_role[count.index].name}-policy"
   role = aws_iam_role.replication_role[count.index].id
@@ -284,7 +284,7 @@ resource "aws_iam_role_policy" "replication" {
 
 
 resource "aws_iam_role_policy" "replication_ap_poc" {
-  count = var.enable_replication && var.enable_replication_ap_poc ? 1 : 0 # Attach policy only if replication is enabled
+  count = var.enable_replication && var.enable_replication_ap_poc == true ? 1 : 0 # Attach policy only if replication is enabled
 
   name = "${aws_iam_role.replication_role[count.index].name}-policy"
   role = aws_iam_role.replication_role[count.index].id
