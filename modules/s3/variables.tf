@@ -89,6 +89,12 @@ variable "enable_replication" {
   default     = false
 }
 
+variable "enable_replication_ap_poc" {
+  description = "Whether to enable cross-account replication without kms"
+  type        = bool
+  default     = false
+}
+
 variable "replication_bucket_arn" {
   description = "ARN of the destination bucket for replication"
   type        = string
