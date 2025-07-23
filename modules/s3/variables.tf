@@ -110,7 +110,7 @@ variable "replication_rules" {
     deletemarker          = string
     replica_kms_key_id    = string
     metrics               = string
-    kms_encrypted_objects = optional(string, "Enabled")
+    kms_encrypted_objects = string
   }))
   default = []
 }
