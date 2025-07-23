@@ -104,12 +104,12 @@ variable "replication_role_arn" {
 variable "replication_rules" {
   description = "Replication rules for the bucket"
   type = list(object({
-    id                    = string
-    prefix                = string
-    status                = string
-    deletemarker          = string
-    replica_kms_key_id    = string
-    metrics               = string
+    id                 = string
+    prefix             = string
+    status             = string
+    deletemarker       = string
+    replica_kms_key_id = string
+    metrics            = string
   }))
   default = []
 }
