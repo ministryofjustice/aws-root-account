@@ -120,6 +120,43 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_on_all_resource
   target_id = aws_organizations_organizational_unit.closed_accounts.id
 }
 
+resource "aws_organizations_policy" "deny_all_actions_accept_sso" {
+  name        = "Deny all actions on all resources except for SSO and Org roles"
+  description = "Denies the ability to do anything within an AWS account"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.deny_all_actions_accept_sso.json
+}
+
+data "aws_iam_policy_document" "deny_all_actions_accept_sso" {
+  statement {
+    effect    = "Deny"
+    actions   = ["*"]
+    resources = ["*"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/AWSReservedSSO_*",
+        "arn:aws:iam::*:role/OrganizationAccountAccessRole",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/eu-west-2/AWSReservedSSO_*",
+        "arn:aws:iam::*:role/DeloitteRole"
+      ]
+    }
+  }
+}
+
+# Attach policy to disabled accounts
+resource "aws_organizations_policy_attachment" "disabled_accounts" {
+  policy_id = aws_organizations_policy.deny_all_actions_accept_sso.id
+  target_id = aws_organizations_organizational_unit.disabled_accounts.id
+}
+
 ##############################################
 # Deny non-EU and non-"us-east-1" operations #
 ##############################################
@@ -158,6 +195,9 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
       variable = "aws:RequestedRegion"
       values = [
         "eu-central-1", # Europe (Frankfurt)
+        "eu-north-1",   # Europe (Stockholm)
+        "eu-south-1",   # Europe (Milan)
+        "eu-south-2",   # Europe (Spain)
         "eu-west-1",    # Europe (Ireland)
         "eu-west-2",    # Europe (London)
         "eu-west-3",    # Europe (Paris)
@@ -227,6 +267,24 @@ data "aws_iam_policy_document" "deny_non_eu_non_us_east_1_operations" {
       "account:DisableRegion"
     ]
     resources = ["*"]
+  }
+
+  # Deny everything except Amazon Bedrock in specific EU regions (exluding eu-west-1 and eu-west-2 as these are our default regions)
+  statement {
+    effect      = "Deny"
+    not_actions = ["bedrock:*"]
+    resources   = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:RequestedRegion"
+      values = [
+        # "eu-central-1", # Europe (Frankfurt)
+        "eu-north-1", # Europe (Stockholm)
+        "eu-south-1", # Europe (Milan)
+        "eu-south-2", # Europe (Spain)
+        # "eu-west-3"     # Europe (Paris)
+      ]
+    }
   }
 }
 
@@ -309,14 +367,6 @@ resource "aws_organizations_policy" "modernisation_platform_member_ou_scp" {
 }
 
 data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
-  # Deny creation of peering connections anywhere
-  statement {
-    effect = "Deny"
-    actions = [
-      "ec2:CreateVpcPeeringConnection",
-    ]
-    resources = ["*"]
-  }
   # Deny creation of VPCs or Subnets outside of eu-west-2
   statement {
     effect = "Deny"
@@ -382,4 +432,38 @@ resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou
 
   target_id = each.value
   policy_id = aws_organizations_policy.modernisation_platform_member_ou_scp.id
+}
+
+
+# LAA Deny actions
+resource "aws_organizations_policy" "deny_all_actions_by_users" {
+  name        = "Deny all actions by users"
+  description = "Denies the ability to do anything with a user"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.deny_all_actions_by_users.json
+}
+
+data "aws_iam_policy_document" "deny_all_actions_by_users" {
+  statement {
+    effect    = "Deny"
+    actions   = ["*"]
+    resources = ["*"]
+    condition {
+      test     = "StringLike"
+      variable = "aws:PrincipalArn"
+      values   = ["arn:aws:iam::*:user/*"]
+    }
+  }
+}
+
+# Attach policy to laa production
+resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
+  policy_id = aws_organizations_policy.deny_all_actions_by_users.id
+  target_id = aws_organizations_account.laa_production.id
 }

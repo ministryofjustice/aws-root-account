@@ -25,6 +25,15 @@ resource "aws_organizations_organizational_unit" "closed_accounts" {
   tags      = {}
 }
 
+#####################
+# Disabled accounts #
+#####################
+resource "aws_organizations_organizational_unit" "disabled_accounts" {
+  name      = "Disabled accounts"
+  parent_id = aws_organizations_organization.default.roots[0].id
+  tags      = {}
+}
+
 #########
 # HMCTS #
 #########

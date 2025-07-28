@@ -36,7 +36,12 @@ locals {
       for account in aws_organizations_organization.default.accounts :
       account.name => account.id
       if account.status == "ACTIVE"
-    }
+    },
+    active_only_account_ids : [
+      for account in aws_organizations_organization.default.accounts :
+      account.id
+      if account.status == "ACTIVE"
+    ],
   }
 
   # Modernisation Platform account IDs
@@ -132,4 +137,15 @@ locals {
     "stack",
     "Stack"
   ]
+  # LAA Data Location locals
+
+
+  laa_lz_data_locations = try(jsondecode(data.aws_secretsmanager_secret_version.laa_lz_data_locations_version.secret_string).locations, [])
+  laa_lz_data_locations_resources = flatten([
+    for location in local.laa_lz_data_locations : [
+      "arn:aws:s3:::${location}",
+      "arn:aws:s3:::${location}/*"
+    ]
+  ])
 }
+

@@ -96,7 +96,34 @@ data "aws_secretsmanager_secret_version" "azure_aws_connectivity_details" {
   secret_id = data.aws_secretsmanager_secret.azure_aws_connectivity_details.id
 }
 
-resource "aws_secretsmanager_secret" "aws_sso_entraid_integration" {
-  name        = "aws-sso-entraid-integration"
-  description = "Azure client ID and secret for the Ministry of Justice owned OAuth app for AWS SSO"
+# LAA-Specific Secrets
+
+resource "aws_secretsmanager_secret" "laa_lz_data_locations" {
+  name        = "laa-landing-zone-data-locations"
+  description = "LAA Landing Zone Data Locations"
+}
+
+resource "aws_secretsmanager_secret_version" "laa_lz_data_locations" {
+  secret_id = aws_secretsmanager_secret.laa_lz_data_locations.id
+  secret_string = jsonencode({
+    locations = [
+      "dummy"
+    ]
+  })
+
+  lifecycle {
+    ignore_changes = [
+      secret_string
+    ]
+  }
+}
+
+# Retrieving LAA Existing Secret
+
+data "aws_secretsmanager_secret" "laa_lz_data_locations" {
+  name = "laa-landing-zone-data-locations"
+}
+
+data "aws_secretsmanager_secret_version" "laa_lz_data_locations_version" {
+  secret_id = data.aws_secretsmanager_secret.laa_lz_data_locations.id
 }

@@ -73,3 +73,39 @@ resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
     }
   }
 }
+
+resource "aws_bcmdataexports_export" "focus_report" {
+  export {
+    name = "MOJ-FOCUS"
+    data_query {
+      query_statement = <<-EOF
+        SELECT AvailabilityZone, BilledCost, BillingAccountId, BillingAccountName, BillingCurrency, BillingPeriodEnd, 
+        BillingPeriodStart, ChargeCategory, ChargeClass, ChargeDescription, ChargeFrequency, ChargePeriodEnd, ChargePeriodStart, 
+        CommitmentDiscountCategory, CommitmentDiscountId, CommitmentDiscountName, CommitmentDiscountStatus, CommitmentDiscountType, 
+        ConsumedQuantity, ConsumedUnit, ContractedCost, ContractedUnitPrice, EffectiveCost, InvoiceIssuerName, ListCost, ListUnitPrice, 
+        PricingCategory, PricingQuantity, PricingUnit, ProviderName, PublisherName, RegionId, RegionName, ResourceId, ResourceName, 
+        ResourceType, ServiceCategory, ServiceName, SkuId, SkuPriceId, SubAccountId, SubAccountName, Tags, x_CostCategories, x_Discounts, 
+        x_Operation, x_ServiceCode, x_UsageType FROM FOCUS_1_0_AWS
+      EOF
+      table_configurations = {
+        FOCUS_1_0_AWS = {}
+      }
+    }
+    destination_configurations {
+      s3_destination {
+        s3_bucket = module.focus_reports_s3_bucket.bucket.bucket
+        s3_prefix = "moj-focus-reports"
+        s3_region = "eu-west-2"
+        s3_output_configurations {
+          overwrite   = "OVERWRITE_REPORT"
+          format      = "PARQUET"
+          compression = "PARQUET"
+          output_type = "CUSTOM"
+        }
+      }
+    }
+    refresh_cadence {
+      frequency = "SYNCHRONOUS"
+    }
+  }
+}
