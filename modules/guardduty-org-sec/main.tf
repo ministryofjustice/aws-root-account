@@ -10,13 +10,18 @@ resource "aws_guardduty_organization_configuration" "delegated_administrator" {
 
   detector_id                      = var.administrator_detector_id
   auto_enable_organization_members = var.auto_enable ? "NEW" : "NONE"
+}
 
-  # Auto-enable S3 logs to be analysed for new accounts in the AWS Organization
-  datasources {
-    s3_logs {
-      auto_enable = true
-    }
-  }
+######################################################################
+# Auto-enable S3 Logs for new accounts in the AWS Organization       #
+# This replaces the deprecated `datasources` block                   #
+######################################################################
+resource "aws_guardduty_organization_configuration_feature" "s3_logs" {
+  provider    = aws.delegated_administrator
+
+  detector_id = var.administrator_detector_id
+  name        = "S3_DATA_EVENTS"
+  auto_enable = "ALL"
 }
 
 #######################################################################
