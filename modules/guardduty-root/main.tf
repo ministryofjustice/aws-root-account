@@ -37,15 +37,16 @@ resource "aws_guardduty_detector" "delegated_administrator" {
   # Note that member accounts inherit this setting, so it'll be set for all member accounts at the value here.
   # See: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_cloudwatch.html#guardduty_findings_cloudwatch_notification_frequency
   finding_publishing_frequency = "FIFTEEN_MINUTES"
-
-  # Enable S3 logs to be analysed in GuardDuty
-  datasources {
-    s3_logs {
-      enable = true
-    }
-  }
-
+  
   tags = var.administrator_tags
+}
+
+# Enable S3 data event analysis via separate resource (replaces deprecated datasources block)
+resource "aws_guardduty_detector_feature" "s3_logs" {
+  provider    = aws.delegated_administrator
+  detector_id = aws_guardduty_detector.delegated_administrator.id
+  name        = "S3_DATA_EVENTS"
+  status      = "ENABLED"
 }
 
 #####################################
