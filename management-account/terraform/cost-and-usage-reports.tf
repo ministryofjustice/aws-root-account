@@ -51,4 +51,3 @@ resource "aws_cur_report_definition" "athena_integration" {
   s3_region = "eu-west-2"
   s3_prefix = "CUR-ATHENA"
 }
-
