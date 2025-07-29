@@ -14,4 +14,3 @@ import {
   to       = aws_ce_cost_allocation_tag.cost_allocation_tags[each.value]
   id       = each.value
 }
-

@@ -172,4 +172,3 @@ resource "aws_iam_user_group_membership" "xsoar_integration" {
     aws_iam_group.aws_organisations_listreadonly.name,
   ]
 }
-

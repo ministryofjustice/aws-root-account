@@ -211,7 +211,7 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_r
 
 module "modernisation_platform_github_actions_role" {
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v3.2.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=b40748ec162b446f8f8d282f767a85b6501fd192" # v4.0.0"
 
   github_repositories = ["ministryofjustice/modernisation-platform"]
   role_name           = "ModernisationPlatformGithubActionsRole"

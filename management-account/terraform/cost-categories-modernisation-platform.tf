@@ -15,4 +15,3 @@ resource "aws_ce_cost_category" "modernisation_platform" {
     }
   }
 }
-

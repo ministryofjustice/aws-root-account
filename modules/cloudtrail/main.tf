@@ -36,5 +36,5 @@ resource "aws_cloudtrail" "default" {
   is_organization_trail         = false
 
   kms_key_id     = aws_kms_key.cloudtrail.arn
-  sns_topic_name = trimprefix(aws_sns_topic.cloudtrail.arn, "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:")
+  sns_topic_name = trimprefix(aws_sns_topic.cloudtrail.arn, "arn:aws:sns:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:")
 }
