@@ -37,7 +37,7 @@ resource "aws_guardduty_detector" "delegated_administrator" {
   # Note that member accounts inherit this setting, so it'll be set for all member accounts at the value here.
   # See: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_cloudwatch.html#guardduty_findings_cloudwatch_notification_frequency
   finding_publishing_frequency = "FIFTEEN_MINUTES"
-  
+
   tags = var.administrator_tags
 }
 
