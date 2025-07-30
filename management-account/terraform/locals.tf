@@ -36,7 +36,12 @@ locals {
       for account in aws_organizations_organization.default.accounts :
       account.name => account.id
       if account.status == "ACTIVE"
-    }
+    },
+    active_only_account_ids : [
+      for account in aws_organizations_organization.default.accounts :
+      account.id
+      if account.status == "ACTIVE"
+    ],
   }
 
   # Modernisation Platform account IDs

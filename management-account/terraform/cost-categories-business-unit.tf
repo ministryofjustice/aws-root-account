@@ -20,7 +20,7 @@ locals {
     "Central Digital" = {
       business_unit_tag_values      = ["Central Digital", "central-digital", "CJSE"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
-      untagged_aws_account_prefixes = ["analytical-platform-", "cdpt-chaps-", "cdpt-ifs-", "data-platform-", "genesys-call-centre-data-"]
+      untagged_aws_account_prefixes = ["analytical-platform-", "cdpt-chaps-", "cdpt-ifs-", "data-platform-", "genesys-call-centre-data-", "bichard7"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Central Digital", "central-digital", "CJSE"], v.business_unit)]
     },
     "CICA" = {
@@ -38,13 +38,13 @@ locals {
     "HMPPS" = {
       business_unit_tag_values      = ["HMPPS", "hmpps"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
-      untagged_aws_account_prefixes = []
+      untagged_aws_account_prefixes = ["delius", "electronic-monitoring", "digital-prison", "nomis"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)]
     },
     "LAA" = {
       business_unit_tag_values      = ["LAA", "laa", "legal-aid-agency"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id
-      untagged_aws_account_prefixes = []
+      untagged_aws_account_prefixes = ["mlra", "ccms", "laa-ccms"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["LAA", "laa", "legal-aid-agency"], v.business_unit)]
     },
     "OPG" = {
@@ -68,7 +68,7 @@ locals {
     "YJB" = {
       business_unit_tag_values      = ["YJB", "yjb"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.yjb.accounts[*].id
-      untagged_aws_account_prefixes = []
+      untagged_aws_account_prefixes = ["youth-justice"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["YJB", "yjb"], v.business_unit)]
     },
   }
@@ -85,26 +85,9 @@ resource "aws_ce_cost_category" "business_unit" {
   rule_version    = "CostCategoryExpression.v1"
   effective_start = "2025-02-01T00:00:00Z"
 
-  # Rule 1: Prioritize the Resource `business-unit` Cost Allocation Tag to assign cost
-  dynamic "rule" {
-    for_each = { for k, v in local.business_units : k => v if length(v.business_unit_tag_values) > 0 }
-    content {
-      type  = "REGULAR"
-      value = rule.key
-
-      rule {
-        tags {
-          key           = "business-unit"
-          values        = rule.value.business_unit_tag_values
-          match_options = ["EQUALS"]
-        }
-      }
-    }
-  }
-
-  # Rule 1.5: Temporary Correction: Assign Cost Category Based on Account Prefixes
+  # Rule 0: Temporary Correction: Assign Cost Category Based on Account Prefixes
   # Due to organisational structure change some accounts currently have the wrong `business-unit` tag
-  # so Rule 2 would assign cost incorrectly. This temporary rule allows us to correctly assign cost
+  # and resource level BU tag for MP created accounts. This temporary rule allows us to correctly assign cost
   # and give teams time to correct their account `business-unit` tags.
   dynamic "rule" {
     for_each = { for k, v in local.business_units : k => v if length(v.untagged_aws_account_prefixes) > 0 }
@@ -117,6 +100,23 @@ resource "aws_ce_cost_category" "business_unit" {
           key           = "LINKED_ACCOUNT_NAME"
           values        = rule.value.untagged_aws_account_prefixes
           match_options = ["STARTS_WITH"]
+        }
+      }
+    }
+  }
+
+  # Rule 1: Use the Resource `business-unit` Cost Allocation Tag to assign cost
+  dynamic "rule" {
+    for_each = { for k, v in local.business_units : k => v if length(v.business_unit_tag_values) > 0 }
+    content {
+      type  = "REGULAR"
+      value = rule.key
+
+      rule {
+        tags {
+          key           = "business-unit"
+          values        = rule.value.business_unit_tag_values
+          match_options = ["EQUALS"]
         }
       }
     }
