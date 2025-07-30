@@ -21,7 +21,7 @@ jobs:
         working-directory: ./organisation-security/terraform
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
+      - uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
           role-to-assume: arn:aws:iam::${{secrets.AWS_SECURITY_ACCOUNT_ID}}:role/github-actions-apply
           role-session-name: GitHubActions
@@ -45,8 +45,10 @@ jobs:
 
       - name: Slack failure notification
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0 # v1.27.0
+        uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
         with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
           payload: |
             {
               "blocks": [
@@ -79,6 +81,3 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
