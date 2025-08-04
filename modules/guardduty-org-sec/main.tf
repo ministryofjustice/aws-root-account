@@ -6,8 +6,7 @@
 # Auto-enable GuardDuty for new accounts in the AWS Organization #
 ##################################################################
 resource "aws_guardduty_organization_configuration" "delegated_administrator" {
-  provider = aws.delegated_administrator
-
+  provider                         = aws.delegated_administrator
   detector_id                      = var.administrator_detector_id
   auto_enable_organization_members = var.auto_enable ? "NEW" : "NONE"
 }
@@ -17,8 +16,7 @@ resource "aws_guardduty_organization_configuration" "delegated_administrator" {
 # This replaces the deprecated `datasources` block                   #
 ######################################################################
 resource "aws_guardduty_organization_configuration_feature" "s3_logs" {
-  provider = aws.delegated_administrator
-
+  provider    = aws.delegated_administrator
   detector_id = var.administrator_detector_id
   name        = "S3_DATA_EVENTS"
   auto_enable = "NEW"
@@ -29,8 +27,7 @@ resource "aws_guardduty_organization_configuration_feature" "s3_logs" {
 #######################################################################
 # Note we are leaving installing the security agent add-on as a manual process
 resource "aws_guardduty_organization_configuration_feature" "eks_runtime_monitoring" {
-  provider = aws.delegated_administrator
-
+  provider    = aws.delegated_administrator
   detector_id = var.administrator_detector_id
   name        = "EKS_RUNTIME_MONITORING"
   auto_enable = "NEW"
@@ -46,7 +43,6 @@ resource "aws_guardduty_organization_configuration_feature" "eks_runtime_monitor
 ####################################
 resource "aws_guardduty_publishing_destination" "delegated_administrator" {
   provider        = aws.delegated_administrator
-
   detector_id     = var.administrator_detector_id
   destination_arn = var.destination_arn
   kms_key_arn     = var.kms_key_arn
@@ -57,7 +53,6 @@ resource "aws_guardduty_publishing_destination" "delegated_administrator" {
 ############################
 resource "aws_guardduty_threatintelset" "default" {
   provider    = aws.delegated_administrator
-
   activate    = var.enable_threatintelset
   detector_id = var.administrator_detector_id
   format      = "TXT"
