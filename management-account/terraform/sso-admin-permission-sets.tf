@@ -300,6 +300,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "cloudformation:DeleteStack",
       "cloudformation:DeleteStackInstances",
       "cloudformation:DeleteStackSet",
+      "cloudformation:CreateStackInstances",
       "cloudwatch:DisableAlarmActions",
       "cloudwatch:EnableAlarmActions",
       "cloudwatch:PutDashboard",
@@ -423,27 +424,6 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "dynamodb:DeleteItem"
     ]
     resources = ["arn:aws:dynamodb:eu-west-2:${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:table/modernisation-platform-terraform-state-lock"]
-  }
-  statement {
-    sid    = "ModPlatAccountsAllowMoveFromOUToRoot"
-    effect = "Allow"
-    actions = [
-      "organizations:MoveAccount"
-    ]
-    resources = [
-
-      # move will only succeed if the source OU is authorized below.
-      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:account/${aws_organizations_organization.default.id}/*",
-
-      # specific source OU we are allowing accounts to be moved from
-      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:ou/${aws_organizations_organization.default.id}/${aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id}",
-
-      # Any nested OUs under the parent OU
-      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:ou/${aws_organizations_organization.default.id}/*",
-
-      # Destination for moved account
-      "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:root/${aws_organizations_organization.default.id}/${aws_organizations_organization.default.roots[0].id}"
-    ]
   }
 }
 

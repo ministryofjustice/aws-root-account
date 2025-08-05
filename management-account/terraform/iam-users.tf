@@ -130,16 +130,7 @@ variable "finance_team" {
   default = [
     # Finance business partners
     "NickiStowe",
-    "CherylJackson",
-
-    # Digital finance team
-    "TraceyCampbell",
-    "DavidCooper",
-    "MarkAstley",
-    "AkaashRameshan",
-
-    # Accounting
-    "ColinMcDonald",
+    "MatthewTansini",
   ]
 }
 
@@ -181,4 +172,3 @@ resource "aws_iam_user_group_membership" "xsoar_integration" {
     aws_iam_group.aws_organisations_listreadonly.name,
   ]
 }
-

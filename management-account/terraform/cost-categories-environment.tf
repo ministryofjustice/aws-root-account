@@ -26,7 +26,6 @@ resource "aws_ce_cost_category" "environment" {
     }
   }
 
-
   rule {
     type  = "REGULAR"
     value = "No is-production Tag"
