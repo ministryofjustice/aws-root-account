@@ -227,7 +227,7 @@ locals {
       for account in local.organizations_organization.accounts :
       account.name => account.id
       if account.status == "ACTIVE"
-        && !contains(local.excluded_accounts, account.name)
+      && !contains(local.excluded_accounts, account.name)
     }
   }
 
