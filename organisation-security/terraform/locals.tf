@@ -216,7 +216,6 @@ locals {
     organizational_units = [
       local.ou_laa,
       local.ou_opg_digideps,
-      local.ou_hmcts_id,
     ]
   }
 
