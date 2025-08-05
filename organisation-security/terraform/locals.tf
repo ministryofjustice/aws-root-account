@@ -209,8 +209,7 @@ locals {
       if
       (
         account_name == "shared-services-dev" ||
-        account_name == "MoJ Digital Services" ||
-        account_name == "xhibit-portal-production"
+        account_name == "MoJ Digital Services"
       )
     ],
     organizational_units = [
