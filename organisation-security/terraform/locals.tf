@@ -1,4 +1,7 @@
 locals {
+
+  excluded_accounts = ["organisation-security", "xhibit-portal-production"]
+
   organizations_organization = data.terraform_remote_state.management_account.outputs.organizations_organization
 
   root_account_id = coalesce([
@@ -224,7 +227,7 @@ locals {
       for account in local.organizations_organization.accounts :
       account.name => account.id
       if account.status == "ACTIVE"
-        && !contains(["organisation-security", "my-excluded-account"], account.name)
+        && !contains(local.excluded_accounts, account.name)
     }
   }
 
