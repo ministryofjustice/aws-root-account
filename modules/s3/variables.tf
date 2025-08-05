@@ -125,4 +125,3 @@ variable "destination_kms_arn" {
   type        = string
   default     = ""
 }
-
