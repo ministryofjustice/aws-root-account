@@ -34,6 +34,12 @@ locals {
     if account.name == "Cloud Platform"
   ]...)
 
+  xhibit_portal_production_account_id = coalesce([
+    for account in local.organizations_organization.accounts :
+    account.id
+    if account.name == "xhibit-portal-production"
+  ]...)
+
   organisation_account_numbers = [for account in local.organizations_organization.accounts : account.id]
 
   # AWS Organizational Units
