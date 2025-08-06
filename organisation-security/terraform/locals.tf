@@ -185,8 +185,7 @@ locals {
     accounts = [
       for account_name, account_value in local.accounts.active_only_not_self :
       account_value
-      if
-      (
+      if !contains(local.excluded_accounts, account_name) && (
         account_name == "Legal Aid Agency" ||
         account_name == "LAA Development" ||
         account_name == "Youth Justice Framework Dev" ||
