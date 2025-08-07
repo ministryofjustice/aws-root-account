@@ -283,32 +283,101 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
   }
 }
 
-# moj-cur-reports-greenops
-module "cur_reports_v2_hourly_s3_bucket" {
-  source = "../../modules/s3"
+module "development_s3" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+  #checkov:skip=CKV_AWS_18:Access logging not enabled currently
+  #checkov:skip=CKV_AWS_21:Versioning is enabled, but not detected by Checkov
+  #checkov:skip=CKV_AWS_145:Bucket is encrypted with CMK KMS, but not detected by Checkov
+  #checkov:skip=CKV_AWS_300:Lifecycle configuration not enabled currently
+  #checkov:skip=CKV_AWS_144:Cross-region replication is not required currently
+  #checkov:skip=CKV2_AWS_6:Public access block is enabled, but not detected by Checkov
+  #checkov:skip=CKV2_AWS_61:Lifecycle configuration not enabled currently
+  #checkov:skip=CKV2_AWS_62:Bucket notifications not required currently
+  #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
-  bucket_name       = "moj-cur-reports-v2-hourly"
-  force_destroy     = true
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "5.2.0"
+
+  bucket        = "moj-cur-reports-v2-hourly"
+  force_destroy = true
   attach_policy     = true
   policy            = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
-  enable_versioning = true
 
-  enable_replication     = true
-  replication_bucket_arn = "arn:aws:s3:::coat-production-cur-v2-hourly"
-  replication_role_arn   = module.cur_reports_v2_hourly_s3_bucket.replication_role_arn
-  destination_kms_arn    = "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
-  source_kms_arn         = module.cur_v2_s3_kms.key_arn
+  versioning = {
+    enabled = true
+  }
 
-  replication_rules = [
-    {
-      id                 = "replicate-cur-v2-reports"
-      prefix             = "moj-cost-and-usage-reports/"
-      status             = "Enabled"
-      deletemarker       = "Enabled"
-      replica_kms_key_id = "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
-      metrics            = "Enabled"
-    }
-  ]
+  replication_configuration = {
+    role = module.cur_reports_v2_hourly_s3_bucket.replication_role_arn
+    rules = [
+      {
+        id                        = "replicate-cur-v2-reports"
+        prefix                    = "moj-cost-and-usage-reports/"
+        status                    = "Enabled"
+        delete_marker_replication = true
+
+        source_selection_criteria = {
+          sse_kms_encrypted_objects = {
+            enabled = true
+          }
+        }
+
+        destination = {
+          account_id    = "279191903737"
+          bucket        = "arn:aws:s3:::coat-production-cur-v2-hourly"
+          storage_class = "STANDARD"
+          access_control_translation = {
+            owner = "Destination"
+          }
+          encryption_configuration = {
+            replica_kms_key_id = "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
+          }
+          metrics = {
+            status  = "Enabled"
+            minutes = 15
+          }
+          replication_time = {
+            status  = "Enabled"
+            minutes = 15
+          }
+        }
+      },
+
+      {
+        id                        = "replicate-cur-v2-reports-mojap"
+        prefix                    = "mojap-cost-and-usage-reports/"
+        status                    = "Enabled"
+        delete_marker_replication = true
+
+        source_selection_criteria = {
+          sse_kms_encrypted_objects = {
+            enabled = true
+          }
+        }
+
+        destination = {
+          account_id    = "593291632749"
+          bucket        = "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly"
+          storage_class = "STANDARD"
+          access_control_translation = {
+            owner = "Destination"
+          }
+          encryption_configuration = {
+            replica_kms_key_id = "arn:aws:kms:eu-west-1:593291632749:key/0409ddbc-b6a2-46c4-a613-6145f6a16215"
+          }
+          metrics = {
+            status  = "Enabled"
+            minutes = 15
+          }
+          replication_time = {
+            status  = "Enabled"
+            minutes = 15
+          }
+        }
+      }
+    ]
+  }
 
   server_side_encryption_configuration = {
     rule = {
