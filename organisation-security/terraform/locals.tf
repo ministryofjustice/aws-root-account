@@ -185,7 +185,7 @@ locals {
     accounts = [
       for account_name, account_value in local.accounts.active_only_not_self :
       account_value
-      if
+      if !contains(local.excluded_accounts, account_name) && 
       (
         account_name == "Legal Aid Agency" ||
         account_name == "LAA Development" ||
@@ -209,7 +209,7 @@ locals {
     accounts = [
       for account_name, account_value in local.accounts.active_only_not_self :
       account_value
-      if
+      if !contains(local.excluded_accounts, account_name) &&
       (
         account_name == "shared-services-dev" ||
         account_name == "MoJ Digital Services"
