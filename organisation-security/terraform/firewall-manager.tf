@@ -11,6 +11,7 @@ resource "aws_fms_policy" "eu_west_2_shield_advanced_auto_remediate" {
   delete_unused_fm_managed_resources = false
   exclude_resource_tags              = false
   remediation_enabled                = true
+
   resource_type_list = [
     "AWS::EC2::EIP",
     "AWS::ElasticLoadBalancing::LoadBalancer",
@@ -20,6 +21,10 @@ resource "aws_fms_policy" "eu_west_2_shield_advanced_auto_remediate" {
   include_map {
     account = try(toset(local.shield_advanced_auto_remediate.accounts), null)
     orgunit = try(toset(local.shield_advanced_auto_remediate.organizational_units), null)
+  }
+
+  exclude_map {
+    account = [local.xhibit_portal_production_account_id]
   }
 
   security_service_policy_data {
@@ -35,6 +40,7 @@ resource "aws_fms_policy" "eu_west_2_shield_advanced_auto_remediate" {
   }
 }
 
+
 # Shield Advanced policy (don't auto remediate)
 resource "aws_fms_policy" "eu_west_2_shield_advanced_no_auto_remediate" {
   provider = aws.eu-west-2
@@ -44,6 +50,7 @@ resource "aws_fms_policy" "eu_west_2_shield_advanced_no_auto_remediate" {
   delete_unused_fm_managed_resources = false
   exclude_resource_tags              = false
   remediation_enabled                = false
+
   resource_type_list = [
     "AWS::EC2::EIP",
     "AWS::ElasticLoadBalancing::LoadBalancer",
@@ -55,6 +62,10 @@ resource "aws_fms_policy" "eu_west_2_shield_advanced_no_auto_remediate" {
     orgunit = try(toset(local.shield_advanced_no_auto_remediate.organizational_units), null)
   }
 
+  exclude_map {
+    account = [local.xhibit_portal_production_account_id]
+  }
+
   security_service_policy_data {
     type = "SHIELD_ADVANCED"
     managed_service_data = jsonencode({
@@ -62,6 +73,7 @@ resource "aws_fms_policy" "eu_west_2_shield_advanced_no_auto_remediate" {
     })
   }
 }
+
 
 #################################
 # Firewall Manager in eu-west-1 #
@@ -76,6 +88,7 @@ resource "aws_fms_policy" "eu_west_1_shield_advanced_auto_remediate" {
   delete_unused_fm_managed_resources = false
   exclude_resource_tags              = false
   remediation_enabled                = true
+
   resource_type_list = [
     "AWS::EC2::EIP",
     "AWS::ElasticLoadBalancing::LoadBalancer",
@@ -85,6 +98,10 @@ resource "aws_fms_policy" "eu_west_1_shield_advanced_auto_remediate" {
   include_map {
     account = try(toset(local.shield_advanced_auto_remediate.accounts), null)
     orgunit = try(toset(local.shield_advanced_auto_remediate.organizational_units), null)
+  }
+
+  exclude_map {
+    account = [local.xhibit_portal_production_account_id]
   }
 
   security_service_policy_data {
@@ -100,6 +117,7 @@ resource "aws_fms_policy" "eu_west_1_shield_advanced_auto_remediate" {
   }
 }
 
+
 # Shield Advanced policy (don't auto remediate)
 resource "aws_fms_policy" "eu_west_1_shield_advanced_no_auto_remediate" {
   provider = aws.eu-west-1
@@ -109,6 +127,7 @@ resource "aws_fms_policy" "eu_west_1_shield_advanced_no_auto_remediate" {
   delete_unused_fm_managed_resources = false
   exclude_resource_tags              = false
   remediation_enabled                = false
+
   resource_type_list = [
     "AWS::EC2::EIP",
     "AWS::ElasticLoadBalancing::LoadBalancer",
@@ -120,6 +139,10 @@ resource "aws_fms_policy" "eu_west_1_shield_advanced_no_auto_remediate" {
     orgunit = try(toset(local.shield_advanced_no_auto_remediate.organizational_units), null)
   }
 
+  exclude_map {
+    account = [local.xhibit_portal_production_account_id]
+  }
+
   security_service_policy_data {
     type = "SHIELD_ADVANCED"
     managed_service_data = jsonencode({
@@ -127,3 +150,4 @@ resource "aws_fms_policy" "eu_west_1_shield_advanced_no_auto_remediate" {
     })
   }
 }
+
