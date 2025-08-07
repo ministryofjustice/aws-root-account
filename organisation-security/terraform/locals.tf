@@ -34,12 +34,6 @@ locals {
     if account.name == "Cloud Platform"
   ]...)
 
-  xhibit_portal_production_account_id = coalesce([
-    for account in local.organizations_organization.accounts :
-    account.id
-    if account.name == "xhibit-portal-production"
-  ]...)
-
   organisation_account_numbers = [for account in local.organizations_organization.accounts : account.id]
 
   # AWS Organizational Units
@@ -191,7 +185,8 @@ locals {
     accounts = [
       for account_name, account_value in local.accounts.active_only_not_self :
       account_value
-      if !contains(local.excluded_accounts, account_name) && (
+      if
+      (
         account_name == "Legal Aid Agency" ||
         account_name == "LAA Development" ||
         account_name == "Youth Justice Framework Dev" ||
