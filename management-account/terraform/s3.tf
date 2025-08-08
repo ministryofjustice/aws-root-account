@@ -283,7 +283,7 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
   }
 }
 
-module "development_s3" {
+module "cur_reports_v2_hourly_s3_bucket" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
   #checkov:skip=CKV_AWS_18:Access logging not enabled currently
@@ -301,15 +301,15 @@ module "development_s3" {
 
   bucket        = "moj-cur-reports-v2-hourly"
   force_destroy = true
-  attach_policy     = true
-  policy            = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
+  attach_policy = true
+  policy        = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
 
   versioning = {
     enabled = true
   }
 
   replication_configuration = {
-    role = module.cur_reports_v2_hourly_s3_bucket.replication_role_arn
+    role = module.production_replication_iam_role.iam_role_arn
     rules = [
       {
         id                        = "replicate-cur-v2-reports"
@@ -388,6 +388,7 @@ module "development_s3" {
     }
   }
 }
+
 
 data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
   version = "2012-10-17"

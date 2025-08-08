@@ -275,3 +275,94 @@ resource "aws_iam_role_policy" "replication" {
       ]
   })
 }
+
+##########################################
+# COAT Production Replication Role  #
+##########################################
+
+module "production_replication_iam_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.59.0"
+
+  create_role = true
+
+  role_name         = "moj-cur-reports-v2-hourly-replication-role"
+  role_requires_mfa = false
+
+  trusted_role_services = ["s3.amazonaws.com"]
+
+  custom_role_policy_arns = [module.production_replication_policy.arn]
+}
+
+data "aws_iam_policy_document" "production_replication" {
+  statement {
+    sid    = "SourceBucketPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetReplicationConfiguration",
+      "s3:ListBucket"
+    ]
+    resources = [module.cur_reports_v2_hourly_s3_bucket.s3_bucket_arn]
+  }
+  statement {
+    sid    = "SourceBucketObjectPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetObjectVersionForReplication",
+      "s3:GetObjectVersionAcl",
+      "s3:GetObjectVersionTagging",
+      "s3:ObjectOwnerOverrideToBucketOwner"
+    ]
+    resources = ["${module.cur_reports_v2_hourly_s3_bucket.s3_bucket_arn}/*"]
+  }
+  statement {
+    sid    = "DestinationBucketPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:ReplicateObject",
+      "s3:ObjectOwnerOverrideToBucketOwner",
+      "s3:GetObjectVersionTagging",
+      "s3:ReplicateTags",
+      "s3:ReplicateDelete"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly",
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*"
+    ]
+  }
+  statement {
+    sid    = "SourceBucketKMSKey"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey"
+    ]
+    resources = [module.cur_v2_s3_kms.key_arn]
+  }
+  statement {
+    sid    = "DestinationBucketKMSKey"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:GenerateDataKey"
+    ]
+    resources = [
+      module.cur_v2_s3_kms.key_arn,
+      "arn:aws:kms:eu-west-1:593291632749:key/0409ddbc-b6a2-46c4-a613-6145f6a16215"
+    ]
+  }
+}
+
+module "production_replication_policy" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.59.0"
+  name    = "${module.production_replication_iam_role.iam_role_name}-policy"
+
+  policy = data.aws_iam_policy_document.production_replication.json
+}
