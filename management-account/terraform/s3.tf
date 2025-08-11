@@ -395,6 +395,11 @@ moved {
 }
 
 moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_ownership_controls.default
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_ownership_controls.this[0]
+}
+
+moved {
   from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_public_access_block.default
   to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_public_access_block.this[0]
 }
