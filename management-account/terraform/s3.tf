@@ -389,6 +389,35 @@ module "cur_reports_v2_hourly_s3_bucket" {
   }
 }
 
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket.default
+  to   = module.cur_reports_v2_hourly_s3_bucket.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_public_access_block.default
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_public_access_block.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_versioning.default["enabled"]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_versioning.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_server_side_encryption_configuration.default["enabled"]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_server_side_encryption_configuration.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_replication_configuration.default["enabled"]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_replication_configuration.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_policy.default["enabled"]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_policy.this[0]
+}
 
 data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
   version = "2012-10-17"
