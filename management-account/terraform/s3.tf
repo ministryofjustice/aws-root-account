@@ -391,7 +391,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
 
 moved {
   from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket.default
-  to   = module.cur_reports_v2_hourly_s3_bucket.this[0]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket.this[0]
 }
 
 moved {
