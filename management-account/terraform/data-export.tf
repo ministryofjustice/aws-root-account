@@ -57,7 +57,7 @@ resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
     }
     destination_configurations {
       s3_destination {
-        s3_bucket = module.cur_reports_v2_hourly_s3_bucket.bucket.bucket
+        s3_bucket = module.cur_reports_v2_hourly_s3_bucket.s3_bucket_id
         s3_prefix = "moj-cost-and-usage-reports"
         s3_region = "eu-west-2"
         s3_output_configurations {
