@@ -419,6 +419,11 @@ moved {
   to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_policy.this[0]
 }
 
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_iam_role.replication_role[0]
+  to   = module.production_replication_iam_role.aws_iam_role.this[0]
+}
+
 data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
   version = "2012-10-17"
 
