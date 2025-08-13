@@ -573,7 +573,7 @@ module "cur_reports_v2_hourly_replication_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.59.0"
+  version = "5.60.0"
   name    = "${module.cur_reports_v2_hourly_replication_role.iam_role_name}-policy"
 
   policy = data.aws_iam_policy_document.cur_reports_v2_hourly_replication.json
