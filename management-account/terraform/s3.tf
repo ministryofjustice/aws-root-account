@@ -297,7 +297,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.2.0"
+  version = "5.4.0"
 
   bucket        = "moj-cur-reports-v2-hourly"
   force_destroy = true
@@ -309,7 +309,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
   }
 
   replication_configuration = {
-    role = module.production_replication_iam_role.iam_role_arn
+    role = module.cur_reports_v2_hourly_replication_role.iam_role_arn
     rules = [
       {
         id                        = "replicate-cur-v2-reports"
@@ -421,7 +421,7 @@ moved {
 
 moved {
   from = module.cur_reports_v2_hourly_s3_bucket.aws_iam_role.replication_role[0]
-  to   = module.production_replication_iam_role.aws_iam_role.this[0]
+  to   = module.cur_reports_v2_hourly_replication_role.aws_iam_role.this[0]
 }
 
 data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
@@ -492,12 +492,12 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
 # COAT Production Replication Role  #
 ##########################################
 
-module "production_replication_iam_role" {
+module "cur_reports_v2_hourly_replication_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.59.0"
+  version = "5.60.0"
 
   create_role = true
 
@@ -506,10 +506,10 @@ module "production_replication_iam_role" {
 
   trusted_role_services = ["s3.amazonaws.com"]
 
-  custom_role_policy_arns = [module.production_replication_policy.arn]
+  custom_role_policy_arns = [module.cur_reports_v2_hourly_replication_policy.arn]
 }
 
-data "aws_iam_policy_document" "production_replication" {
+data "aws_iam_policy_document" "cur_reports_v2_hourly_replication" {
   statement {
     sid    = "SourceBucketPermissions"
     effect = "Allow"
@@ -568,15 +568,15 @@ data "aws_iam_policy_document" "production_replication" {
   }
 }
 
-module "production_replication_policy" {
+module "cur_reports_v2_hourly_replication_policy" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.59.0"
-  name    = "${module.production_replication_iam_role.iam_role_name}-policy"
+  name    = "${module.cur_reports_v2_hourly_replication_role.iam_role_name}-policy"
 
-  policy = data.aws_iam_policy_document.production_replication.json
+  policy = data.aws_iam_policy_document.cur_reports_v2_hourly_replication.json
 }
 
 # moj-focus-reports-greenops
