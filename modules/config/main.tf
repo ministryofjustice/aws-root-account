@@ -19,7 +19,7 @@ resource "aws_config_configuration_recorder" "default" {
     all_supported = true
     # Enable global resource types for the default (home) region
     # For other regions, you should set it to false to reduce cost and duplication
-    include_global_resource_types = (var.home_region == data.aws_region.current.name || data.aws_region.current.name == "us-east-1") ? true : false
+    include_global_resource_types = (var.home_region == data.aws_region.current.region || data.aws_region.current.region == "us-east-1") ? true : false
   }
 }
 

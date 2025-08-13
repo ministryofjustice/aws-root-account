@@ -208,6 +208,6 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
     actions = [
       "sts:AssumeRole",
     ]
-    resources = ["arn:aws:iam::${var.organisation_security_account_id}:role/ReadOnly"]
+    resources = ["arn:aws:iam::${var.organisation_security_account_id}:role/OrganizationAccountAccessRole"]
   }
 }

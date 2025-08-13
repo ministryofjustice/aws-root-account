@@ -1,4 +1,7 @@
 locals {
+
+  excluded_accounts = ["organisation-security", "xhibit-portal-production"]
+
   organizations_organization = data.terraform_remote_state.management_account.outputs.organizations_organization
 
   root_account_id = coalesce([
@@ -223,9 +226,11 @@ locals {
     active_only_not_self : {
       for account in local.organizations_organization.accounts :
       account.name => account.id
-      if account.status == "ACTIVE" && account.name != "organisation-security"
+      if account.status == "ACTIVE"
+      && !contains(local.excluded_accounts, account.name)
     }
   }
+
 
   guardduty_administrator_detector_ids = data.terraform_remote_state.management_account.outputs.guardduty_administrator_detector_ids
 }
