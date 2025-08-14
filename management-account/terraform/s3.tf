@@ -312,11 +312,13 @@ module "cur_reports_v2_hourly_s3_bucket" {
     role = module.cur_reports_v2_hourly_replication_role.iam_role_arn
     rules = [
       {
-        id                        = "replicate-cur-v2-reports"
-        prefix                    = "moj-cost-and-usage-reports/"
-        status                    = "Enabled"
-        priority                  = 1
-        filter                    = {}
+        id       = "replicate-cur-v2-reports"
+        prefix   = "moj-cost-and-usage-reports/"
+        status   = "Enabled"
+        priority = 1
+        filter = {
+          prefix = ""
+        }
         delete_marker_replication = true
 
         source_selection_criteria = {
@@ -347,11 +349,13 @@ module "cur_reports_v2_hourly_s3_bucket" {
       },
 
       {
-        id                        = "replicate-cur-v2-reports-mojap"
-        prefix                    = "mojap-cost-and-usage-reports/"
-        status                    = "Enabled"
-        priority                  = 0
-        filter                    = {}
+        id       = "replicate-cur-v2-reports-mojap"
+        prefix   = "mojap-cost-and-usage-reports/"
+        status   = "Enabled"
+        priority = 0
+        filter = {
+          prefix = ""
+        }
         delete_marker_replication = true
 
         source_selection_criteria = {
