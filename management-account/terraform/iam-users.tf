@@ -59,19 +59,19 @@ resource "aws_iam_user_group_membership" "ewa_stempel" {
   ]
 }
 
-###############
-# Connor Glyn #
-###############
-resource "aws_iam_user" "connor_glyn" {
-  name          = "ConnorGlyn"
+################
+# Connor Glynn #
+################
+resource "aws_iam_user" "connor_glynn" {
+  name          = "ConnorGlynn"
   path          = "/"
   force_destroy = true
   tags          = {}
 }
 
 # User membership
-resource "aws_iam_user_group_membership" "connor_glyn" {
-  user = aws_iam_user.connor_glyn.name
+resource "aws_iam_user_group_membership" "connor_glynn" {
+  user = aws_iam_user.connor_glynn.name
 
   groups = [
     aws_iam_group.iam_user_change_password.name,
