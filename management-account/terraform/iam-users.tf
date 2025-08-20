@@ -59,22 +59,23 @@ resource "aws_iam_user_group_membership" "ewa_stempel" {
   ]
 }
 
-###############################################
-# ModernisationPlatformOrganisationManagement #
-###############################################
-resource "aws_iam_user" "modernisation_platform_organisation_management" {
-  name          = "ModernisationPlatformOrganisationManagement"
+################
+# Connor Glynn #
+################
+resource "aws_iam_user" "connor_glynn" {
+  name          = "ConnorGlynn"
   path          = "/"
   force_destroy = true
   tags          = {}
 }
 
 # User membership
-resource "aws_iam_user_group_membership" "modernisation_platform_organisation_management" {
-  user = aws_iam_user.modernisation_platform_organisation_management.name
+resource "aws_iam_user_group_membership" "connor_glynn" {
+  user = aws_iam_user.connor_glynn.name
 
   groups = [
-    aws_iam_group.modernisation_platform_organisation_management.name
+    aws_iam_group.iam_user_change_password.name,
+    aws_iam_group.modernisation_platform_organisation_management.name,
   ]
 }
 
