@@ -72,3 +72,8 @@ resource "aws_ram_principal_association" "network_operations_centre_production_b
   principal          = local.moj_network_operations_centre_production_account_id
   resource_share_arn = aws_ram_resource_share.network_operations_centre_byoip.arn
 }
+
+resource "aws_ram_principal_association" "network_operations_centre_preproduction_byoip" {
+  principal          = local.moj_network_operations_centre_preproduction_account_id
+  resource_share_arn = aws_ram_resource_share.network_operations_centre_byoip.arn
+}
