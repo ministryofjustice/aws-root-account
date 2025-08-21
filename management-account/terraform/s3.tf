@@ -512,7 +512,10 @@ module "cur_reports_v2_hourly_replication_role" {
   role_name         = "moj-cur-reports-v2-hourly-replication-role"
   role_requires_mfa = false
 
-  trusted_role_services = ["s3.amazonaws.com"]
+  trusted_role_services = [
+    "batchoperations.s3.amazonaws.com",
+    "s3.amazonaws.com"
+  ]
 
   custom_role_policy_arns = [module.cur_reports_v2_hourly_replication_policy.arn]
 }
@@ -531,10 +534,13 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_replication" {
     sid    = "SourceBucketObjectPermissions"
     effect = "Allow"
     actions = [
-      "s3:GetObjectVersionForReplication",
+      "s3:GetObject",
+      "s3:GetObjectAcl",
+      "s3:GetObjectTagging",
       "s3:GetObjectVersionAcl",
+      "s3:GetObjectVersionForReplication",
       "s3:GetObjectVersionTagging",
-      "s3:ObjectOwnerOverrideToBucketOwner"
+      "s3:ObjectOwnerOverrideToBucketOwner",
     ]
     resources = ["${module.cur_reports_v2_hourly_s3_bucket.s3_bucket_arn}/*"]
   }
@@ -542,11 +548,14 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_replication" {
     sid    = "DestinationBucketPermissions"
     effect = "Allow"
     actions = [
-      "s3:ReplicateObject",
-      "s3:ObjectOwnerOverrideToBucketOwner",
       "s3:GetObjectVersionTagging",
-      "s3:ReplicateTags",
-      "s3:ReplicateDelete"
+      "s3:ObjectOwnerOverrideToBucketOwner",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:PutObjectTagging",
+      "s3:ReplicateDelete",
+      "s3:ReplicateObject",
+      "s3:ReplicateTags"
     ]
     resources = [
       "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly",
