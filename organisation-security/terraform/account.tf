@@ -9,7 +9,7 @@ resource "aws_account_alternate_contact" "operations" {
 resource "aws_account_alternate_contact" "billing" {
   alternate_contact_type = "BILLING"
   email_address          = "modernisation-platform@digital.justice.gov.uk"
-  name                   = "Modernisation Platform Team"
+  name                   = "Modernisation Platform"
   title                  = "Team"
   phone_number           = "+0000000000"
 }
