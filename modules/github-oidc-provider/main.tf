@@ -147,6 +147,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "cloudtrail:*",
       "cloudformation:*",
       "config:*",
+      "cost-optimization-hub:*",
       "cur:DescribeReportDefinitions",
       "cur:ListTagsForResource",
       "cur:PutReportDefinition",
