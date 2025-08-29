@@ -51,6 +51,7 @@ data "aws_iam_policy_document" "oidc_assume_role_apply" {
       "ce:*",
       "cloudtrail:*",
       "config:*",
+      "cost-optimization-hub:UpdateEnrollmentStatus",
       "cur:*",
       "events:*",
       "fms:*",
