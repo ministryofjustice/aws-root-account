@@ -173,6 +173,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "organizations:DescribeOrganization",
       "organizations:DisablePolicyType",
       "organizations:EnablePolicyType",
+      "organizations:EnableAWSServiceAccess",
       "organizations:ListAccounts",
       "organizations:ListAccountsForParent",
       "organizations:ListOrganizationalUnitsForParent",
