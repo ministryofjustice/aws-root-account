@@ -3,8 +3,9 @@
 module "dsit_cost_integration" {
   source = "github.com/co-cddo/terraform-aws-focus?ref=949f1318da46d6e211b440a77b42c6a90205613b" # v2.0.2
 
-  destination_account_id  = "203341582084"
-  destination_bucket_name = "uk-gov-gds-cost-inbound"
+  destination_account_id                          = "203341582084"
+  destination_bucket_name                         = "uk-gov-gds-cost-inbound"
+  create_cost_recommendations_service_linked_role = true
 }
 
 import {
