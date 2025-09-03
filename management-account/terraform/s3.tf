@@ -559,7 +559,9 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_replication" {
     ]
     resources = [
       "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly",
-      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*"
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*",
+      "arn:aws:s3:::coat-production-cur-v2-hourly",
+      "arn:aws:s3:::coat-production-cur-v2-hourly/*"
     ]
   }
   statement {
