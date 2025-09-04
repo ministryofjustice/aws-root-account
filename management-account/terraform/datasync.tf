@@ -1,0 +1,27 @@
+# SOURCE - Root account S3 location
+resource "aws_datasync_location_s3" "root_account" {
+  s3_bucket_arn = module.cur_reports_v2_hourly_s3_bucket.s3_bucket_arn
+  subdirectory  = "/" #TODO: ask COAT if this is correct
+
+  s3_config {
+    bucket_access_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.coat_datasync_iam_policy.role_name}" #TODO: review
+  }
+}
+
+# DESTINATION - APDP
+resource "aws_datasync_location_s3" "apdp_account" {
+  region        = "eu-west-1"
+  s3_bucket_arn = "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly" #TODO: review
+  subdirectory  = "/" #TODO: ask COAT where they want the data to go
+
+  s3_config {
+    bucket_access_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.coat_datasync_iam_policy.role_name}" #TODO: review
+  }
+}
+
+resource "aws_datasync_task" "coat_to_apdp_task" {
+  destination_location_arn = aws_datasync_location_s3.apdp_account.arn
+  name                     = "root-to-apdp-coat-cur-reports-v2-hourly"
+  source_location_arn      = aws_datasync_location_s3.root_account.arn
+  task_mode                = "ENHANCED"
+}
