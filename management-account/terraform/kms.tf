@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "terraform_state_s3_bucket_kms" {
 
 module "focus_s3_kms" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.0.0"
+  version = "4.1.0"
 
   aliases                 = ["s3/focus"]
   description             = "FOCUS S3 bucket KMS key"
@@ -54,7 +54,7 @@ module "focus_s3_kms" {
 
 module "cur_v2_s3_kms" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.0.0"
+  version = "4.1.0"
 
   aliases                 = ["s3/curv2"]
   description             = "CUR v2 S3 bucket KMS key"
