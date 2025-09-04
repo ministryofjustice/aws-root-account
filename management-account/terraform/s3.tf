@@ -559,7 +559,9 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_replication" {
     ]
     resources = [
       "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly",
-      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*"
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*",
+      "arn:aws:s3:::coat-production-cur-v2-hourly",
+      "arn:aws:s3:::coat-production-cur-v2-hourly/*"
     ]
   }
   statement {
@@ -580,7 +582,8 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_replication" {
     ]
     resources = [
       module.cur_v2_s3_kms.key_arn,
-      "arn:aws:kms:eu-west-1:593291632749:key/0409ddbc-b6a2-46c4-a613-6145f6a16215"
+      "arn:aws:kms:eu-west-1:593291632749:key/0409ddbc-b6a2-46c4-a613-6145f6a16215",
+      "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
     ]
   }
 }
