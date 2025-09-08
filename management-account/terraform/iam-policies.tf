@@ -186,7 +186,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "kms:DescribeKey"
     ]
     resources = [
-      "arn:aws:kms:eu-west-1:${local.accounts.active_only["analytical-platform-data-production"]}:key/*"
+      "arn:aws:kms:eu-west-1:${local.accounts.active_only["analytical-platform-data-production"]}:key/0409ddbc-b6a2-46c4-a613-6145f6a16215"
     ]
   }
 }
@@ -198,7 +198,7 @@ module "coat_datasync_iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "6.2.1"
 
-  name_prefix = "coat-datasync-iam-policy"
+  name_prefix = "coat-datasync"
 
   policy = data.aws_iam_policy_document.coat_datasync_iam_policy.json
 }

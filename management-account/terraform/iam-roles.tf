@@ -322,7 +322,7 @@ module "coat_datasync_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
   version = "6.2.1"
 
-  name            = "CoatDataSyncRole"
+  name            = "coat-datasync"
   use_name_prefix = false
 
   trust_policy_permissions = {
