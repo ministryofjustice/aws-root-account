@@ -59,3 +59,35 @@ resource "aws_guardduty_threatintelset" "default" {
   location    = "https://s3.amazonaws.com/${var.threatintelset_bucket}/${var.threatintelset_key}"
   name        = var.threatintelset_key
 }
+
+############################
+# GuardDuty EKS Protection #
+############################
+# Enable GuardDuty Detector
+resource "aws_guardduty_detector" "detector" {
+  enable = var.enable_guardduty_detector
+}
+
+# Enable EKS Protection 
+resource "aws_guardduty_detector_feature" "eks_protection" {
+  detector_id = aws_guardduty_detector.detector.id
+  name        = "EKS_PROTECTION"
+  status      = "ENABLED"
+
+  depends_on = [aws_guardduty_detector.detector]
+}
+
+# Enable Runtime Monitoring and let GuardDuty manage the EKS agent
+resource "aws_guardduty_detector_feature" "runtime_monitoring" {
+  detector_id = aws_guardduty_detector.detector.id
+  name        = "RUNTIME_MONITORING"
+  status      = "ENABLED"
+
+  additional_configuration {
+    name   = "EKS_ADDON_MANAGEMENT"
+    status = "ENABLED" # GuardDuty auto-installs/updates agent add-on
+  }
+
+  depends_on = [aws_guardduty_detector.detector]
+}
+
