@@ -173,7 +173,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "kms:GenerateDataKey",
     ]
     resources = [
-      module.cur_v2_s3_kms.kms_key_arn
+      module.cur_v2_s3_kms.key_arn
     ]
   }
 
