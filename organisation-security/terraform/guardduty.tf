@@ -44,6 +44,9 @@ module "guardduty_us_east_1" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for us-east-1
   auto_enable = true
 
@@ -71,6 +74,9 @@ module "guardduty_us_east_2" {
   enable_threatintelset = false
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
 
   # Automatically enable GuardDuty for us-east-2
   auto_enable = true
@@ -100,6 +106,9 @@ module "guardduty_us_west_1" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for us-west-1
   auto_enable = true
 
@@ -127,6 +136,9 @@ module "guardduty_us_west_2" {
   enable_threatintelset = false
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
 
   # Automatically enable GuardDuty for us-west-2
   auto_enable = true
@@ -160,6 +172,9 @@ module "guardduty_ap_south_1" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for ap-south-1
   auto_enable = true
 
@@ -188,6 +203,9 @@ module "guardduty_ap_northeast_3" {
   enable_threatintelset = false
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
 
   # Automatically enable GuardDuty for ap-northeast-3
   auto_enable = true
@@ -218,6 +236,9 @@ module "guardduty_ap_northeast_2" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for ap-northeast-2
   auto_enable = true
 
@@ -246,6 +267,9 @@ module "guardduty_ap_southeast_1" {
   enable_threatintelset = false
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
 
   # Automatically enable GuardDuty for ap-southeast-1
   auto_enable = true
@@ -276,6 +300,9 @@ module "guardduty_ap_southeast_2" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for ap-southeast-2
   auto_enable = true
 
@@ -304,6 +331,9 @@ module "guardduty_ap_northeast_1" {
   enable_threatintelset = false
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
 
   # Automatically enable GuardDuty for ap-northeast-1
   auto_enable = true
@@ -337,6 +367,9 @@ module "guardduty_ca_central_1" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for ca-central-1
   auto_enable = true
 
@@ -369,6 +402,9 @@ module "guardduty_eu_central_1" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for eu-central-1
   auto_enable = true
 
@@ -397,6 +433,9 @@ module "guardduty_eu_west_1" {
   enable_threatintelset = false
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
 
   # Automatically enable GuardDuty for eu-west-1
   auto_enable = true
@@ -427,6 +466,9 @@ module "guardduty_eu_west_2" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for eu-west-2
   auto_enable = true
 
@@ -456,6 +498,9 @@ module "guardduty_eu_west_3" {
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
 
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
+
   # Automatically enable GuardDuty for eu-west-3
   auto_enable = true
 
@@ -484,6 +529,9 @@ module "guardduty_eu_north_1" {
   enable_threatintelset = false
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
 
   # Automatically enable GuardDuty for eu-north-1
   auto_enable = true
@@ -516,6 +564,9 @@ module "guardduty_sa_east_1" {
   enable_threatintelset = false
   threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
   threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Utilise GuardDuty Detector
+  enable_guardduty_detector = true
 
   # Automatically enable GuardDuty for sa-east-1
   auto_enable = true
