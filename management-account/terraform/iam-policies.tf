@@ -134,7 +134,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
     condition {
       test     = "StringEquals"
       variable = "aws:ResourceAccount"
-      values = ["${local.accounts.active_only["analytical-platform-data-production"]}"]
+      values   = ["${local.accounts.active_only["analytical-platform-data-production"]}"]
     }
   }
 
@@ -158,7 +158,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
     condition {
       test     = "StringEquals"
       variable = "aws:ResourceAccount"
-      values = ["${local.accounts.active_only["analytical-platform-data-production"]}"]
+      values   = ["${local.accounts.active_only["analytical-platform-data-production"]}"]
     }
   }
 
