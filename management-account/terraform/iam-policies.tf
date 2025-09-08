@@ -117,7 +117,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "dms:StartReplicationTask",
       "dms:StopReplicationTask",
     ]
-    resources = ["*"] #TODO: tighten this up
+    resources = ["*"]
   }
 
   statement {
@@ -129,12 +129,11 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "s3:ListBucketMultipartUploads",
     ]
     resources = [
-      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly" #TODO: Update call
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly"
     ]
     condition {
       test     = "StringEquals"
       variable = "aws:ResourceAccount"
-      # values   = ["593291632749"] #TODO: Update call to APDP
       values = ["${local.accounts.active_only["analytical-platform-data-production"]}"]
     }
   }
@@ -154,13 +153,12 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "s3:PutObjectTagging",
     ]
     resources = [
-      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*" #TODO: Update call
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*"
     ]
     condition {
       test     = "StringEquals"
       variable = "aws:ResourceAccount"
-      values   = ["593291632749"] #TODO: Updatecall to APDP
-      # values = [${local.accounts.active_only["analytical-platform-data-production"]}] #No idea if this is correct - based off of something else I've read in this repo
+      values = ["${local.accounts.active_only["analytical-platform-data-production"]}"]
     }
   }
 
@@ -188,8 +186,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "kms:DescribeKey"
     ]
     resources = [
-      "arn:aws:kms:eu-west-1:593291632749:key/*" #TODO: Update call to APDP / tighten this up
-      # "arn:aws:kms:eu-west-1:${local.accounts.active_only["analytical-platform-data-production"]}:key/*" #ASK: No idea if this is correct - based off of something else I've read in this repo
+      "arn:aws:kms:eu-west-1:${local.accounts.active_only["analytical-platform-data-production"]}:key/*"
     ]
   }
 }
