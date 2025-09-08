@@ -11,7 +11,7 @@ resource "aws_datasync_location_s3" "root_account" {
 # DESTINATION - APDP
 resource "aws_datasync_location_s3" "apdp_account" {
   region        = "eu-west-1"
-  s3_bucket_arn = "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly" #TODO: review
+  s3_bucket_arn = "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly"
   subdirectory  = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
 
   s3_config {
