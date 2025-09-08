@@ -38,6 +38,30 @@ resource "aws_guardduty_organization_configuration_feature" "eks_runtime_monitor
   }
 }
 
+###########################################################################
+# Auto-enable Runtime Monitoring for new accounts in the AWS Organization #
+###########################################################################
+# Note we are leaving installing the security agent add-on as a manual process
+resource "aws_guardduty_organization_configuration_feature" "runtime_monitoring" {
+  provider    = aws.delegated_administrator
+  detector_id = var.administrator_detector_id
+  name        = "RUNTIME_MONITORING"
+  auto_enable = "NEW"
+
+  additional_configuration {
+    name        = "EKS_ADDON_MANAGEMENT"
+    auto_enable = "NONE"
+  }
+  additional_configuration {
+    name        = "ECS_FARGATE_AGENT_MANAGEMENT"
+    auto_enable = "NONE"
+  }
+  additional_configuration {
+    name        = "EC2_AGENT_MANAGEMENT"
+    auto_enable = "NONE"
+  }
+}
+
 ####################################
 # GuardDuty publishing destination #
 ####################################
