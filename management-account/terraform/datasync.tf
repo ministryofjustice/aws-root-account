@@ -4,7 +4,7 @@ resource "aws_datasync_location_s3" "root_account" {
   subdirectory  = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
 
   s3_config {
-    bucket_access_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.coat_datasync_iam_policy.name}"
+    bucket_access_role_arn = "${module.coat_datasync_iam_role.arn}"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_datasync_location_s3" "apdp_account" {
   subdirectory  = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
 
   s3_config {
-    bucket_access_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.coat_datasync_iam_policy.name}"
+    bucket_access_role_arn = "${module.coat_datasync_iam_role.arn}"
   }
 }
 
