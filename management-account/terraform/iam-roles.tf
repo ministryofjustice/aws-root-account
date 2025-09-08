@@ -325,7 +325,7 @@ module "coat_datasync_iam_role" {
   name            = "coat-datasync"
   use_name_prefix = false
 
-  trust_policy_permissions = {
+  TrustStatement = {
     DataSync = {
       actions = [
         "sts:AssumeRole",
