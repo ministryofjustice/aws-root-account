@@ -134,8 +134,8 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
     condition {
       test     = "StringEquals"
       variable = "aws:ResourceAccount"
-      values   = ["593291632749"] #TODO: Update call to APDP
-      # values = [${local.accounts.active_only["analytical-platform-data-production"]}] #No idea if this is correct - based off of something else I've read in this repo
+      # values   = ["593291632749"] #TODO: Update call to APDP
+      values = [${local.accounts.active_only["analytical-platform-data-production"]}]
     }
   }
 
