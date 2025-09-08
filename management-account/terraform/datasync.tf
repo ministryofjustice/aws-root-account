@@ -4,7 +4,7 @@ resource "aws_datasync_location_s3" "root_account" {
   subdirectory  = "/" #TODO: ask COAT if this is correct
 
   s3_config {
-    bucket_access_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.coat_datasync_iam_policy.role_name}" #TODO: review
+    bucket_access_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.coat_datasync_iam_policy.name}" #TODO: review
   }
 }
 
@@ -12,10 +12,10 @@ resource "aws_datasync_location_s3" "root_account" {
 resource "aws_datasync_location_s3" "apdp_account" {
   region        = "eu-west-1"
   s3_bucket_arn = "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly" #TODO: review
-  subdirectory  = "/" #TODO: ask COAT where they want the data to go
+  subdirectory  = "/"                                                             #TODO: ask COAT where they want the data to go
 
   s3_config {
-    bucket_access_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.coat_datasync_iam_policy.role_name}" #TODO: review
+    bucket_access_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${module.coat_datasync_iam_policy.name}" #TODO: review
   }
 }
 

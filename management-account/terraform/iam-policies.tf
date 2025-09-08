@@ -117,7 +117,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "dms:StartReplicationTask",
       "dms:StopReplicationTask",
     ]
-    resources = ["*"]  #TODO: tighten this up
+    resources = ["*"] #TODO: tighten this up
   }
 
   statement {
