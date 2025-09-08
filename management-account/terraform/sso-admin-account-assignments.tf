@@ -145,6 +145,16 @@ locals {
       ]
     },
     {
+      github_team        = "hosting-networking",
+      permission_set_arn = aws_ssoadmin_permission_set.view_only_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.moj_official_preproduction.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
+      ]
+    },
+    {
       github_team        = "opg-secops",
       permission_set_arn = aws_ssoadmin_permission_set.opg_security_audit.arn,
       account_ids = [
