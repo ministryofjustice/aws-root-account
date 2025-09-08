@@ -21,7 +21,7 @@ resource "aws_datasync_location_s3" "apdp_account" {
 
 resource "aws_datasync_task" "coat_to_apdp_task" {
   destination_location_arn = aws_datasync_location_s3.apdp_account.arn
-  name                     = "root-to-apdp-coat-cur-reports-v2-hourly"
+  name                     = "root-to-apdp-coat-cur-reports"
   source_location_arn      = aws_datasync_location_s3.root_account.arn
   task_mode                = "ENHANCED"
 }
