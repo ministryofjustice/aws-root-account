@@ -1,6 +1,6 @@
 locals {
-  destination_bucket = "mojap-data-production-coat-cur-reports-v2-hourly"
-  source_subdirectory = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
+  destination_bucket       = "mojap-data-production-coat-cur-reports-v2-hourly"
+  source_subdirectory      = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
   destination_subdirectory = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
 }
 
