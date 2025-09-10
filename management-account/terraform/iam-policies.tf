@@ -116,7 +116,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
       "s3:ListBucketMultipartUploads",
     ]
     resources = [
-      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly"
+      "arn:aws:s3:::${local.coat_ap_datasync_destination_bucket}"
     ]
     condition {
       test     = "StringEquals"
