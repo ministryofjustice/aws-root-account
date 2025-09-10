@@ -514,7 +514,7 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
       "arn:aws:s3:::moj-cur-reports-v2-hourly/*"
     ]
     principals {
-      type = "AWS" 
+      type        = "AWS" 
       identifiers = ["module.coat_datasync_iam_role.arn"]
     }
   }
