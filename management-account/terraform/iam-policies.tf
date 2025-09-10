@@ -108,7 +108,7 @@ data "aws_iam_policy_document" "billing_full_access" {
 ######################
 data "aws_iam_policy_document" "coat_datasync_iam_policy" {
   statement {
-    sid    = "CoatDatasyncS3BucketPermissions"
+    sid    = "DestinationBucketPermissions"
     effect = "Allow"
     actions = [
       "s3:GetBucketLocation",
@@ -126,7 +126,7 @@ data "aws_iam_policy_document" "coat_datasync_iam_policy" {
   }
 
   statement {
-    sid    = "CoatDatasyncS3ObjectPermissions"
+    sid    = "DestinationObjectPermissions"
     effect = "Allow"
     actions = [
       "s3:AbortMultipartUpload",
