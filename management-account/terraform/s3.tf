@@ -297,7 +297,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.4.0"
+  version = "5.7.0"
 
   bucket        = "moj-cur-reports-v2-hourly"
   force_destroy = true
