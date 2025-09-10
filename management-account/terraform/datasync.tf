@@ -1,7 +1,7 @@
 locals {
-  destination_bucket       = "mojap-data-production-coat-cur-reports-v2-hourly"
-  source_subdirectory      = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
-  destination_subdirectory = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
+  coat_ap_datasync_destination_bucket       = "mojap-data-production-coat-cur-reports-v2-hourly"
+  coat_ap_datasync_source_subdirectory      = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
+  coat_ap_datasync_destination_subdirectory = "moj-cost-and-usage-reports/MOJ-CUR-V2-HOURLY/"
 }
 
 # SOURCE - Root account S3 location
