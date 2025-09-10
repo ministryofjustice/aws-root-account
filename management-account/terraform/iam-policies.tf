@@ -108,19 +108,6 @@ data "aws_iam_policy_document" "billing_full_access" {
 ######################
 data "aws_iam_policy_document" "coat_datasync_iam_policy" {
   statement {
-    sid    = "CoatDatasyncDmsPermissions"
-    effect = "Allow"
-    actions = [
-      "dms:DescribeEndpoints",
-      "dms:DescribeReplicationInstances",
-      "dms:DescribeReplicationTasks",
-      "dms:StartReplicationTask",
-      "dms:StopReplicationTask",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
     sid    = "CoatDatasyncS3BucketPermissions"
     effect = "Allow"
     actions = [
