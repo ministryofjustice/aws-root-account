@@ -515,7 +515,7 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
     ]
     principals {
       type        = "AWS" 
-      identifiers = ["module.coat_datasync_iam_role.arn"]
+      identifiers = [module.coat_datasync_iam_role.arn]
     }
   }
 }
