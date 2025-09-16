@@ -8,8 +8,8 @@ resource "aws_account_alternate_contact" "operations" {
 
 resource "aws_account_alternate_contact" "billing" {
   alternate_contact_type = "BILLING"
-  email_address          = "modernisation-platform@digital.justice.gov.uk"
-  name                   = "Modernisation Platform"
+  email_address          = "HostingBilling-gg@justice.gov.uk"
+  name                   = "Hosting Billing"
   title                  = "Team"
   phone_number           = "+0000000000"
 }
