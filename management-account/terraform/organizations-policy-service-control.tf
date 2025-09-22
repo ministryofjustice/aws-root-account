@@ -50,7 +50,7 @@ resource "aws_organizations_policy" "deny_aws_account_root_user" {
   tags = {
     business-unit = "Platforms"
     component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control.tf"])
   }
 
   content = data.aws_iam_policy_document.deny_aws_account_root_user.json
@@ -434,12 +434,12 @@ resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou
   policy_id = aws_organizations_policy.modernisation_platform_member_ou_scp.id
 }
 
-########################################################
-# Restrict ec2:CreateImage from backup snapshots in MP #
-########################################################
-resource "aws_organizations_policy" "modernisation_platform_restrict_ec2_create_image_scp" {
-  name        = "Modernisation Platform Restrict ec2:CreateImage SCP"
-  description = "Restricts ec2:CreateImage permissions on snapshots created by AWS Backup"
+##########################################################
+# Restrict ec2:RegisterImage from backup snapshots in MP #
+##########################################################
+resource "aws_organizations_policy" "modernisation_platform_restrict_ec2_register_image_scp" {
+  name        = "Modernisation Platform Restrict ec2:RegisterImage SCP"
+  description = "Restricts ec2:RegisterImage permissions on snapshots created by AWS Backup"
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
@@ -448,33 +448,25 @@ resource "aws_organizations_policy" "modernisation_platform_restrict_ec2_create_
     source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
   }
 
-  content = data.aws_iam_policy_document.modernisation_platform_restrict_ec2_create_image_scp.json
+  content = data.aws_iam_policy_document.modernisation_platform_restrict_ec2_register_image_scp.json
 }
 
-data "aws_iam_policy_document" "modernisation_platform_restrict_ec2_create_image_scp" {
+data "aws_iam_policy_document" "modernisation_platform_restrict_ec2_register_image_scp" {
   statement {
-    sid    = "DenyAMICreationFromBackupSnapshots"
+    sid    = "DenyRegisterImageFromBackupSnapshots"
     effect = "Deny"
 
     actions = [
-      "ec2:CreateImage"
+      "ec2:RegisterImage"
     ]
 
     resources = ["*"]
 
+    # Deny if any source snapshot has the Backup tag
     condition {
       test     = "ForAnyValue:StringLike"
       variable = "ec2:SnapshotTag/aws:backup:source-resource"
       values   = ["*"]
-    }
-
-    condition {
-      test     = "ArnNotEquals"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup",
-        "arn:aws:iam::*:role/AWSBackup"
-      ]
     }
   }
 }
@@ -489,7 +481,7 @@ data "aws_organizations_organizational_units" "modernisation_platform_member_chi
 }
 
 # Attach SCP to the "modernisation-platform-sprinkler" OU only
-resource "aws_organizations_policy_attachment" "modernisation_platform_restrict_ec2_create_image_scp" {
+resource "aws_organizations_policy_attachment" "modernisation_platform_restrict_ec2_register_image_scp" {
   for_each = toset([
     for child in data.aws_organizations_organizational_units.modernisation_platform_member_children.children :
     child.id
@@ -497,7 +489,7 @@ resource "aws_organizations_policy_attachment" "modernisation_platform_restrict_
   ])
 
   target_id = each.value
-  policy_id = aws_organizations_policy.modernisation_platform_restrict_ec2_create_image_scp.id
+  policy_id = aws_organizations_policy.modernisation_platform_restrict_ec2_register_image_scp.id
 }
 
 # LAA Deny actions
