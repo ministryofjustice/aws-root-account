@@ -50,7 +50,7 @@ resource "aws_organizations_policy" "deny_aws_account_root_user" {
   tags = {
     business-unit = "Platforms"
     component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control.tf"])
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
   }
 
   content = data.aws_iam_policy_document.deny_aws_account_root_user.json
