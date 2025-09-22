@@ -463,7 +463,7 @@ data "aws_iam_policy_document" "modernisation_platform_restrict_ec2_create_image
     resources = ["*"]
 
     condition {
-      test     = "StringLike"
+      test     = "ForAnyValue:StringLike"
       variable = "ec2:SnapshotTag/aws:backup:source-resource"
       values   = ["*"]
     }
