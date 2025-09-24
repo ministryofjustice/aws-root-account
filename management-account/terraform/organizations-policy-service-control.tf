@@ -434,6 +434,63 @@ resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou
   policy_id = aws_organizations_policy.modernisation_platform_member_ou_scp.id
 }
 
+##########################################################
+# Restrict ec2:RegisterImage from backup snapshots in MP #
+##########################################################
+resource "aws_organizations_policy" "modernisation_platform_restrict_ec2_register_image_scp" {
+  name        = "Modernisation Platform Restrict ec2:RegisterImage SCP"
+  description = "Restricts ec2:RegisterImage permissions on snapshots created by AWS Backup"
+  type        = "SERVICE_CONTROL_POLICY"
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.modernisation_platform_restrict_ec2_register_image_scp.json
+}
+
+data "aws_iam_policy_document" "modernisation_platform_restrict_ec2_register_image_scp" {
+  statement {
+    sid    = "DenyRegisterImageFromBackupSnapshots"
+    effect = "Deny"
+
+    actions = [
+      "ec2:RegisterImage"
+    ]
+
+    resources = ["*"]
+
+    # Deny if any source snapshot has the Backup tag
+    condition {
+      test     = "ForAnyValue:StringLike"
+      variable = "ec2:SnapshotTag/aws:backup:source-resource"
+      values   = ["*"]
+    }
+  }
+}
+
+# Fetch children of "Modernisation Platform Member"
+data "aws_organizations_organizational_units" "modernisation_platform_member_children" {
+  parent_id = [
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children :
+    child.id
+    if child.name == "Modernisation Platform Member"
+  ][0]
+}
+
+# Attach SCP to the "modernisation-platform-sprinkler" OU only
+resource "aws_organizations_policy_attachment" "modernisation_platform_restrict_ec2_register_image_scp" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.modernisation_platform_member_children.children :
+    child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
+
+  target_id = each.value
+  policy_id = aws_organizations_policy.modernisation_platform_restrict_ec2_register_image_scp.id
+}
 
 # LAA Deny actions
 resource "aws_organizations_policy" "deny_all_actions_by_users" {
