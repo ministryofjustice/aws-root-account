@@ -453,20 +453,14 @@ resource "aws_organizations_policy" "modernisation_platform_restrict_ec2_registe
 
 data "aws_iam_policy_document" "modernisation_platform_restrict_ec2_register_image_scp" {
   statement {
-    sid    = "DenyRegisterImageFromBackupSnapshots"
-    effect = "Deny"
-
-    actions = [
-      "ec2:RegisterImage"
-    ]
-
+    effect    = "Deny"
+    actions   = ["ec2:RegisterImage"]
     resources = ["*"]
 
-    # Deny if any source snapshot has the Backup tag
     condition {
-      test     = "ForAnyValue:StringLike"
-      variable = "ec2:SnapshotTag/aws:backup:source-resource"
-      values   = ["*"]
+      test     = "StringEqualsIfExists"
+      variable = "aws:RequestTag/aws_backup_recovery_point_arn"
+      values   = ["true"]
     }
   }
 }
