@@ -173,7 +173,6 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "organizations:DescribeAccount",
       "organizations:DescribeCreateAccountStatus",
       "organizations:DescribeOrganization",
-      "organizations:DetachPolicy",
       "organizations:DisablePolicyType",
       "organizations:EnablePolicyType",
       "organizations:EnableAWSServiceAccess",
