@@ -73,6 +73,10 @@ locals {
     ]
   }
 
+  # Flat list of all modernisation platform account IDs
+  modernisation_platform_account_ids = flatten(values(local.modernisation_platform_accounts))
+
+
   root_account = merge(local.tags_business_units.platforms, {
     application   = "AWS root account"
     is-production = true
@@ -147,4 +151,8 @@ locals {
       "arn:aws:s3:::${location}/*"
     ]
   ])
+
+  non_default_enabled_regions = [
+    "eu-central-2"
+  ]
 }
