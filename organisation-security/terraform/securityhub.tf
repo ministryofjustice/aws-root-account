@@ -39,6 +39,15 @@ module "securityhub_eu_central_1" {
   is_delegated_administrator = true
 }
 
+module "securityhub_eu_central_2" {
+  source = "../../modules/securityhub"
+  providers = {
+    aws = aws.eu-central-2
+  }
+
+  is_delegated_administrator = true
+}
+
 ##############################
 # Security Hub in US regions #
 ##############################

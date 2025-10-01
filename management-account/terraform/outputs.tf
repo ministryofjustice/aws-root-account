@@ -13,6 +13,7 @@ output "guardduty_administrator_detector_ids" {
     "ap_southeast_2" = module.guardduty_ap_southeast_2.administrator_detector_id
     "ca_central_1"   = module.guardduty_ca_central_1.administrator_detector_id
     "eu_central_1"   = module.guardduty_eu_central_1.administrator_detector_id
+    "eu_central_2"   = module.guardduty_eu_central_2.administrator_detector_id
     "eu_west_1"      = module.guardduty_eu_west_1.administrator_detector_id
     "eu_west_2"      = module.guardduty_eu_west_2.administrator_detector_id
     "eu_west_3"      = module.guardduty_eu_west_3.administrator_detector_id

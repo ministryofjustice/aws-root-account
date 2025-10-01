@@ -122,6 +122,16 @@ provider "aws" {
   }
 }
 
+# eu-central-2
+provider "aws" {
+  region = "eu-central-2"
+  alias  = "organisation-security-eu-central-2"
+
+  assume_role {
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+  }
+}
+
 # eu-west-1
 provider "aws" {
   region = "eu-west-1"

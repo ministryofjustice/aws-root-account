@@ -386,6 +386,35 @@ module "guardduty_eu_central_1" {
   ]
 }
 
+module "guardduty_eu_central_2" {
+  source = "../../modules/guardduty-org-sec"
+
+  providers = { aws.delegated_administrator = aws.eu-central-2 }
+
+  administrator_detector_id = local.guardduty_administrator_detector_ids.eu_central_2
+
+  # Utilise ThreatIntelSet
+  enable_threatintelset = false
+  threatintelset_key    = aws_s3_object.guardduty_threatintelset.key
+  threatintelset_bucket = aws_s3_object.guardduty_threatintelset.bucket
+
+  # Automatically enable GuardDuty for eu-central-2
+  auto_enable = true
+
+  destination_arn = module.guardduty_publishing_destination_s3_bucket.bucket.arn
+  kms_key_arn     = aws_kms_key.guardduty.arn
+
+
+  administrator_tags = merge(
+    local.tags_organisation_management, {
+      component = "Security"
+  })
+
+  depends_on = [
+    module.guardduty_publishing_destination_s3_bucket
+  ]
+}
+
 module "guardduty_eu_west_1" {
   source = "../../modules/guardduty-org-sec"
 

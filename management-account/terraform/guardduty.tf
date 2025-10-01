@@ -221,6 +221,21 @@ module "guardduty_eu_central_1" {
   })
 }
 
+module "guardduty_eu_central_2" {
+  source = "../../modules/guardduty-root"
+
+  providers = {
+    aws.root_account            = aws.eu-central-2
+    aws.delegated_administrator = aws.organisation-security-eu-central-2
+  }
+
+  root_tags = local.root_account
+  administrator_tags = merge(
+    local.tags_organisation_management, {
+      component = "Security"
+  })
+}
+
 module "guardduty_eu_west_1" {
   source = "../../modules/guardduty-root"
 

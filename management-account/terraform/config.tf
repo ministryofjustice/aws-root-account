@@ -45,6 +45,17 @@ module "config_eu_central_1" {
   snapshot_delivery_frequency = "One_Hour"
 }
 
+module "config_eu_central_2" {
+  source = "../../modules/config"
+  providers = {
+    aws = aws.eu-central-2
+  }
+
+  iam_role_arn                = module.config_eu_west_2.iam_role_arn
+  s3_bucket_name              = module.config_log_bucket.bucket_name
+  snapshot_delivery_frequency = "One_Hour"
+}
+
 ########################
 # Config in US regions #
 ########################

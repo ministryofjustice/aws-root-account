@@ -37,6 +37,15 @@ module "securityhub_eu_central_1" {
   admin_account = aws_organizations_account.organisation_security.id
 }
 
+module "securityhub_eu_central_2" {
+  source = "../../modules/securityhub"
+  providers = {
+    aws = aws.eu-central-2
+  }
+
+  admin_account = aws_organizations_account.organisation_security.id
+}
+
 ##############################
 # Security Hub in US regions #
 ##############################

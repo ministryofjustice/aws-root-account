@@ -94,6 +94,11 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias  = "eu-central-2"
+  region = "eu-central-2"
+}
+
+provider "aws" {
   alias  = "eu-west-1"
   region = "eu-west-1"
 }
