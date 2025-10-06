@@ -30,7 +30,6 @@ resource "aws_inspector2_organization_configuration" "eu_central_1" {
     ecr         = true
     lambda      = true
     lambda_code = true
-
   }
 }
 resource "aws_inspector2_organization_configuration" "us_east_1" {
@@ -39,6 +38,5 @@ resource "aws_inspector2_organization_configuration" "us_east_1" {
     ecr         = true
     lambda      = true
     lambda_code = true
-
   }
 }
