@@ -8,6 +8,7 @@ resource "aws_inspector2_organization_configuration" "eu_west_2" {
     ec2    = true
     ecr    = true
     lambda = true
+    lambda_code = true
   }
 }
 resource "aws_inspector2_organization_configuration" "eu_west_1" {
@@ -15,6 +16,7 @@ resource "aws_inspector2_organization_configuration" "eu_west_1" {
     ec2    = true
     ecr    = true
     lambda = true
+    lambda_code = true
   }
 }
 resource "aws_inspector2_organization_configuration" "eu_west_3" {
@@ -22,6 +24,7 @@ resource "aws_inspector2_organization_configuration" "eu_west_3" {
     ec2    = true
     ecr    = true
     lambda = true
+    lambda_code = false
   }
 }
 resource "aws_inspector2_organization_configuration" "eu_central_1" {

@@ -161,6 +161,8 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
       "identitystore:CreateGroup",
+      "inspector2:EnableDelegatedAdminAccount",          
+      "inspector2:ListDelegatedAdminAccounts",   
       "kms:*",
       "lambda:*",
       "license-manager:*",
