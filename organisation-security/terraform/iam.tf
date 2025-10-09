@@ -59,6 +59,8 @@ data "aws_iam_policy_document" "oidc_assume_role_apply" {
       "identitystore:ListGroups",
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
+      "inspector2:EnableDelegatedAdminAccount",
+      "inspector2:ListDelegatedAdminAccounts",
       "kms:Decrypt",
       "lambda:*",
       "license-manager:*",
