@@ -22,6 +22,7 @@ resource "aws_inspector2_organization_configuration" "eu_west_1" {
 }
 
 resource "aws_inspector2_organization_configuration" "eu_west_3" {
+  provider = aws.eu-west-3
   auto_enable {
     ec2         = true
     ecr         = true
@@ -31,6 +32,7 @@ resource "aws_inspector2_organization_configuration" "eu_west_3" {
 }
 
 resource "aws_inspector2_organization_configuration" "eu_central_1" {
+  provider = aws.eu-central-1
   auto_enable {
     ec2         = true
     ecr         = true
@@ -40,6 +42,7 @@ resource "aws_inspector2_organization_configuration" "eu_central_1" {
 }
 
 resource "aws_inspector2_organization_configuration" "us_east_1" {
+  provider = aws.us-east-1
   auto_enable {
     ec2         = true
     ecr         = true
