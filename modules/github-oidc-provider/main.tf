@@ -186,6 +186,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "organizations:ListRoots",
       "organizations:MoveAccount",
       "organizations:MoveOrganizationalUnit",
+      "organizations:RegisterDelegatedAdministrator",
       "organizations:TagResource",
       "organizations:UpdateOrganizationalUnit",
       "organizations:UpdatePolicy",
