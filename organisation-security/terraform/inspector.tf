@@ -2,7 +2,11 @@
 # Inspector in EU and US-East regions #
 ###########################
 
-# Enable Inspector in each region where it's not currently active
+# Data source to get all organization accounts
+data "aws_organizations_organization" "current" {}
+
+# Enable Inspector2 for all existing organization member accounts in new regions
+
 resource "aws_inspector2_enabler" "eu_west_3" {
   provider       = aws.eu-west-3
   account_ids    = [data.aws_caller_identity.current.account_id]
@@ -19,6 +23,33 @@ resource "aws_inspector2_enabler" "us_east_1" {
   provider       = aws.us-east-1
   account_ids    = [data.aws_caller_identity.current.account_id]
   resource_types = ["ECR", "EC2", "LAMBDA", "LAMBDA_CODE"]
+}
+
+resource "aws_inspector2_enabler" "all_member_accounts_eu_west_3" {
+  provider = aws.eu-west-3
+  account_ids = [
+    for account in data.aws_organizations_organization.current.accounts :
+    account.id if account.id != local.root_account_id && account.id != data.aws_caller_identity.current.account_id
+  ]
+  resource_types = ["EC2", "ECR", "LAMBDA"]
+}
+
+resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
+  provider = aws.eu-central-1
+  account_ids = [
+    for account in data.aws_organizations_organization.current.accounts :
+    account.id if account.id != local.root_account_id && account.id != data.aws_caller_identity.current.account_id
+  ]
+  resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
+}
+
+resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
+  provider = aws.us-east-1
+  account_ids = [
+    for account in data.aws_organizations_organization.current.accounts :
+    account.id if account.id != local.root_account_id && account.id != data.aws_caller_identity.current.account_id
+  ]
+  resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
 }
 
 # Auto enable per region
