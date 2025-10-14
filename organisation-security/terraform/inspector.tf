@@ -9,7 +9,9 @@ data "aws_organizations_organization" "current" {}
 locals {
   all_member_accounts = [
     for account in data.aws_organizations_organization.current.accounts :
-    account.id if account.id != local.root_account_id && account.id != data.aws_caller_identity.current.account_id
+    account.id if account.id != local.root_account_id &&
+    account.id != data.aws_caller_identity.current.account_id &&
+    account.status == "ACTIVE"
   ]
 
   # Split accounts into chunks of 100
