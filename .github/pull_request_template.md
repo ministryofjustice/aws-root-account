@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD041 -->
+
 ## 👀 Purpose
 
 { Add content here - what are you trying to achieve with this PR? What originating issue sparked this pull request? }
