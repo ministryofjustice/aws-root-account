@@ -681,3 +681,43 @@ module "focus_reports_s3_bucket" {
     }
   }
 }
+
+# moj-optimisation-hub-export
+
+module "optimisation_hub_export_s3_bucket" {
+  source = "../../modules/s3"
+
+  bucket_name   = "moj-optimisation-hub-export"
+  attach_policy = true
+  policy        = data.aws_iam_policy_document.optimisation_hub_export_s3_policy.json
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.optimisation_hub_export_s3_kms.key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}
+
+data "aws_iam_policy_document" "optimisation_hub_export_s3_policy" {
+  version = "2008-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetBucketLocation",
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-optimisation-hub-export",
+      "arn:aws:s3:::moj-optimisation-hub-export/*"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["bcm-data-exports.amazonaws.com"]
+    }
+  }
+}
