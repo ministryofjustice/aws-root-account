@@ -2,14 +2,11 @@
 # Inspector in EU and US-East regions #
 ###########################
 
-# Data source to get all organization accounts
-data "aws_organizations_organization" "current" {}
-
 # Local value to chunk accounts into batches of 100 (AWS API limit)
 locals {
-  all_member_accounts = [
-    for account in data.aws_organizations_organization.current.accounts :
-    account.id if account.id != data.aws_caller_identity.current.account_id &&
+ all_member_accounts = [
+    for account in local.organizations_organization.current.accounts :
+    account.id if account.id != local.root_account_id && account.id != data.aws_caller_identity.current.account_id  &&
     account.status == "ACTIVE"
   ]
 
@@ -45,6 +42,7 @@ resource "aws_inspector2_enabler" "all_member_accounts_eu_west_3" {
   provider       = aws.eu-west-3
   account_ids    = local.account_chunks[count.index]
   resource_types = ["EC2", "ECR", "LAMBDA"]
+  depends_on     = [aws_inspector2_organization_configuration.eu_west_3]
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
@@ -52,6 +50,7 @@ resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
   provider       = aws.eu-central-1
   account_ids    = local.account_chunks[count.index]
   resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
+  depends_on     = [aws_inspector2_organization_configuration.eu_central_1]
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
@@ -59,6 +58,7 @@ resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
   provider       = aws.us-east-1
   account_ids    = local.account_chunks[count.index]
   resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
+  depends_on     = [aws_inspector2_organization_configuration.us_east_1]
 }
 
 # Auto enable per region
