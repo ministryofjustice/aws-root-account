@@ -108,19 +108,16 @@ resource "aws_inspector2_member_association" "us_east_1" {
   count      = length(local.all_member_accounts)
   provider   = aws.us-east-1
   account_id = local.all_member_accounts[count.index]
-  depends_on = [aws_inspector2_enabler.all_member_accounts_us_east_1]
 }
 
 resource "aws_inspector2_member_association" "eu_central_1" {
   count      = length(local.all_member_accounts)
   provider   = aws.eu-central-1
   account_id = local.all_member_accounts[count.index]
-  depends_on = [aws_inspector2_enabler.all_member_accounts_eu_central_1]
 }
 
 resource "aws_inspector2_member_association" "eu_west_3" {
   count      = length(local.all_member_accounts)
   provider   = aws.eu-west-3
   account_id = local.all_member_accounts[count.index]
-  depends_on = [aws_inspector2_enabler.all_member_accounts_eu_west_3]
 }
