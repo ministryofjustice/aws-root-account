@@ -2,10 +2,13 @@
 # Inspector in EU and US-East regions #
 ###########################
 
+# Data source to get all organization accounts
+data "aws_organizations_organization" "current" {}
+
 # Local value to chunk accounts into batches of 100 (AWS API limit)
 locals {
  all_member_accounts = [
-    for account in local.organizations_organization.current.accounts :
+    for account in data.aws_organizations_organization.current.accounts :
     account.id if account.id != local.root_account_id && account.id != data.aws_caller_identity.current.account_id  &&
     account.status == "ACTIVE"
   ]
