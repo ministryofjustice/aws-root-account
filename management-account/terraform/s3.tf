@@ -719,5 +719,10 @@ data "aws_iam_policy_document" "optimisation_hub_export_s3_policy" {
       type        = "Service"
       identifiers = ["bcm-data-exports.amazonaws.com"]
     }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = ["295814833350"]
+    } 
   }
 }
