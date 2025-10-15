@@ -505,7 +505,7 @@ module "cur_reports_v2_hourly_replication_role" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.60.0"
+  version = "6.2.1"
 
   create_role = true
 
@@ -593,7 +593,7 @@ module "cur_reports_v2_hourly_replication_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.60.0"
+  version = "6.2.1"
   name    = "${module.cur_reports_v2_hourly_replication_role.iam_role_name}-policy"
 
   policy = data.aws_iam_policy_document.cur_reports_v2_hourly_replication.json
