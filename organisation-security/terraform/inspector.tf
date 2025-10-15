@@ -35,21 +35,21 @@ resource "aws_inspector2_enabler" "us_east_1" {
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_eu_west_3" {
-  provider       = aws.organisation-security-eu-west-3
+  provider       = aws.eu-west-3
   account_ids    = local.all_member_accounts
   resource_types = ["EC2", "ECR", "LAMBDA"]
   depends_on     = [aws_inspector2_organization_configuration.eu_west_3]
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
-  provider       = aws.organisation-security-eu-central-1
+  provider       = aws.eu-central-1
   account_ids    = local.all_member_accounts
   resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
   depends_on     = [aws_inspector2_organization_configuration.eu_central_1]
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
-  provider       = aws.organisation-security-us-east-1
+  provider       = aws.us-east-1
   account_ids    = local.all_member_accounts
   resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
   depends_on     = [aws_inspector2_organization_configuration.us_east_1]
@@ -101,4 +101,26 @@ resource "aws_inspector2_organization_configuration" "us_east_1" {
     lambda      = true
     lambda_code = true
   }
+}
+
+# Member associations for explicit association with delegated admin account
+resource "aws_inspector2_member_association" "us_east_1" {
+  count      = length(local.all_member_accounts)
+  provider   = aws.us-east-1
+  account_id = local.all_member_accounts[count.index]
+  depends_on = [aws_inspector2_enabler.all_member_accounts_us_east_1]
+}
+
+resource "aws_inspector2_member_association" "eu_central_1" {
+  count      = length(local.all_member_accounts)
+  provider   = aws.eu-central-1
+  account_id = local.all_member_accounts[count.index]
+  depends_on = [aws_inspector2_enabler.all_member_accounts_eu_central_1]
+}
+
+resource "aws_inspector2_member_association" "eu_west_3" {
+  count      = length(local.all_member_accounts)
+  provider   = aws.eu-west-3
+  account_id = local.all_member_accounts[count.index]
+  depends_on = [aws_inspector2_enabler.all_member_accounts_eu_west_3]
 }
