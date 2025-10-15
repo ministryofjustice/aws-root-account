@@ -125,30 +125,3 @@ provider "aws" {
   alias  = "sa-east-1"
   region = "sa-east-1"
 }
-# us-east-1
-provider "aws" {
-  region = "us-east-1"
-  alias  = "organisation-security-us-east-1"
-
-  assume_role {
-    role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/OrganizationAccountAccessRole"
-  }
-}
-# eu-west-3
-provider "aws" {
-  region = "eu-west-3"
-  alias  = "organisation-security-eu-west-3"
-
-  assume_role {
-    role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/OrganizationAccountAccessRole"
-  }
-}
-# eu-central-1
-provider "aws" {
-  region = "eu-central-1"
-  alias  = "organisation-security-eu-central-1"
-
-  assume_role {
-    role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/OrganizationAccountAccessRole"
-  }
-}
