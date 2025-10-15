@@ -722,7 +722,7 @@ data "aws_iam_policy_document" "optimisation_hub_export_s3_policy" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = ["295814833350"]
+      values   = ["${data.aws_caller_identity.current.account_id}"]
     } 
   }
 }
