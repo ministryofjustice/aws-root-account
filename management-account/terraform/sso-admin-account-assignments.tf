@@ -470,6 +470,13 @@ locals {
         aws_organizations_account.laa_production.id,
       ]
     },
+    {
+      github_team        = "azure-aws-sso-management-billing",
+      permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id
+      ]
+    },
   ]
   sso_admin_account_assignments_expanded = flatten([
     for assignment in local.sso_admin_account_assignments : [
