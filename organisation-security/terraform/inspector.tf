@@ -40,23 +40,23 @@ resource "aws_inspector2_enabler" "us_east_1" {
   resource_types = ["ECR", "EC2", "LAMBDA", "LAMBDA_CODE"]
 }
 resource "aws_inspector2_enabler" "all_member_accounts_eu_west_3" {
-  for_each       = { for idx, chunk in local.account_chunks : idx => chunk }
+  count          = length(local.account_chunks)
   provider       = aws.eu-west-3
-  account_ids    = each.value
+  account_ids    = local.account_chunks[count.index]
   resource_types = ["EC2", "ECR", "LAMBDA"]
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
-  for_each       = { for idx, chunk in local.account_chunks : idx => chunk }
+  count          = length(local.account_chunks)
   provider       = aws.eu-central-1
-  account_ids    = each.value
+  account_ids    = local.account_chunks[count.index]
   resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
-  for_each       = { for idx, chunk in local.account_chunks : idx => chunk }
+  count          = length(local.account_chunks)
   provider       = aws.us-east-1
-  account_ids    = each.value
+  account_ids    = local.account_chunks[count.index]
   resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
 }
 
@@ -110,19 +110,19 @@ resource "aws_inspector2_organization_configuration" "us_east_1" {
 
 # Member associations for explicit association with delegated admin account
 resource "aws_inspector2_member_association" "us_east_1" {
-  for_each   = toset(local.all_member_accounts)
+  count      = length(local.all_member_accounts)
   provider   = aws.us-east-1
-  account_id = each.value
+  account_id = local.all_member_accounts[count.index]
 }
 
 resource "aws_inspector2_member_association" "eu_central_1" {
-  for_each   = toset(local.all_member_accounts)
+  count      = length(local.all_member_accounts)
   provider   = aws.eu-central-1
-  account_id = each.value
+  account_id = local.all_member_accounts[count.index]
 }
 
 resource "aws_inspector2_member_association" "eu_west_3" {
-  for_each   = toset(local.all_member_accounts)
+  count      = length(local.all_member_accounts)
   provider   = aws.eu-west-3
-  account_id = each.value
+  account_id = local.all_member_accounts[count.index]
 }
