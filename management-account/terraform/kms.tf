@@ -61,3 +61,15 @@ module "cur_v2_s3_kms" {
   enable_default_policy   = true
   deletion_window_in_days = 7
 }
+
+# Optimisation hub bucket key
+
+module "optimisation_hub_export_s3_kms" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "4.0.0"
+
+  aliases                 = ["s3/optimisation-hub"]
+  description             = "Optimisation hub S3 bucket KMS key"
+  enable_default_policy   = true
+  deletion_window_in_days = 7
+}
