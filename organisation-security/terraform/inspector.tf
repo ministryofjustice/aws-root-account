@@ -39,26 +39,6 @@ resource "aws_inspector2_enabler" "us_east_1" {
   account_ids    = [data.aws_caller_identity.current.account_id]
   resource_types = ["ECR", "EC2", "LAMBDA", "LAMBDA_CODE"]
 }
-resource "aws_inspector2_enabler" "all_member_accounts_eu_west_3" {
-  for_each       = { for idx, chunk in local.account_chunks : idx => chunk }
-  provider       = aws.eu-west-3
-  account_ids    = each.value
-  resource_types = ["EC2", "ECR", "LAMBDA"]
-}
-
-resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
-  for_each       = { for idx, chunk in local.account_chunks : idx => chunk }
-  provider       = aws.eu-central-1
-  account_ids    = each.value
-  resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
-}
-
-resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
-  for_each       = { for idx, chunk in local.account_chunks : idx => chunk }
-  provider       = aws.us-east-1
-  account_ids    = each.value
-  resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
-}
 
 # Auto enable per region
 resource "aws_inspector2_organization_configuration" "eu_west_2" {
