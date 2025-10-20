@@ -45,6 +45,7 @@ resource "aws_inspector2_enabler" "all_member_accounts_eu_west_3" {
   provider       = aws.eu-west-3
   account_ids    = each.value
   resource_types = ["EC2", "ECR", "LAMBDA"]
+  depends_on     = [aws_inspector2_member_association.eu_west_3]
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
@@ -52,6 +53,7 @@ resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
   provider       = aws.eu-central-1
   account_ids    = each.value
   resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
+  depends_on     = [aws_inspector2_member_association.eu_central_1]
 }
 
 resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
@@ -59,6 +61,7 @@ resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
   provider       = aws.us-east-1
   account_ids    = each.value
   resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
+  depends_on     = [aws_inspector2_member_association.us_east_1]
 }
 
 # Auto enable per region
