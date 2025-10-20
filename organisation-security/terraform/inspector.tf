@@ -5,12 +5,18 @@
 # Data source to get all organization accounts
 data "aws_organizations_organization" "current" {}
 
-# Local value for test accounts
+# Local value to chunk accounts into batches of 100 (AWS API limit)
 locals {
-  # Test accounts for Inspector2 member association testing
   all_member_accounts = [
-    "348456244381",
-    "083957762049"
+    for account in data.aws_organizations_organization.current.accounts :
+    account.id if account.id != local.root_account_id && account.id != data.aws_caller_identity.current.account_id &&
+    account.status == "ACTIVE"
+  ]
+
+  # Split accounts into chunks of 100
+  account_chunks = [
+    for i in range(0, length(local.all_member_accounts), 100) :
+    slice(local.all_member_accounts, i, min(i + 100, length(local.all_member_accounts)))
   ]
 }
 
@@ -32,27 +38,6 @@ resource "aws_inspector2_enabler" "us_east_1" {
   provider       = aws.us-east-1
   account_ids    = [data.aws_caller_identity.current.account_id]
   resource_types = ["ECR", "EC2", "LAMBDA", "LAMBDA_CODE"]
-}
-
-resource "aws_inspector2_enabler" "all_member_accounts_eu_west_3" {
-  provider       = aws.eu-west-3
-  account_ids    = local.all_member_accounts
-  resource_types = ["EC2", "ECR", "LAMBDA"]
-  depends_on     = [aws_inspector2_organization_configuration.eu_west_3]
-}
-
-resource "aws_inspector2_enabler" "all_member_accounts_eu_central_1" {
-  provider       = aws.eu-central-1
-  account_ids    = local.all_member_accounts
-  resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
-  depends_on     = [aws_inspector2_organization_configuration.eu_central_1]
-}
-
-resource "aws_inspector2_enabler" "all_member_accounts_us_east_1" {
-  provider       = aws.us-east-1
-  account_ids    = local.all_member_accounts
-  resource_types = ["EC2", "ECR", "LAMBDA", "LAMBDA_CODE"]
-  depends_on     = [aws_inspector2_organization_configuration.us_east_1]
 }
 
 # Auto enable per region
@@ -105,19 +90,19 @@ resource "aws_inspector2_organization_configuration" "us_east_1" {
 
 # Member associations for explicit association with delegated admin account
 resource "aws_inspector2_member_association" "us_east_1" {
-  count      = length(local.all_member_accounts)
+  for_each   = toset(local.all_member_accounts)
   provider   = aws.us-east-1
-  account_id = local.all_member_accounts[count.index]
+  account_id = each.value
 }
 
 resource "aws_inspector2_member_association" "eu_central_1" {
-  count      = length(local.all_member_accounts)
+  for_each   = toset(local.all_member_accounts)
   provider   = aws.eu-central-1
-  account_id = local.all_member_accounts[count.index]
+  account_id = each.value
 }
 
 resource "aws_inspector2_member_association" "eu_west_3" {
-  count      = length(local.all_member_accounts)
+  for_each   = toset(local.all_member_accounts)
   provider   = aws.eu-west-3
-  account_id = local.all_member_accounts[count.index]
+  account_id = each.value
 }
