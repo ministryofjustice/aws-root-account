@@ -20,7 +20,7 @@ This repository also manages the following services:
 
 ## 🧭 Repository Structure Overview
 
-```
+```sh
 .
 ├── .github/                            # Issue templates, workflows (CI/CD), CODEOWNERS, etc.
 ├── management-account/                 # IaC for Managment Account. Contains configuration Organisations, Identity Centre, Cost and Billing etc.
