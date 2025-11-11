@@ -1,20 +1,20 @@
 # AWS Root Account
 
-[![MoJ Repository Standards](https://github-community.service.justice.gov.uk/repository-standards/api/aws-root-account/badge)](https://github-community.service.justice.gov.uk/repository-standards/aws-root-account)
+[![MOJ Repository Standards](https://github-community.service.justice.gov.uk/repository-standards/api/aws-root-account/badge)](https://github-community.service.justice.gov.uk/repository-standards/aws-root-account)
 
-This repository defines and manages the MoJ AWS Management Account, which serves as the **root of the MoJ AWS Organization**.
+This repository defines and manages the MOJ AWS Management Account, which serves as the **root of the MOJ AWS Organization**.
 It provides shared services, centralized governance, and foundational security for all AWS accounts under the Ministry of Justice.
 
 This repository manages the following AWS accounts:
 
-- The Management Account (`MoJ Master` also referred to as `AWS Root Account`)
+- The Management Account (`MOJ Master` also referred to as `AWS Root Account`)
 - Supporting organizational accounts (`organisation-security`, `organisation-logging (to be added)`)
 - Lifecycle management of accounts that are not provided by the Modernisation Platform
 
 This repository also manages the following services:
 
 - SSO Access to AWS Accounts and Applications through GitHub and Microsoft Justice Identities
-- Opt-in Extended Detection and Response (XDR) AWS Account Integration with MoJ Security Operations Centre (SOC)
+- Opt-in Extended Detection and Response (XDR) AWS Account Integration with MOJ Security Operations Centre (SOC)
 - Automatically setting the Security Contact of all Member Accounts to `security@justice.gov.uk`
 - Configuring AWS Organization such as creating Organizational Units, AWS Accounts, Service Control Policies. For details on all AWS Organization integrated services, see [AWS Organizations Integrated Services Overview](#️-aws-organizations-integrated-services-overview)
 
@@ -34,7 +34,7 @@ This repository also manages the following services:
 | Responsibility                          | Team / Role                                                                                                                         | Contact                                                                                            |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Primary ownership of `aws-root-account` | [Hosting Tech Leads](https://github.com/orgs/ministryofjustice/teams/hosting-tech-leads)                                            | [#aws-root-account](https://moj.enterprise.slack.com/archives/C06P4KA0V0A)                         |
-| Strategic MoJ AWS landing zone          | [Modernisation Platform](https://github.com/orgs/ministryofjustice/teams/modernisation-platform)                                    | [#ask-modernisation-platform](https://moj.enterprise.slack.com/archives/C013RM6MFFW)               |
+| Strategic MOJ AWS landing zone          | [Modernisation Platform](https://github.com/orgs/ministryofjustice/teams/modernisation-platform)                                    | [#ask-modernisation-platform](https://moj.enterprise.slack.com/archives/C013RM6MFFW)               |
 | AWS cost and billing                    | [Cloud Optimisation and Accountability Team](https://github.com/orgs/ministryofjustice/teams/cloud-optimisation-and-accountability) | [#cloud-optimisation-and-accountability-team](https://moj.enterprise.slack.com/archives/CPVD6398C) |
 | Security consultation and reviews       | P&A Cyber Security                                                                                                                  | [#ask-panda-cyber](https://moj.enterprise.slack.com/archives/C0476G42C0N)                          |
 | Ownership of overall AWS Service        | Hosting                                                                                                                             | [#hosting](https://moj.enterprise.slack.com/archives/CA454PY2C)                                    |
@@ -43,7 +43,7 @@ This repository also manages the following services:
 
 The Ministry of Justice AWS Organization integrates with a number of [AWS services that work with Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services_list.html), enabling centralized governance, security, and automation across all member accounts.
 
-This section lists **all AWS services known to support integration with AWS Organizations**, showing which are **enabled** for the MoJ Organization.
+This section lists **all AWS services known to support integration with AWS Organizations**, showing which are **enabled** for the MOJ Organization.
 
 Each service is grouped by category and includes:
 
@@ -60,7 +60,7 @@ The following AWS Services establish organization-wide visibility, detection, an
 | Status | Service                                                   | Description                                                                             | Managed By              | Rationale                                                                                             |
 | :----: | :-------------------------------------------------------- | :-------------------------------------------------------------------------------------- | :---------------------- | :---------------------------------------------------------------------------------------------------- |
 |   ✅   | **Detective** (`detective.amazonaws.com`)                 | Security investigation service that builds relationship graphs from GuardDuty findings. | `organisation-security` | Provides org-wide threat investigation capability.                                                    |
-|   ✅   | **Firewall Manager** (`fms.amazonaws.com`)                | Central policy management for WAF, Shield, and security groups.                         | `MoJ Master`            | Enforces baseline network security policies, such as auto attachting basic firewalls to applications. |
+|   ✅   | **Firewall Manager** (`fms.amazonaws.com`)                | Central policy management for WAF, Shield, and security groups.                         | `MOJ Master`            | Enforces baseline network security policies, such as auto attachting basic firewalls to applications. |
 |   ✅   | **GuardDuty** (`guardduty.amazonaws.com`)                 | Threat detection and monitoring across accounts.                                        | `organisation-security` | Centralised GuardDuty delegated admin for all accounts.                                               |
 |   ✅   | **IAM Access Analyzer** (`access-analyzer.amazonaws.com`) | Enables org-wide IAM Access Analyzer for external access findings.                      | `organisation-security` | Provides org-level visibility into cross-account access.                                              |
 |   ✅   | **Inspector** (`inspector2.amazonaws.com`)                | Automated vulnerability scanning across instances, containers, and Lambda.              | `organisation-security` | Ensures continuous compliance scanning across org.                                                    |
@@ -76,12 +76,12 @@ The following AWS Services define organizational structure, manage policies and 
 
 | Status | Service                                            | Description                                                                 | Managed By              | Rationale                                                           |
 | :----: | :------------------------------------------------- | :-------------------------------------------------------------------------- | :---------------------- | :------------------------------------------------------------------ |
-|   ✅   | **Account Management** (`account.amazonaws.com`)   | Enables API-level management of AWS accounts within the organization.       | `MoJ Master`            | Required for account provisioning and lifecycle management.         |
+|   ✅   | **Account Management** (`account.amazonaws.com`)   | Enables API-level management of AWS accounts within the organization.       | `MOJ Master`            | Required for account provisioning and lifecycle management.         |
 |   ✅   | CloudFormation Stacksets                           | Provision infrastructure in all member accounts.                            | `organisation-security` | Organisation-wide governance and integreations, such as with XSIAM  |
-|   ✅   | **IAM** (`iam.amazonaws.com`)                      | Organization-wide identity service integration (for Access Analyzer, SCPs). | `MoJ Master`            | Required for managing root users, setting SCPs and access analyzer. |
-|   ✅   | **Resource Access Manager** (`ram.amazonaws.com`)  | Share specified AWS resources that you own with other AWS accounts.         | `MoJ Master`            | Enables easier cross account resource access within org.            |
-|   ✅   | **IAM Identity Center** (`sso.amazonaws.com`)      | Enable visibility and control of your AWS resources.                        | `MoJ Master`            | Allows central SSO service for AWS Access via GitHub and Microsoft. |
-|   ✅   | **Tag Policies** (`tagpolicies.tag.amazonaws.com`) | Standardise tags across resources in your organization's accounts.          | `MoJ Master`            | Define standardised tagging rules for resources.                    |
+|   ✅   | **IAM** (`iam.amazonaws.com`)                      | Organization-wide identity service integration (for Access Analyzer, SCPs). | `MOJ Master`            | Required for managing root users, setting SCPs and access analyzer. |
+|   ✅   | **Resource Access Manager** (`ram.amazonaws.com`)  | Share specified AWS resources that you own with other AWS accounts.         | `MOJ Master`            | Enables easier cross account resource access within org.            |
+|   ✅   | **IAM Identity Center** (`sso.amazonaws.com`)      | Enable visibility and control of your AWS resources.                        | `MOJ Master`            | Allows central SSO service for AWS Access via GitHub and Microsoft. |
+|   ✅   | **Tag Policies** (`tagpolicies.tag.amazonaws.com`) | Standardise tags across resources in your organization's accounts.          | `MOJ Master`            | Define standardised tagging rules for resources.                    |
 
 </details>
 
@@ -92,9 +92,9 @@ The following AWS Services enable cross-account operational monitoring, automati
 
 | Status | Service                                               | Description                                                           | Managed By              | Rationale                                                      |
 | :----: | :---------------------------------------------------- | :-------------------------------------------------------------------- | :---------------------- | :------------------------------------------------------------- |
-|   ✅   | **AWS Backup** (`backup.amazonaws.com`)               | Centralized backup plans and compliance management across accounts.   | `MoJ Master`            | Currently, only monitors backups across the organisation.      |
+|   ✅   | **AWS Backup** (`backup.amazonaws.com`)               | Centralized backup plans and compliance management across accounts.   | `MOJ Master`            | Currently, only monitors backups across the organisation.      |
 |   ✅   | **AWS Config** (`config.amazonaws.com`)               | Tracks configuration changes and compliance across accounts.          | `organisation-security` | Enables centralized config aggregators and conformance packs.  |
-|   ✅   | **AWS Health** (`health.amazonaws.com`)               | Aggregates AWS Health events across the organization.                 | `MoJ Master`            | Allows central visibility of incidents and maintenance events. |
+|   ✅   | **AWS Health** (`health.amazonaws.com`)               | Aggregates AWS Health events across the organization.                 | `MOJ Master`            | Allows central visibility of incidents and maintenance events. |
 |   ✅   | **License Manager** (`license-manager.amazonaws.com`) | Tracks and enforces software license usage across accounts.           | `organisation-security` | Used to manage enterprise licensing across org.                |
 |   ✅   | **IP Address Manager (IPAM)** (`ipam.amazonaws.com`)  | Enables central management of IP address allocations across accounts. | `organisation-security` | Supports CIDR allocation and VPC IP tracking.                  |
 
@@ -107,19 +107,19 @@ The following AWS Services provide consolidated visibility and optimization of s
 
 | Status | Service                                                                   | Description                                                                                                                                   | Managed By   | Rationale                                              |
 | :----: | :------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------- | :----------- | :----------------------------------------------------- |
-|   ✅   | **Billing and Cost Management** (`billing-cost-management.amazonaws.com`) | Enables consolidated billing and budgets across the organization.                                                                             | `MoJ Master` | Required for consolidated billing and cost allocation. |
-|   ✅   | **Compute Optimizer** (`compute-optimizer.amazonaws.com`)                 | Provides org-wide optimization recommendations for compute resources.                                                                         | `MoJ Master` | Helps identify cost-saving opportunities.              |
-|   ✅   | **Cost Optimization Hub** (`cost-optimization-hub.bcm.amazonaws.com`)     | Aggregates cost optimization insights across accounts.                                                                                        | `MoJ Master` | Centralizes cost optimization insights.                |
-|   ✅   | **Marketplace** (`license-management.marketplace.amazonaws.com`)          | curated digital catalog that you can use to find, buy, deploy, and manage third-party software.                                               | `MoJ Master` | Centrally manage purchases through AWS Marketplace.    |
-|   ✅   | **S3 Storage Lens** (`storage-lens.s3.amazonaws.com`)                     | S3 storage usage and activity metrics with actionable recommendations to optimize storage.                                                    | `MoJ Master` | Centralizes cost optimization insights.                |
-|   ✅   | **Trusted Advisor** (`reporting.trustedadvisor.amazonaws.com`)            | makes recommendations when opportunities exist to save money, to improve system availability and performance, or to help close security gaps. | `MoJ Master` | Centralizes cost optimization and security insights.   |
+|   ✅   | **Billing and Cost Management** (`billing-cost-management.amazonaws.com`) | Enables consolidated billing and budgets across the organization.                                                                             | `MOJ Master` | Required for consolidated billing and cost allocation. |
+|   ✅   | **Compute Optimizer** (`compute-optimizer.amazonaws.com`)                 | Provides org-wide optimization recommendations for compute resources.                                                                         | `MOJ Master` | Helps identify cost-saving opportunities.              |
+|   ✅   | **Cost Optimization Hub** (`cost-optimization-hub.bcm.amazonaws.com`)     | Aggregates cost optimization insights across accounts.                                                                                        | `MOJ Master` | Centralizes cost optimization insights.                |
+|   ✅   | **Marketplace** (`license-management.marketplace.amazonaws.com`)          | curated digital catalog that you can use to find, buy, deploy, and manage third-party software.                                               | `MOJ Master` | Centrally manage purchases through AWS Marketplace.    |
+|   ✅   | **S3 Storage Lens** (`storage-lens.s3.amazonaws.com`)                     | S3 storage usage and activity metrics with actionable recommendations to optimize storage.                                                    | `MOJ Master` | Centralizes cost optimization insights.                |
+|   ✅   | **Trusted Advisor** (`reporting.trustedadvisor.amazonaws.com`)            | makes recommendations when opportunities exist to save money, to improve system availability and performance, or to help close security gaps. | `MOJ Master` | Centralizes cost optimization and security insights.   |
 
 </details>
 
 <details>
 <summary>💤 Services Not Yet Enabled</summary>
 
-These services support AWS Organizations integration but are currently **disabled** in the MoJ Organization.
+These services support AWS Organizations integration but are currently **disabled** in the MOJ Organization.
 
 | Status | Service                                                                                             | Description                                                                                             | Rationale |
 | :----: | :-------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------ | :-------- |
@@ -168,7 +168,7 @@ It is perfectly safe to run manually via the console and will not cause any issu
 
 **Steps:**
 
-- SSO into the `MoJ Master` account as an `ModernisationPlatformEngineer`.
+- SSO into the `MOJ Master` account as an `ModernisationPlatformEngineer`.
 - Navigate to the "Lambda" service.
 - Change your Region is set to eu-west-2 (London).
 - Navigate to the "Functions" on the sidebar.
@@ -205,6 +205,6 @@ _Validate:_ User can log in to AWS SSO and see the assigned account.
 
 - [AWS Organizations Overview](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html)
 - [AWS SSO (IAM Identity Center) Documentation](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)
-- [MoJ Cloud Platform Guidance](https://user-guide.modernisation-platform.service.justice.gov.uk)
-- [MoJ Modernisation Platform Guidance](https://user-guide.modernisation-platform.service.justice.gov.uk/)
+- [MOJ Cloud Platform Guidance](https://user-guide.modernisation-platform.service.justice.gov.uk)
+- [MOJ Modernisation Platform Guidance](https://user-guide.modernisation-platform.service.justice.gov.uk/)
 - [Terraform Best Practices (HashiCorp)](https://developer.hashicorp.com/terraform/docs/language/best-practices)
