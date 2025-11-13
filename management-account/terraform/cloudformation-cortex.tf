@@ -31,3 +31,12 @@ resource "aws_cloudformation_stack" "cortex_xdr_stack" {
   tags          = local.tags_organisation_management
   template_body = data.aws_s3_object.cortex_xdr_templates["cortex-xdr-root-account.template"].body
 }
+
+# Attach SQS log read policy to CortexXDRCloudApp role for log collection
+# Grants access to SQS queues and S3 buckets for CloudTrail, VPC Flow, Route53, Application, CloudFront, Modsec, and RDS logs
+resource "aws_iam_role_policy_attachment" "cortex_xdr_sqs_logs" {
+  role       = "CortexXDRCloudApp"
+  policy_arn = "arn:aws:iam::754256621582:policy/sqs-queue-read-policy"
+
+  depends_on = [aws_cloudformation_stack.cortex_xdr_stack]
+}
