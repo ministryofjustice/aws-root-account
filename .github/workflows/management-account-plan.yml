@@ -29,7 +29,7 @@ jobs:
           aws-region: eu-west-2
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
-          terraform_version: 1.12.2
+          terraform_version: 1.13.5
       - run: terraform fmt -check
         continue-on-error: true
       - run: terraform init
@@ -39,8 +39,9 @@ jobs:
         id: terraform-plan
         run: |
           set -o pipefail
-          terraform plan -detailed-exitcode | ../../scripts/redaction.sh
-          plan_exit_code=${PIPESTATUS[0]}  
+          terraform plan -detailed-exitcode -out "${RUNNER_TEMP}/tfplan"
+          plan_exit_code=$?
+          echo $RUNNER_TEMP/tfplan | ../../scripts/redaction.sh
           echo "Plan Exit Code: ${plan_exit_code}"
           echo "plan_exit_code=${plan_exit_code}" >> "$GITHUB_OUTPUT"
           if [ "$plan_exit_code" -ne 0 ] && [ "$plan_exit_code" -ne 2 ]; then
