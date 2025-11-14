@@ -36,21 +36,14 @@ jobs:
       - run: terraform validate -no-color
 
       - name: Terraform plan
-        id: terraform-plan
-        run: |
-          set -o pipefail
-          terraform plan -detailed-exitcode -out "${RUNNER_TEMP}/tfplan"
-          plan_exit_code=$?
-          echo $RUNNER_TEMP/tfplan | ../../scripts/redaction.sh
-          echo "Plan Exit Code: ${plan_exit_code}"
-          echo "plan_exit_code=${plan_exit_code}" >> "$GITHUB_OUTPUT"
-          if [ "$plan_exit_code" -ne 0 ] && [ "$plan_exit_code" -ne 2 ]; then
-            echo "::error title=Terraform Plan Failed::Unexpected exit code $plan_exit_code (expected 0 or 2)"
-            exit "$plan_exit_code"
-          fi
+        id: plan
+        run: terraform plan -detailed-exitcode -out "${RUNNER_TEMP}/tfplan"
+
+      - name: Show Redacted Terraform plan
+        run: echo $RUNNER_TEMP/tfplan | ../../scripts/redaction.sh
 
       - name: Alert Slack if drift detected on scheduled run
-        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && steps.terraform-plan.outputs.plan_exit_code == '2' }}
+        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && steps.plan.outputs.exitcode == '2' }}
         uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TESTING }}
