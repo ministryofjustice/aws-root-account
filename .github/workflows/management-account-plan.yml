@@ -39,7 +39,7 @@ jobs:
         id: plan
         run: |
           set -o pipefail
-          terraform plan -detailed-exitcode -out "${RUNNER_TEMP}/tfplan" | ../../scripts/redaction.sh
+          terraform plan -detailed-exitcode | ../../scripts/redaction.sh
 
       - name: Alert Slack if drift detected on scheduled run
         if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && steps.plan.outputs.exitcode == '2' }}
@@ -54,7 +54,8 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Drift Detected!"}},
+                    "text": "Drift Detected!"
+                  },
                 }
               ]
             }
