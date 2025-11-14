@@ -41,6 +41,7 @@ jobs:
           set -o pipefail
           terraform plan -detailed-exitcode | ../../scripts/redaction.sh
           plan_exit_code=${PIPESTATUS[0]}  
+          echo "Plan Exit Code: ${plan_exit_code}"
           echo "plan_exit_code=${plan_exit_code}" >> "$GITHUB_OUTPUT"
           [ "$plan_exit_code" -eq 1 ] && echo "Terraform plan failed." && exit 1
 
