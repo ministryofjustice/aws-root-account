@@ -54,8 +54,38 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Drift Detected!"
-                  },
+                    "text": ":old-man-yells-at-terraform: *Terraform Drift Detected!* \n\nDrift has been detected in the repository *<https://github.com/${{ github.repository }}|${{ github.repository }}>*. To corect the drift, re-apply the latest terraform code or update the code.\n\n*Workflow:* `${{ github.workflow }}`"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Workflow"
+                      },
+                      "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Apply management-account"
+                      },
+                      "url": "https://github.com/ministryofjustice/aws-root-account/actions/workflows/management-account-apply.yml"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Apply organisation-security"
+                      },
+                      "url": "https://github.com/ministryofjustice/aws-root-account/actions/workflows/organisation-security-apply.yml"
+                    }
+                  ]
                 }
               ]
             }
