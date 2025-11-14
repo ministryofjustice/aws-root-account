@@ -9,6 +9,7 @@ on:
       - ".github/workflows/management-account-apply.yml"
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   apply:

@@ -8,6 +8,8 @@ on:
       - ".github/workflows/management-account-plan.yml"
       - ".github/workflows/management-account-apply.yml"
   workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 1"
 
 jobs:
   plan:
@@ -32,7 +34,30 @@ jobs:
         continue-on-error: true
       - run: terraform init
       - run: terraform validate -no-color
+
       - name: Terraform plan
+        id: terraform-plan
         run: |
           set -o pipefail
-          terraform plan | ../../scripts/redaction.sh
+          terraform plan -detailed-exitcode | ../../scripts/redaction.sh
+          plan_exit_code=${PIPESTATUS[0]}  
+          echo "plan_exit_code=${plan_exit_code}" >> "$GITHUB_OUTPUT"
+          [ "$plan_exit_code" -eq 1 ] && echo "Terraform plan failed." && exit 1
+
+      - name: Alert Slack if drift detected on scheduled run
+        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && steps.terraform-plan.outputs.plan_exit_code == '2' }}
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TESTING }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Drift Detected!"}},
+                }
+              ]
+            }
