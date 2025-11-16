@@ -73,14 +73,6 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
-                        "text": "Apply management-account"
-                      },
-                      "url": "https://github.com/ministryofjustice/aws-root-account/actions/workflows/management-account-apply.yml"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
                         "text": "Apply organisation-security"
                       },
                       "url": "https://github.com/ministryofjustice/aws-root-account/actions/workflows/organisation-security-apply.yml"
