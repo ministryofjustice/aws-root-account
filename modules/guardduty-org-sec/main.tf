@@ -49,10 +49,6 @@ resource "aws_guardduty_organization_configuration_feature" "runtime_monitoring"
   auto_enable = "NEW"
 
   additional_configuration {
-    name        = "EKS_ADDON_MANAGEMENT"
-    auto_enable = "NONE"
-  }
-  additional_configuration {
     name        = "ECS_FARGATE_AGENT_MANAGEMENT"
     auto_enable = "NONE"
   }
@@ -60,6 +56,11 @@ resource "aws_guardduty_organization_configuration_feature" "runtime_monitoring"
     name        = "EC2_AGENT_MANAGEMENT"
     auto_enable = "NONE"
   }
+  additional_configuration {
+    name        = "EKS_ADDON_MANAGEMENT"
+    auto_enable = "NONE"
+  }
+
 }
 
 ####################################
