@@ -29,7 +29,7 @@ jobs:
           aws-region: eu-west-2
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
-          terraform_version: 1.13.5
+          terraform_version: 1.12.2
       - run: terraform fmt -check
         continue-on-error: true
       - run: terraform init
@@ -54,7 +54,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":old-man-yells-at-terraform: *Terraform Drift Detected!* \n\nDrift has been detected in the repository *<https://github.com/${{ github.repository }}|${{ github.repository }}>*. To corect the drift, re-apply the latest terraform code or update the code.\n\n*Workflow:* `${{ github.workflow }}`"
+                    "text": ":old-man-yells-at-terraform: *Terraform Drift Detected!* \n\nDrift has been detected in the repository *<https://github.com/${{ github.repository }}|${{ github.repository }}>*. To correct the drift, re-apply the latest terraform code or update the code.\n\n*Workflow:* `${{ github.workflow }}`"
                   }
                 },
                 {
