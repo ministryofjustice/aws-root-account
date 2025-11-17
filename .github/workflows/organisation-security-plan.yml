@@ -42,10 +42,10 @@ jobs:
           terraform plan -detailed-exitcode | ../../scripts/redaction.sh
 
       - name: Alert Slack if drift detected on scheduled run
-        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && steps.plan.outputs.exitcode == '2' }}
+        if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.plan.outputs.exitcode == '2' }}
         uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TESTING }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: webhook-trigger
           payload: |
             {
