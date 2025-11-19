@@ -86,9 +86,10 @@ resource "aws_inspector2_organization_configuration" "eu_west_1" {
 resource "aws_inspector2_organization_configuration" "eu_west_3" {
   provider = aws.eu-west-3
   auto_enable {
-    ec2    = true
-    ecr    = true
-    lambda = true
+    ec2         = true
+    ecr         = true
+    lambda      = true
+    lambda_code = true
   }
 }
 
@@ -130,3 +131,4 @@ resource "aws_inspector2_member_association" "eu_west_3" {
   provider   = aws.eu-west-3
   account_id = each.value
 }
+

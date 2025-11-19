@@ -9,6 +9,7 @@ on:
       - ".github/workflows/organisation-security-apply.yml"
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   apply:

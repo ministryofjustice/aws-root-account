@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "github_oidc_assume_role_plan" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.repository_with_owner}:pull_request"]
+      values   = ["repo:${var.repository_with_owner}:pull_request", "repo:${var.repository_with_owner}:ref:refs/heads/main"]
     }
   }
 }
