@@ -1,12 +1,14 @@
 module "scim" {
   # tflint-ignore: terraform_module_pinned_source
-  source                = "github.com/ministryofjustice/moj-terraform-scim-github?ref=52a981e832f47fd75f023c647913ca1a8d9ac907" # v1.0.0
-  github_organisation   = local.sso.github_organisation
-  github_token          = sensitive(local.sso.aws_saml.github_token)
-  sso_aws_region        = local.sso.region
-  sso_email_suffix      = local.sso.email_suffix
-  sso_identity_store_id = local.sso_admin_identity_store_id
-  not_dry_run           = true
+  source                     = "github.com/ministryofjustice/moj-terraform-scim-github?ref=02f017e9ee8a1dc03c0ff592ea47b7ccff76b383" # v2.0.0
+  github_organisation        = local.sso.github_organisation
+  github_app_id              = sensitive(local.sso.aws_saml.github_app_id)
+  github_app_private_key     = sensitive(local.sso.aws_saml.github_app_private_key)
+  github_app_installation_id = sensitive(local.sso.aws_saml.github_app_installation_id)
+  sso_aws_region             = local.sso.region
+  sso_email_suffix           = local.sso.email_suffix
+  sso_identity_store_id      = local.sso_admin_identity_store_id
+  not_dry_run                = true
 }
 
 module "entraid_scim" {
