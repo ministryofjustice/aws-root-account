@@ -70,6 +70,16 @@ data "aws_secretsmanager_secret_version" "aws_saml" {
   secret_id = aws_secretsmanager_secret.aws_saml.id
 }
 
+# GitHub App Private Key for SCIM
+resource "aws_secretsmanager_secret" "github_app_private_key" {
+  name        = "github_app_private_key"
+  description = "GitHub App private key for AWS SSO SCIM provisioning"
+}
+
+data "aws_secretsmanager_secret_version" "github_app_private_key" {
+  secret_id = aws_secretsmanager_secret.github_app_private_key.id
+}
+
 # OIDC: Azure EntraID client ID and secrets
 resource "aws_secretsmanager_secret" "azure_entraid_oidc" {
   name        = "azure_entraid_oidc"
