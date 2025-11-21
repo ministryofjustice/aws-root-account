@@ -201,6 +201,28 @@ _Validate:_ User can log in to AWS SSO and see the assigned account.
 
 </details>
 
+<details>
+<summary>📣 Making Changes that Impact the Entire Organisation</summary>
+
+If you are making a change could potentially impact Member Accounts, you should [post a maintenance update](https://moj-digital-tools.pagerduty.com/external-status-dashboard/PZEG8EK/maintenance?tab=ongoing) on the [MOJ Hosting External Status Page](https://status.hosting.service.justice.gov.uk/posts/dashboard).
+
+### What changes do I need to create a maintenance post for?
+
+Some changes within the Management AWS Accounts will impact the entire AWS Organisation. These changes typically include:
+
+- Updating EntraID / GitHub SCIM jobs that populate AWS Identity Centre. Changes here could break or degrade the service of SSO potentially preventing teams gaining access to AWS Accounts via SSO.
+- Enabling/Disabling AWS Services in AWS Organizations. Enabling/Disabling a service typically deploys infrastructure such as IAM Roles and Policies to all Member Accounts to establish Trusted Access.
+- Changing the configuration of Organization Enabled AWS Services. Changes to these services could potentially create or destroy infrastructure in all Member Accounts.
+- Adding/Updating a custom process that manages infrastructure in Member Accounts. This is things like custom Cloud Formation Templates we deploy across the Organisation, or ensuring all Member Accounts have `security@justice.gov.uk` as their Security Contact.
+
+### Why create a maintenance post?
+
+Changes are normal and not cause for concern in almost all cases. Although, because these changes can generate activity in Member Accounts, they can trigger alarms for our members which they need to investigate.
+
+Raising a maintenance post for these changes can help minimise the time members need to investigate alarms that our changes may have triggered.
+
+</details>
+
 ## 📚 Further Reading
 
 - [AWS Organizations Overview](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html)
