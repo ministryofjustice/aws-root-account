@@ -13,7 +13,8 @@ data "aws_iam_policy_document" "aws_organizations_list_read_only_role" {
     principals {
       type = "AWS"
       identifiers = ["arn:aws:iam::${aws_organizations_account.moj_digital_services.id}:root",
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/XsoarIntegration"]
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/XsoarIntegration",
+      "arn:aws:iam::${data.aws_ssm_parameter.cortex_account_id.value}:root"]
     }
   }
 }
