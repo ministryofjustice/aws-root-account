@@ -280,6 +280,20 @@ locals {
       ]
     },
     {
+      github_team        = "modernisation-platform-security",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.modernisation_platform.id
+      ]
+    },
+    {
+      github_team        = "modernisation-platform-security",
+      permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
+      account_ids = [
+        aws_organizations_account.modernisation_platform.id
+      ]
+    },
+    {
       github_team        = "secops",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
