@@ -13,7 +13,7 @@ module "scim" {
 
 module "entraid_scim" {
   # tflint-ignore: terraform_module_pinned_source
-  source              = "github.com/ministryofjustice/moj-terraform-scim-entra-id?ref=db0502e38d9bf34cddf02b7734057a31195d20ea" # v2.0.0
+  source              = "github.com/ministryofjustice/moj-terraform-scim-entra-id?ref=2b5085cb19c8c909c688e43f873013a2eb3d390f" # v2.0.1
   azure_tenant_id     = sensitive(local.azure.tenant_id)
   azure_client_id     = sensitive(local.azure.client_id)
   azure_client_secret = sensitive(local.azure.client_secret)
