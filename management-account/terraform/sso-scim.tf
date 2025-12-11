@@ -26,8 +26,8 @@ module "entraid_scim" {
 module "scim_slack_notifications" {
   source = "github.com/ministryofjustice/modernisation-platform-terraform-aws-chatbot?ref=0ec33c7bfde5649af3c23d0834ea85c849edf3ac" # v3.0.0
 
-  application_name  = "scim-monitoring"
-  slack_channel_id  = "C02PFCG8M1R"
-  sns_topic_arns    = [module.entraid_scim.sns_topic_arn]
-  tags              = {}
+  application_name = "scim-monitoring"
+  slack_channel_id = "C02PFCG8M1R"
+  sns_topic_arns   = [module.entraid_scim.sns_topic_arn]
+  tags             = {}
 }
