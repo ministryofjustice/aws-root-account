@@ -17,4 +17,17 @@ module "entraid_scim" {
   azure_tenant_id     = sensitive(local.azure.tenant_id)
   azure_client_id     = sensitive(local.azure.client_id)
   azure_client_secret = sensitive(local.azure.client_secret)
+
+  # Monitoring configuration
+  enable_monitoring   = true
+  alarm_sns_topic_arn = ""
+}
+
+module "scim_slack_notifications" {
+  source = "github.com/ministryofjustice/modernisation-platform-terraform-aws-chatbot?ref=0ec33c7bfde5649af3c23d0834ea85c849edf3ac" # v3.0.0
+
+  application_name = "scim-monitoring"
+  slack_channel_id = "C02PFCG8M1R"
+  sns_topic_arns   = [module.entraid_scim.sns_topic_arn]
+  tags             = {}
 }
