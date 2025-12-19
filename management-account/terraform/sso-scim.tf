@@ -9,6 +9,10 @@ module "scim" {
   sso_email_suffix           = local.sso.email_suffix
   sso_identity_store_id      = local.sso_admin_identity_store_id
   not_dry_run                = true
+
+  # Monitoring configuration
+  enable_monitoring   = true
+  alarm_sns_topic_arn = ""
 }
 
 module "entraid_scim" {
@@ -28,6 +32,9 @@ module "scim_slack_notifications" {
 
   application_name = "scim-monitoring"
   slack_channel_id = "C02PFCG8M1R"
-  sns_topic_arns   = [module.entraid_scim.sns_topic_arn]
-  tags             = {}
+  sns_topic_arns = [
+    module.entraid_scim.sns_topic_arn,
+    module.scim.sns_topic_arn
+  ]
+  tags = {}
 }
