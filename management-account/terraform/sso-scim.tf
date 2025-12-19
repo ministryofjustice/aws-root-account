@@ -32,7 +32,7 @@ module "scim_slack_notifications" {
 
   application_name = "scim-monitoring"
   slack_channel_id = "C02PFCG8M1R"
-  sns_topic_arns   = [
+  sns_topic_arns = [
     module.entraid_scim.sns_topic_arn,
     module.scim.sns_topic_arn
   ]
