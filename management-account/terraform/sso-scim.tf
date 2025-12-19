@@ -35,6 +35,6 @@ module "scim_slack_notifications" {
     sns_topic_arns   = [
       module.entraid_scim.sns_topic_arn,
       module.scim.sns_topic_arn
-  ]
+    ]
   tags             = {}
 }
