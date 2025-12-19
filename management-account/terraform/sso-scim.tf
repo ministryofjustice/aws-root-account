@@ -1,6 +1,6 @@
 module "scim" {
   # tflint-ignore: terraform_module_pinned_source
-  source                     = "github.com/ministryofjustice/moj-terraform-scim-github?ref=b2de8d82f7f620fe81e55a933a31372abba32bfa" # v3.0.0
+  source                     = "github.com/ministryofjustice/moj-terraform-scim-github?ref=c5259fe50f760dd14558d5f7fbaf6cde70811dca" # v3.1.0
   github_organisation        = local.sso.github_organisation
   github_app_id              = sensitive(local.sso.aws_saml.github_app_id)
   github_app_installation_id = sensitive(local.sso.aws_saml.github_app_installation_id)
