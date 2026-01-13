@@ -31,7 +31,7 @@ resource "aws_organizations_policy" "mandatory_tags" {
           "Technology Services",
           "HMCTS",
           "CICA",
-          "Platforms"
+          "OCTO"
         ]
       }
     },
