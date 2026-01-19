@@ -87,7 +87,7 @@ import {
 }
 
 resource "aws_guardduty_filter" "universal_eicar_supression_rule" {
-  name        = "Universal EICAR Supression Rule"
+  name        = "universal_eicar_supression_rule"
   action      = "ARCHIVE"
   detector_id = local.guardduty_administrator_detector_ids.eu_west_2
   rank        = 4
