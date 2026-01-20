@@ -71,7 +71,7 @@ locals {
       ]
     },
     {
-      github_team        = "cica",
+      github_team        = "CICA-DevOps",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.cica_development.id,
