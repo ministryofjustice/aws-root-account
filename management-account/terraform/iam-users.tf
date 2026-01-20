@@ -132,6 +132,9 @@ variable "finance_team" {
     # Finance business partners
     "NickiStowe",
     "MatthewTansini",
+    "RaymondMugerwa",
+    "RayHarper",
+    "BryanGillingham",
   ]
 }
 
