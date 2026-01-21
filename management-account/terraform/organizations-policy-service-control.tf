@@ -537,7 +537,8 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::*:role/OrganizationAccountAccessRole",
-        "arn:aws:iam::*:role/AWSServiceRoleFor*"
+        "arn:aws:iam::*:role/AWSServiceRoleFor*",
+        "arn:aws:iam::*:role/ControlTower*"
       ]
     }
   }
