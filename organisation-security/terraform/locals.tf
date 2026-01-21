@@ -85,6 +85,12 @@ locals {
     if ou.name == "OPG"
   ]...)
 
+  ou_opg_lpa_data_store = coalesce([
+    for ou in data.aws_organizations_organizational_units.opg.children :
+    ou.id
+    if ou.name == "LPA Data Store"
+  ]...)
+
   ou_opg_make_an_lpa = coalesce([
     for ou in data.aws_organizations_organizational_units.opg.children :
     ou.id
@@ -203,6 +209,7 @@ locals {
       )
     ],
     organizational_units = flatten([
+      local.ou_opg_lpa_data_store,
       local.ou_opg_make_an_lpa,
       local.ou_opg_use_my_lpa,
       local.ou_sirius,
