@@ -467,7 +467,7 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
   target_id = aws_organizations_account.laa_production.id
 }
 
-# Enforce presence of mandatory tags - test
+# Enforce presence of mandatory tags
 resource "aws_organizations_policy" "enforce_mandatory_tags" {
   name        = "Enforce mandatory tags"
   description = "Enforces the presence of mandatory resource tags"
