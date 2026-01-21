@@ -466,3 +466,85 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
   policy_id = aws_organizations_policy.deny_all_actions_by_users.id
   target_id = aws_organizations_account.laa_production.id
 }
+
+# Enforce presence of mandatory tags - test
+resource "aws_organizations_policy" "enforce_mandatory_tags" {
+  name        = "Enforce mandatory tags"
+  description = "Enforces the presence of mandatory resource tags"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.enforce_mandatory_tags.json
+}
+
+data "aws_iam_policy_document" "enforce_mandatory_tags" {
+  statement {
+    sid    = "DenyAllServices"
+    effect = "Deny"
+
+    not_actions = [
+      "iam:*",
+      "route53:*",
+      "cloudfront:*",
+      "support:*",
+      "shield:*",
+      "budgets:*",
+      "account:*",
+      "organizations:*",
+      "controltower:*",
+      "logs:CreateLogGroup",
+      "events:PutRule"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/business-unit"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/service-area"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/application"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/is-production"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/owner"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/OrganizationAccountAccessRole",
+        "arn:aws:iam::*:role/AWSServiceRoleFor*"
+      ]
+    }
+  }
+}
+
+# Attach policy to coat-development
+resource "aws_organizations_policy_attachment" "enforce_mandatory_tags" {
+  target_id = "082282578003"
+  policy_id = aws_organizations_policy.enforce_mandatory_tags.id
+}
