@@ -1,5 +1,10 @@
 # Repurposed for LPA Data Store, was LPA Refunds Development
-resource "aws_organizations_account" "moj_opg_lpa_refunds_development" {
+moved {
+  from = aws_organizations_account.moj_opg_lpa_refunds_development
+  to   = aws_organizations_account.moj_opg_lpa_data_store_preproduction
+}
+
+resource "aws_organizations_account" "moj_opg_lpa_data_store_preproduction" {
   name                       = "opg-lpa-data-store-preproduction"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "opg-lpa-store-preproduction")
   iam_user_access_to_billing = "ALLOW"
@@ -20,7 +25,11 @@ resource "aws_organizations_account" "moj_opg_lpa_refunds_development" {
 }
 
 # Repurposed for LPA Data Store, was LPA Refunds Preproduction
-resource "aws_organizations_account" "moj_opg_lpa_refunds_preproduction" {
+moved {
+  from = aws_organizations_account.moj_opg_lpa_refunds_preproduction
+  to   = aws_organizations_account.moj_opg_lpa_data_store_production
+}
+resource "aws_organizations_account" "moj_opg_lpa_data_store_production" {
   name                       = "opg-lpa-data-store-production"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "opg-lpa-store-production")
   iam_user_access_to_billing = "ALLOW"
