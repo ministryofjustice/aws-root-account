@@ -487,17 +487,56 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
     effect = "Deny"
 
     not_actions = [
+      # Can't be tagged on creation
       "iam:*",
       "route53:*",
       "cloudfront:*",
-      "support:*",
       "shield:*",
       "budgets:*",
+      "logs:CreateLogGroup",
+      "events:PutRule",
+
+      # Can't be tagged
+      "appflow:*",
+      "applicationsignals:*",
+      "auditmanager:*",
+      "autoscalingplans:*",
+      "bedrockagentcore:*",
+      "cases:*",
+      "codecatalyst:*",
+      "codedeploy:*",
+      "cognito:*",
+      "devopsagent:*",
+      "devopsguru:*",
+      "diode:*",
+      "elasticloadbalancingv2:*",
+      "identitystore:*",
+      "inspector:*",
+      "invoicing:*",
+      "iotthingsgraph:*",
+      "marketplacecatalog:*",
+      "mediaconnect:*",
+      "mediaconvert:*",
+      "neptunegraph:*",
+      "notifications:*",
+      "one:*",
+      "opsworks:*",
+      "pcaconnectorad:*",
+      "qbusiness:*",
+      "s3express:*",
+      "s3tables:*",
+      "s3vectors:*",
+      "sdb:*",
+      "servicequotas:*",
+      "smsvoice:*",
+      "ssmguiconnect:*",
+      "workspacesinstances:*",
+      "support:*",
       "account:*",
       "organizations:*",
-      "controltower:*",
-      "logs:CreateLogGroup",
-      "events:PutRule"
+
+      # Don't want to block to prevent incomplete resource creation
+      "controltower:*"
     ]
 
     resources = ["*"]
