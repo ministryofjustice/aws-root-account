@@ -54,10 +54,10 @@ locals {
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["OPG", "opg"], v.business_unit)]
     },
     "OCTO" = {
-      business_unit_tag_values      = ["Platforms", "Platform", "platforms","OCTO"]
+      business_unit_tag_values      = ["Platforms", "Platform", "platforms", "OCTO"]
       aws_descendant_accounts       = []
       untagged_aws_account_prefixes = ["Security Operations Pre Production","analytical-platform-","data-platform-"]
-      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Platforms", "Platform", "platforms","OCTO"], v.business_unit)]
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Platforms", "Platform", "platforms", "OCTO"], v.business_unit)]
     },
     "Technology Services" = {
       business_unit_tag_values      = ["Technology Services", "technology-services"]
