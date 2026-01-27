@@ -186,7 +186,8 @@ resource "aws_ssoadmin_permission_set_inline_policy" "security_audit_additional"
 data "aws_iam_policy_document" "security_audit" {
   statement {
     actions = [
-      "support:*"
+      "support:*",
+      "support-console:*"
     ]
     resources = ["*"]
   }
@@ -271,7 +272,8 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_eng
 data "aws_iam_policy_document" "modernisation_platform_engineer" {
   statement {
     actions = [
-      "support:*"
+      "support:*",
+      "support-console:*"
     ]
     resources = ["*"]
   }
