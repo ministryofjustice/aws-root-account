@@ -72,6 +72,77 @@ resource "aws_organizations_policy_attachment" "mandatory_tags" {
   target_id = aws_organizations_organization.default.roots[0].id
 }
 
+##################
+# Mandatory tags - alerting activated #
+##################
+resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
+  name        = "mandatory-tags-with-alerting"
+  description = "A tag policy for mandatory tags as listed in the MoJ Technical Guidance with alerting enabled."
+  type        = "TAG_POLICY"
+  tags        = {}
+
+  content = <<CONTENT
+{
+  "tags": {
+    "business-unit": {
+      "tag_key": {
+        "@@assign": "business-unit"
+      },
+      "tag_value": {
+        "@@assign": [
+          "HMPPS",
+          "OPG",
+          "LAA",
+          "Central Digital",
+          "Technology Services",
+          "HMCTS",
+          "CICA",
+          "OCTO"
+        ]
+      },
+      "report_required_tag_for": { "@@assign": ["*"] }
+    },
+    "service-area": {
+      "tag_key": {
+        "@@assign": "service-area"
+      },
+      "report_required_tag_for": { "@@assign": ["*"] }
+    },
+    "application": {
+      "tag_key": {
+        "@@assign": "application"
+      },
+      "report_required_tag_for": { "@@assign": ["*"] }
+    },
+    "is-production": {
+      "tag_key": {
+        "@@assign": "is-production"
+      },
+      "tag_value": {
+        "@@assign": [
+          "true",
+          "false"
+        ]
+      },
+      "report_required_tag_for": { "@@assign": ["*"] }
+    },
+    "owner": {
+      "tag_key": {
+        "@@assign": "owner"
+      },
+      "report_required_tag_for": { "@@assign": ["*"] }
+    }
+  }
+}
+CONTENT
+}
+
+# Attach policy to coat-development account
+resource "aws_organizations_policy_attachment" "mandatory_tags_with_alerting" {
+  policy_id = aws_organizations_policy.mandatory_tags_with_alerting.id
+  target_id = "082282578003"
+}
+
 #################
 # Optional tags #
 #################
