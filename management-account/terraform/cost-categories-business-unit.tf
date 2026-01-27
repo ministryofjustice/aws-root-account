@@ -20,7 +20,7 @@ locals {
     "Central Digital" = {
       business_unit_tag_values      = ["Central Digital", "central-digital", "CJSE"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
-      untagged_aws_account_prefixes = ["analytical-platform-", "cdpt-chaps-", "cdpt-ifs-", "data-platform-", "genesys-call-centre-data-", "bichard7"]
+      untagged_aws_account_prefixes = ["cdpt-chaps-", "cdpt-ifs-", "genesys-call-centre-data-", "bichard7"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Central Digital", "central-digital", "CJSE"], v.business_unit)]
     },
     "CICA" = {
@@ -53,11 +53,11 @@ locals {
       untagged_aws_account_prefixes = []
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["OPG", "opg"], v.business_unit)]
     },
-    "Platforms" = {
-      business_unit_tag_values      = ["Platforms", "Platform", "platforms"]
+    "OCTO" = {
+      business_unit_tag_values      = ["Platforms", "Platform", "platforms","OCTO"]
       aws_descendant_accounts       = []
-      untagged_aws_account_prefixes = ["Security Operations Pre Production"]
-      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Platforms", "Platform", "platforms"], v.business_unit)]
+      untagged_aws_account_prefixes = ["Security Operations Pre Production","analytical-platform-","data-platform-"]
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Platforms", "Platform", "platforms","OCTO"], v.business_unit)]
     },
     "Technology Services" = {
       business_unit_tag_values      = ["Technology Services", "technology-services"]
