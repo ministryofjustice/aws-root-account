@@ -75,17 +75,6 @@ resource "aws_organizations_policy_attachment" "mandatory_tags" {
 ##################
 # Mandatory tags - alerting activated #
 ##################
-locals {
-  mp_member_id = one([
-    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
-    if child.name == "Modernisation Platform Member"
-  ])
-}
-
-data "aws_organizations_organizational_units" "mp_member_children" {
-  parent_id = local.mp_member_id
-}
-
 resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
   name        = "mandatory-tags-with-alerting"
   description = "A tag policy for mandatory tags as listed in the MoJ Technical Guidance with alerting enabled."
