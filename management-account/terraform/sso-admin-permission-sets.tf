@@ -101,9 +101,13 @@ resource "aws_ssoadmin_permission_set_inline_policy" "billing" {
 
 data "aws_iam_policy_document" "billing" {
   statement {
-    sid       = "BCMDataExports"
-    effect    = "Allow"
-    actions   = ["bcm-data-exports:*"]
+    sid    = "BillingAdditionalAllow"
+    effect = "Allow"
+    actions = [
+      "bcm-data-exports:*",
+      "bcm-recommended-actions:ListRecommendedActions",
+      "ce:*"
+    ]
     resources = ["*"]
   }
 }
