@@ -75,6 +75,8 @@ resource "aws_organizations_policy_attachment" "mandatory_tags" {
 ##################
 # Mandatory tags - alerting activated #
 ##################
+data "aws_organizations_accounts" "all" {}
+
 locals {
   coat_dev_account_id = one([
     for acct in data.aws_organizations_accounts.all.accounts :
