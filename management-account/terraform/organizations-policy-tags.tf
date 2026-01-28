@@ -88,31 +88,84 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
       "tag_key": {
         "@@assign": "business-unit"
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "tag_value": {
+        "@@assign": [
+          "HMPPS",
+          "OPG",
+          "LAA",
+          "Central Digital",
+          "Technology Services",
+          "HMCTS",
+          "CICA",
+          "OCTO"
+        ]
+      },
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED"
+        ]
+      }
     },
     "service-area": {
       "tag_key": {
         "@@assign": "service-area"
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED"
+        ]
+      }
     },
     "application": {
       "tag_key": {
         "@@assign": "application"
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED"
+        ]
+      }
     },
     "is-production": {
       "tag_key": {
         "@@assign": "is-production"
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "tag_value": {
+        "@@assign": [
+          "true",
+          "false"
+        ]
+      },
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED"
+        ]
+      }
     },
     "owner": {
       "tag_key": {
         "@@assign": "owner"
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED"
+        ]
+      }
     }
   }
 }
