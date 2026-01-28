@@ -88,18 +88,6 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
       "tag_key": {
         "@@assign": "business-unit"
       },
-      "tag_value": {
-        "@@assign": [
-          "HMPPS",
-          "OPG",
-          "LAA",
-          "Central Digital",
-          "Technology Services",
-          "HMCTS",
-          "CICA",
-          "OCTO"
-        ]
-      },
       "report_required_tag_for": { "@@assign": ["*"] }
     },
     "service-area": {
@@ -117,12 +105,6 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
     "is-production": {
       "tag_key": {
         "@@assign": "is-production"
-      },
-      "tag_value": {
-        "@@assign": [
-          "true",
-          "false"
-        ]
       },
       "report_required_tag_for": { "@@assign": ["*"] }
     },
