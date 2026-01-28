@@ -140,7 +140,7 @@ CONTENT
 # Attach policy to coat-development account
 resource "aws_organizations_policy_attachment" "mandatory_tags_with_alerting" {
   policy_id = aws_organizations_policy.mandatory_tags_with_alerting.id
-  target_id = "082282578003"
+  target_id = data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children["Modernisation Platform Member"]["modernisation-platform-coat"]["coat-development"].id
 }
 
 #################
