@@ -75,14 +75,26 @@ resource "aws_organizations_policy_attachment" "mandatory_tags" {
 ##################
 # Mandatory tags - alerting activated #
 ##################
-data "aws_organizations_accounts" "all" {}
+locals {
+  mp_member_id = one([
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
+    if child.name == "Modernisation Platform Member"
+  ])
+}
+
+data "aws_organizations_organizational_units" "mp_member_children" {
+  parent_id = local.mp_member_id
+}
 
 locals {
-  coat_dev_account_id = one([
-    for acct in data.aws_organizations_accounts.all.accounts :
-    acct.id
-    if acct.name == "coat-development"
+  mp_coat_id = one([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
   ])
+}
+
+data "aws_organizations_organizational_units" "mp_coat_children" {
+  parent_id = local.mp_coat_id
 }
 
 resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
@@ -150,7 +162,10 @@ CONTENT
 # Attach policy to coat-development account
 resource "aws_organizations_policy_attachment" "mandatory_tags_with_alerting" {
   policy_id = aws_organizations_policy.mandatory_tags_with_alerting.id
-  target_id = local.coat_dev_account_id
+  target_id = one([
+    for child in data.aws_organizations_organizational_units.mp_coat_children.children : child.id
+    if child.name == "coat-development"
+  ])
 }
 
 #################
