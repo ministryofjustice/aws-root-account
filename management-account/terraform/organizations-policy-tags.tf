@@ -100,19 +100,52 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "OCTO"
         ]
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
     },
     "service-area": {
       "tag_key": {
         "@@assign": "service-area"
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
     },
     "application": {
       "tag_key": {
         "@@assign": "application"
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
     },
     "is-production": {
       "tag_key": {
@@ -124,13 +157,35 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "false"
         ]
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
     },
     "owner": {
       "tag_key": {
         "@@assign": "owner"
       },
-      "report_required_tag_for": { "@@assign": ["*"] }
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
     }
   }
 }
