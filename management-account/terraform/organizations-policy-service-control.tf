@@ -586,6 +586,11 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
 
 # Attach policy to coat-development
 resource "aws_organizations_policy_attachment" "enforce_mandatory_tags" {
-  target_id = "082282578003"
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
+
   policy_id = aws_organizations_policy.enforce_mandatory_tags.id
+  target_id = each.value
 }
