@@ -105,7 +105,11 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "ec2:ALL_SUPPORTED",
           "rds:ALL_SUPPORTED",
           "s3:ALL_SUPPORTED",
-          "lambda:ALL_SUPPORTED"
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
         ]
       }
     },
@@ -118,7 +122,11 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "ec2:ALL_SUPPORTED",
           "rds:ALL_SUPPORTED",
           "s3:ALL_SUPPORTED",
-          "lambda:ALL_SUPPORTED"
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
         ]
       }
     },
@@ -131,7 +139,11 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "ec2:ALL_SUPPORTED",
           "rds:ALL_SUPPORTED",
           "s3:ALL_SUPPORTED",
-          "lambda:ALL_SUPPORTED"
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
         ]
       }
     },
@@ -150,7 +162,11 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "ec2:ALL_SUPPORTED",
           "rds:ALL_SUPPORTED",
           "s3:ALL_SUPPORTED",
-          "lambda:ALL_SUPPORTED"
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
         ]
       }
     },
@@ -163,7 +179,11 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "ec2:ALL_SUPPORTED",
           "rds:ALL_SUPPORTED",
           "s3:ALL_SUPPORTED",
-          "lambda:ALL_SUPPORTED"
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
         ]
       }
     }
