@@ -75,6 +75,14 @@ resource "aws_organizations_policy_attachment" "mandatory_tags" {
 ##################
 # Mandatory tags - alerting activated #
 ##################
+locals {
+  coat_dev_account_id = one([
+    for acct in data.aws_organizations_accounts.all.accounts :
+    acct.id
+    if acct.name == "coat-development"
+  ])
+}
+
 resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
   name        = "mandatory-tags-with-alerting"
   description = "A tag policy for mandatory tags as listed in the MoJ Technical Guidance with alerting enabled."
@@ -140,7 +148,7 @@ CONTENT
 # Attach policy to coat-development account
 resource "aws_organizations_policy_attachment" "mandatory_tags_with_alerting" {
   policy_id = aws_organizations_policy.mandatory_tags_with_alerting.id
-  target_id = data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children["Modernisation Platform Member"]["modernisation-platform-coat"]["coat-development"].id
+  target_id = local.coat_dev_account_id
 }
 
 #################
