@@ -86,17 +86,6 @@ data "aws_organizations_organizational_units" "mp_member_children" {
   parent_id = local.mp_member_id
 }
 
-locals {
-  mp_coat_id = one([
-    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
-    if child.name == "modernisation-platform-coat"
-  ])
-}
-
-data "aws_organizations_organizational_units" "mp_coat_children" {
-  parent_id = local.mp_coat_id
-}
-
 resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
   name        = "mandatory-tags-with-alerting"
   description = "A tag policy for mandatory tags as listed in the MoJ Technical Guidance with alerting enabled."
@@ -159,13 +148,15 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
 CONTENT
 }
 
-# Attach policy to coat-development account
+# Attach policy to coat accounts
 resource "aws_organizations_policy_attachment" "mandatory_tags_with_alerting" {
-  policy_id = aws_organizations_policy.mandatory_tags_with_alerting.id
-  target_id = one([
-    for child in data.aws_organizations_organizational_units.mp_coat_children.children : child.id
-    if child.name == "coat-development"
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
   ])
+
+  policy_id = aws_organizations_policy.mandatory_tags_with_alerting.id
+  target_id = each.value
 }
 
 #################
