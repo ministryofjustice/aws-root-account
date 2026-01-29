@@ -179,6 +179,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "organizations:CreateAccount",
       "organizations:CreateOrganizationalUnit",
       "organizations:CreatePolicy",
+      "organizations:DeletePolicy",
       "organizations:DescribeAccount",
       "organizations:DescribeCreateAccountStatus",
       "organizations:DescribeOrganization",
