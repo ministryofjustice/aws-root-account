@@ -466,3 +466,131 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
   policy_id = aws_organizations_policy.deny_all_actions_by_users.id
   target_id = aws_organizations_account.laa_production.id
 }
+
+# Enforce presence of mandatory tags
+resource "aws_organizations_policy" "enforce_mandatory_tags" {
+  name        = "Enforce mandatory tags"
+  description = "Enforces the presence of mandatory resource tags"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.enforce_mandatory_tags.json
+}
+
+data "aws_iam_policy_document" "enforce_mandatory_tags" {
+  statement {
+    sid    = "DenyAllServices"
+    effect = "Deny"
+
+    not_actions = [
+      # Can't be tagged on creation
+      "iam:*",
+      "route53:*",
+      "cloudfront:*",
+      "shield:*",
+      "budgets:*",
+      "logs:CreateLogGroup",
+      "events:PutRule",
+
+      # Can't be tagged
+      "appflow:*",
+      "application-signals:*",
+      "auditmanager:*",
+      "autoscaling-plans:*",
+      "bedrock-agentcore:*",
+      "cases:*",
+      "codecatalyst:*",
+      "codedeploy:*",
+      "cognito-identity:*",
+      "cognito-sync:*",
+      "cognito-idp:*",
+      "aidevops:*",
+      "devops-guru:*",
+      "elasticloadbalancing:*",
+      "identitystore:*",
+      "inspector:*",
+      "invoicing:*",
+      "iotanalytics:*",
+      "aws-marketplace:*",
+      "mediaconnect:*",
+      "mediaconvert:*",
+      "neptune-graph:*",
+      "notifications:*",
+      "one:*",
+      "opsworks:*",
+      "pca-connector-ad:*",
+      "qbusiness:*",
+      "s3express:*",
+      "s3tables:*",
+      "s3vectors:*",
+      "sdb:*",
+      "servicequotas:*",
+      "sms-voice:*",
+      "ssm-guiconnect:*",
+      "workspaces-instances:*",
+      "support:*",
+      "account:*",
+      "organizations:*",
+
+      # Don't want to block to prevent incomplete resource creation
+      "controltower:*"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/business-unit"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/service-area"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/application"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/is-production"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/owner"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/OrganizationAccountAccessRole",
+        "arn:aws:iam::*:role/AWSServiceRoleFor*",
+        "arn:aws:iam::*:role/ControlTower*"
+      ]
+    }
+  }
+}
+
+# Attach policy to coat-development
+resource "aws_organizations_policy_attachment" "enforce_mandatory_tags" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
+
+  policy_id = aws_organizations_policy.enforce_mandatory_tags.id
+  target_id = each.value
+}
