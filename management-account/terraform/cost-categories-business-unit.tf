@@ -38,7 +38,7 @@ locals {
     "HMPPS" = {
       business_unit_tag_values      = ["HMPPS", "hmpps"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
-      untagged_aws_account_prefixes = ["delius", "electronic-monitoring", "digital-prison", "nomis","property-cafm-data-migration"]
+      untagged_aws_account_prefixes = ["delius", "electronic-monitoring", "digital-prison", "nomis", "property-cafm-data-migration"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)]
     },
     "LAA" = {
@@ -56,7 +56,7 @@ locals {
     "OCTO" = {
       business_unit_tag_values      = ["Platforms", "Platform", "platforms", "OCTO"]
       aws_descendant_accounts       = []
-      untagged_aws_account_prefixes = ["Security Operations Pre Production","analytical-platform-","data-platform-"]
+      untagged_aws_account_prefixes = ["Security Operations Pre Production", "analytical-platform-", "data-platform-"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Platforms", "Platform", "platforms", "OCTO"], v.business_unit)]
     },
     "Technology Services" = {
