@@ -466,3 +466,76 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
   policy_id = aws_organizations_policy.deny_all_actions_by_users.id
   target_id = aws_organizations_account.laa_production.id
 }
+
+# Enforce presence of mandatory tags
+resource "aws_organizations_policy" "enforce_mandatory_tags" {
+  name        = "Enforce mandatory tags"
+  description = "Enforces the presence of mandatory resource tags"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.enforce_mandatory_tags.json
+}
+
+data "aws_iam_policy_document" "enforce_mandatory_tags" {
+  statement {
+    sid    = "DenyCreateActions"
+    effect = "Deny"
+
+    actions = [
+      "athena:Create*",
+      "s3:Create*",
+      "kms:Create*",
+      "iam:Create*",
+      "lambda:Create*",
+      "apigateway:POST"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/business-unit"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/service-area"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/application"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/is-production"
+      values   = ["true"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/owner"
+      values   = ["true"]
+    }
+  }
+}
+
+# Attach policy to coat-development
+resource "aws_organizations_policy_attachment" "enforce_mandatory_tags" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
+
+  policy_id = aws_organizations_policy.enforce_mandatory_tags.id
+  target_id = each.value
+}
