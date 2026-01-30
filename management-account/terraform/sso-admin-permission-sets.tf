@@ -105,7 +105,9 @@ data "aws_iam_policy_document" "billing" {
     actions = [
       "bcm-data-exports:*",
       "bcm-recommended-actions:ListRecommendedActions",
-      "ce:*"
+      "ce:*",
+      "cost-optimization-hub:List*",
+      "cost-optimization-hub:Get*"
     ]
     resources = ["*"]
   }
