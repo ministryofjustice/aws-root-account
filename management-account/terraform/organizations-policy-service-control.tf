@@ -490,9 +490,9 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       "athena:Create*",
       "s3:Create*",
       "kms:Create*",
-      "iam:Create*",
       "lambda:Create*",
-      "apigateway:POST"
+      "apigateway:POST",
+      "iam:CreateRole"
     ]
 
     resources = ["*"]
