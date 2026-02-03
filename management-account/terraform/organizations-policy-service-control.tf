@@ -487,11 +487,16 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
     effect = "Deny"
 
     actions = [
-      "athena:Create*",
-      "s3:Create*",
-      "kms:Create*",
-      "lambda:Create*",
-      "apigateway:POST",
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
       "iam:CreateRole"
     ]
 
