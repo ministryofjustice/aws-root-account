@@ -72,6 +72,137 @@ resource "aws_organizations_policy_attachment" "mandatory_tags" {
   target_id = aws_organizations_organization.default.roots[0].id
 }
 
+##################
+# Mandatory tags - alerting activated #
+##################
+resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
+  name        = "mandatory-tags-with-alerting"
+  description = "A tag policy for mandatory tags as listed in the MoJ Technical Guidance with alerting enabled."
+  type        = "TAG_POLICY"
+  tags        = {}
+
+  content = <<CONTENT
+{
+  "tags": {
+    "business-unit": {
+      "tag_key": {
+        "@@assign": "business-unit"
+      },
+      "tag_value": {
+        "@@assign": [
+          "HMPPS",
+          "OPG",
+          "LAA",
+          "Central Digital",
+          "Technology Services",
+          "HMCTS",
+          "CICA",
+          "OCTO"
+        ]
+      },
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
+    },
+    "service-area": {
+      "tag_key": {
+        "@@assign": "service-area"
+      },
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
+    },
+    "application": {
+      "tag_key": {
+        "@@assign": "application"
+      },
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
+    },
+    "is-production": {
+      "tag_key": {
+        "@@assign": "is-production"
+      },
+      "tag_value": {
+        "@@assign": [
+          "true",
+          "false"
+        ]
+      },
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
+    },
+    "owner": {
+      "tag_key": {
+        "@@assign": "owner"
+      },
+      "report_required_tag_for": { 
+        "@@assign": [
+          "ec2:ALL_SUPPORTED",
+          "rds:ALL_SUPPORTED",
+          "s3:ALL_SUPPORTED",
+          "lambda:ALL_SUPPORTED",
+          "iam:ALL_SUPPORTED",
+          "kms:ALL_SUPPORTED",
+          "cloudtrail:ALL_SUPPORTED",
+          "athena:ALL_SUPPORTED"
+        ]
+      }
+    }
+  }
+}
+CONTENT
+}
+
+# Attach policy to coat accounts
+resource "aws_organizations_policy_attachment" "mandatory_tags_with_alerting" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
+
+  policy_id = aws_organizations_policy.mandatory_tags_with_alerting.id
+  target_id = each.value
+}
+
 #################
 # Optional tags #
 #################

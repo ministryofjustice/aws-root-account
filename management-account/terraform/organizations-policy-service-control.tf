@@ -483,7 +483,7 @@ resource "aws_organizations_policy" "enforce_mandatory_tags" {
 
 data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
-    sid    = "DenyCreateActions"
+    sid    = "DenyMissingBusinessUnit"
     effect = "Deny"
 
     actions = [
@@ -507,24 +507,108 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       variable = "aws:RequestTag/business-unit"
       values   = ["true"]
     }
+  }
+
+  statement {
+    sid    = "DenyMissingServiceArea"
+    effect = "Deny"
+
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
+
+    resources = ["*"]
 
     condition {
       test     = "Null"
       variable = "aws:RequestTag/service-area"
       values   = ["true"]
     }
+  }
+
+  statement {
+    sid    = "DenyMissingApplication"
+    effect = "Deny"
+
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
+
+    resources = ["*"]
 
     condition {
       test     = "Null"
       variable = "aws:RequestTag/application"
       values   = ["true"]
     }
+  }
+
+  statement {
+    sid    = "DenyMissingIsProduction"
+    effect = "Deny"
+
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
+
+    resources = ["*"]
 
     condition {
       test     = "Null"
       variable = "aws:RequestTag/is-production"
       values   = ["true"]
     }
+  }
+
+  statement {
+    sid    = "DenyMissingOwner"
+    effect = "Deny"
+
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
+
+    resources = ["*"]
 
     condition {
       test     = "Null"
