@@ -117,3 +117,43 @@ resource "aws_securityhub_finding_aggregator" "default" {
 
   linking_mode = "ALL_REGIONS"
 }
+
+########################################
+# Terraform state bucket suppression   #
+########################################
+
+resource "aws_securityhub_automation_rule" "suppress_tf_state_bucket_cross_account" {
+  for_each = var.aggregation_region ? toset(["aggregation_region"]) : []
+
+  rule_name   = "suppress-tf-state-bucket-cross-account-policy"
+  rule_order  = 1
+  description = "Suppress Security Hub S3.6 finding for terraform state bucket"
+
+  criteria {
+    resource_id {
+      comparison = "PREFIX"
+      value      = "arn:aws:s3:::modernisation-platform-terraform-state"
+    }
+
+    title {
+      comparison = "EQUALS"
+      value      = "S3 general purpose bucket policies should restrict access to other AWS accounts"
+    }
+  }
+
+  actions {
+    type = "FINDING_FIELDS_UPDATE"
+
+    finding_fields_update {
+      workflow {
+        status = "SUPPRESSED"
+      }
+
+      note {
+        text       = "Approved exception - Terraform backend requires controlled cross-account access."
+        updated_by = "terraform"
+      }
+    }
+  }
+}
+
