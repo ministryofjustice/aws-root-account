@@ -11,6 +11,7 @@ resource "aws_organizations_account" "youth_justice_framework_dev" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "youth-justice-framework-migration-dev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_yjb, {
     environment-name = "development"
@@ -31,6 +32,7 @@ resource "aws_organizations_account" "youth_justice_framework_eng_tools" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "youth-justice-framework-migration-eng")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_yjb, {
     environment-name = "engineering-tools"
@@ -51,6 +53,7 @@ resource "aws_organizations_account" "youth_justice_framework_juniper" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "youth-justice-framework-migration-jun")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_yjb, {
     environment-name = "juniper-network"
@@ -71,6 +74,7 @@ resource "aws_organizations_account" "youth_justice_framework_management" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "youth-justice-framework-migration-mgt")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_yjb, {
     environment-name = "landing-zone"
@@ -91,6 +95,7 @@ resource "aws_organizations_account" "youth_justice_framework_monitoring" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "youth-justice-framework-migration-mon")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_yjb, {
     environment-name = "monitoring"
@@ -111,6 +116,7 @@ resource "aws_organizations_account" "youth_justice_framework_pre_prod" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "youth-justice-framework-migration-pre")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_yjb, {
     environment-name = "pre-production"
@@ -131,6 +137,7 @@ resource "aws_organizations_account" "youth_justice_framework_prod" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "youth-justice-framework-migration-prd")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_yjb, {
     environment-name = "production"
@@ -152,6 +159,7 @@ resource "aws_organizations_account" "youth_justice_framework_sandpit" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "youth-justice-framework-migration-pit")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.yjb.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_yjb, {
     environment-name = "sandpit"

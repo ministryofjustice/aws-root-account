@@ -7,6 +7,7 @@ resource "aws_organizations_account" "electronic_monitoring_acquisitive_crime_de
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-ac-dev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_electronic_monitoring_acquisitive_crime, {
 
@@ -27,6 +28,7 @@ resource "aws_organizations_account" "electronic_monitoring_acquisitive_crime_pr
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-ac-preprod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_electronic_monitoring_acquisitive_crime, {
 
@@ -47,6 +49,7 @@ resource "aws_organizations_account" "electronic_monitoring_acquisitive_crime_pr
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-ac-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_electronic_monitoring_acquisitive_crime, {
     is-production = true
@@ -67,6 +70,7 @@ resource "aws_organizations_account" "electronic_monitoring_acquisitive_crime_te
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-ac-test")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_electronic_monitoring_acquisitive_crime, {
 
@@ -88,6 +92,7 @@ resource "aws_organizations_account" "electronic_monitoring_monitoring_and_mappi
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-monitoring-mapping-dev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_electronic_monitoring, {
 

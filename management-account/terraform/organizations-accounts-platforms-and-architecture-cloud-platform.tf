@@ -3,6 +3,7 @@ resource "aws_organizations_account" "cloud_platform" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "cloud-platform")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_platforms, {
     is-production          = true
@@ -27,6 +28,7 @@ resource "aws_organizations_account" "cloud_platform_ephemeral_test" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "cloud-platform-ephemeral-test")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_platforms, {
     application            = "Cloud Platform Ephemeral Test"

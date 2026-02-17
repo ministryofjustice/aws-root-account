@@ -3,6 +3,7 @@ resource "aws_organizations_account" "opg_digi_deps_dev" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "opg-digideps-dev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.opg_digideps.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_opg, {
 
@@ -23,6 +24,7 @@ resource "aws_organizations_account" "opg_digi_deps_preprod" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "opg-digideps-preproduction")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.opg_digideps.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_opg, {
 
@@ -43,6 +45,7 @@ resource "aws_organizations_account" "opg_digi_deps_prod" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "opg-digideps-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.opg_digideps.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_opg, {
     is-production = true
