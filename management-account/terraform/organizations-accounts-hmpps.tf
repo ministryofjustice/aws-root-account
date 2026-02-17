@@ -7,6 +7,7 @@ resource "aws_organizations_account" "hmpps_co_financing_organisation" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-co-financing-org")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_hmpps, {
 
@@ -27,6 +28,7 @@ resource "aws_organizations_account" "hmpps_engineering_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-engineering-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_hmpps, {
 
@@ -47,6 +49,7 @@ resource "aws_organizations_account" "hmpps_probation_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-probation-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_hmpps, {
 
@@ -67,6 +70,7 @@ resource "aws_organizations_account" "probation" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "probation")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_hmpps, {
 
@@ -87,6 +91,7 @@ resource "aws_organizations_account" "public_sector_prison_industries" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "pspi")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_hmpps, {
 

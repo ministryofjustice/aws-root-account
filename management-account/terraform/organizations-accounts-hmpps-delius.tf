@@ -7,6 +7,7 @@ resource "aws_organizations_account" "alfresco_non_prod" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "alfresco_non_prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_delius, {
 
@@ -27,6 +28,7 @@ resource "aws_organizations_account" "hmpps_delius_mis_non_prod" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-mis-non-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_delius, {
 
@@ -47,6 +49,7 @@ resource "aws_organizations_account" "hmpps_delius_pre_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-pre-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_delius, {
 
@@ -67,6 +70,7 @@ resource "aws_organizations_account" "hmpps_delius_stage" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-stage")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_delius, {
 
@@ -87,6 +91,7 @@ resource "aws_organizations_account" "hmpps_delius_test" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-test")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_delius, {
 
@@ -107,6 +112,7 @@ resource "aws_organizations_account" "hmpps_delius_training" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-delius-training")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_delius, {
 
@@ -127,6 +133,7 @@ resource "aws_organizations_account" "probation_management_non_prod" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "probation_management_non_prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_delius.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_delius, {
 

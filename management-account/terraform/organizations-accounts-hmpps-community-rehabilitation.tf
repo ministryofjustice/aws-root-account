@@ -7,6 +7,7 @@ resource "aws_organizations_account" "hmpps_cr_jira_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cr-jira-production")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_community_rehabilitation, {
     application   = "Community Rehabilitation - Jira"
@@ -28,6 +29,7 @@ resource "aws_organizations_account" "hmpps_cr_unpaid_work_non_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cr-unpaid-work-non-production")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_community_rehabilitation, {
     application = "Community Rehabilitation - Unpaid Work"
@@ -48,6 +50,7 @@ resource "aws_organizations_account" "hmpps_cr_unpaid_work_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-cr-unpaid-work-production")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_community_rehabilitation.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_community_rehabilitation, {
     application   = "Community Rehabilitation - Unpaid Work"
