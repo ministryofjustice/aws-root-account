@@ -67,7 +67,7 @@ locals {
     },
     "YJB" = {
       business_unit_tag_values      = ["YJB", "yjb"]
-      aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.yjb.accounts[*].id
+      aws_descendant_accounts       = []
       untagged_aws_account_prefixes = ["youth-justice"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["YJB", "yjb"], v.business_unit)]
     },

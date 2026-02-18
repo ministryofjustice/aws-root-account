@@ -249,11 +249,3 @@ resource "aws_organizations_organizational_unit" "technology_services" {
   tags      = {}
 }
 
-#######
-# YJB #
-#######
-resource "aws_organizations_organizational_unit" "yjb" {
-  name      = "YJB"
-  parent_id = aws_organizations_organization.default.roots[0].id
-  tags      = {}
-}
