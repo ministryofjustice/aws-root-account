@@ -100,63 +100,6 @@ resource "aws_iam_user_group_membership" "sablu_miah" {
   ]
 }
 
-##############
-# Ona Ojukwu #
-##############
-resource "aws_iam_user" "ona_ojukwu" {
-  name          = "OnaOjukwu"
-  path          = "/"
-  force_destroy = true
-  tags          = {}
-}
-
-# User membership
-resource "aws_iam_user_group_membership" "ona_ojukwu" {
-  user = aws_iam_user.ona_ojukwu.name
-
-  groups = [
-    aws_iam_group.billing_full_access.name,
-    aws_iam_group.iam_user_change_password.name,
-  ]
-}
-
-
-################
-# Finance team #
-################
-
-variable "finance_team" {
-  description = "Finance team members"
-  type        = list(string)
-  default = [
-    # Finance business partners
-    "NickiStowe",
-    "MatthewTansini",
-    "RaymondMugerwa",
-    "RayHarper",
-    "BryanGillingham",
-  ]
-}
-
-resource "aws_iam_user" "finance_team" {
-  for_each      = toset(var.finance_team)
-  name          = each.value
-  path          = "/"
-  force_destroy = true
-  tags          = {}
-}
-
-# User membership
-resource "aws_iam_user_group_membership" "finance_team" {
-  for_each = toset(var.finance_team)
-  user     = aws_iam_user.finance_team[each.key].name
-
-  groups = [
-    aws_iam_group.billing_full_access.name,
-    aws_iam_group.iam_user_change_password.name,
-  ]
-}
-
 #####################
 # Cortex XSOAR user #
 #####################
