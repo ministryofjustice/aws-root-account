@@ -4,14 +4,6 @@ data "aws_region" "current" {}
 # Get current account
 data "aws_caller_identity" "current" {}
 
-locals {
-  is_mp_delegated_admin = (
-    var.is_delegated_administrator &&
-    var.aggregation_region &&
-    data.aws_region.current.region == "eu-west-2"
-  )
-}
-
 ###############################
 # Self-configuration: general #
 ###############################
@@ -131,7 +123,10 @@ resource "aws_securityhub_finding_aggregator" "default" {
 ########################################
 
 resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_account" {
-  for_each = local.is_mp_delegated_admin ? toset(["enabled"]) : []
+  count = (
+    var.is_delegated_administrator &&
+    data.aws_region.current.region == "eu-west-2"
+    ) ? 1 : 0
 
   rule_name   = "suppress-mp-tf-state-bucket-s3-6"
   rule_order  = 1
