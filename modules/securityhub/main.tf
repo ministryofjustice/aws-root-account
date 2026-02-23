@@ -7,8 +7,8 @@ data "aws_caller_identity" "current" {}
 locals {
   is_mp_delegated_admin = (
     var.is_delegated_administrator &&
-    data.aws_region.current.name == "eu-west-2" &&
-    data.aws_caller_identity.current.account_id == var.modernisation_platform_account_id
+    var.aggregation_region &&
+    data.aws_region.current.name == "eu-west-2"
   )
 }
 
@@ -138,7 +138,6 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
   description = "Suppress S3.6 for approved Terraform backend bucket (cross-account access is intentional and controlled)"
 
   criteria {
-
     # Exact bucket match — safe across rebuilds
     resource_id {
       comparison = "EQUALS"
@@ -151,7 +150,7 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
       value      = "S3.6"
     }
 
-    # Extra safety: only active findings
+    # Optional: only act on new findings
     workflow_status {
       comparison = "EQUALS"
       value      = "NEW"
