@@ -6,7 +6,6 @@ module "securityhub_eu_west_2" {
   providers = {
     aws = aws.eu-west-2
   }
-  modernisation_platform_account_id = var.modernisation_platform_account_id
 
   aggregation_region = true
 
@@ -18,8 +17,6 @@ module "securityhub_eu_west_1" {
   providers = {
     aws = aws.eu-west-1
   }
-  modernisation_platform_account_id = var.modernisation_platform_account_id
-
   is_delegated_administrator = true
 }
 
@@ -28,8 +25,6 @@ module "securityhub_eu_west_3" {
   providers = {
     aws = aws.eu-west-3
   }
-  modernisation_platform_account_id = var.modernisation_platform_account_id
-
   is_delegated_administrator = true
 }
 
@@ -38,8 +33,6 @@ module "securityhub_eu_central_1" {
   providers = {
     aws = aws.eu-central-1
   }
-  modernisation_platform_account_id = var.modernisation_platform_account_id
-
   is_delegated_administrator = true
 }
 
@@ -54,6 +47,4 @@ module "securityhub_us_east_1" {
   source = "../../modules/securityhub"
 
   is_delegated_administrator = true
-
-  modernisation_platform_account_id = var.modernisation_platform_account_id
 }
