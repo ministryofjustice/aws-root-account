@@ -1,5 +1,5 @@
 # Get current region
-data "aws_region" "current" {}
+data.aws_region.current.region
 
 # Get current account
 data "aws_caller_identity" "current" {}
@@ -8,7 +8,7 @@ locals {
   is_mp_delegated_admin = (
     var.is_delegated_administrator &&
     var.aggregation_region &&
-    data.aws_region.current.name == "eu-west-2"
+    data.aws_region.current.region == "eu-west-2"
   )
 }
 
@@ -135,22 +135,29 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
 
   rule_name   = "suppress-mp-tf-state-bucket-s3-6"
   rule_order  = 1
-  description = "Suppress S3.6 for approved Terraform backend bucket (cross-account access is intentional and controlled)"
+  description = "Suppress S3.6 for approved Terraform backend bucket (controlled cross-account access is intentional)"
 
   criteria {
-    # Exact bucket match — safe across rebuilds
+    # Keep this exact match (rebuild-safe)
     resource_id {
       comparison = "EQUALS"
       value      = "arn:aws:s3:::modernisation-platform-terraform-state"
     }
 
-    # Stable control identifier (not brittle title text)
-    control_id {
+    # Ensure we're only touching Security Hub controls
+    product_name {
       comparison = "EQUALS"
-      value      = "S3.6"
+      value      = "Security Hub"
     }
 
-    # Optional: only act on new findings
+    # Identify the control without relying on the human title text
+    # If your generator_id differs, use CONTAINS "/S3.6" instead of EQUALS
+    generator_id {
+      comparison = "CONTAINS"
+      value      = "/S3.6"
+    }
+
+    # Optional - only act on new findings
     workflow_status {
       comparison = "EQUALS"
       value      = "NEW"
@@ -166,7 +173,7 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
       }
 
       note {
-        text       = "Approved exception: Terraform backend requires controlled cross-account access. Reviewed by platform engineering."
+        text       = "Approved exception: Terraform backend requires controlled cross-account access."
         updated_by = "terraform"
       }
     }
