@@ -4,6 +4,13 @@ data "aws_region" "current" {}
 # Get current account
 data "aws_caller_identity" "current" {}
 
+locals {
+  is_mp_delegated_admin =
+    var.is_delegated_administrator &&
+    data.aws_region.current.name == "eu-west-2" &&
+    data.aws_caller_identity.current.account_id == var.modernisation_platform_account_id
+}
+
 ###############################
 # Self-configuration: general #
 ###############################
@@ -123,21 +130,30 @@ resource "aws_securityhub_finding_aggregator" "default" {
 ########################################
 
 resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_account" {
-  for_each = var.aggregation_region ? toset(["aggregation_region"]) : []
+  for_each = local.is_mp_delegated_admin ? toset(["enabled"]) : []
 
-  rule_name   = "suppress-tf-state-bucket-cross-account-policy"
+  rule_name   = "suppress-mp-tf-state-bucket-s3-6"
   rule_order  = 1
-  description = "Suppress Security Hub S3.6 finding for terraform state bucket"
+  description = "Suppress S3.6 for approved Terraform backend bucket (cross-account access is intentional and controlled)"
 
   criteria {
+
+    # Exact bucket match — safe across rebuilds
     resource_id {
-      comparison = "PREFIX"
+      comparison = "EQUALS"
       value      = "arn:aws:s3:::modernisation-platform-terraform-state"
     }
 
-    title {
+    # Stable control identifier (not brittle title text)
+    control_id {
       comparison = "EQUALS"
-      value      = "S3 general purpose bucket policies should restrict access to other AWS accounts"
+      value      = "S3.6"
+    }
+
+    # Extra safety: only active findings
+    workflow_status {
+      comparison = "EQUALS"
+      value      = "NEW"
     }
   }
 
@@ -150,10 +166,9 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
       }
 
       note {
-        text       = "Approved exception - Terraform backend requires controlled cross-account access."
+        text       = "Approved exception: Terraform backend requires controlled cross-account access. Reviewed by platform engineering."
         updated_by = "terraform"
       }
     }
   }
 }
-
