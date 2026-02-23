@@ -1,3 +1,4 @@
+
 ##############################
 # Security Hub in EU regions #
 ##############################
@@ -17,8 +18,8 @@ module "securityhub_eu_west_1" {
   providers = {
     aws = aws.eu-west-1
   }
-  is_delegated_administrator = true
 
+  is_delegated_administrator = true
 }
 
 module "securityhub_eu_west_3" {
@@ -26,8 +27,8 @@ module "securityhub_eu_west_3" {
   providers = {
     aws = aws.eu-west-3
   }
-  is_delegated_administrator = true
 
+  is_delegated_administrator = true
 }
 
 module "securityhub_eu_central_1" {
@@ -35,6 +36,7 @@ module "securityhub_eu_central_1" {
   providers = {
     aws = aws.eu-central-1
   }
+
   is_delegated_administrator = true
 }
 
@@ -49,5 +51,4 @@ module "securityhub_us_east_1" {
   source = "../../modules/securityhub"
 
   is_delegated_administrator = true
-
 }
