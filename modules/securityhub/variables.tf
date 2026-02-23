@@ -17,3 +17,8 @@ variable "enrolled_accounts" {
   type    = map(any)
   default = {}
 }
+
+variable "modernisation_platform_account_id" {
+  description = "Account ID of the Modernisation Platform delegated admin account"
+  type        = string
+}
