@@ -138,7 +138,6 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
   description = "Suppress S3.6 for approved Terraform backend bucket (controlled cross-account access is intentional)"
 
   criteria {
-    # Keep this exact match (rebuild-safe)
     resource_id {
       comparison = "EQUALS"
       value      = "arn:aws:s3:::modernisation-platform-terraform-state"
@@ -150,14 +149,11 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
       value      = "Security Hub"
     }
 
-    # Identify the control without relying on the human title text
-    # If your generator_id differs, use CONTAINS "/S3.6" instead of EQUALS
     generator_id {
       comparison = "CONTAINS"
       value      = "/S3.6"
     }
 
-    # Optional - only act on new findings
     workflow_status {
       comparison = "EQUALS"
       value      = "NEW"
