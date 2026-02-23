@@ -4,14 +4,6 @@ data "aws_region" "current" {}
 # Get current account
 data "aws_caller_identity" "current" {}
 
-locals {
-  is_mp_delegated_admin = (
-    var.is_delegated_administrator &&
-    var.aggregation_region &&
-    data.aws_region.current.region == "eu-west-2"
-  )
-}
-
 ###############################
 # Self-configuration: general #
 ###############################
@@ -130,33 +122,22 @@ resource "aws_securityhub_finding_aggregator" "default" {
 # Terraform state bucket suppression   #
 ########################################
 
-resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_account" {
-  for_each = local.is_mp_delegated_admin ? toset(["enabled"]) : []
+resource "aws_securityhub_automation_rule" "suppress_tf_state_bucket_cross_account" {
+  for_each = var.aggregation_region ? toset(["aggregation_region"]) : []
 
-  rule_name   = "suppress-mp-tf-state-bucket-s3-6"
+  rule_name   = "suppress-tf-state-bucket-cross-account-policy"
   rule_order  = 1
-  description = "Suppress S3.6 for approved Terraform backend bucket (controlled cross-account access is intentional)"
+  description = "Suppress Security Hub S3.6 finding for terraform state bucket"
 
   criteria {
     resource_id {
-      comparison = "EQUALS"
+      comparison = "PREFIX"
       value      = "arn:aws:s3:::modernisation-platform-terraform-state"
     }
 
-    # Ensure we're only touching Security Hub controls
-    product_name {
+    title {
       comparison = "EQUALS"
-      value      = "Security Hub"
-    }
-
-    generator_id {
-      comparison = "CONTAINS"
-      value      = "/S3.6"
-    }
-
-    workflow_status {
-      comparison = "EQUALS"
-      value      = "NEW"
+      value      = "S3 general purpose bucket policies should restrict access to other AWS accounts"
     }
   }
 
@@ -169,7 +150,7 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
       }
 
       note {
-        text       = "Approved exception: Terraform backend requires controlled cross-account access."
+        text       = "Approved exception - Terraform backend requires controlled cross-account access."
         updated_by = "terraform"
       }
     }
