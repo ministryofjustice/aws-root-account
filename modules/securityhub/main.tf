@@ -122,7 +122,7 @@ resource "aws_securityhub_finding_aggregator" "default" {
 # Terraform state bucket suppression   #
 ########################################
 
-resource "aws_securityhub_automation_rule" "suppress_tf_state_bucket_cross_account" {
+resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_account" {
   for_each = var.aggregation_region ? toset(["aggregation_region"]) : []
 
   rule_name   = "suppress-tf-state-bucket-cross-account-policy"
