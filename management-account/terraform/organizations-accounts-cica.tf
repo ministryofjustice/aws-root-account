@@ -7,6 +7,7 @@ resource "aws_organizations_account" "cica_development" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "cica-dev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.cica.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_cica, {
     environment-name = "development"
@@ -27,6 +28,7 @@ resource "aws_organizations_account" "cica_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "cica-tnv")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.cica.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_cica, {
     environment-name = "production"
@@ -48,6 +50,7 @@ resource "aws_organizations_account" "cica_shared_services" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "cica")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.cica.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_cica, {
     environment-name = "shared-services"
@@ -69,6 +72,7 @@ resource "aws_organizations_account" "cica_uat" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "cica-uat")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.cica.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_cica, {
     environment-name = "user-acceptance-testing"

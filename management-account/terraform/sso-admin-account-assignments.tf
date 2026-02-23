@@ -52,7 +52,6 @@ locals {
       account_ids = [
         aws_organizations_account.moj_digital_services.id,
         aws_organizations_account.tacticalproducts.id,
-        aws_organizations_account.youth_justice_framework_management.id
       ]
     },
     {
@@ -264,7 +263,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.modernisation_platform.id,
-        aws_organizations_account.youth_justice_framework_management.id
       ]
     },
     {
@@ -422,14 +420,6 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
       account_ids = [
         aws_organizations_organization.default.master_account_id
-      ]
-    },
-    {
-      github_team        = "laa-internal-analysis",
-      permission_set_arn = aws_ssoadmin_permission_set.laa_security_audit.arn,
-      account_ids = [
-        aws_organizations_account.organisation_security.id,
-        aws_organizations_account.cloud_platform.id
       ]
     },
     {

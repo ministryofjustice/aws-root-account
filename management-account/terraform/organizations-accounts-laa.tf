@@ -7,6 +7,7 @@ resource "aws_organizations_account" "laa_cloudtrail" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "LAA+CloudTrail")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.laa.id
+  close_on_deletion          = true
 
   tags = local.tags_laa
 
@@ -25,6 +26,7 @@ resource "aws_organizations_account" "laa_development" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "LAA+Development")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.laa.id
+  close_on_deletion          = true
 
   tags = local.tags_laa
 
@@ -43,6 +45,7 @@ resource "aws_organizations_account" "laa_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "LAA+Production")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.disabled_accounts.id
+  close_on_deletion          = true
 
   tags = local.tags_laa
 
@@ -61,6 +64,7 @@ resource "aws_organizations_account" "laa_shared_services" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "LAA+Shared+services")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.laa.id
+  close_on_deletion          = true
 
   tags = local.tags_laa
 
@@ -79,6 +83,7 @@ resource "aws_organizations_account" "laa_staging" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "laa+staging")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.laa.id
+  close_on_deletion          = true
 
   tags = local.tags_laa
 
@@ -97,6 +102,7 @@ resource "aws_organizations_account" "laa_test" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "LAA+Test")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.laa.id
+  close_on_deletion          = true
 
   tags = local.tags_laa
 
@@ -115,6 +121,7 @@ resource "aws_organizations_account" "laa_uat" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "laa-uat")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.laa.id
+  close_on_deletion          = true
 
   tags = local.tags_laa
 

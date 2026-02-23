@@ -8,6 +8,7 @@ resource "aws_organizations_account" "electronic_monitoring_identity_and_access_
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-idam")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_electronic_monitoring, {
 
@@ -29,6 +30,7 @@ resource "aws_organizations_account" "electronic_monitoring_shared_logging" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-em-shared-logging")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_electronic_monitoring.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_electronic_monitoring, {
 

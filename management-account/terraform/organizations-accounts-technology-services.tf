@@ -10,6 +10,7 @@ resource "aws_organizations_account" "moj_official_development" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-dev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_technology_services, {
     application = "MOJ Official: DHCP / DNS / Monitoring / NACs / SMTP Relay / Global Protect / Transit Gateway"
@@ -31,6 +32,7 @@ resource "aws_organizations_account" "moj_official_preproduction" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-preprod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_technology_services, {
     application = "MOJ Official: DHCP / DNS / Monitoring / NACs / SMTP Relay / Global Protect / Transit Gateway"
@@ -52,6 +54,7 @@ resource "aws_organizations_account" "moj_official_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_technology_services, {
     is-production = true
@@ -74,6 +77,7 @@ resource "aws_organizations_account" "moj_official_public_key_infrastructure_dev
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-pki-dev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_technology_services, {
     application = "Entrust Managed VMs"
@@ -95,6 +99,7 @@ resource "aws_organizations_account" "moj_official_public_key_infrastructure" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-public-key-infra")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_technology_services, {
     is-production = true
@@ -117,6 +122,7 @@ resource "aws_organizations_account" "moj_official_shared_services" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "mojofficial-shared")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_technology_services, {
     is-production = true
@@ -139,6 +145,7 @@ resource "aws_organizations_account" "workplace_tech_proof_of_concept_developmen
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "wptpocdev")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_technology_services, {
     application = "Workplace Technology"
@@ -159,6 +166,7 @@ resource "aws_organizations_account" "network_architecture" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "network-architecture")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.technology_services.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_technology_services, {
     is-production    = true

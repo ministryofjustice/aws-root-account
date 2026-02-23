@@ -35,6 +35,3 @@ data "aws_organizations_organizational_unit_descendant_accounts" "technology_ser
   parent_id = aws_organizations_organizational_unit.technology_services.id
 }
 
-data "aws_organizations_organizational_unit_descendant_accounts" "yjb" {
-  parent_id = aws_organizations_organizational_unit.yjb.id
-}
