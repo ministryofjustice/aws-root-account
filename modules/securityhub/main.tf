@@ -5,10 +5,11 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 locals {
-  is_mp_delegated_admin =
+  is_mp_delegated_admin = (
     var.is_delegated_administrator &&
     data.aws_region.current.name == "eu-west-2" &&
     data.aws_caller_identity.current.account_id == var.modernisation_platform_account_id
+  )
 }
 
 ###############################
