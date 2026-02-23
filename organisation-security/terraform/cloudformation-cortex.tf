@@ -52,8 +52,7 @@ resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
       local.ou_laa,
       local.ou_platforms_and_architecture_id,
       local.ou_security_engineering_id,
-      local.ou_technology_services,
-      local.ou_yjb_id
+      local.ou_technology_services
     ]
   }
   operation_preferences {
