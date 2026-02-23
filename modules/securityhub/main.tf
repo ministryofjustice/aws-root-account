@@ -4,6 +4,14 @@ data "aws_region" "current" {}
 # Get current account
 data "aws_caller_identity" "current" {}
 
+locals {
+  is_mp_delegated_admin = (
+    var.is_delegated_administrator &&
+    var.aggregation_region &&
+    data.aws_region.current.region == "eu-west-2"
+  )
+}
+
 ###############################
 # Self-configuration: general #
 ###############################
@@ -116,4 +124,54 @@ resource "aws_securityhub_finding_aggregator" "default" {
   for_each   = var.is_delegated_administrator && var.aggregation_region ? toset(["aggregator"]) : []
 
   linking_mode = "ALL_REGIONS"
+}
+
+########################################
+# Terraform state bucket suppression   #
+########################################
+
+resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_account" {
+  for_each = local.is_mp_delegated_admin ? toset(["enabled"]) : []
+
+  rule_name   = "suppress-mp-tf-state-bucket-s3-6"
+  rule_order  = 1
+  description = "Suppress S3.6 for approved Terraform backend bucket (controlled cross-account access is intentional)"
+
+  criteria {
+    resource_id {
+      comparison = "EQUALS"
+      value      = "arn:aws:s3:::modernisation-platform-terraform-state"
+    }
+
+    # Ensure we're only touching Security Hub controls
+    product_name {
+      comparison = "EQUALS"
+      value      = "Security Hub"
+    }
+
+    generator_id {
+      comparison = "CONTAINS"
+      value      = "/S3.6"
+    }
+
+    workflow_status {
+      comparison = "EQUALS"
+      value      = "NEW"
+    }
+  }
+
+  actions {
+    type = "FINDING_FIELDS_UPDATE"
+
+    finding_fields_update {
+      workflow {
+        status = "SUPPRESSED"
+      }
+
+      note {
+        text       = "Approved exception: Terraform backend requires controlled cross-account access."
+        updated_by = "terraform"
+      }
+    }
+  }
 }
