@@ -25,6 +25,15 @@ resource "aws_organizations_organizational_unit" "closed_accounts" {
   tags      = {}
 }
 
+#####################
+# Disabled accounts #
+#####################
+resource "aws_organizations_organizational_unit" "disabled_accounts" {
+  name      = "Disabled accounts"
+  parent_id = aws_organizations_organization.default.roots[0].id
+  tags      = {}
+}
+
 #########
 # HMCTS #
 #########
@@ -203,6 +212,18 @@ data "aws_organizations_organizational_units" "platforms_and_architecture_modern
   parent_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
 
+# Modernisation Platform Member children (managed by Modernisation Platform team)
+locals {
+  mp_member_id = one([
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
+    if child.name == "Modernisation Platform Member"
+  ])
+}
+
+data "aws_organizations_organizational_units" "mp_member_children" {
+  parent_id = local.mp_member_id
+}
+
 # Operations Engineering
 resource "aws_organizations_organizational_unit" "platforms_and_architecture_operations_engineering" {
   name      = "Operations Engineering"
@@ -228,11 +249,3 @@ resource "aws_organizations_organizational_unit" "technology_services" {
   tags      = {}
 }
 
-#######
-# YJB #
-#######
-resource "aws_organizations_organizational_unit" "yjb" {
-  name      = "YJB"
-  parent_id = aws_organizations_organization.default.roots[0].id
-  tags      = {}
-}

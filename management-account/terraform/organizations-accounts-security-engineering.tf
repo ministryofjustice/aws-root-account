@@ -7,6 +7,7 @@ resource "aws_organizations_account" "security_operations_pre_production" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "secops-preprod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.security_engineering.id
+  close_on_deletion          = true
 
   tags = local.tags_security
 

@@ -8,7 +8,7 @@ provider "aws" {
   alias  = "organisation-security-us-east-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -18,7 +18,7 @@ provider "aws" {
   alias  = "organisation-security-us-east-2"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -28,7 +28,7 @@ provider "aws" {
   alias  = "organisation-security-us-west-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -38,7 +38,7 @@ provider "aws" {
   alias  = "organisation-security-us-west-2"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -48,7 +48,7 @@ provider "aws" {
   alias  = "organisation-security-ap-south-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -58,7 +58,7 @@ provider "aws" {
   alias  = "organisation-security-ap-northeast-3"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -68,7 +68,7 @@ provider "aws" {
   alias  = "organisation-security-ap-northeast-2"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -78,7 +78,7 @@ provider "aws" {
   alias  = "organisation-security-ap-southeast-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -88,7 +88,7 @@ provider "aws" {
   alias  = "organisation-security-ap-southeast-2"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -98,7 +98,7 @@ provider "aws" {
   alias  = "organisation-security-ap-northeast-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -108,7 +108,7 @@ provider "aws" {
   alias  = "organisation-security-ca-central-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -118,7 +118,7 @@ provider "aws" {
   alias  = "organisation-security-eu-central-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -128,7 +128,7 @@ provider "aws" {
   alias  = "organisation-security-eu-west-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -138,7 +138,7 @@ provider "aws" {
   alias  = "organisation-security-eu-west-2"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -148,7 +148,7 @@ provider "aws" {
   alias  = "organisation-security-eu-west-3"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -158,7 +158,7 @@ provider "aws" {
   alias  = "organisation-security-eu-north-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }
 
@@ -168,6 +168,6 @@ provider "aws" {
   alias  = "organisation-security-sa-east-1"
 
   assume_role {
-    role_arn = can(regex("GitHubActions", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
+    role_arn = can(regex("GitHubActionsPlan", data.aws_caller_identity.current.arn)) ? "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/ReadOnly" : "arn:aws:iam::${aws_organizations_account.organisation_security.id}:role/OrganizationAccountAccessRole"
   }
 }

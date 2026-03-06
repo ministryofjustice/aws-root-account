@@ -1,6 +1,6 @@
 resource "aws_ce_cost_category" "modernisation_platform" {
-  name         = "Modernisation Platform"
-  rule_version = "CostCategoryExpression.v1"
+  name            = "Modernisation Platform"
+  rule_version    = "CostCategoryExpression.v1"
 
   rule {
     type  = "REGULAR"
@@ -14,4 +14,3 @@ resource "aws_ce_cost_category" "modernisation_platform" {
     }
   }
 }
-

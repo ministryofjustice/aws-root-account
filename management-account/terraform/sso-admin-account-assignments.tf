@@ -3,11 +3,12 @@ locals {
     {
       github_team        = "aws-root-account-admin-team",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id,
-        aws_organizations_account.organisation_security.id,
-        aws_organizations_account.organisation_logging.id,
-      ]
+      account_ids        = local.accounts.active_only_account_ids
+    },
+    {
+      github_team        = "aws-root-account-admin-team",
+      permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
+      account_ids        = local.accounts.active_only_account_ids
     },
     {
       github_team        = "aws-root-account-admin-team",
@@ -15,43 +16,34 @@ locals {
       account_ids = [
         aws_organizations_organization.default.master_account_id,
         aws_organizations_account.organisation_security.id,
-      ]
-    },
-    {
-      github_team        = "aws-root-account-admin-team",
-      permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id,
-        aws_organizations_account.organisation_security.id,
-      ]
-    },
-    {
-      github_team        = "aws-root-account-admin-team",
-      permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id
-      ]
-    },
-    {
-      github_team        = "aws-root-account-admin-team",
-      permission_set_arn = aws_ssoadmin_permission_set.view_only_access.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id
-      ]
-    },
-    {
-      github_team        = "aws-root-account-admin-team",
-      permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
-      account_ids = [
-        aws_organizations_organization.default.master_account_id
       ]
     },
     {
       github_team        = "webops",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
-        aws_organizations_account.cloud_platform.id,
         aws_organizations_account.cloud_platform_ephemeral_test.id,
+      ]
+    },
+    {
+      github_team        = "cloud-platform-engineers",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.cloud_platform.id,
+      ]
+    },
+    {
+      github_team        = "webops",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.cloud_platform.id,
+      ]
+    },
+    {
+      github_team        = "webops",
+      permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
+      account_ids = [
+        aws_organizations_account.cloud_platform.id,
       ]
     },
     {
@@ -60,7 +52,6 @@ locals {
       account_ids = [
         aws_organizations_account.moj_digital_services.id,
         aws_organizations_account.tacticalproducts.id,
-        aws_organizations_account.youth_justice_framework_management.id
       ]
     },
     {
@@ -72,7 +63,14 @@ locals {
       ]
     },
     {
-      github_team        = "cica",
+      github_team        = "dns-read",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_digital_services.id
+      ]
+    },
+    {
+      github_team        = "CICA-DevOps",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.cica_development.id,
@@ -121,21 +119,9 @@ locals {
         aws_organizations_account.electronic_monitoring_acquisitive_crime_preprod.id,
         aws_organizations_account.electronic_monitoring_acquisitive_crime_production.id,
         aws_organizations_account.electronic_monitoring_acquisitive_crime_test.id,
-        aws_organizations_account.electronic_monitoring_case_management_dev.id,
-        aws_organizations_account.electronic_monitoring_case_management_preprod.id,
-        aws_organizations_account.electronic_monitoring_case_management_prod.id,
         aws_organizations_account.electronic_monitoring_identity_and_access_management.id,
-        aws_organizations_account.electronic_monitoring_infrastructure_dev.id,
         aws_organizations_account.electronic_monitoring_monitoring_and_mapping_dev.id,
-        aws_organizations_account.electronic_monitoring_case_management_networking_prod.id,
-        aws_organizations_account.electronic_monitoring_case_management_management_prod.id,
-        aws_organizations_account.electronic_monitoring_protective_monitoring.id,
         aws_organizations_account.electronic_monitoring_shared_logging.id,
-        aws_organizations_account.electronic_monitoring_shared_networking.id,
-        aws_organizations_account.electronic_monitoring_shared_networking_non_prod.id,
-        aws_organizations_account.electronic_monitoring_tagging_hardware_pre_prod.id,
-        aws_organizations_account.electronic_monitoring_tagging_hardware_prod.id,
-        aws_organizations_account.electronic_monitoring_tagging_hardware_test.id,
       ]
     },
     {
@@ -143,6 +129,16 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
       account_ids = [
         aws_organizations_account.electronic_monitoring_shared_logging.id,
+      ]
+    },
+    {
+      github_team        = "hosting-networking",
+      permission_set_arn = aws_ssoadmin_permission_set.view_only_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.moj_official_preproduction.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
       ]
     },
     {
@@ -155,8 +151,8 @@ locals {
         aws_organizations_account.opg_digi_deps_dev.id,
         aws_organizations_account.opg_digi_deps_preprod.id,
         aws_organizations_account.opg_digi_deps_prod.id,
-        aws_organizations_account.moj_opg_lpa_refunds_development.id,
-        aws_organizations_account.moj_opg_lpa_refunds_preproduction.id,
+        aws_organizations_account.moj_opg_lpa_data_store_preproduction.id,
+        aws_organizations_account.moj_opg_lpa_data_store_production.id,
         aws_organizations_account.moj_opg_lpa_refunds_production.id,
         aws_organizations_account.opg_refund_production.id,
         aws_organizations_account.moj_lpa_development.id,
@@ -267,7 +263,20 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.modernisation_platform.id,
-        aws_organizations_account.youth_justice_framework_management.id
+      ]
+    },
+    {
+      github_team        = "modernisation-platform-security",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.modernisation_platform.id
+      ]
+    },
+    {
+      github_team        = "modernisation-platform-security",
+      permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
+      account_ids = [
+        aws_organizations_account.modernisation_platform.id
       ]
     },
     {
@@ -322,11 +331,34 @@ locals {
       ]
     },
     {
+      github_team        = "eucs-idam-maintainers",
+      permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
+        aws_organizations_account.moj_official_public_key_infrastructure.id,
+        aws_organizations_account.moj_official_shared_services.id,
+      ]
+    },
+    {
+      github_team        = "eucs-idam-admins",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
+        aws_organizations_account.moj_official_public_key_infrastructure.id,
+      ]
+    },
+    {
+      github_team        = "eucs-idam-admins",
+      permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_shared_services.id,
+      ]
+    },
+    {
       github_team        = "moj-official-techops",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = flatten([
         local.modernisation_platform_accounts.core_network_services_id,
-        aws_organizations_account.organisation_security.id
       ])
     },
     {
@@ -391,6 +423,20 @@ locals {
       ]
     },
     {
+      github_team        = "laa-lz-read-only",
+      permission_set_arn = aws_ssoadmin_permission_set.laa_read_only.arn,
+      account_ids = [
+        aws_organizations_account.laa_production.id
+      ]
+    },
+    {
+      github_team        = "laa-lz-admin",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.laa_production.id
+      ]
+    },
+    {
       github_team        = "modernisation-platform",
       permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
       account_ids = [
@@ -431,7 +477,28 @@ locals {
       account_ids = [
         aws_organizations_organization.default.master_account_id
       ]
-    }
+    },
+    {
+      github_team        = "azure-aws-sso-laa-readers",
+      permission_set_arn = aws_ssoadmin_permission_set.laa_lz_s3_read_access.arn,
+      account_ids = [
+        aws_organizations_account.laa_production.id,
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-management-billing",
+      permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-finance-billing-access",
+      permission_set_arn = aws_ssoadmin_permission_set.billing_finance.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id
+      ]
+    },
   ]
   sso_admin_account_assignments_expanded = flatten([
     for assignment in local.sso_admin_account_assignments : [
@@ -458,3 +525,4 @@ resource "aws_ssoadmin_account_assignment" "github_team_access" {
   target_id          = each.value.account_id
   target_type        = "AWS_ACCOUNT"
 }
+

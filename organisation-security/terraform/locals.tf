@@ -1,4 +1,7 @@
 locals {
+
+  excluded_accounts = ["organisation-security", "xhibit-portal-production"]
+
   organizations_organization = data.terraform_remote_state.management_account.outputs.organizations_organization
 
   root_account_id = coalesce([
@@ -19,6 +22,12 @@ locals {
     if account.name == "Workplace Tech Proof Of Concept Development"
   ]...)
 
+  moj_network_operations_centre_preproduction_account_id = coalesce([
+    for account in local.organizations_organization.accounts :
+    account.id
+    if account.name == "moj-network-operations-centre-preproduction"
+  ]...)
+
   moj_network_operations_centre_production_account_id = coalesce([
     for account in local.organizations_organization.accounts :
     account.id
@@ -34,10 +43,52 @@ locals {
   organisation_account_numbers = [for account in local.organizations_organization.accounts : account.id]
 
   # AWS Organizational Units
+  ## Central Digital
+  ou_central_digital_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "Central Digital"
+  ]...)
+
+  ## Criminal Injuries Compensation Authority
+  ou_cica_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "CICA"
+  ]...)
+
+  ## HM Courts & Tribunal Service
+  ou_hmcts_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "HMCTS"
+  ]...)
+
+  ## HM Prison and Probation Service
+  ou_hmpps_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "HMPPS"
+  ]...)
+
+  ## Legal Aid Agency
+  ou_laa = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "LAA"
+  ]...)
+
+  ## Office of the Public Guardian
   ou_opg = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
     if ou.name == "OPG"
+  ]...)
+
+  ou_opg_lpa_data_store = coalesce([
+    for ou in data.aws_organizations_organizational_units.opg.children :
+    ou.id
+    if ou.name == "LPA Data Store"
   ]...)
 
   ou_opg_make_an_lpa = coalesce([
@@ -64,6 +115,21 @@ locals {
     if ou.name == "Sirius"
   ]...)
 
+  ## Organisation Management
+  ou_organisation_management = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "Organisation Management"
+  ]...)
+
+  ## Security Engineering
+  ou_security_engineering_id = coalesce([
+    for ou in data.aws_organizations_organizational_units.organizational_units.children :
+    ou.id
+    if ou.name == "Security Engineering"
+  ]...)
+
+  ## Platforms and Architecture
   ou_platforms_and_architecture_id = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
@@ -88,16 +154,11 @@ locals {
     if ou.name == "Modernisation Platform Member"
   ]...)
 
+  ## Technology Services
   ou_technology_services = coalesce([
     for ou in data.aws_organizations_organizational_units.organizational_units.children :
     ou.id
     if ou.name == "Technology Services"
-  ]...)
-
-  ou_laa = coalesce([
-    for ou in data.aws_organizations_organizational_units.organizational_units.children :
-    ou.id
-    if ou.name == "LAA"
   ]...)
 
   # ous for license manager
@@ -141,6 +202,7 @@ locals {
       )
     ],
     organizational_units = flatten([
+      local.ou_opg_lpa_data_store,
       local.ou_opg_make_an_lpa,
       local.ou_opg_use_my_lpa,
       local.ou_sirius,
@@ -170,9 +232,11 @@ locals {
     active_only_not_self : {
       for account in local.organizations_organization.accounts :
       account.name => account.id
-      if account.status == "ACTIVE" && account.name != "organisation-security"
+      if account.status == "ACTIVE"
+      && !contains(local.excluded_accounts, account.name)
     }
   }
+
 
   guardduty_administrator_detector_ids = data.terraform_remote_state.management_account.outputs.guardduty_administrator_detector_ids
 }

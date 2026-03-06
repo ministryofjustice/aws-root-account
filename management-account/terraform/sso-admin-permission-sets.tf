@@ -44,6 +44,12 @@ resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_read_only_directory" 
   permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn
 }
 
+resource "aws_ssoadmin_managed_policy_attachment" "aws_sso_read_only_ec2" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn
+}
+
 # SSO Admin
 
 resource "aws_ssoadmin_permission_set" "aws_sso_admin" {
@@ -92,21 +98,51 @@ resource "aws_ssoadmin_permission_set_inline_policy" "billing" {
   inline_policy      = data.aws_iam_policy_document.billing.json
   permission_set_arn = aws_ssoadmin_permission_set.billing.arn
 }
-
 data "aws_iam_policy_document" "billing" {
   statement {
-    sid       = "BCMDataExports"
-    effect    = "Allow"
-    actions   = ["bcm-data-exports:*"]
+    sid    = "BillingAdditionalAllow"
+    effect = "Allow"
+    actions = [
+      "bcm-data-exports:*",
+      "bcm-recommended-actions:ListRecommendedActions",
+      "ce:*",
+      "cost-optimization-hub:List*",
+      "cost-optimization-hub:Get*"
+    ]
     resources = ["*"]
   }
 }
-
 resource "aws_ssoadmin_managed_policy_attachment" "billing" {
   instance_arn       = local.sso_admin_instance_arn
   managed_policy_arn = "arn:aws:iam::aws:policy/job-function/Billing"
   permission_set_arn = aws_ssoadmin_permission_set.billing.arn
 }
+
+# Billing (Finance)
+resource "aws_ssoadmin_permission_set" "billing_finance" {
+  name             = "BillingFinance"
+  description      = "Billing access for Finance partners"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "billing_finance" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.billing_finance.json
+  permission_set_arn = aws_ssoadmin_permission_set.billing_finance.arn
+}
+
+data "aws_iam_policy_document" "billing_finance" {
+  statement {
+    sid       = ""
+    effect    = "Allow"
+    actions   = ["aws-portal:*"]
+    resources = ["*"]
+  }
+}
+
+
 
 # Read Only Access
 resource "aws_ssoadmin_permission_set" "read_only_access" {
@@ -180,7 +216,8 @@ resource "aws_ssoadmin_permission_set_inline_policy" "security_audit_additional"
 data "aws_iam_policy_document" "security_audit" {
   statement {
     actions = [
-      "support:*"
+      "support:*",
+      "support-console:*"
     ]
     resources = ["*"]
   }
@@ -265,7 +302,8 @@ resource "aws_ssoadmin_permission_set_inline_policy" "modernisation_platform_eng
 data "aws_iam_policy_document" "modernisation_platform_engineer" {
   statement {
     actions = [
-      "support:*"
+      "support:*",
+      "support-console:*"
     ]
     resources = ["*"]
   }
@@ -291,6 +329,10 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "bcm-data-exports:ListTables",
       "bcm-data-exports:ListTagsForResource",
       "aws-marketplace:ViewSubscriptions",
+      "cloudformation:DeleteStack",
+      "cloudformation:DeleteStackInstances",
+      "cloudformation:DeleteStackSet",
+      "cloudformation:CreateStackInstances",
       "cloudwatch:DisableAlarmActions",
       "cloudwatch:EnableAlarmActions",
       "cloudwatch:PutDashboard",
@@ -320,7 +362,13 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "ec2:*SerialConsole*",
       "ec2:ModifyInstanceAttribute",
       "ec2-instance-connect:SendSerialConsoleSSHPublicKey",
+      "ecr:BatchCheckLayerAvailability",
       "ecr:BatchDeleteImage",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetAuthorizationToken",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart",
       "ecs:StartTask",
       "ecs:StopTask",
       "ecs:UpdateService",
@@ -766,5 +814,129 @@ data "aws_iam_policy_document" "waf_viewer_shield" {
     ]
 
     resources = ["*"]
+  }
+}
+
+#########################################
+#   laa landing zone  permission sets   #
+#########################################
+
+# S3 Read Access
+#
+# This role provides read-only access to specific S3 buckets.
+resource "aws_ssoadmin_permission_set" "laa_lz_s3_read_access" {
+  name             = "laa-lz-s3-read-access"
+  description      = "A role that provides read-only access to specific LAA LZ S3 buckets"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "s3_read_access_inline" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.laa_lz_s3_read_access.json
+  permission_set_arn = aws_ssoadmin_permission_set.laa_lz_s3_read_access.arn
+}
+
+data "aws_iam_policy_document" "laa_lz_s3_read_access" {
+  statement {
+    sid = "AllowListAllBucketsForConsole"
+    actions = [
+      "s3:ListAllMyBuckets"
+    ]
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = ["*"]
+  }
+  statement {
+    sid = "AllowListAndReadObjects"
+    actions = [
+      "s3:ListBucketVersions",
+      "s3:ListBucket",
+      "s3:GetObjectVersion",
+      "s3:GetObject",
+      "s3:GetBucketLocation",
+      "s3:GetBucketObjectLockConfiguration",
+      "s3:GetBucketVersioning",
+      "s3:GetBucketOwnershipControls"
+    ]
+
+    resources = local.laa_lz_data_locations_resources
+  }
+  statement {
+    sid    = "AllowS3DecryptWithCMK"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey"
+    ]
+    resources = [
+      "arn:aws:kms:eu-west-2:${aws_organizations_account.laa_production.id}:alias/s3"
+    ]
+  }
+}
+
+# LAA Read Only
+resource "aws_ssoadmin_permission_set" "laa_read_only" {
+  name             = "LAAReadOnly"
+  description      = "LAA Read only access"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT1H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "laa_read_only" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.laa_read_only.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "laa_read_only_additional" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.laa_read_only_additional.json
+  permission_set_arn = aws_ssoadmin_permission_set.laa_read_only.arn
+}
+
+data "aws_iam_policy_document" "laa_read_only_additional" {
+  statement {
+    sid    = "DenyS3GetorPut"
+    effect = "Deny"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:PutObject",
+    ]
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowSnapshotCopy"
+    effect = "Allow"
+    actions = [
+      "ec2:CopySnapshot",
+      "ec2:ModifySnapshotAttribute",
+      "ec2:CreateImage",
+      "ec2:RegisterImage",
+      "ec2:ModifyImageAttribute",
+      "ec2:CreateSnapshot",
+      "ec2:CreateTags",
+      "rds:CopyDBSnapshot",
+      "rds:ModifyDBSnapshotAttribute",
+      "backup:ListRecoveryPoints",
+      "backup:CopyRecoveryPoint"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowKMSKeyUseForSnapshotCopy"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:Encrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+      "kms:CreateGrant"
+    ]
+    resources = ["arn:aws:kms:*:*:key/*"]
   }
 }

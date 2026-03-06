@@ -7,6 +7,7 @@ resource "aws_organizations_account" "hmpps_victim_case_management_system_pre_pr
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-vcms-pre-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_vcms.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_victim_case_management_system, {
 
@@ -27,6 +28,7 @@ resource "aws_organizations_account" "hmpps_victim_case_management_system_produc
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-vcms-prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_vcms.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_victim_case_management_system, {
 
@@ -47,6 +49,7 @@ resource "aws_organizations_account" "hmpps_victim_case_management_system_test" 
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "hmpps-vcms-test")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_vcms.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_victim_case_management_system, {
 
@@ -67,6 +70,7 @@ resource "aws_organizations_account" "vcms_non_prod" {
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "vcms_non_prod")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.hmpps_vcms.id
+  close_on_deletion          = true
 
   tags = merge(local.tags_victim_case_management_system, {
 

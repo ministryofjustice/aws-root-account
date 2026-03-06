@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "github_oidc_assume_role_plan" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.repository_with_owner}:pull_request"]
+      values   = ["repo:${var.repository_with_owner}:pull_request", "repo:${var.repository_with_owner}:ref:refs/heads/main"]
     }
   }
 }
@@ -141,15 +141,27 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
     actions = [
       "account:*AlternateContact",
       "apigateway:*",
+      "backup:UpdateGlobalSettings",
       "bcm-data-exports:*",
       "budgets:*",
       "ce:*",
+      "chatbot:CreateSlackChannelConfiguration",
+      "chatbot:DeleteSlackChannelConfiguration",
+      "chatbot:DescribeSlackChannelConfigurations",
+      "chatbot:GetSlackChannelConfiguration",
+      "chatbot:UpdateSlackChannelConfiguration",
       "cloudtrail:*",
+      "cloudformation:*",
+      "cloudwatch:DeleteAlarms",
+      "cloudwatch:DescribeAlarms",
+      "cloudwatch:PutMetricAlarm",
       "config:*",
+      "cost-optimization-hub:*",
       "cur:DescribeReportDefinitions",
       "cur:ListTagsForResource",
       "cur:PutReportDefinition",
       "cur:DeleteReportDefinition",
+      "datasync:*",
       "events:*",
       "fms:*",
       "guardduty:*",
@@ -158,19 +170,23 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "identitystore:GetGroupId",
       "identitystore:DescribeGroup",
       "identitystore:CreateGroup",
-      "kms:Decrypt",
+      "kms:*",
       "lambda:*",
       "license-manager:*",
       "logs:*",
       "organizations:AddAccountToOrganization",
+      "organizations:AttachPolicy",
       "organizations:CreateAccount",
       "organizations:CreateOrganizationalUnit",
       "organizations:CreatePolicy",
+      "organizations:DeletePolicy",
       "organizations:DescribeAccount",
       "organizations:DescribeCreateAccountStatus",
       "organizations:DescribeOrganization",
+      "organizations:DetachPolicy",
       "organizations:DisablePolicyType",
       "organizations:EnablePolicyType",
+      "organizations:EnableAWSServiceAccess",
       "organizations:ListAccounts",
       "organizations:ListAccountsForParent",
       "organizations:ListOrganizationalUnitsForParent",
@@ -188,6 +204,13 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "secretsmanager:*",
       "securityhub:*",
       "sns:*",
+      "ssm:AddTagsToResource",
+      "ssm:DeleteParameter",
+      "ssm:DescribeParameter",
+      "ssm:GetParameter",
+      "ssm:GetParameter*",
+      "ssm:LabelParameterVersion",
+      "ssm:PutParameter",
       "sso-directory:*",
       "sso:*PermissionSet*",
       "sso:*AccountAssignment*"
@@ -200,6 +223,6 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
     actions = [
       "sts:AssumeRole",
     ]
-    resources = ["arn:aws:iam::${var.organisation_security_account_id}:role/ReadOnly"]
+    resources = ["arn:aws:iam::${var.organisation_security_account_id}:role/OrganizationAccountAccessRole"]
   }
 }

@@ -1,6 +1,5 @@
 resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
   export {
-
     name = "MOJ-CUR-V2-HOURLY"
     data_query {
       query_statement = <<-EOF
@@ -40,7 +39,11 @@ resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
           savings_plan_offering_type, savings_plan_payment_option, savings_plan_purchase_term, 
           savings_plan_recurring_commitment_for_billing_period, savings_plan_region, savings_plan_savings_plan_a_r_n, 
           savings_plan_savings_plan_effective_cost, savings_plan_savings_plan_rate, savings_plan_start_time, 
-          savings_plan_total_commitment_to_date, savings_plan_used_commitment 
+          savings_plan_total_commitment_to_date, savings_plan_used_commitment, 
+          split_line_item_actual_usage,  split_line_item_net_split_cost, 
+          split_line_item_net_unused_cost,  split_line_item_parent_resource_id, split_line_item_public_on_demand_split_cost, 
+          split_line_item_public_on_demand_unused_cost, split_line_item_reserved_usage, split_line_item_split_cost , split_line_item_split_usage, 
+          split_line_item_split_usage_ratio, split_line_item_unused_cost 
         FROM COST_AND_USAGE_REPORT
       EOF
       table_configurations = {
@@ -48,13 +51,13 @@ resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
           TIME_GRANULARITY                      = "HOURLY",
           INCLUDE_RESOURCES                     = "TRUE",
           INCLUDE_MANUAL_DISCOUNT_COMPATIBILITY = "FALSE",
-          INCLUDE_SPLIT_COST_ALLOCATION_DATA    = "FALSE",
+          INCLUDE_SPLIT_COST_ALLOCATION_DATA    = "TRUE",
         }
       }
     }
     destination_configurations {
       s3_destination {
-        s3_bucket = module.cur_reports_v2_hourly_s3_bucket.bucket.bucket
+        s3_bucket = module.cur_reports_v2_hourly_s3_bucket.s3_bucket_id
         s3_prefix = "moj-cost-and-usage-reports"
         s3_region = "eu-west-2"
         s3_output_configurations {
@@ -65,7 +68,42 @@ resource "aws_bcmdataexports_export" "moj_cur_v2_report" {
         }
       }
     }
+    refresh_cadence {
+      frequency = "SYNCHRONOUS"
+    }
+  }
+}
 
+resource "aws_bcmdataexports_export" "focus_report" {
+  export {
+    name = "MOJ-FOCUS"
+    data_query {
+      query_statement = <<-EOF
+        SELECT AvailabilityZone, BilledCost, BillingAccountId, BillingAccountName, BillingCurrency, BillingPeriodEnd, 
+        BillingPeriodStart, ChargeCategory, ChargeClass, ChargeDescription, ChargeFrequency, ChargePeriodEnd, ChargePeriodStart, 
+        CommitmentDiscountCategory, CommitmentDiscountId, CommitmentDiscountName, CommitmentDiscountStatus, CommitmentDiscountType, 
+        ConsumedQuantity, ConsumedUnit, ContractedCost, ContractedUnitPrice, EffectiveCost, InvoiceIssuerName, ListCost, ListUnitPrice, 
+        PricingCategory, PricingQuantity, PricingUnit, ProviderName, PublisherName, RegionId, RegionName, ResourceId, ResourceName, 
+        ResourceType, ServiceCategory, ServiceName, SkuId, SkuPriceId, SubAccountId, SubAccountName, Tags, x_CostCategories, x_Discounts, 
+        x_Operation, x_ServiceCode, x_UsageType FROM FOCUS_1_0_AWS
+      EOF
+      table_configurations = {
+        FOCUS_1_0_AWS = {}
+      }
+    }
+    destination_configurations {
+      s3_destination {
+        s3_bucket = module.focus_reports_s3_bucket.bucket.bucket
+        s3_prefix = "moj-focus-reports"
+        s3_region = "eu-west-2"
+        s3_output_configurations {
+          overwrite   = "OVERWRITE_REPORT"
+          format      = "PARQUET"
+          compression = "PARQUET"
+          output_type = "CUSTOM"
+        }
+      }
+    }
     refresh_cadence {
       frequency = "SYNCHRONOUS"
     }

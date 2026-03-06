@@ -9,6 +9,7 @@ on:
       - ".github/workflows/organisation-security-apply.yml"
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   apply:
@@ -20,15 +21,15 @@ jobs:
       run:
         working-directory: ./organisation-security/terraform
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: aws-actions/configure-aws-credentials@00943011d9042930efac3dcd3a170e4273319bc8 # v5.1.0
         with:
           role-to-assume: arn:aws:iam::${{secrets.AWS_SECURITY_ACCOUNT_ID}}:role/github-actions-apply
-          role-session-name: GitHubActions
+          role-session-name: GitHubActionsApply
           aws-region: eu-west-2
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
-          terraform_version: 1.7.5
+          terraform_version: 1.12.2
       - run: terraform fmt -check
         continue-on-error: true
       - run: terraform init
@@ -45,8 +46,10 @@ jobs:
 
       - name: Slack failure notification
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0 # v1.27.0
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
         with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
           payload: |
             {
               "blocks": [
@@ -79,6 +82,3 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

@@ -243,24 +243,6 @@ data "aws_iam_policy_document" "cur_reports_s3_bucket" {
       identifiers = ["arn:aws:iam::386209384616:root"]
     }
   }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:GetObject",
-      "s3:GetObjectTagging",
-      "s3:ListBucket"
-    ]
-    resources = [
-      "arn:aws:s3:::moj-cur-reports",
-      "arn:aws:s3:::moj-cur-reports/*"
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::083957762049:root"]
-    }
-  }
 }
 
 # moj-cur-reports-quicksight
@@ -301,22 +283,153 @@ data "aws_iam_policy_document" "cur_reports_quicksight_s3_policy" {
   }
 }
 
-# moj-cur-reports-greenops
 module "cur_reports_v2_hourly_s3_bucket" {
-  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=52a40b0dd18aaef0d7c5565d93cc8997aad79636" # v8.2.0"
-  providers = {
-    aws.bucket-replication = aws
-  }
-  bucket_name        = "moj-cur-reports-v2-hourly"
-  bucket_policy      = [data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json]
-  ownership_controls = "BucketOwnerEnforced"
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+  #checkov:skip=CKV_AWS_18:Access logging not enabled currently
+  #checkov:skip=CKV_AWS_21:Versioning is enabled, but not detected by Checkov
+  #checkov:skip=CKV_AWS_145:Bucket is encrypted with CMK KMS, but not detected by Checkov
+  #checkov:skip=CKV_AWS_300:Lifecycle configuration not enabled currently
+  #checkov:skip=CKV_AWS_144:Cross-region replication is not required currently
+  #checkov:skip=CKV2_AWS_6:Public access block is enabled, but not detected by Checkov
+  #checkov:skip=CKV2_AWS_61:Lifecycle configuration not enabled currently
+  #checkov:skip=CKV2_AWS_62:Bucket notifications not required currently
+  #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
-  tags = {
-    business-unit = "Platforms"
-    application   = "Modernisation Platform"
-    is-production = true
-    owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "5.7.0"
+
+  bucket        = "moj-cur-reports-v2-hourly"
+  force_destroy = true
+  attach_policy = true
+  policy        = data.aws_iam_policy_document.cur_reports_v2_hourly_s3_policy.json
+
+  versioning = {
+    enabled = true
   }
+
+  replication_configuration = {
+    role = module.cur_reports_v2_hourly_replication_role.iam_role_arn
+    rules = [
+      {
+        id       = "replicate-cur-v2-reports"
+        prefix   = "moj-cost-and-usage-reports/"
+        status   = "Enabled"
+        priority = 1
+        filter = {
+          prefix = ""
+        }
+        delete_marker_replication = true
+
+        source_selection_criteria = {
+          sse_kms_encrypted_objects = {
+            enabled = true
+          }
+        }
+
+        destination = {
+          account_id    = "279191903737"
+          bucket        = "arn:aws:s3:::coat-production-cur-v2-hourly"
+          storage_class = "STANDARD"
+          access_control_translation = {
+            owner = "Destination"
+          }
+          encryption_configuration = {
+            replica_kms_key_id = "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
+          }
+          metrics = {
+            status  = "Enabled"
+            minutes = 15
+          }
+          replication_time = {
+            status  = "Enabled"
+            minutes = 15
+          }
+        }
+      },
+
+      {
+        id       = "replicate-cur-v2-reports-mojap"
+        prefix   = "mojap-cost-and-usage-reports/"
+        status   = "Enabled"
+        priority = 0
+        filter = {
+          prefix = ""
+        }
+        delete_marker_replication = true
+
+        source_selection_criteria = {
+          sse_kms_encrypted_objects = {
+            enabled = true
+          }
+        }
+
+        destination = {
+          account_id    = "593291632749"
+          bucket        = "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly"
+          storage_class = "STANDARD"
+          access_control_translation = {
+            owner = "Destination"
+          }
+          encryption_configuration = {
+            replica_kms_key_id = "arn:aws:kms:eu-west-1:593291632749:key/0409ddbc-b6a2-46c4-a613-6145f6a16215"
+          }
+          metrics = {
+            status  = "Enabled"
+            minutes = 15
+          }
+          replication_time = {
+            status  = "Enabled"
+            minutes = 15
+          }
+        }
+      }
+    ]
+  }
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.cur_v2_s3_kms.key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket.default
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_public_access_block.default
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_public_access_block.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_versioning.default["enabled"]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_versioning.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_server_side_encryption_configuration.default["enabled"]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_server_side_encryption_configuration.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_replication_configuration.default["enabled"]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_replication_configuration.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_policy.default["enabled"]
+  to   = module.cur_reports_v2_hourly_s3_bucket.aws_s3_bucket_policy.this[0]
+}
+
+moved {
+  from = module.cur_reports_v2_hourly_s3_bucket.aws_iam_role.replication_role[0]
+  to   = module.cur_reports_v2_hourly_replication_role.aws_iam_role.this[0]
 }
 
 data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
@@ -362,6 +475,209 @@ data "aws_iam_policy_document" "cur_reports_v2_hourly_s3_policy" {
       type        = "Service"
       identifiers = ["bcm-data-exports.amazonaws.com"]
     }
+  }
 
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:GetObjectTagging"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-cur-reports-v2-hourly",
+      "arn:aws:s3:::moj-cur-reports-v2-hourly/*"
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::279191903737:root"]
+    }
+  }
+}
+
+##########################################
+# COAT Production Replication Role  #
+##########################################
+
+module "cur_reports_v2_hourly_replication_role" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.60.0"
+
+  create_role = true
+
+  role_name         = "moj-cur-reports-v2-hourly-replication-role"
+  role_requires_mfa = false
+
+  trusted_role_services = [
+    "batchoperations.s3.amazonaws.com",
+    "s3.amazonaws.com"
+  ]
+
+  custom_role_policy_arns = [module.cur_reports_v2_hourly_replication_policy.arn]
+}
+
+data "aws_iam_policy_document" "cur_reports_v2_hourly_replication" {
+  statement {
+    sid    = "SourceBucketPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetReplicationConfiguration",
+      "s3:ListBucket"
+    ]
+    resources = [module.cur_reports_v2_hourly_s3_bucket.s3_bucket_arn]
+  }
+  statement {
+    sid    = "SourceBucketObjectPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectAcl",
+      "s3:GetObjectTagging",
+      "s3:GetObjectVersionAcl",
+      "s3:GetObjectVersionForReplication",
+      "s3:GetObjectVersionTagging",
+      "s3:ObjectOwnerOverrideToBucketOwner",
+    ]
+    resources = ["${module.cur_reports_v2_hourly_s3_bucket.s3_bucket_arn}/*"]
+  }
+  statement {
+    sid    = "DestinationBucketPermissions"
+    effect = "Allow"
+    actions = [
+      "s3:GetObjectVersionTagging",
+      "s3:ObjectOwnerOverrideToBucketOwner",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:PutObjectTagging",
+      "s3:ReplicateDelete",
+      "s3:ReplicateObject",
+      "s3:ReplicateTags"
+    ]
+    resources = [
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly",
+      "arn:aws:s3:::mojap-data-production-coat-cur-reports-v2-hourly/*",
+      "arn:aws:s3:::coat-production-cur-v2-hourly",
+      "arn:aws:s3:::coat-production-cur-v2-hourly/*"
+    ]
+  }
+  statement {
+    sid    = "SourceBucketKMSKey"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey"
+    ]
+    resources = [module.cur_v2_s3_kms.key_arn]
+  }
+  statement {
+    sid    = "DestinationBucketKMSKey"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:GenerateDataKey"
+    ]
+    resources = [
+      module.cur_v2_s3_kms.key_arn,
+      "arn:aws:kms:eu-west-1:593291632749:key/0409ddbc-b6a2-46c4-a613-6145f6a16215",
+      "arn:aws:kms:eu-west-2:279191903737:key/ef7e1dc9-dc2b-4733-9278-46885b7040c7"
+    ]
+  }
+}
+
+module "cur_reports_v2_hourly_replication_policy" {
+  #checkov:skip=CKV_TF_1:Module is from Terraform registry
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.60.0"
+  name    = "${module.cur_reports_v2_hourly_replication_role.iam_role_name}-policy"
+
+  policy = data.aws_iam_policy_document.cur_reports_v2_hourly_replication.json
+}
+
+# moj-focus-reports-greenops
+data "aws_iam_policy_document" "focus_reports_s3_bucket" {
+  version = "2008-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetBucketLocation",
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-focus-1-reports",
+      "arn:aws:s3:::moj-focus-1-reports/*"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["bcm-data-exports.amazonaws.com"]
+    }
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:GetObjectTagging"
+    ]
+    resources = [
+      "arn:aws:s3:::moj-focus-1-reports",
+      "arn:aws:s3:::moj-focus-1-reports/*"
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::279191903737:root"]
+    }
+  }
+}
+
+
+# cf-template-storage
+module "cf_template_storage" {
+  source          = "../../modules/s3"
+  additional_tags = local.tags_organisation_management
+  bucket_prefix   = "cf-template-storage"
+}
+
+module "focus_reports_s3_bucket" {
+  source = "../../modules/s3"
+
+  bucket_name       = "moj-focus-1-reports"
+  force_destroy     = true
+  attach_policy     = true
+  policy            = data.aws_iam_policy_document.focus_reports_s3_bucket.json
+  enable_versioning = true
+
+  enable_replication     = true
+  replication_bucket_arn = "arn:aws:s3:::coat-production-focus-reports"
+  replication_role_arn   = module.focus_reports_s3_bucket.replication_role_arn
+  destination_kms_arn    = "arn:aws:kms:eu-west-2:279191903737:key/807c9d94-a20e-4df4-b5a9-d8e08bd24323"
+  source_kms_arn         = module.focus_s3_kms.key_arn
+
+  replication_rules = [
+    {
+      id                 = "replicate-focus-reports"
+      prefix             = "moj-focus-reports/"
+      status             = "Enabled"
+      deletemarker       = "Enabled"
+      replica_kms_key_id = "arn:aws:kms:eu-west-2:279191903737:key/807c9d94-a20e-4df4-b5a9-d8e08bd24323"
+      metrics            = "Enabled"
+    }
+  ]
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.focus_s3_kms.key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
   }
 }

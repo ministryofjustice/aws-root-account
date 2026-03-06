@@ -11,6 +11,7 @@ resource "aws_organizations_organization" "default" {
     "fms.amazonaws.com",
     "guardduty.amazonaws.com",
     "health.amazonaws.com",
+    "iam.amazonaws.com",
     "inspector2.amazonaws.com",
     "ipam.amazonaws.com",
     "license-management.marketplace.amazonaws.com",
@@ -41,6 +42,20 @@ resource "aws_organizations_organization" "default" {
 resource "aws_organizations_delegated_administrator" "stacksets_organisation_security" {
   account_id        = aws_organizations_account.organisation_security.id
   service_principal = "member.org.stacksets.cloudformation.amazonaws.com"
+}
+
+# Enable Centralised Root Account management
+resource "aws_iam_organizations_features" "root_iam" {
+  enabled_features = [
+    "RootCredentialsManagement",
+    "RootSessions"
+  ]
+}
+
+# Delegate Centralised IAM to organisation-security
+resource "aws_organizations_delegated_administrator" "iam_organisation_security" {
+  account_id        = aws_organizations_account.organisation_security.id
+  service_principal = "iam.amazonaws.com"
 }
 
 # Enable RAM sharing with the organization without requiring acceptors

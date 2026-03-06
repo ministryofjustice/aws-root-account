@@ -3,7 +3,7 @@
 ####################################
 
 module "github_oidc" {
-  source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=82f546bd5f002674138a2ccdade7d7618c6758b3" # v3.0.0
+  source                 = "github.com/ministryofjustice/modernisation-platform-github-oidc-provider?ref=5dc9bc211d10c58de4247fa751c318a3985fc87b" # v4.0.0
   role_name              = "github-actions-plan"
   additional_permissions = data.aws_iam_policy_document.oidc_assume_role_plan.json
   github_repositories    = ["ministryofjustice/aws-root-account:pull_request"]
@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "oidc_assume_role_plan" {
 
 module "github_actions_apply_role" {
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=9d9a2d23cf569348cbdb665c979fcbaed76bb2f4" # v3.1.0
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=b40748ec162b446f8f8d282f767a85b6501fd192" # v4.0.0
 
   github_repositories = ["ministryofjustice/aws-root-account"]
   role_name           = "github-actions-apply"
@@ -74,4 +74,39 @@ data "aws_iam_policy_document" "oidc_assume_role_apply" {
     ]
     resources = ["*"]
   }
+}
+
+###########################
+# Xsiam Integration User #
+###########################
+
+# This will be used as a way for the Xsiam Security Hub Event Collector https://xsoar.pan.dev/docs/reference/integrations/aws-security-hub-event-collector 
+# to authenticate with the org-security account.
+resource "aws_iam_user" "xsiam_integration" {
+  name          = "XsiamIntegration"
+  path          = "/"
+  force_destroy = true
+  tags          = {}
+}
+
+resource "aws_iam_policy" "xsiam_integration" {
+  name   = "XsiamIntegrationAccessPolicy"
+  policy = data.aws_iam_policy_document.xsiam_integration.json
+}
+
+data "aws_iam_policy_document" "xsiam_integration" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "securityhub:GetFindings",
+      "guardduty:ListDetectors",
+      "guardduty:ListFindings",
+      "guardduty:GetFindings"
+    ]
+    resources = ["*"]
+  }
+}
+resource "aws_iam_user_policy_attachment" "xsiam_integration" {
+  user       = aws_iam_user.xsiam_integration.name
+  policy_arn = aws_iam_policy.xsiam_integration.arn
 }

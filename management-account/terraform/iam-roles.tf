@@ -39,7 +39,6 @@ data "aws_iam_policy_document" "cost_explorer_access_read_only" {
     principals {
       type = "AWS"
       identifiers = [
-        aws_organizations_account.youth_justice_framework_management.id,
         aws_organizations_account.moj_opg_management.id
       ]
     }
@@ -69,6 +68,50 @@ data "aws_iam_policy_document" "lambda_basic_execution_test" {
       identifiers = ["lambda.amazonaws.com"]
     }
   }
+}
+#########################################
+# CoatGithubActionsReadonlyRole
+#########################################
+resource "aws_iam_role" "coat_github_actions_read_only" {
+  name               = "CoatGithubActionsReadonlyRole"
+  assume_role_policy = data.aws_iam_policy_document.coat_github_actions_read_only.json
+}
+
+data "aws_iam_policy_document" "coat_github_actions_read_only" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type = "Federated"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
+      ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:ministryofjustice/cloud-optimisation-and-accountability:ref:refs/heads/main"]
+    }
+  }
+}
+
+# Role policy attachments
+resource "aws_iam_role_policy_attachment" "organizations_list_read_only" {
+  role       = aws_iam_role.coat_github_actions_read_only.name
+  policy_arn = aws_iam_policy.aws_organizations_list_read_only.arn
+}
+
+resource "aws_iam_role_policy_attachment" "cost_optimizer_read_only" {
+  role       = aws_iam_role.coat_github_actions_read_only.name
+  policy_arn = aws_iam_policy.cost_optimizer_read_only.arn
 }
 
 #########################################
@@ -167,7 +210,7 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_r
 
 module "modernisation_platform_github_actions_role" {
 
-  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=v3.2.0"
+  source = "github.com/ministryofjustice/modernisation-platform-github-oidc-role?ref=b40748ec162b446f8f8d282f767a85b6501fd192" # v4.0.0"
 
   github_repositories = ["ministryofjustice/modernisation-platform"]
   role_name           = "ModernisationPlatformGithubActionsRole"

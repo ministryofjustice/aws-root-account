@@ -28,4 +28,3 @@ variable "license_counting_type" {
   type    = string
   default = "vCPU"
 }
-
