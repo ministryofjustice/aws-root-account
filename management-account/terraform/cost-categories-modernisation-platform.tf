@@ -1,6 +1,7 @@
 resource "aws_ce_cost_category" "modernisation_platform" {
   name            = "Modernisation Platform"
   rule_version    = "CostCategoryExpression.v1"
+  effective_start = "2026-02-01T00:00:00Z"
 
   rule {
     type  = "REGULAR"
