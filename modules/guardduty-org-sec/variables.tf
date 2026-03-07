@@ -42,6 +42,12 @@ variable "enable_threatintelset" {
   default     = false
 }
 
+variable "enable_guardduty_detector" {
+  description = "Whether to enable GuardDuty Detector"
+  type        = bool
+  default     = false
+}
+
 variable "administrator_detector_id" {
   description = "Guardduty detector ID of the region administrator"
   type        = string
