@@ -85,3 +85,25 @@ import {
   to = aws_guardduty_filter.cloud_platform_eicr_com
   id = "${local.guardduty_administrator_detector_ids.eu_west_2}:EICARSuppression_com"
 }
+
+resource "aws_guardduty_filter" "universal_eicar_supression_rule" {
+  name        = "universal_eicar_supression_rule"
+  action      = "ARCHIVE"
+  detector_id = local.guardduty_administrator_detector_ids.eu_west_2
+  rank        = 4
+
+  finding_criteria {
+    criterion {
+      field  = "type"
+      equals = ["Malware:S3Object"]
+    }
+    criterion {
+      field   = "service.malwareScanDetails.threats.name"
+      matches = ["EICAR-Test-File*"]
+    }
+  }
+  tags = merge(
+    local.tags_organisation_management, {
+      component = "Security"
+  })
+}
