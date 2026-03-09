@@ -83,7 +83,7 @@ resource "aws_ce_cost_category" "business_unit" {
   name            = "Business Unit"
   default_value   = "Uncategorised Business Unit"
   rule_version    = "CostCategoryExpression.v1"
-  effective_start = "2025-02-01T00:00:00Z"
+  effective_start = "2026-02-01T00:00:00Z"
 
   # Rule 0: Temporary Correction: Assign Cost Category Based on Account Prefixes
   # Due to organisational structure change some accounts currently have the wrong `business-unit` tag
