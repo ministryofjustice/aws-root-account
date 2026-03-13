@@ -650,7 +650,7 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:RequestTag/is-production"
-      values   = ["Non Production", "Production"]
+      values   = ["true", "false"]
     }
   }
 
