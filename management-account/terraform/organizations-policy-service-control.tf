@@ -510,6 +510,43 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   }
 
   statement {
+    sid    = "DenyInvalidBusinessUnit"
+    effect = "Deny"
+
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:RequestTag/business-unit"
+      values   = [
+        "Central Digital", 
+        "CICA", 
+        "HMCTS", 
+        "HMPPS", 
+        "LAA", 
+        "OPG", 
+        "OCTO", 
+        "Technology Services", 
+        "YJB"
+      ]
+    }
+  }
+
+  statement {
     sid    = "DenyMissingServiceArea"
     effect = "Deny"
 
@@ -587,6 +624,33 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       test     = "Null"
       variable = "aws:RequestTag/is-production"
       values   = ["true"]
+    }
+  }
+
+  statement {
+    sid    = "DenyInvalidIsProduction"
+    effect = "Deny"
+
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:RequestTag/is-production"
+      values   = ["true", "false"]
     }
   }
 
