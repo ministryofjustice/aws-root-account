@@ -293,8 +293,6 @@ locals {
         aws_organizations_account.moj_official_development.id,
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
-        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
-        aws_organizations_account.moj_official_public_key_infrastructure.id,
         aws_organizations_account.moj_official_shared_services.id,
         aws_organizations_account.workplace_tech_proof_of_concept_development.id,
       ]
@@ -340,7 +338,7 @@ locals {
       ]
     },
     {
-      github_team        = "eucs-idam-admins",
+      github_team        = "eucs-idam-certificate-services",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
@@ -348,7 +346,7 @@ locals {
       ]
     },
     {
-      github_team        = "eucs-idam-admins",
+      github_team        = "eucs-idam-certificate-services",
       permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
       account_ids = [
         aws_organizations_account.moj_official_shared_services.id,
@@ -384,8 +382,6 @@ locals {
         aws_organizations_account.moj_official_development.id,
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
-        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
-        aws_organizations_account.moj_official_public_key_infrastructure.id,
         aws_organizations_account.moj_official_shared_services.id,
       ]
     },
