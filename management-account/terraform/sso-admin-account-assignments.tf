@@ -293,8 +293,6 @@ locals {
         aws_organizations_account.moj_official_development.id,
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
-        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
-        aws_organizations_account.moj_official_public_key_infrastructure.id,
         aws_organizations_account.moj_official_shared_services.id,
         aws_organizations_account.workplace_tech_proof_of_concept_development.id,
       ]
@@ -340,7 +338,7 @@ locals {
       ]
     },
     {
-      github_team        = "eucs-idam-admins",
+      github_team        = "eucs-idam-certificate-services",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
@@ -348,7 +346,7 @@ locals {
       ]
     },
     {
-      github_team        = "eucs-idam-admins",
+      github_team        = "eucs-idam-certificate-services",
       permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
       account_ids = [
         aws_organizations_account.moj_official_shared_services.id,
@@ -384,8 +382,6 @@ locals {
         aws_organizations_account.moj_official_development.id,
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
-        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
-        aws_organizations_account.moj_official_public_key_infrastructure.id,
         aws_organizations_account.moj_official_shared_services.id,
       ]
     },
@@ -497,6 +493,60 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.billing_finance.arn,
       account_ids = [
         aws_organizations_organization.default.master_account_id
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-modernisation-platform",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.modernisation_platform.id,
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-modernisation-platform",
+      permission_set_arn = aws_ssoadmin_permission_set.modernisation_platform_engineer.arn,
+      account_ids = [
+        aws_organizations_account.modernisation_platform.id,
+        aws_organizations_organization.default.master_account_id,
+        aws_organizations_account.organisation_security.id,
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-modernisation-platform",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.modernisation_platform.id,
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-modernisation-platform",
+      permission_set_arn = aws_ssoadmin_permission_set.aws_sso_read_only.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id,
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-modernisation-platform",
+      permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id,
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-modernisation-platform",
+      permission_set_arn = aws_ssoadmin_permission_set.view_only_access.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id,
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-modernisation-platform",
+      permission_set_arn = aws_ssoadmin_permission_set.billing.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id,
       ]
     },
   ]
