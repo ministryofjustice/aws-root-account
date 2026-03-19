@@ -31,7 +31,8 @@ resource "aws_organizations_policy" "mandatory_tags" {
           "Technology Services",
           "HMCTS",
           "CICA",
-          "OCTO"
+          "OCTO",
+          "YJB"
         ]
       }
     },
@@ -97,7 +98,8 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "Technology Services",
           "HMCTS",
           "CICA",
-          "OCTO"
+          "OCTO",
+          "YJB"
         ]
       },
       "report_required_tag_for": { 
