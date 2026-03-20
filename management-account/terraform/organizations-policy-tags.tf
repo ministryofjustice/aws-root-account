@@ -24,14 +24,14 @@ resource "aws_organizations_policy" "mandatory_tags" {
       },
       "tag_value": {
         "@@assign": [
-          "HMPPS",
-          "OPG",
-          "LAA",
           "Central Digital",
-          "Technology Services",
-          "HMCTS",
           "CICA",
+          "HMCTS",
+          "HMPPS",
+          "LAA",
           "OCTO",
+          "OPG",
+          "Technology Services",
           "YJB"
         ]
       }
@@ -91,14 +91,14 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
       },
       "tag_value": {
         "@@assign": [
-          "HMPPS",
-          "OPG",
-          "LAA",
           "Central Digital",
-          "Technology Services",
-          "HMCTS",
           "CICA",
+          "HMCTS",
+          "HMPPS",
+          "LAA",
           "OCTO",
+          "OPG",
+          "Technology Services",
           "YJB"
         ]
       },
