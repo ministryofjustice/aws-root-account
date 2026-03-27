@@ -33,6 +33,7 @@ resource "aws_organizations_organization" "default" {
     "AISERVICES_OPT_OUT_POLICY",
     "SERVICE_CONTROL_POLICY",
     "TAG_POLICY",
+    "S3_POLICY",
   ]
 
   feature_set = "ALL"

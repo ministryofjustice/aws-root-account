@@ -434,6 +434,45 @@ resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou
   policy_id = aws_organizations_policy.modernisation_platform_member_ou_scp.id
 }
 
+###############################################################
+# Enforce S3 Block Public Access in Sprinkler OU only    #
+###############################################################
+
+# Create the Organizations S3 policy (enforce S3 Block Public Access = all)
+resource "aws_organizations_policy" "mp_sprinkler_s3_block_public_access" {
+  name        = "mp-sprinkler-s3-block-public-access"
+  description = "Enforce S3 Block Public Access for accounts in the modernisation-platform-sprinkler OU."
+  type        = "S3_POLICY"
+
+  content = jsonencode({
+    s3_attributes = {
+      public_access_block_configuration = {
+        "@@assign" = "all"
+      }
+    }
+  })
+}
+# Fetch children of "Modernisation Platform Member"
+data "aws_organizations_organizational_units" "modernisation_platform_member_children" {
+  parent_id = [
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children :
+    child.id
+    if child.name == "Modernisation Platform Member"
+  ][0]
+}
+
+# Attach the S3 policy to the "modernisation-platform-sprinkler" OU only
+resource "aws_organizations_policy_attachment" "mp_sprinkler_s3_block_public_access" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.modernisation_platform_member_children.children :
+    child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
+
+  policy_id = aws_organizations_policy.mp_sprinkler_s3_block_public_access.id
+  target_id = each.value
+}
+
 # LAA Deny actions
 resource "aws_organizations_policy" "deny_all_actions_by_users" {
   name        = "Deny all actions by users"
@@ -532,15 +571,15 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:RequestTag/business-unit"
-      values   = [
-        "Central Digital", 
-        "CICA", 
-        "HMCTS", 
-        "HMPPS", 
-        "LAA", 
-        "OPG", 
-        "OCTO", 
-        "Technology Services", 
+      values = [
+        "Central Digital",
+        "CICA",
+        "HMCTS",
+        "HMPPS",
+        "LAA",
+        "OPG",
+        "OCTO",
+        "Technology Services",
         "YJB",
         "Platforms"
       ]
