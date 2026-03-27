@@ -32,7 +32,7 @@ jobs:
           terraform_version: 1.12.2
       - run: terraform fmt -check
         continue-on-error: true
-      - run: terraform init
+      - run:  terraform init -upgrade
       - run: terraform validate -no-color
       - name: Terraform plan
         run: |
