@@ -542,7 +542,7 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
         "OPG",
         "OCTO",
         "Technology Services",
-        "YJB"
+        "YJB",
         "Platforms"
       ]
     }
