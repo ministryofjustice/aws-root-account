@@ -126,7 +126,7 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
   count = (
     var.is_delegated_administrator &&
     data.aws_region.current.region == "eu-west-2"
-    ) ? 1 : 0
+  ) ? 1 : 0
 
   rule_name   = "suppress-mp-tf-state-bucket-s3-6"
   rule_order  = 1
