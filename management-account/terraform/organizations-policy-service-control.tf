@@ -532,15 +532,15 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:RequestTag/business-unit"
-      values   = [
-        "Central Digital", 
-        "CICA", 
-        "HMCTS", 
-        "HMPPS", 
-        "LAA", 
-        "OPG", 
-        "OCTO", 
-        "Technology Services", 
+      values = [
+        "Central Digital",
+        "CICA",
+        "HMCTS",
+        "HMPPS",
+        "LAA",
+        "OPG",
+        "OCTO",
+        "Technology Services",
         "YJB",
         "Platforms"
       ]
