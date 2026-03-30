@@ -421,6 +421,7 @@ data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
       values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
     }
   }
+
 }
 
 resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou_scp" {
@@ -532,15 +533,15 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:RequestTag/business-unit"
-      values   = [
-        "Central Digital", 
-        "CICA", 
-        "HMCTS", 
-        "HMPPS", 
-        "LAA", 
-        "OPG", 
-        "OCTO", 
-        "Technology Services", 
+      values = [
+        "Central Digital",
+        "CICA",
+        "HMCTS",
+        "HMPPS",
+        "LAA",
+        "OPG",
+        "OCTO",
+        "Technology Services",
         "YJB"
       ]
     }
