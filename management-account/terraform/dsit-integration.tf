@@ -103,11 +103,5 @@ removed {
     destroy = false
   }
 }
-removed {
-  from = module.dsit_cost_integration.aws_bcmdataexports_export.focus_report
 
-  lifecycle {
-    destroy = false
-  }
-}
 
