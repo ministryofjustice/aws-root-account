@@ -11,6 +11,8 @@ on:
   schedule:
     - cron: "0 8 * * 1"
 
+permissions: {}
+
 jobs:
   plan:
     runs-on: ubuntu-latest
