@@ -85,30 +85,93 @@ resource "aws_organizations_policy_attachment" "enforce_s3_kms_encryption_pilot"
   target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
 
-# Wider rollout — once the pilot is validated, remove the pilot attachment
-# above, uncomment the locals block and for_each resource below.
-# The target list mirrors deny_non_eu_non_us_east_1_operations_targets.
-#
-# locals {
-#   enforce_s3_kms_encryption_targets = [
-#     aws_organizations_organizational_unit.central_digital.id,
-#     aws_organizations_organizational_unit.cica.id,
-#     aws_organizations_organizational_unit.hmcts.id,
-#     aws_organizations_organizational_unit.hmpps_community_rehabilitation.id,
-#     aws_organizations_organizational_unit.hmpps_electronic_monitoring_acquisitive_crime.id,
-#     aws_organizations_organizational_unit.hmpps_electronic_monitoring_case_management.id,
-#     aws_organizations_organizational_unit.laa.id,
-#     aws_organizations_organizational_unit.opg.id,
-#     aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id,
-#     aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id,
-#     aws_organizations_organizational_unit.platforms_and_architecture_operations_engineering.id,
-#     aws_organizations_organizational_unit.security_engineering.id,
-#     aws_organizations_organizational_unit.technology_services.id,
-#   ]
-# }
-#
-# resource "aws_organizations_policy_attachment" "enforce_s3_kms_encryption" {
-#   for_each  = toset(local.enforce_s3_kms_encryption_targets)
-#   policy_id = aws_organizations_policy.enforce_s3_kms_encryption.id
-#   target_id = each.value
-# }
+########################################
+# Modernisation Platform Member OU SCP #
+########################################
+
+# Restricts permissions for all OUs and accounts under the Modernisation Platform Member OU.
+# Covers VPC/subnet region locking and protection of GitHub OIDC and policy resources.
+
+resource "aws_organizations_policy" "modernisation_platform_member_ou_scp" {
+  name        = "Modernisation Platform Member OU SCP"
+  description = "Restricts permissions for all OUs and accounts under the Modernisation Platform Member OU"
+  type        = "SERVICE_CONTROL_POLICY"
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
+  }
+
+  content = data.aws_iam_policy_document.modernisation_platform_member_ou_scp.json
+}
+
+data "aws_iam_policy_document" "modernisation_platform_member_ou_scp" {
+  # Deny creation of VPCs or Subnets outside of eu-west-2
+  statement {
+    effect = "Deny"
+    actions = [
+      "ec2:CreateVpc",
+      "ec2:CreateSubnet"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringNotEqualsIfExists"
+      variable = "aws:RequestedRegion"
+      values   = ["eu-west-2"]
+    }
+  }
+  # block changes to OIDC provider github role
+  statement {
+    effect = "Deny"
+    actions = [
+      "iam:AttachRolePolicy",
+      "iam:DeleteRole",
+      "iam:DeleteRolePermissionsBoundary",
+      "iam:DeleteRolePolicy",
+      "iam:DetachRolePolicy",
+      "iam:PutRolePermissionsBoundary",
+      "iam:PutRolePolicy",
+      "iam:UpdateAssumeRolePolicy",
+      "iam:UpdateRole",
+      "iam:UpdateRoleDescription"
+    ]
+    resources = ["arn:aws:iam::*:role/github-actions"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalARN"
+      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
+    }
+  }
+
+  # block changes to github-actions policy
+  statement {
+    effect = "Deny"
+    actions = [
+      "iam:CreatePolicy*",
+      "iam:DeletePolicy*",
+      "iam:SetDefaultPolicyVersion",
+      "iam:TagPolicy",
+      "iam:UntagPolicy"
+    ]
+    resources = ["arn:aws:iam::*:policy/github-actions"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalARN"
+      values   = ["arn:aws:iam::*:role/OrganizationAccountAccessRole", "arn:aws:iam::*:role/ModernisationPlatformAccess", "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.modernisation_platform_id...)}:role/superadmin"]
+    }
+  }
+}
+
+resource "aws_organizations_policy_attachment" "modernisation_platform_member_ou_scp" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children :
+    child.id
+    if child.name == "Modernisation Platform Member"
+  ])
+
+  target_id = each.value
+  policy_id = aws_organizations_policy.modernisation_platform_member_ou_scp.id
+}
+
+
