@@ -13,7 +13,7 @@ resource "aws_organizations_policy" "rds_guardrails" {
   tags = {
     business-unit = "Platforms"
     component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/mp-organizations-policy-service-control.tf"])
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform‎.tf"])
   }
 
   content = data.aws_iam_policy_document.rds_guardrails.json
