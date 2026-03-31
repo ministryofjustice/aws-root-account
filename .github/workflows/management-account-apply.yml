@@ -11,6 +11,8 @@ on:
       - main
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   apply:
     runs-on: ubuntu-latest
