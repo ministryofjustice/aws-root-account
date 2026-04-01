@@ -81,3 +81,37 @@ resource "aws_organizations_policy_attachment" "rds_guardrails" {
   policy_id = aws_organizations_policy.rds_guardrails.id
   target_id = each.value
 }
+
+
+###############################################################
+# Enforce S3 Block Public Access - MP OU scope
+# Prevents public S3 bucket/object access, blocks public ACLs and policies,
+# and enforces account-level S3 data protection
+###############################################################
+
+# Create the Organizations S3 policy
+resource "aws_organizations_policy" "mp_s3_block_public_access" {
+  name        = "Modernisation Platform S3 Block Public Access"
+  description = "Enforce S3 Block Public Access for accounts in the Modernisation Platform OU."
+  type        = "S3_POLICY"
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "S3_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
+  }
+
+  content = jsonencode({
+    s3_attributes = {
+      public_access_block_configuration = {
+        "@@assign" = "all"
+      }
+    }
+  })
+}
+
+# Attach the S3 policy to the Modernisation Platform OU only
+resource "aws_organizations_policy_attachment" "mp_s3_block_public_access" {
+  policy_id = aws_organizations_policy.mp_s3_block_public_access.id
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
+}
