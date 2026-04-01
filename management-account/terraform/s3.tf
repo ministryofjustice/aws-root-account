@@ -297,7 +297,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
   #checkov:skip=CKV2_AWS_67:Regular CMK key rotation is not required currently
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.7.0"
+  version = "5.9.1"
 
   bucket        = "moj-cur-reports-v2-hourly"
   force_destroy = true
@@ -309,7 +309,7 @@ module "cur_reports_v2_hourly_s3_bucket" {
   }
 
   replication_configuration = {
-    role = module.cur_reports_v2_hourly_replication_role.iam_role_arn
+    role = module.cur_reports_v2_hourly_replication_role.arn
     rules = [
       {
         id       = "replicate-cur-v2-reports"
@@ -504,20 +504,29 @@ module "cur_reports_v2_hourly_replication_role" {
   #checkov:skip=CKV_TF_1:Module is from Terraform registry
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.60.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.2.3"
 
-  create_role = true
+  create          = true
+  name            = "moj-cur-reports-v2-hourly-replication-role"
+  use_name_prefix = false
 
-  role_name         = "moj-cur-reports-v2-hourly-replication-role"
-  role_requires_mfa = false
+  trust_policy_permissions = {
+    S3ReplicationServiceTrust = {
+      actions = ["sts:AssumeRole"]
+      principals = [{
+        type = "Service"
+        identifiers = [
+          "batchoperations.s3.amazonaws.com",
+          "s3.amazonaws.com"
+        ]
+      }]
+    }
+  }
 
-  trusted_role_services = [
-    "batchoperations.s3.amazonaws.com",
-    "s3.amazonaws.com"
-  ]
-
-  custom_role_policy_arns = [module.cur_reports_v2_hourly_replication_policy.arn]
+  policies = {
+    cur_reports_v2_hourly_replication = module.cur_reports_v2_hourly_replication_policy.arn
+  }
 }
 
 data "aws_iam_policy_document" "cur_reports_v2_hourly_replication" {
@@ -593,8 +602,8 @@ module "cur_reports_v2_hourly_replication_policy" {
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.60.0"
-  name    = "${module.cur_reports_v2_hourly_replication_role.iam_role_name}-policy"
+  version = "6.2.3"
+  name    = "${module.cur_reports_v2_hourly_replication_role.name}-policy"
 
   policy = data.aws_iam_policy_document.cur_reports_v2_hourly_replication.json
 }
