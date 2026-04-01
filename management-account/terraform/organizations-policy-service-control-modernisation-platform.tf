@@ -84,16 +84,22 @@ resource "aws_organizations_policy_attachment" "rds_guardrails" {
 
 
 ###############################################################
-# Enforce S3 Block Public Access - MP Member OU scope
+# Enforce S3 Block Public Access - MP OU scope
 # Prevents public S3 bucket/object access, blocks public ACLs and policies,
 # and enforces account-level S3 data protection
 ###############################################################
 
-# Create the Organizations S3 policy 
+# Create the Organizations S3 policy
 resource "aws_organizations_policy" "mp_s3_block_public_access" {
-  name        = "mp-s3-block-public-access"
-  description = "Enforce S3 Block Public Access for accounts in the Modernisation Platform Member OU."
+  name        = "Modernisation Platform S3 Block Public Access"
+  description = "Enforce S3 Block Public Access for accounts in the Modernisation Platform OU."
   type        = "S3_POLICY"
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "S3_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
+  }
 
   content = jsonencode({
     s3_attributes = {
@@ -104,13 +110,8 @@ resource "aws_organizations_policy" "mp_s3_block_public_access" {
   })
 }
 
-# Attach the S3 policy to the "Modernisation Platform Member" OU (applies to all accounts under it)
-resource "aws_organizations_policy_attachment" "mp_member_s3_block_public_access" {
-  for_each = toset([
-    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
-    if child.name == "Modernisation Platform Member"
-  ])
-
+# Attach the S3 policy to the Modernisation Platform OU only
+resource "aws_organizations_policy_attachment" "mp_s3_block_public_access" {
   policy_id = aws_organizations_policy.mp_s3_block_public_access.id
-  target_id = each.value
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
