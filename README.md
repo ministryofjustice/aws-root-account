@@ -222,6 +222,22 @@ Changes are normal and not cause for concern in almost all cases. Although, beca
 Raising a maintenance post for these changes can help minimise the time members need to investigate alarms that our changes may have triggered.
 
 </details>
+<summary>🔥 Closing an AWS Account</summary>
+
+The current process for closing an AWS Account.
+
+**Steps:**
+
+- Raise a Pull Request against this repository to remove the AWS Account resource (`aws_organizations_account`) for the account needing to be removed and any references to that resource in the code.
+- Post your pull request in the [#aws-root-account](https://moj.enterprise.slack.com/archives/C06P4KA0V0A) Slack channel to be reviewed by the Hosting Leads
+- Once the pull request is approved and merged into the main branch, the apply job will run and fail due to the pipeline role not having permissions to delete AWS Accounts. This will generate an alert in [#aws-root-account](https://moj.enterprise.slack.com/archives/C06P4KA0V0A).
+- Sign into the MOJ Master Account with an role that has enough permissions to delete AWS Accounts.
+- You may first need move the Account to the Root Organisational Unit (OU), if a SCP is being applied to the AWS Account that prevents account closures via a OU
+- Close the AWS Account
+- Move the closed AWS Account into the Closed OU
+- The account will remain in a closed state for 90 days until AWS fully delete the account
+
+</details>
 
 ## 📚 Further Reading
 
