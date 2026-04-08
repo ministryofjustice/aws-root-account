@@ -107,7 +107,8 @@ data "aws_iam_policy_document" "billing" {
       "bcm-recommended-actions:ListRecommendedActions",
       "ce:*",
       "cost-optimization-hub:List*",
-      "cost-optimization-hub:Get*"
+      "cost-optimization-hub:Get*",
+      "support:*"
     ]
     resources = ["*"]
   }
