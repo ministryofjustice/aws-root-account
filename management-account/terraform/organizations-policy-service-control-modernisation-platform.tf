@@ -141,7 +141,9 @@ data "aws_iam_policy_document" "deny_cloudtrail_delete_stop_update_sprinkler" {
       "cloudtrail:DeleteTrail",
       "cloudtrail:StopLogging"
     ]
-    resources = ["*"]
+    resources = [
+      "arn:aws:cloudtrail:*:*:trail/cloudtrail"
+    ]
 
     # Exclusion of ModernisationPlatformAccess role for Terraform infrastructure automation
     condition {
