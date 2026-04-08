@@ -108,7 +108,8 @@ data "aws_iam_policy_document" "billing" {
       "ce:*",
       "cost-optimization-hub:List*",
       "cost-optimization-hub:Get*",
-      "support:*"
+      "support:*",
+      "suuport-console:*"
     ]
     resources = ["*"]
   }
