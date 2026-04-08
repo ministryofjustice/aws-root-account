@@ -107,9 +107,7 @@ data "aws_iam_policy_document" "billing" {
       "bcm-recommended-actions:ListRecommendedActions",
       "ce:*",
       "cost-optimization-hub:List*",
-      "cost-optimization-hub:Get*",
-      "support:*",
-      "suuport-console:*"
+      "cost-optimization-hub:Get*"
     ]
     resources = ["*"]
   }
@@ -117,6 +115,12 @@ data "aws_iam_policy_document" "billing" {
 resource "aws_ssoadmin_managed_policy_attachment" "billing" {
   instance_arn       = local.sso_admin_instance_arn
   managed_policy_arn = "arn:aws:iam::aws:policy/job-function/Billing"
+  permission_set_arn = aws_ssoadmin_permission_set.billing.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "support_access" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
   permission_set_arn = aws_ssoadmin_permission_set.billing.arn
 }
 
