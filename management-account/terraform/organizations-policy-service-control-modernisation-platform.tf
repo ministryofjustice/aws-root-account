@@ -92,7 +92,7 @@ resource "aws_organizations_policy_attachment" "rds_guardrails" {
 # Create the Organizations S3 policy
 resource "aws_organizations_policy" "mp_s3_block_public_access" {
   name        = "Modernisation Platform S3 Block Public Access"
-  description = "Enforce S3 Block Public Access for accounts in the Modernisation Platform OU."
+  description = "Enforce S3 Block Public Access for accounts in the Modernisation Platform Member OU."
   type        = "S3_POLICY"
 
   tags = {
@@ -110,10 +110,15 @@ resource "aws_organizations_policy" "mp_s3_block_public_access" {
   })
 }
 
-# Attach the S3 policy to the Modernisation Platform OU only
+# Attach the S3 policy to the Modernisation Platform Member OU only
 resource "aws_organizations_policy_attachment" "mp_s3_block_public_access" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
+    if child.name == "Modernisation Platform Member"
+  ])
+
   policy_id = aws_organizations_policy.mp_s3_block_public_access.id
-  target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
+  target_id = each.value
 }
 
 ###################################################
