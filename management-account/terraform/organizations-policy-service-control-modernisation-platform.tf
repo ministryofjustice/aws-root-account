@@ -120,3 +120,71 @@ resource "aws_organizations_policy_attachment" "mp_s3_block_public_access" {
   policy_id = aws_organizations_policy.mp_s3_block_public_access.id
   target_id = each.value
 }
+
+###################################################
+# DenyCloudTrailDeleteStopUpdatePolicy Sprinkler  #
+###################################################
+resource "aws_organizations_policy" "deny_cloudtrail_delete_stop_update_sprinkler" {
+  name        = "DenyCloudTrailDeleteStopUpdatePolicySprinkler"
+  description = "Denies DeleteTrail, StopLogging, and UpdateTrail on the 'cloudtrail' trail, except that UpdateTrail is permitted for the ModernisationPlatformAccess role, within modernisation-platform-sprinkler"
+  type        = "SERVICE_CONTROL_POLICY"
+
+  tags = {
+    business-unit = "Security"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.deny_cloudtrail_delete_stop_update_sprinkler.json
+}
+
+data "aws_iam_policy_document" "deny_cloudtrail_delete_stop_update_sprinkler" {
+  statement {
+    sid    = "DenyDeleteTrailAndStopLogging"
+    effect = "Deny"
+    actions = [
+      "cloudtrail:DeleteTrail",
+      "cloudtrail:StopLogging"
+    ]
+    resources = [
+      "arn:aws:cloudtrail:*:*:trail/cloudtrail"
+    ]
+  }
+
+  statement {
+    sid    = "DenyUpdateTrailExceptModernisationPlatformAccess"
+    effect = "Deny"
+    actions = [
+      "cloudtrail:UpdateTrail"
+    ]
+    resources = [
+      "arn:aws:cloudtrail:*:*:trail/cloudtrail"
+    ]
+
+    # Exclusion of ModernisationPlatformAccess role for Terraform infrastructure automation
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalARN"
+      values   = ["arn:aws:iam::*:role/ModernisationPlatformAccess"]
+    }
+  }
+}
+
+data "aws_organizations_organizational_units" "modernisation_platform_member_children_sprinkler" {
+  parent_id = [
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children :
+    child.id
+    if child.name == "Modernisation Platform Member"
+  ][0]
+}
+
+resource "aws_organizations_policy_attachment" "deny_cloudtrail_delete_stop_update_sprinkler" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.modernisation_platform_member_children_sprinkler.children :
+    child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
+
+  policy_id = aws_organizations_policy.deny_cloudtrail_delete_stop_update_sprinkler.id
+  target_id = each.value
+}
