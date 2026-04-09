@@ -126,7 +126,7 @@ resource "aws_organizations_policy_attachment" "mp_s3_block_public_access" {
 ###################################################
 resource "aws_organizations_policy" "deny_cloudtrail_delete_stop_update_sprinkler" {
   name        = "DenyCloudTrailDeleteStopUpdatePolicySprinkler"
-  description = "Denies changes to CloudTrail (DeleteTrail, StopLogging, UpdateTrail) for modernisation-platform-sprinkler while allowing ModernisationPlatformAccess role for infrastructure automation"
+  description = "Denies DeleteTrail, StopLogging, and UpdateTrail on the 'cloudtrail' trail, except that UpdateTrail is permitted for the ModernisationPlatformAccess role, within modernisation-platform-sprinkler"
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
@@ -140,11 +140,22 @@ resource "aws_organizations_policy" "deny_cloudtrail_delete_stop_update_sprinkle
 
 data "aws_iam_policy_document" "deny_cloudtrail_delete_stop_update_sprinkler" {
   statement {
+    sid    = "DenyDeleteTrailAndStopLogging"
     effect = "Deny"
     actions = [
-      "cloudtrail:UpdateTrail",
       "cloudtrail:DeleteTrail",
       "cloudtrail:StopLogging"
+    ]
+    resources = [
+      "arn:aws:cloudtrail:*:*:trail/cloudtrail"
+    ]
+  }
+
+  statement {
+    sid    = "DenyUpdateTrailExceptModernisationPlatformAccess"
+    effect = "Deny"
+    actions = [
+      "cloudtrail:UpdateTrail"
     ]
     resources = [
       "arn:aws:cloudtrail:*:*:trail/cloudtrail"
