@@ -120,3 +120,4 @@ resource "aws_organizations_policy_attachment" "mp_s3_block_public_access" {
   policy_id = aws_organizations_policy.mp_s3_block_public_access.id
   target_id = each.value
 }
+
