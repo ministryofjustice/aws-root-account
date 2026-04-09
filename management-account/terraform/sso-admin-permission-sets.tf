@@ -118,6 +118,12 @@ resource "aws_ssoadmin_managed_policy_attachment" "billing" {
   permission_set_arn = aws_ssoadmin_permission_set.billing.arn
 }
 
+resource "aws_ssoadmin_managed_policy_attachment" "support_access" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.billing.arn
+}
+
 # Billing (Finance)
 resource "aws_ssoadmin_permission_set" "billing_finance" {
   name             = "BillingFinance"
