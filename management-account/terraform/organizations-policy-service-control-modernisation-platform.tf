@@ -193,10 +193,23 @@ data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
   }
 }
 
-# Scoped to Modernisation Platform OU only.
+# Scoped to Modernisation Platform OU and sprinkler-development sub-OU for testing.
+locals {
+  enforce_s3_kms_encryption_targets = concat(
+    [aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id],
+    [
+      for child in data.aws_organizations_organizational_units.modernisation_platform_member_children.children :
+      child.id
+      if child.name == "sprinkler-development"
+    ]
+  )
+}
+
 resource "aws_organizations_policy_attachment" "enforce_s3_kms_encryption_pilot" {
+  for_each = toset(local.enforce_s3_kms_encryption_targets)
+
   policy_id = aws_organizations_policy.enforce_s3_kms_encryption.id
-  target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
+  target_id = each.value
 }
 
 ########################################
