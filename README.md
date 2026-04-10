@@ -222,6 +222,8 @@ Changes are normal and not cause for concern in almost all cases. Although, beca
 Raising a maintenance post for these changes can help minimise the time members need to investigate alarms that our changes may have triggered.
 
 </details>
+
+<details>
 <summary>🔥 Closing an AWS Account</summary>
 
 The current process for closing an AWS Account.
