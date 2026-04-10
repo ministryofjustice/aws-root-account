@@ -194,14 +194,14 @@ data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
   }
 }
 
-# Scoped to Modernisation Platform OU and sprinkler-development sub-OU for testing.
+# Scoped to Modernisation Platform OU and sprinkler sub-OU for testing.
 locals {
   enforce_s3_kms_encryption_targets = concat(
     [aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id],
     [
-      for child in data.aws_organizations_organizational_units.modernisation_platform_member_children.children :
+      for child in data.aws_organizations_organizational_units.modernisation_platform_member_children_sprinkler.children :
       child.id
-      if child.name == "sprinkler-development"
+      if child.name == "modernisation-platform-sprinkler"
     ]
   )
 }
