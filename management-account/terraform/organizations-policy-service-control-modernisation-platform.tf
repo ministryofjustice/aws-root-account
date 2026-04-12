@@ -164,7 +164,7 @@ data "aws_iam_policy_document" "mp_deny_cloudtrail_delete_stop_update" {
     # Exclusion of ModernisationPlatformAccess role for Terraform infrastructure automation
     condition {
       test     = "StringNotLike"
-      variable = "aws:PrincipalArn"
+      variable = "aws:PrincipalARN"
       values   = ["arn:aws:iam::*:role/ModernisationPlatformAccess"]
     }
   }
