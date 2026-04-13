@@ -14,7 +14,7 @@ resource "random_uuid" "cortex_xdr_stack_set" {}
 resource "aws_ssm_parameter" "cortex_xdr_uuids" {
   description = "Map of random UUID values used to secure external access for IAM role assumption"
   name        = "cortex_xdr_uuids"
-  tags        = local.tags_organisation_management
+  tags        = merge(local.tags_organisation_management, { service_area = "Hosting" })
   type        = "SecureString"
   value = jsonencode({
     xdr_stack_set = random_uuid.cortex_xdr_stack_set.result
@@ -39,7 +39,7 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
   }
   permission_model = "SERVICE_MANAGED"
   template_body    = data.aws_s3_object.cortex_xdr_templates["cortex-xdr-subordinate-account.template"].body
-  tags             = local.tags_organisation_management
+  tags             = merge(local.tags_organisation_management, { service_area = "Hosting" })
 }
 
 resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
