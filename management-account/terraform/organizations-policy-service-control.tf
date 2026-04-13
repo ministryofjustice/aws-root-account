@@ -383,30 +383,6 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
 }
 
 # Enforce presence of mandatory tags
-locals {
-  iam_actions_for_tagging_scp = [
-      "athena:CreateWorkGroup",
-      "athena:CreateCapacityReservation",
-      "athena:CreateDataCatalog",
-      "s3:CreateBucket",
-      "s3:CreateAccessPoint",
-      "kms:CreateKey",
-      "lambda:CreateFunction",
-      "lambda:CreateCapacityProvider",
-      "lambda:CreateCodeSigningConfig",
-      "lambda:CreateEventSourceMapping",
-      "iam:CreateRole",
-      "ecr:CreateRepository",
-      "secretsmanager:CreateSecret",
-      "logs:CreateLogGroup",
-      "elasticache:CreateReplicationGroup",
-      "ec2:Create*",
-      "eks:Create*",
-      "rds:Create*",
-      "elasticloadbalancing:Create*"
-    ]
-}
-
 resource "aws_organizations_policy" "enforce_mandatory_tags" {
   name        = "Enforce mandatory tags"
   description = "Enforces the presence of mandatory resource tags"
@@ -424,7 +400,19 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingBusinessUnit"
     effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
     resources = ["*"]
 
     condition {
@@ -437,7 +425,19 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyInvalidBusinessUnit"
     effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
     resources = ["*"]
 
     condition {
@@ -461,7 +461,19 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingServiceArea"
     effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
     resources = ["*"]
 
     condition {
@@ -474,7 +486,19 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingApplication"
     effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
     resources = ["*"]
 
     condition {
@@ -487,7 +511,19 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingIsProduction"
     effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
     resources = ["*"]
 
     condition {
@@ -500,7 +536,19 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyInvalidIsProduction"
     effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
     resources = ["*"]
 
     condition {
@@ -513,7 +561,19 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingOwner"
     effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    actions = [
+      "athena:CreateWorkGroup",
+      "athena:CreateCapacityReservation",
+      "athena:CreateDataCatalog",
+      "s3:CreateBucket",
+      "s3:CreateAccessPoint",
+      "kms:CreateKey",
+      "lambda:CreateFunction",
+      "lambda:CreateCapacityProvider",
+      "lambda:CreateCodeSigningConfig",
+      "lambda:CreateEventSourceMapping",
+      "iam:CreateRole"
+    ]
     resources = ["*"]
 
     condition {
