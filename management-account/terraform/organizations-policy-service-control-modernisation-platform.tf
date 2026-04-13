@@ -126,7 +126,7 @@ resource "aws_organizations_policy_attachment" "mp_s3_block_public_access" {
 ###############################################################
 resource "aws_organizations_policy" "mp_deny_cloudtrail_delete_stop_update" {
   name        = "Modernisation Platform Deny CloudTrail Delete Stop Update"
-  description = "Denies DeleteTrail, StopLogging, and UpdateTrail on the 'cloudtrail' trail for accounts in the Modernisation Platform Member OU, except that UpdateTrail is permitted for the ModernisationPlatformAccess role."
+  description = "Denies DeleteTrail, StopLogging, and UpdateTrail on the 'cloudtrail' trail for accounts in the Modernisation Platform OU, except that UpdateTrail is permitted for the ModernisationPlatformAccess role."
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
@@ -164,19 +164,14 @@ data "aws_iam_policy_document" "mp_deny_cloudtrail_delete_stop_update" {
     # Exclusion of ModernisationPlatformAccess role for Terraform infrastructure automation
     condition {
       test     = "StringNotLike"
-      variable = "aws:PrincipalARN"
+      variable = "aws:PrincipalArn"
       values   = ["arn:aws:iam::*:role/ModernisationPlatformAccess"]
     }
   }
 }
 
-# Attach the SCP to the Modernisation Platform Member OU only
+# Attach the SCP to the Modernisation Platform OU only
 resource "aws_organizations_policy_attachment" "mp_deny_cloudtrail_delete_stop_update" {
-  for_each = toset([
-    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
-    if child.name == "Modernisation Platform Member"
-  ])
-
   policy_id = aws_organizations_policy.mp_deny_cloudtrail_delete_stop_update.id
-  target_id = each.value
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
