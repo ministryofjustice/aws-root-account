@@ -485,7 +485,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingBusinessUnit"
     effect = "Deny"
-
     actions = [
       "athena:CreateWorkGroup",
       "athena:CreateCapacityReservation",
@@ -499,7 +498,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       "lambda:CreateEventSourceMapping",
       "iam:CreateRole"
     ]
-
     resources = ["*"]
 
     condition {
@@ -512,7 +510,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyInvalidBusinessUnit"
     effect = "Deny"
-
     actions = [
       "athena:CreateWorkGroup",
       "athena:CreateCapacityReservation",
@@ -526,7 +523,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       "lambda:CreateEventSourceMapping",
       "iam:CreateRole"
     ]
-
     resources = ["*"]
 
     condition {
@@ -550,7 +546,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingServiceArea"
     effect = "Deny"
-
     actions = [
       "athena:CreateWorkGroup",
       "athena:CreateCapacityReservation",
@@ -564,7 +559,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       "lambda:CreateEventSourceMapping",
       "iam:CreateRole"
     ]
-
     resources = ["*"]
 
     condition {
@@ -577,7 +571,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingApplication"
     effect = "Deny"
-
     actions = [
       "athena:CreateWorkGroup",
       "athena:CreateCapacityReservation",
@@ -591,7 +584,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       "lambda:CreateEventSourceMapping",
       "iam:CreateRole"
     ]
-
     resources = ["*"]
 
     condition {
@@ -604,7 +596,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingIsProduction"
     effect = "Deny"
-
     actions = [
       "athena:CreateWorkGroup",
       "athena:CreateCapacityReservation",
@@ -618,7 +609,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       "lambda:CreateEventSourceMapping",
       "iam:CreateRole"
     ]
-
     resources = ["*"]
 
     condition {
@@ -631,7 +621,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyInvalidIsProduction"
     effect = "Deny"
-
     actions = [
       "athena:CreateWorkGroup",
       "athena:CreateCapacityReservation",
@@ -645,7 +634,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       "lambda:CreateEventSourceMapping",
       "iam:CreateRole"
     ]
-
     resources = ["*"]
 
     condition {
@@ -658,7 +646,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   statement {
     sid    = "DenyMissingOwner"
     effect = "Deny"
-
     actions = [
       "athena:CreateWorkGroup",
       "athena:CreateCapacityReservation",
@@ -672,7 +659,6 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       "lambda:CreateEventSourceMapping",
       "iam:CreateRole"
     ]
-
     resources = ["*"]
 
     condition {
