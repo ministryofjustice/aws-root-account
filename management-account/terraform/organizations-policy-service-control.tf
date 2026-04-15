@@ -563,9 +563,9 @@ resource "aws_organizations_policy" "enforce_owner_tag" {
 # policy documents
 data "aws_iam_policy_document" "enforce_business_unit_tag" {
   statement {
-    sid    = "DenyMissingBusinessUnit"
-    effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    sid       = "DenyMissingBusinessUnit"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -576,9 +576,9 @@ data "aws_iam_policy_document" "enforce_business_unit_tag" {
   }
 
   statement {
-    sid    = "DenyInvalidBusinessUnit"
-    effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    sid       = "DenyInvalidBusinessUnit"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -602,9 +602,9 @@ data "aws_iam_policy_document" "enforce_business_unit_tag" {
 
 data "aws_iam_policy_document" "enforce_service_area_tag" {
   statement {
-    sid    = "DenyMissingServiceArea"
-    effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    sid       = "DenyMissingServiceArea"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -617,9 +617,9 @@ data "aws_iam_policy_document" "enforce_service_area_tag" {
 
 data "aws_iam_policy_document" "enforce_application_tag" {
   statement {
-    sid    = "DenyMissingApplication"
-    effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    sid       = "DenyMissingApplication"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -632,9 +632,9 @@ data "aws_iam_policy_document" "enforce_application_tag" {
 
 data "aws_iam_policy_document" "enforce_is_production_tag" {
   statement {
-    sid    = "DenyMissingIsProduction"
-    effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    sid       = "DenyMissingIsProduction"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -645,9 +645,9 @@ data "aws_iam_policy_document" "enforce_is_production_tag" {
   }
 
   statement {
-    sid    = "DenyInvalidIsProduction"
-    effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    sid       = "DenyInvalidIsProduction"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -660,9 +660,9 @@ data "aws_iam_policy_document" "enforce_is_production_tag" {
 
 data "aws_iam_policy_document" "enforce_owner_tag" {
   statement {
-    sid    = "DenyMissingOwner"
-    effect = "Deny"
-    actions = local.iam_actions_for_tagging_scp
+    sid       = "DenyMissingOwner"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
