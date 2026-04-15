@@ -468,9 +468,36 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
 }
 
 # Enforce presence of mandatory tags
-resource "aws_organizations_policy" "enforce_mandatory_tags" {
-  name        = "Enforce mandatory tags"
-  description = "Enforces the presence of mandatory resource tags"
+locals {
+  iam_actions_for_tagging_scp = [
+    "athena:CreateWorkGroup",
+    "athena:CreateCapacityReservation",
+    "athena:CreateDataCatalog",
+    "s3:CreateBucket",
+    "s3:CreateAccessPoint",
+    "kms:CreateKey",
+    "lambda:CreateFunction",
+    "lambda:CreateCapacityProvider",
+    "lambda:CreateCodeSigningConfig",
+    "lambda:CreateEventSourceMapping",
+    "iam:CreateRole",
+
+    "ecr:CreateRepository",
+    "secretsmanager:CreateSecret",
+    "logs:CreateLogGroup",
+    "elasticache:CreateReplicationGroup",
+
+    "ec2:Create*",
+    "eks:Create*",
+    "rds:Create*",
+    "elasticloadbalancing:Create*"
+  ]
+}
+
+# policies
+resource "aws_organizations_policy" "enforce_business_unit_tag" {
+  name        = "Enforce business unit tag"
+  description = "Enforces the presence of mandatory business unit tag"
   type        = "SERVICE_CONTROL_POLICY"
   tags = {
     business-unit = "Platforms"
@@ -478,26 +505,67 @@ resource "aws_organizations_policy" "enforce_mandatory_tags" {
     source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
   }
 
-  content = data.aws_iam_policy_document.enforce_mandatory_tags.json
+  content = data.aws_iam_policy_document.enforce_business_unit_tag.json
 }
 
-data "aws_iam_policy_document" "enforce_mandatory_tags" {
+resource "aws_organizations_policy" "enforce_service_area_tag" {
+  name        = "Enforce service area tag"
+  description = "Enforces the presence of service area tag"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.enforce_service_area_tag.json
+}
+
+resource "aws_organizations_policy" "enforce_application_tag" {
+  name        = "Enforce application tag"
+  description = "Enforces the presence of mandatory application tag"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.enforce_application_tag.json
+}
+
+resource "aws_organizations_policy" "enforce_is_production_tag" {
+  name        = "Enforce is production tag"
+  description = "Enforces the presence of mandatory is production tag"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.enforce_is_production_tag.json
+}
+
+resource "aws_organizations_policy" "enforce_owner_tag" {
+  name        = "Enforce owner tag"
+  description = "Enforces the presence of mandatory owner tag"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.enforce_owner_tag.json
+}
+
+# policy documents
+data "aws_iam_policy_document" "enforce_business_unit_tag" {
   statement {
-    sid    = "DenyMissingBusinessUnit"
-    effect = "Deny"
-    actions = [
-      "athena:CreateWorkGroup",
-      "athena:CreateCapacityReservation",
-      "athena:CreateDataCatalog",
-      "s3:CreateBucket",
-      "s3:CreateAccessPoint",
-      "kms:CreateKey",
-      "lambda:CreateFunction",
-      "lambda:CreateCapacityProvider",
-      "lambda:CreateCodeSigningConfig",
-      "lambda:CreateEventSourceMapping",
-      "iam:CreateRole"
-    ]
+    sid       = "DenyMissingBusinessUnit"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -508,21 +576,9 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   }
 
   statement {
-    sid    = "DenyInvalidBusinessUnit"
-    effect = "Deny"
-    actions = [
-      "athena:CreateWorkGroup",
-      "athena:CreateCapacityReservation",
-      "athena:CreateDataCatalog",
-      "s3:CreateBucket",
-      "s3:CreateAccessPoint",
-      "kms:CreateKey",
-      "lambda:CreateFunction",
-      "lambda:CreateCapacityProvider",
-      "lambda:CreateCodeSigningConfig",
-      "lambda:CreateEventSourceMapping",
-      "iam:CreateRole"
-    ]
+    sid       = "DenyInvalidBusinessUnit"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -542,23 +598,13 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       ]
     }
   }
+}
 
+data "aws_iam_policy_document" "enforce_service_area_tag" {
   statement {
-    sid    = "DenyMissingServiceArea"
-    effect = "Deny"
-    actions = [
-      "athena:CreateWorkGroup",
-      "athena:CreateCapacityReservation",
-      "athena:CreateDataCatalog",
-      "s3:CreateBucket",
-      "s3:CreateAccessPoint",
-      "kms:CreateKey",
-      "lambda:CreateFunction",
-      "lambda:CreateCapacityProvider",
-      "lambda:CreateCodeSigningConfig",
-      "lambda:CreateEventSourceMapping",
-      "iam:CreateRole"
-    ]
+    sid       = "DenyMissingServiceArea"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -567,23 +613,13 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       values   = ["true"]
     }
   }
+}
 
+data "aws_iam_policy_document" "enforce_application_tag" {
   statement {
-    sid    = "DenyMissingApplication"
-    effect = "Deny"
-    actions = [
-      "athena:CreateWorkGroup",
-      "athena:CreateCapacityReservation",
-      "athena:CreateDataCatalog",
-      "s3:CreateBucket",
-      "s3:CreateAccessPoint",
-      "kms:CreateKey",
-      "lambda:CreateFunction",
-      "lambda:CreateCapacityProvider",
-      "lambda:CreateCodeSigningConfig",
-      "lambda:CreateEventSourceMapping",
-      "iam:CreateRole"
-    ]
+    sid       = "DenyMissingApplication"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -592,23 +628,13 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       values   = ["true"]
     }
   }
+}
 
+data "aws_iam_policy_document" "enforce_is_production_tag" {
   statement {
-    sid    = "DenyMissingIsProduction"
-    effect = "Deny"
-    actions = [
-      "athena:CreateWorkGroup",
-      "athena:CreateCapacityReservation",
-      "athena:CreateDataCatalog",
-      "s3:CreateBucket",
-      "s3:CreateAccessPoint",
-      "kms:CreateKey",
-      "lambda:CreateFunction",
-      "lambda:CreateCapacityProvider",
-      "lambda:CreateCodeSigningConfig",
-      "lambda:CreateEventSourceMapping",
-      "iam:CreateRole"
-    ]
+    sid       = "DenyMissingIsProduction"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -619,21 +645,9 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   }
 
   statement {
-    sid    = "DenyInvalidIsProduction"
-    effect = "Deny"
-    actions = [
-      "athena:CreateWorkGroup",
-      "athena:CreateCapacityReservation",
-      "athena:CreateDataCatalog",
-      "s3:CreateBucket",
-      "s3:CreateAccessPoint",
-      "kms:CreateKey",
-      "lambda:CreateFunction",
-      "lambda:CreateCapacityProvider",
-      "lambda:CreateCodeSigningConfig",
-      "lambda:CreateEventSourceMapping",
-      "iam:CreateRole"
-    ]
+    sid       = "DenyInvalidIsProduction"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -642,23 +656,13 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
       values   = ["true", "false"]
     }
   }
+}
 
+data "aws_iam_policy_document" "enforce_owner_tag" {
   statement {
-    sid    = "DenyMissingOwner"
-    effect = "Deny"
-    actions = [
-      "athena:CreateWorkGroup",
-      "athena:CreateCapacityReservation",
-      "athena:CreateDataCatalog",
-      "s3:CreateBucket",
-      "s3:CreateAccessPoint",
-      "kms:CreateKey",
-      "lambda:CreateFunction",
-      "lambda:CreateCapacityProvider",
-      "lambda:CreateCodeSigningConfig",
-      "lambda:CreateEventSourceMapping",
-      "iam:CreateRole"
-    ]
+    sid       = "DenyMissingOwner"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
     resources = ["*"]
 
     condition {
@@ -669,13 +673,53 @@ data "aws_iam_policy_document" "enforce_mandatory_tags" {
   }
 }
 
-# Attach policy to coat-development
-resource "aws_organizations_policy_attachment" "enforce_mandatory_tags" {
+# Policy attachments - attach to COAT OU
+resource "aws_organizations_policy_attachment" "enforce_business_unit_tag" {
   for_each = toset([
     for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
     if child.name == "modernisation-platform-coat"
   ])
 
-  policy_id = aws_organizations_policy.enforce_mandatory_tags.id
+  policy_id = aws_organizations_policy.enforce_business_unit_tag.id
+  target_id = each.value
+}
+
+resource "aws_organizations_policy_attachment" "enforce_service_area_tag" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
+
+  policy_id = aws_organizations_policy.enforce_service_area_tag.id
+  target_id = each.value
+}
+
+resource "aws_organizations_policy_attachment" "enforce_application_tag" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
+
+  policy_id = aws_organizations_policy.enforce_application_tag.id
+  target_id = each.value
+}
+
+resource "aws_organizations_policy_attachment" "enforce_is_production_tag" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
+
+  policy_id = aws_organizations_policy.enforce_is_production_tag.id
+  target_id = each.value
+}
+
+resource "aws_organizations_policy_attachment" "enforce_owner_tag" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
+
+  policy_id = aws_organizations_policy.enforce_owner_tag.id
   target_id = each.value
 }
