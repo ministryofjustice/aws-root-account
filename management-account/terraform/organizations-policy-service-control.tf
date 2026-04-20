@@ -487,10 +487,7 @@ locals {
     "logs:CreateLogGroup",
     "elasticache:CreateReplicationGroup",
 
-    "ec2:Create*",
-    "eks:Create*",
-    "rds:Create*",
-    "elasticloadbalancing:Create*"
+    "rds:Create*"
   ]
 }
 
