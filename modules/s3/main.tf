@@ -53,8 +53,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
     content {
       bucket_key_enabled = try(rule.value.bucket_key_enabled, false)
 
-      blocked_encryption_types = try(rule.value.blocked_encryption_types, [])
-
       dynamic "apply_server_side_encryption_by_default" {
         for_each = try([rule.value.apply_server_side_encryption_by_default], [])
 
