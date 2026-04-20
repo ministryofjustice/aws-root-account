@@ -487,7 +487,26 @@ locals {
     "logs:CreateLogGroup",
     "elasticache:CreateReplicationGroup",
 
-    "rds:Create*"
+    "rds:CreateBlueGreenDeployment",
+    "rds:CreateCustomDBEngineVersion",
+    "rds:CreateDBCluster",	 
+    "rds:CreateDBClusterEndpoint",	 
+    "rds:CreateDBClusterParameterGroup",	 
+    "rds:CreateDBClusterSnapshot",
+    "rds:CreateDBInstance",	 
+    "rds:CreateDBInstanceReadReplica",	 
+    "rds:CreateDBParameterGroup",	 
+    "rds:CreateDBProxy",
+    "rds:CreateDBProxyEndpoint",
+    "rds:CreateDBSecurityGroup",
+    "rds:CreateDBShardGroup",	 
+    "rds:CreateDBSnapshot",
+    "rds:CreateDBSubnetGroup",	 
+    "rds:CreateEventSubscription",	 
+    "rds:CreateGlobalCluster",	 
+    "rds:CreateIntegration",
+    "rds:CreateOptionGroup",	 
+    "rds:CreateTenantDatabase"
   ]
 }
 
