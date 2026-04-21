@@ -714,3 +714,50 @@ resource "aws_organizations_policy_attachment" "enforce_application_and_owner_ta
   policy_id = aws_organizations_policy.enforce_application_and_owner_tags.id
   target_id = each.value
 }
+
+#######################################
+# Deny unencrypted RDS instance creation #
+#######################################
+
+# Denies creation or restoration of RDS instances without storage encryption enabled.
+# Cannot be enforced via account-level defaults, hence the SCP approach.
+# See: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.Encryption.html
+#
+# Note: This does not affect existing unencrypted instances — a follow-on ticket
+# should audit and remediate those separately.
+
+resource "aws_organizations_policy" "deny_unencrypted_rds" {
+  name        = "Deny unencrypted RDS instance creation"
+  description = "Denies creation or restoration of RDS instances that do not have storage encryption enabled"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
+  }
+
+  content = data.aws_iam_policy_document.deny_unencrypted_rds.json
+}
+
+data "aws_iam_policy_document" "deny_unencrypted_rds" {
+  statement {
+    sid    = "DenyUnencryptedRDSCreation"
+    effect = "Deny"
+    actions = [
+      "rds:CreateDBInstance",
+      "rds:CreateDBCluster",
+      "rds:RestoreDBInstanceFromDBSnapshot",
+      "rds:RestoreDBInstanceFromS3",
+      "rds:RestoreDBInstanceToPointInTime",
+      "rds:RestoreDBClusterFromSnapshot",
+      "rds:RestoreDBClusterToPointInTime",
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "Bool"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
+    }
+  }
+}
