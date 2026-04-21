@@ -715,31 +715,22 @@ resource "aws_organizations_policy_attachment" "enforce_application_and_owner_ta
   target_id = each.value
 }
 
-#######################################
-# Deny unencrypted RDS instance creation #
-#######################################
-
-# Denies creation or restoration of RDS instances without storage encryption enabled.
-# Cannot be enforced via account-level defaults, hence the SCP approach.
-# See: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.Encryption.html
-#
-# Note: This does not affect existing unencrypted instances — a follow-on ticket
-# should audit and remediate those separately.
-
-resource "aws_organizations_policy" "deny_unencrypted_rds" {
-  name        = "Deny unencrypted RDS instance creation"
-  description = "Denies creation or restoration of RDS instances that do not have storage encryption enabled"
+###################################################
+# Deny unencrypted RDS instance creation Sprinkler #
+###################################################
+resource "aws_organizations_policy" "deny_unencrypted_rds_sprinkler" {
+  name        = "DenyUnencryptedRDSSprinkler"
+  description = "Denies creation or restoration of RDS instances without storage encryption enabled, within modernisation-platform-sprinkler"
   type        = "SERVICE_CONTROL_POLICY"
   tags = {
     business-unit = "Platforms"
     component     = "SERVICE_CONTROL_POLICY"
     source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
   }
-
-  content = data.aws_iam_policy_document.deny_unencrypted_rds.json
+  content = data.aws_iam_policy_document.deny_unencrypted_rds_sprinkler.json
 }
 
-data "aws_iam_policy_document" "deny_unencrypted_rds" {
+data "aws_iam_policy_document" "deny_unencrypted_rds_sprinkler" {
   statement {
     sid    = "DenyUnencryptedRDSCreation"
     effect = "Deny"
@@ -760,4 +751,22 @@ data "aws_iam_policy_document" "deny_unencrypted_rds" {
       values   = ["false"]
     }
   }
+}
+
+data "aws_organizations_organizational_units" "modernisation_platform_member_children_sprinkler" {
+  parent_id = [
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children :
+    child.id
+    if child.name == "Modernisation Platform Member"
+  ][0]
+}
+
+resource "aws_organizations_policy_attachment" "deny_unencrypted_rds_sprinkler" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.modernisation_platform_member_children_sprinkler.children :
+    child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
+  policy_id = aws_organizations_policy.deny_unencrypted_rds_sprinkler.id
+  target_id = each.value
 }
