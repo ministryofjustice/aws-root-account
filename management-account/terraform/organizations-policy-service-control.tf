@@ -470,6 +470,7 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
 # Enforce presence of mandatory tags
 locals {
   iam_actions_for_tagging_scp = [
+    # COAT
     "athena:CreateWorkGroup",
     "athena:CreateCapacityReservation",
     "athena:CreateDataCatalog",
@@ -482,11 +483,13 @@ locals {
     "lambda:CreateEventSourceMapping",
     "iam:CreateRole",
 
+    # Cloud Platform
     "ecr:CreateRepository",
     "secretsmanager:CreateSecret",
     "logs:CreateLogGroup",
     "elasticache:CreateReplicationGroup",
 
+    # Cloud Platform - RDS
     "rds:CreateBlueGreenDeployment",
     "rds:CreateCustomDBEngineVersion",
     "rds:CreateDBCluster",
