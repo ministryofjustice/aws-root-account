@@ -688,13 +688,13 @@ data "aws_iam_policy_document" "enforce_application_and_owner_tags" {
 
 # Policy attachments
 resource "aws_organizations_policy_attachment" "tagging_scps_coat_attachments" {
-  for_each  = local.scp_ids
+  for_each  = toset(local.scp_ids)
   policy_id = each.value
   target_id = local.coat_ou_id
 }
 
 resource "aws_organizations_policy_attachment" "tagging_scps_cloud_platform_attachments" {
-  for_each  = local.scp_ids
+  for_each  = toset(local.scp_ids)
   policy_id = each.value
   target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
 }
