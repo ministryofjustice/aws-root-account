@@ -515,9 +515,9 @@ locals {
   ])
 
   scp_ids = [
-    aws_organizations_policy.enforce_business_unit_tag.id
-    aws_organizations_policy.enforce_is_production_tag.id
-    aws_organizations_policy.enforce_service_area_tag.id
+    aws_organizations_policy.enforce_business_unit_tag.id,
+    aws_organizations_policy.enforce_is_production_tag.id,
+    aws_organizations_policy.enforce_service_area_tag.id,
     aws_organizations_policy.enforce_application_and_owner_tags.id
   ]
 }
