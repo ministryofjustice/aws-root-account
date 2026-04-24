@@ -517,7 +517,7 @@ locals {
     if child.name == "modernisation-platform-coat"
   ])
 
-  scp_ids = [
+  tagging_scp_ids = [
     aws_organizations_policy.enforce_business_unit_tag.id,
     aws_organizations_policy.enforce_is_production_tag.id,
     aws_organizations_policy.enforce_service_area_tag.id,
@@ -691,13 +691,13 @@ data "aws_iam_policy_document" "enforce_application_and_owner_tags" {
 
 # Policy attachments
 resource "aws_organizations_policy_attachment" "tagging_scps_coat_attachments" {
-  for_each  = toset(local.scp_ids)
+  for_each  = toset(local.tagging_scp_ids)
   policy_id = each.value
   target_id = local.coat_ou_id
 }
 
 resource "aws_organizations_policy_attachment" "tagging_scps_cloud_platform_attachments" {
-  for_each  = toset(local.scp_ids)
+  for_each  = toset(local.tagging_scp_ids)
   policy_id = each.value
   target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
 }
