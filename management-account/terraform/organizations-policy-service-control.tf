@@ -516,12 +516,6 @@ locals {
     for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
     if child.name == "modernisation-platform-coat"
   ])
-
-  tagging_scp_ids = [
-    aws_organizations_policy.enforce_business_unit_tag.id,
-    aws_organizations_policy.enforce_is_production_tag.id,
-    aws_organizations_policy.enforce_application_owner_service_area_tags.id
-  ]
 }
 
 # policies
@@ -673,15 +667,34 @@ data "aws_iam_policy_document" "enforce_application_owner_service_area_tags" {
   }
 }
 
-# Policy attachments
-resource "aws_organizations_policy_attachment" "tagging_scps_coat_attachments" {
-  for_each  = toset(local.tagging_scp_ids)
-  policy_id = each.value
+# Policy attachments - attach to COAT OU
+resource "aws_organizations_policy_attachment" "enforce_business_unit_tag_coat" {
+  policy_id = aws_organizations_policy.enforce_business_unit_tag.id
   target_id = local.coat_ou_id
 }
 
-resource "aws_organizations_policy_attachment" "tagging_scps_cloud_platform_attachments" {
-  for_each  = toset(local.tagging_scp_ids)
-  policy_id = each.value
+resource "aws_organizations_policy_attachment" "enforce_is_production_tag_coat" {
+  policy_id = aws_organizations_policy.enforce_is_production_tag.id
+  target_id = local.coat_ou_id
+}
+
+resource "aws_organizations_policy_attachment" "enforce_application_and_owner_tags_coat" {
+  policy_id = aws_organizations_policy.enforce_application_owner_service_area_tags.id
+  target_id = local.coat_ou_id
+}
+
+# Policy attachments - attach to Cloud Platform OU
+resource "aws_organizations_policy_attachment" "enforce_business_unit_tag_cloud_platform" {
+  policy_id = aws_organizations_policy.enforce_business_unit_tag.id
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
+}
+
+resource "aws_organizations_policy_attachment" "enforce_is_production_tag_cloud_platform" {
+  policy_id = aws_organizations_policy.enforce_is_production_tag.id
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
+}
+
+resource "aws_organizations_policy_attachment" "enforce_application_owner_service_area_tags_cloud_platform" {
+  policy_id = aws_organizations_policy.enforce_application_owner_service_area_tags.id
   target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
 }
