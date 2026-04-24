@@ -520,8 +520,7 @@ locals {
   tagging_scp_ids = [
     aws_organizations_policy.enforce_business_unit_tag.id,
     aws_organizations_policy.enforce_is_production_tag.id,
-    aws_organizations_policy.enforce_service_area_tag.id,
-    aws_organizations_policy.enforce_application_and_owner_tags.id
+    aws_organizations_policy.enforce_application_owner_service_area_tags.id
   ]
 }
 
@@ -552,9 +551,9 @@ resource "aws_organizations_policy" "enforce_is_production_tag" {
   content = data.aws_iam_policy_document.enforce_is_production_tag.json
 }
 
-resource "aws_organizations_policy" "enforce_service_area_tag" {
-  name        = "Enforce service area tag"
-  description = "Enforces the presence of service area tag"
+resource "aws_organizations_policy" "enforce_application_owner_service_area_tags" {
+  name        = "Enforce application, owner, and service area tags"
+  description = "Enforces the presence of mandatory application, owner, and service area tags"
   type        = "SERVICE_CONTROL_POLICY"
   tags = {
     business-unit = "Platforms"
@@ -562,20 +561,7 @@ resource "aws_organizations_policy" "enforce_service_area_tag" {
     source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
   }
 
-  content = data.aws_iam_policy_document.enforce_service_area_tag.json
-}
-
-resource "aws_organizations_policy" "enforce_application_and_owner_tags" {
-  name        = "Enforce application and owner tags"
-  description = "Enforces the presence of mandatory application and owner tags"
-  type        = "SERVICE_CONTROL_POLICY"
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
-  }
-
-  content = data.aws_iam_policy_document.enforce_application_and_owner_tags.json
+  content = data.aws_iam_policy_document.enforce_application_owner_service_area_tags.json
 }
 
 # policy documents
@@ -646,22 +632,7 @@ data "aws_iam_policy_document" "enforce_is_production_tag" {
   }
 }
 
-data "aws_iam_policy_document" "enforce_service_area_tag" {
-  statement {
-    sid       = "DenyMissingServiceArea"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "Null"
-      variable = "aws:RequestTag/service-area"
-      values   = ["true"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "enforce_application_and_owner_tags" {
+data "aws_iam_policy_document" "enforce_application_owner_service_area_tags" {
   statement {
     sid       = "DenyMissingApplication"
     effect    = "Deny"
@@ -684,6 +655,19 @@ data "aws_iam_policy_document" "enforce_application_and_owner_tags" {
     condition {
       test     = "Null"
       variable = "aws:RequestTag/owner"
+      values   = ["true"]
+    }
+  }
+
+  statement {
+    sid       = "DenyMissingServiceArea"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
+    resources = ["*"]
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/service-area"
       values   = ["true"]
     }
   }
