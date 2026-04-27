@@ -470,6 +470,7 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
 # Enforce presence of mandatory tags
 locals {
   iam_actions_for_tagging_scp = [
+    # COAT
     "athena:CreateWorkGroup",
     "athena:CreateCapacityReservation",
     "athena:CreateDataCatalog",
@@ -482,11 +483,13 @@ locals {
     "lambda:CreateEventSourceMapping",
     "iam:CreateRole",
 
+    # Cloud Platform
     "ecr:CreateRepository",
     "secretsmanager:CreateSecret",
     "logs:CreateLogGroup",
     "elasticache:CreateReplicationGroup",
 
+    # Cloud Platform - RDS
     "rds:CreateBlueGreenDeployment",
     "rds:CreateCustomDBEngineVersion",
     "rds:CreateDBCluster",
@@ -508,6 +511,11 @@ locals {
     "rds:CreateOptionGroup",
     "rds:CreateTenantDatabase"
   ]
+
+  coat_ou_id = one([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-coat"
+  ])
 }
 
 # policies
@@ -537,9 +545,9 @@ resource "aws_organizations_policy" "enforce_is_production_tag" {
   content = data.aws_iam_policy_document.enforce_is_production_tag.json
 }
 
-resource "aws_organizations_policy" "enforce_service_area_tag" {
-  name        = "Enforce service area tag"
-  description = "Enforces the presence of service area tag"
+resource "aws_organizations_policy" "enforce_application_owner_service_area_tags" {
+  name        = "Enforce application, owner, and service area tags"
+  description = "Enforces the presence of mandatory application, owner, and service area tags"
   type        = "SERVICE_CONTROL_POLICY"
   tags = {
     business-unit = "Platforms"
@@ -547,20 +555,7 @@ resource "aws_organizations_policy" "enforce_service_area_tag" {
     source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
   }
 
-  content = data.aws_iam_policy_document.enforce_service_area_tag.json
-}
-
-resource "aws_organizations_policy" "enforce_application_and_owner_tags" {
-  name        = "Enforce application and owner tags"
-  description = "Enforces the presence of mandatory application and owner tags"
-  type        = "SERVICE_CONTROL_POLICY"
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
-  }
-
-  content = data.aws_iam_policy_document.enforce_application_and_owner_tags.json
+  content = data.aws_iam_policy_document.enforce_application_owner_service_area_tags.json
 }
 
 # policy documents
@@ -631,22 +626,7 @@ data "aws_iam_policy_document" "enforce_is_production_tag" {
   }
 }
 
-data "aws_iam_policy_document" "enforce_service_area_tag" {
-  statement {
-    sid       = "DenyMissingServiceArea"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "Null"
-      variable = "aws:RequestTag/service-area"
-      values   = ["true"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "enforce_application_and_owner_tags" {
+data "aws_iam_policy_document" "enforce_application_owner_service_area_tags" {
   statement {
     sid       = "DenyMissingApplication"
     effect    = "Deny"
@@ -672,45 +652,49 @@ data "aws_iam_policy_document" "enforce_application_and_owner_tags" {
       values   = ["true"]
     }
   }
+
+  statement {
+    sid       = "DenyMissingServiceArea"
+    effect    = "Deny"
+    actions   = local.iam_actions_for_tagging_scp
+    resources = ["*"]
+
+    condition {
+      test     = "Null"
+      variable = "aws:RequestTag/service-area"
+      values   = ["true"]
+    }
+  }
 }
 
 # Policy attachments - attach to COAT OU
-resource "aws_organizations_policy_attachment" "enforce_business_unit_tag" {
-  for_each = toset([
-    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
-    if child.name == "modernisation-platform-coat"
-  ])
-
+resource "aws_organizations_policy_attachment" "enforce_business_unit_tag_coat" {
   policy_id = aws_organizations_policy.enforce_business_unit_tag.id
-  target_id = each.value
+  target_id = local.coat_ou_id
 }
 
-resource "aws_organizations_policy_attachment" "enforce_is_production_tag" {
-  for_each = toset([
-    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
-    if child.name == "modernisation-platform-coat"
-  ])
-
+resource "aws_organizations_policy_attachment" "enforce_is_production_tag_coat" {
   policy_id = aws_organizations_policy.enforce_is_production_tag.id
-  target_id = each.value
+  target_id = local.coat_ou_id
 }
 
-resource "aws_organizations_policy_attachment" "enforce_service_area_tag" {
-  for_each = toset([
-    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
-    if child.name == "modernisation-platform-coat"
-  ])
-
-  policy_id = aws_organizations_policy.enforce_service_area_tag.id
-  target_id = each.value
+resource "aws_organizations_policy_attachment" "enforce_application_and_owner_tags_coat" {
+  policy_id = aws_organizations_policy.enforce_application_owner_service_area_tags.id
+  target_id = local.coat_ou_id
 }
 
-resource "aws_organizations_policy_attachment" "enforce_application_and_owner_tags" {
-  for_each = toset([
-    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
-    if child.name == "modernisation-platform-coat"
-  ])
+# Policy attachments - attach to Cloud Platform OU
+resource "aws_organizations_policy_attachment" "enforce_business_unit_tag_cloud_platform" {
+  policy_id = aws_organizations_policy.enforce_business_unit_tag.id
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
+}
 
-  policy_id = aws_organizations_policy.enforce_application_and_owner_tags.id
-  target_id = each.value
+resource "aws_organizations_policy_attachment" "enforce_is_production_tag_cloud_platform" {
+  policy_id = aws_organizations_policy.enforce_is_production_tag.id
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
+}
+
+resource "aws_organizations_policy_attachment" "enforce_application_owner_service_area_tags_cloud_platform" {
+  policy_id = aws_organizations_policy.enforce_application_owner_service_area_tags.id
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
 }
