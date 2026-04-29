@@ -201,6 +201,7 @@ locals {
     "arn:aws:s3:::modernisation-platform-logs-r53-public-dns-logs-replication",
 
     "arn:aws:s3:::tests3scanningkf",
+    "arn:aws:s3:::s3-test-scp-kf",
 
   ]
 }
