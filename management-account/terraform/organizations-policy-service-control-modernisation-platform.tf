@@ -175,3 +175,92 @@ resource "aws_organizations_policy_attachment" "mp_deny_cloudtrail_delete_stop_u
   policy_id = aws_organizations_policy.mp_deny_cloudtrail_delete_stop_update.id
   target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
+###############################################################
+# Protect core S3 buckets from deletion
+# Sprinkler OU scope for testing
+###############################################################
+
+locals {
+  mp_protected_core_s3_buckets = [
+    "arn:aws:s3:::modernisation-platform-terraform-state",
+    "arn:aws:s3:::modernisation-platform-terraform-state-replication",
+
+    "arn:aws:s3:::modernisation-platform-logs-cloudtrail",
+    "arn:aws:s3:::modernisation-platform-logs-cloudtrail-replication",
+
+    "arn:aws:s3:::modernisation-platform-logs-cloudtrail-logging",
+    "arn:aws:s3:::modernisation-platform-logs-cloudtrail-logging-replication",
+
+    "arn:aws:s3:::modernisation-platform-logs-config",
+    "arn:aws:s3:::modernisation-platform-logs-config-replication",
+
+    "arn:aws:s3:::modernisation-platform-waf-logs",
+    "arn:aws:s3:::modernisation-platform-waf-logs-replication",
+
+    "arn:aws:s3:::modernisation-platform-logs-r53-public-dns-logs",
+    "arn:aws:s3:::modernisation-platform-logs-r53-public-dns-logs-replication",
+
+    "arn:aws:s3:::tests3scanningkf",
+    "arn:aws:s3:::s3-test-scp-kf",
+
+  ]
+}
+
+resource "aws_organizations_policy" "mp_protect_core_s3_buckets" {
+  name        = "Modernisation Platform Protect Core S3 Buckets"
+  description = "Denies deletion and policy/lifecycle tampering for core S3 buckets (state + core logging) in the Modernisation Platform."
+  type        = "SERVICE_CONTROL_POLICY"
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
+  }
+
+  content = data.aws_iam_policy_document.mp_protect_core_s3_buckets.json
+}
+
+data "aws_iam_policy_document" "mp_protect_core_s3_buckets" {
+  # 1) Deny deleting the bucket itself
+  statement {
+    sid    = "DenyDeleteCoreBuckets"
+    effect = "Deny"
+    actions = [
+      "s3:DeleteBucket"
+    ]
+    resources = local.mp_protected_core_s3_buckets
+  }
+
+  # 2) Deny changing/removing bucket policy (prevents removing other protections)
+  statement {
+    sid    = "DenyBucketPolicyChangesOnCoreBuckets"
+    effect = "Deny"
+    actions = [
+      "s3:PutBucketPolicy",
+      "s3:DeleteBucketPolicy"
+    ]
+    resources = local.mp_protected_core_s3_buckets
+  }
+
+  # 3) Deny changing lifecycle configuration (prevents reducing retention / disabling expiration rules)
+  statement {
+    sid    = "DenyLifecycleChangesOnCoreBuckets"
+    effect = "Deny"
+    actions = [
+      "s3:PutLifecycleConfiguration",
+      "s3:DeleteLifecycleConfiguration"
+    ]
+    resources = local.mp_protected_core_s3_buckets
+  }
+}
+
+# Attach the SCP to the SPRINKLER OU only for testing before wider MP OU attachment
+resource "aws_organizations_policy_attachment" "mp_protect_core_s3_buckets" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
+
+  policy_id = aws_organizations_policy.mp_protect_core_s3_buckets.id
+  target_id = each.value
+}
