@@ -85,3 +85,29 @@ import {
   to = aws_guardduty_filter.cloud_platform_eicr_com
   id = "${local.guardduty_administrator_detector_ids.eu_west_2}:EICARSuppression_com"
 }
+
+resource "aws_guardduty_filter" "cloud_platform_w97m_class_zd" {
+  name        = "CP_W97MClassZDSuppression"
+  action      = "ARCHIVE"
+  detector_id = local.guardduty_administrator_detector_ids.eu_west_2
+  rank        = 4
+
+  finding_criteria {
+    criterion {
+      field  = "accountId"
+      equals = [local.cloud_platform_account_id]
+    }
+    criterion {
+      field  = "region"
+      equals = ["eu-west-2"]
+    }
+    criterion {
+      field  = "service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash"
+      equals = ["0736f2f61cf55119a02e306296296ce95b4c01f6f118f89ca171e619465aa92c"]
+    }
+  }
+  tags = merge(
+    local.tags_organisation_management, {
+      component = "Security"
+  })
+}
