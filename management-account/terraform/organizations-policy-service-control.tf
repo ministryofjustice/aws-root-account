@@ -487,7 +487,6 @@ locals {
     "ecr:CreateRepository",
     "secretsmanager:CreateSecret",
     "logs:CreateLogGroup",
-    "elasticache:CreateReplicationGroup",
 
     # Cloud Platform - RDS
     "rds:CreateBlueGreenDeployment",
