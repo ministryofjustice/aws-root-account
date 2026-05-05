@@ -177,7 +177,7 @@ resource "aws_organizations_policy_attachment" "mp_deny_cloudtrail_delete_stop_u
 }
 ###############################################################
 # Protect core S3 buckets from deletion
-# Sprinkler OU scope for testing
+# Modernisation Platform OU scope
 ###############################################################
 
 locals {
@@ -199,9 +199,6 @@ locals {
 
     "arn:aws:s3:::modernisation-platform-logs-r53-public-dns-logs",
     "arn:aws:s3:::modernisation-platform-logs-r53-public-dns-logs-replication",
-
-    "arn:aws:s3:::tests3scanningkf",
-    "arn:aws:s3:::s3-test-scp-kf",
 
   ]
 }
@@ -233,10 +230,28 @@ data "aws_iam_policy_document" "mp_protect_core_s3_buckets" {
 
   # 2) Deny changing/removing bucket policy (prevents removing other protections)
   statement {
-    sid    = "DenyBucketPolicyChangesOnCoreBuckets"
+    sid    = "DenyPutBucketPolicyOnCoreBuckets"
     effect = "Deny"
     actions = [
-      "s3:PutBucketPolicy",
+      "s3:PutBucketPolicy"
+    ]
+    resources = local.mp_protected_core_s3_buckets
+
+    # Exclusion of automation roles for Terraform infrastructure automation
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/github-actions"
+      ]
+    }
+  }
+
+  statement {
+    sid    = "DenyDeleteBucketPolicyOnCoreBuckets"
+    effect = "Deny"
+    actions = [
       "s3:DeleteBucketPolicy"
     ]
     resources = local.mp_protected_core_s3_buckets
@@ -254,13 +269,7 @@ data "aws_iam_policy_document" "mp_protect_core_s3_buckets" {
   }
 }
 
-# Attach the SCP to the SPRINKLER OU only for testing before wider MP OU attachment
 resource "aws_organizations_policy_attachment" "mp_protect_core_s3_buckets" {
-  for_each = toset([
-    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
-    if child.name == "modernisation-platform-sprinkler"
-  ])
-
   policy_id = aws_organizations_policy.mp_protect_core_s3_buckets.id
-  target_id = each.value
+  target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
