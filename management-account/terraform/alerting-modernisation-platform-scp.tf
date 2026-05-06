@@ -3,6 +3,8 @@
 ###############################################################
 
 resource "aws_sns_topic" "modernisation_platform_scp_change_alerts" {
+  provider = aws.us-east-1
+
   name = "modernisation-platform-scp-change-alerts"
 
   tags = {
@@ -13,6 +15,8 @@ resource "aws_sns_topic" "modernisation_platform_scp_change_alerts" {
 }
 
 resource "aws_cloudwatch_event_rule" "modernisation_platform_scp_change_alerts" {
+  provider = aws.us-east-1
+
   name        = "modernisation-platform-scp-change-alerts"
   description = "Alerts on AWS Organizations changes to Modernisation Platform SCPs."
 
@@ -46,6 +50,8 @@ resource "aws_cloudwatch_event_rule" "modernisation_platform_scp_change_alerts" 
 }
 
 resource "aws_cloudwatch_event_target" "modernisation_platform_scp_change_alerts" {
+  provider = aws.us-east-1
+
   rule = aws_cloudwatch_event_rule.modernisation_platform_scp_change_alerts.name
   arn  = aws_sns_topic.modernisation_platform_scp_change_alerts.arn
 }
@@ -85,12 +91,18 @@ data "aws_iam_policy_document" "modernisation_platform_scp_change_alerts_topic_p
 }
 
 resource "aws_sns_topic_policy" "modernisation_platform_scp_change_alerts" {
+  provider = aws.us-east-1
+
   arn    = aws_sns_topic.modernisation_platform_scp_change_alerts.arn
   policy = data.aws_iam_policy_document.modernisation_platform_scp_change_alerts_topic_policy.json
 }
 
 module "modernisation_platform_scp_slack_notifications" {
   source = "github.com/ministryofjustice/modernisation-platform-terraform-aws-chatbot?ref=0ec33c7bfde5649af3c23d0834ea85c849edf3ac" # v3.0.0
+
+  providers = {
+    aws = aws.us-east-1
+  }
 
   application_name = "modernisation-platform-scp-alerts"
   slack_channel_id = "C02PFCG8M1R"
