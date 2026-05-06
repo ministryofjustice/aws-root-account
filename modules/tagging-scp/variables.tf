@@ -8,11 +8,6 @@ variable "resources" {
   default = ["*"]
 }
 
-variable "enforce_value" {
-  type    = bool
-  default = false
-}
-
 variable "tags_to_enforce" {
   type = list(object({
     tag                 = string

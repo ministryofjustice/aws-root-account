@@ -469,6 +469,46 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
 
 # Enforce presence of mandatory tags
 locals {
+  mandatory_tags_group_1 = [
+    {
+      tag = "business-unit"
+      valid_values = [
+        "Central Digital",
+        "CICA",
+        "HMCTS",
+        "HMPPS",
+        "LAA",
+        "OPG",
+        "OCTO",
+        "Technology Services",
+        "YJB",
+        "Platforms"
+      ]
+    }
+  ]
+
+  mandatory_tags_group_2 = [
+    {
+      tag = "is-production"
+      valid_values = ["true", "false"]
+    }
+  ]
+
+  mandatory_tags_group_3 = [
+    {
+      tag = "service-area"
+      valid_values = []
+    },
+    {
+      tag = "owner"
+      valid_values = []
+    },
+    {
+      tag = "application"
+      valid_values = []
+    }
+  ]
+
   iam_actions_for_tagging_scp_staging = [
     "athena:CreateWorkGroup",
     "athena:CreateCapacityReservation",
@@ -555,167 +595,28 @@ locals {
   ])
 }
 
-# policies
-resource "aws_organizations_policy" "enforce_business_unit_tag" {
-  name        = "Enforce business unit tag"
-  description = "Enforces the presence of mandatory business unit tag"
-  type        = "SERVICE_CONTROL_POLICY"
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
-  }
+# Create mandatory tagging SCPs for staging, attached to COAT OU - using internal tagging-scp module
 
-  content = data.aws_iam_policy_document.enforce_business_unit_tag.json
+module "mandatory_tags_group_1_scp_staging_coat" {
+  source = "../../modules/tagging-scp"
+
+  iam_actions = local.iam_actions_for_tagging_scp_staging
+  tags_to_enforce = local.mandatory_tags_group_1
+  organisational_unit_ids = local.coat_ou_id
 }
 
-resource "aws_organizations_policy" "enforce_is_production_tag" {
-  name        = "Enforce is production tag"
-  description = "Enforces the presence of mandatory is production tag"
-  type        = "SERVICE_CONTROL_POLICY"
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
-  }
+module "mandatory_tags_group_2_scp_staging_coat" {
+  source = "../../modules/tagging-scp"
 
-  content = data.aws_iam_policy_document.enforce_is_production_tag.json
+  iam_actions = local.iam_actions_for_tagging_scp_staging
+  tags_to_enforce = local.mandatory_tags_group_2
+  organisational_unit_ids = local.coat_ou_id
 }
 
-resource "aws_organizations_policy" "enforce_application_owner_service_area_tags" {
-  name        = "Enforce application, owner, and service area tags"
-  description = "Enforces the presence of mandatory application, owner, and service area tags"
-  type        = "SERVICE_CONTROL_POLICY"
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-service-control-policies.tf"])
-  }
+module "mandatory_tags_group_3_scp_staging_coat" {
+  source = "../../modules/tagging-scp"
 
-  content = data.aws_iam_policy_document.enforce_application_owner_service_area_tags.json
-}
-
-# policy documents
-data "aws_iam_policy_document" "enforce_business_unit_tag" {
-  statement {
-    sid       = "DenyMissingBusinessUnit"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "Null"
-      variable = "aws:RequestTag/business-unit"
-      values   = ["true"]
-    }
-  }
-
-  statement {
-    sid       = "DenyInvalidBusinessUnit"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:RequestTag/business-unit"
-      values = [
-        "Central Digital",
-        "CICA",
-        "HMCTS",
-        "HMPPS",
-        "LAA",
-        "OPG",
-        "OCTO",
-        "Technology Services",
-        "YJB",
-        "Platforms"
-      ]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "enforce_is_production_tag" {
-  statement {
-    sid       = "DenyMissingIsProduction"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "Null"
-      variable = "aws:RequestTag/is-production"
-      values   = ["true"]
-    }
-  }
-
-  statement {
-    sid       = "DenyInvalidIsProduction"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:RequestTag/is-production"
-      values   = ["true", "false"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "enforce_application_owner_service_area_tags" {
-  statement {
-    sid       = "DenyMissingApplication"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "Null"
-      variable = "aws:RequestTag/application"
-      values   = ["true"]
-    }
-  }
-
-  statement {
-    sid       = "DenyMissingOwner"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "Null"
-      variable = "aws:RequestTag/owner"
-      values   = ["true"]
-    }
-  }
-
-  statement {
-    sid       = "DenyMissingServiceArea"
-    effect    = "Deny"
-    actions   = local.iam_actions_for_tagging_scp
-    resources = ["*"]
-
-    condition {
-      test     = "Null"
-      variable = "aws:RequestTag/service-area"
-      values   = ["true"]
-    }
-  }
-}
-
-# Policy attachments - attach to COAT OU
-resource "aws_organizations_policy_attachment" "enforce_business_unit_tag_coat" {
-  policy_id = aws_organizations_policy.enforce_business_unit_tag.id
-  target_id = local.coat_ou_id
-}
-
-resource "aws_organizations_policy_attachment" "enforce_is_production_tag_coat" {
-  policy_id = aws_organizations_policy.enforce_is_production_tag.id
-  target_id = local.coat_ou_id
-}
-
-resource "aws_organizations_policy_attachment" "enforce_application_and_owner_tags_coat" {
-  policy_id = aws_organizations_policy.enforce_application_owner_service_area_tags.id
-  target_id = local.coat_ou_id
+  iam_actions = local.iam_actions_for_tagging_scp_staging
+  tags_to_enforce = local.mandatory_tags_group_3
+  organisational_unit_ids = local.coat_ou_id
 }
