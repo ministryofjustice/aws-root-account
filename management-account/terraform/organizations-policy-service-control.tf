@@ -469,8 +469,7 @@ resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
 
 # Enforce presence of mandatory tags
 locals {
-  iam_actions_for_tagging_scp = [
-    # COAT
+  iam_actions_for_tagging_scp_staging = [
     "athena:CreateWorkGroup",
     "athena:CreateCapacityReservation",
     "athena:CreateDataCatalog",
@@ -483,13 +482,51 @@ locals {
     "lambda:CreateEventSourceMapping",
     "iam:CreateRole",
 
-    # Cloud Platform
     "ecr:CreateRepository",
     "secretsmanager:CreateSecret",
     "logs:CreateLogGroup",
     "elasticache:CreateReplicationGroup",
 
-    # Cloud Platform - RDS
+    "rds:CreateBlueGreenDeployment",
+    "rds:CreateCustomDBEngineVersion",
+    "rds:CreateDBCluster",
+    "rds:CreateDBClusterEndpoint",
+    "rds:CreateDBClusterParameterGroup",
+    "rds:CreateDBClusterSnapshot",
+    "rds:CreateDBInstance",
+    "rds:CreateDBInstanceReadReplica",
+    "rds:CreateDBParameterGroup",
+    "rds:CreateDBProxy",
+    "rds:CreateDBProxyEndpoint",
+    "rds:CreateDBSecurityGroup",
+    "rds:CreateDBShardGroup",
+    "rds:CreateDBSnapshot",
+    "rds:CreateDBSubnetGroup",
+    "rds:CreateEventSubscription",
+    "rds:CreateGlobalCluster",
+    "rds:CreateIntegration",
+    "rds:CreateOptionGroup",
+    "rds:CreateTenantDatabase"
+  ]
+
+  iam_actions_for_tagging_scp_prod = [
+    "athena:CreateWorkGroup",
+    "athena:CreateCapacityReservation",
+    "athena:CreateDataCatalog",
+    "s3:CreateBucket",
+    "s3:CreateAccessPoint",
+    "kms:CreateKey",
+    "lambda:CreateFunction",
+    "lambda:CreateCapacityProvider",
+    "lambda:CreateCodeSigningConfig",
+    "lambda:CreateEventSourceMapping",
+    "iam:CreateRole",
+
+    "ecr:CreateRepository",
+    "secretsmanager:CreateSecret",
+    "logs:CreateLogGroup",
+    "elasticache:CreateReplicationGroup",
+
     "rds:CreateBlueGreenDeployment",
     "rds:CreateCustomDBEngineVersion",
     "rds:CreateDBCluster",
