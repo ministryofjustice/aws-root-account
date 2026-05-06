@@ -681,19 +681,3 @@ resource "aws_organizations_policy_attachment" "enforce_application_and_owner_ta
   policy_id = aws_organizations_policy.enforce_application_owner_service_area_tags.id
   target_id = local.coat_ou_id
 }
-
-# Policy attachments - attach to Cloud Platform OU
-resource "aws_organizations_policy_attachment" "enforce_business_unit_tag_cloud_platform" {
-  policy_id = aws_organizations_policy.enforce_business_unit_tag.id
-  target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
-}
-
-resource "aws_organizations_policy_attachment" "enforce_is_production_tag_cloud_platform" {
-  policy_id = aws_organizations_policy.enforce_is_production_tag.id
-  target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
-}
-
-resource "aws_organizations_policy_attachment" "enforce_application_owner_service_area_tags_cloud_platform" {
-  policy_id = aws_organizations_policy.enforce_application_owner_service_area_tags.id
-  target_id = aws_organizations_organizational_unit.platforms_and_architecture_cloud_platform.id
-}
