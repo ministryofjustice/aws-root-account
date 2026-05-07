@@ -37,24 +37,21 @@ data "aws_iam_policy_document" "default" {
 
   dynamic "statement" {
     for_each   = {
-      for tag, valid_values in var.tags_to_enforce :
-      tag => {
-        tag          = tag
-        valid_values = valid_values
-      }
-      if length(valid_values) > 0
+      for item in var.tags_to_enforce :
+      item.tag => item.valid_values
+      if length(item.valid_values) > 0
     }
 
     content {
-      sid       = "DenyInvalid${statement.value.tag}"
+      sid       = "DenyInvalid${statement.key}"
       effect    = "Deny"
       actions   = var.iam_actions
       resources = var.resources
 
       condition {
         test     = "StringNotEquals"
-        variable = "aws:RequestTag/${statement.value.tag}"
-        values = statement.value.valid_values
+        variable = "aws:RequestTag/${statement.key}"
+        values = statement.value
       }
     }
   }
