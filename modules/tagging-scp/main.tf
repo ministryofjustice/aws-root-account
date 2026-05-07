@@ -17,15 +17,17 @@ data "aws_iam_policy_document" "default" {
   dynamic "statement" {
     for_each = var.tags_to_enforce
 
-    sid       = "DenyMissing${statement.value.tag}"
-    effect    = "Deny"
-    actions   = var.iam_actions
-    resources = [var.resources]
+    content {
+      sid       = "DenyMissing${statement.value.tag}"
+      effect    = "Deny"
+      actions   = var.iam_actions
+      resources = [var.resources]
 
-    condition {
-      test     = "Null"
-      variable = "aws:RequestTag/${statement.value.tag}"
-      values   = ["true"]
+      condition {
+        test     = "Null"
+        variable = "aws:RequestTag/${statement.value.tag}"
+        values   = ["true"]
+      }
     }
   }
 
@@ -39,15 +41,17 @@ data "aws_iam_policy_document" "default" {
       if length(valid_values) > 0
     }
 
-    sid       = "DenyInvalid${statement.value.tag}"
-    effect    = "Deny"
-    actions   = var.iam_actions
-    resources = [var.resources]
+    content {
+      sid       = "DenyInvalid${statement.value.tag}"
+      effect    = "Deny"
+      actions   = var.iam_actions
+      resources = [var.resources]
 
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:RequestTag/${statement.value.tag}"
-      values = statement.value.valid_values
+      condition {
+        test     = "StringNotEquals"
+        variable = "aws:RequestTag/${statement.value.tag}"
+        values = statement.value.valid_values
+      }
     }
   }
 }
