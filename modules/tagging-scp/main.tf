@@ -1,7 +1,11 @@
+locals {
+  tag_names = [for tag in var.tags_to_enforce : tag.tag]
+}
+
 # Policies
 resource "aws_organizations_policy" "default" {
-  name        = "Enforce ${join(", ", var.tags_to_enforce)} tag"
-  description = "Enforces the presence of mandatory ${join(", ", var.tags_to_enforce)} tag"
+  name        = "Enforce ${join(", ", local.tag_names)} tag"
+  description = "Enforces the presence of mandatory ${join(", ", local.tag_names)} tag"
   type        = "SERVICE_CONTROL_POLICY"
   tags = {
     business-unit = "Platforms"
