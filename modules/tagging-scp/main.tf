@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "default" {
     for_each = var.tags_to_enforce
 
     content {
-      sid       = "DenyMissing${statement.value.tag}"
+      sid       = "DenyMissing${join("", [for part in split("-", statement.value.tag) : title(part)])}"
       effect    = "Deny"
       actions   = var.iam_actions
       resources = var.resources
@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "default" {
     }
 
     content {
-      sid       = "DenyInvalid${statement.key}"
+      sid       = "DenyInvalid${join("", [for part in split("-", statement.key) : title(part)])}"
       effect    = "Deny"
       actions   = var.iam_actions
       resources = var.resources
