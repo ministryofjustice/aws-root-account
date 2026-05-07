@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "default" {
       sid       = "DenyMissing${statement.value.tag}"
       effect    = "Deny"
       actions   = var.iam_actions
-      resources = [var.resources]
+      resources = var.resources
 
       condition {
         test     = "Null"
@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "default" {
       sid       = "DenyInvalid${statement.value.tag}"
       effect    = "Deny"
       actions   = var.iam_actions
-      resources = [var.resources]
+      resources = var.resources
 
       condition {
         test     = "StringNotEquals"
