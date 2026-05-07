@@ -10,8 +10,8 @@ variable "resources" {
 
 variable "tags_to_enforce" {
   type = list(object({
-    tag                 = string
-    valid_values        = list(string)
+    tag          = string
+    valid_values = list(string)
   }))
   default = []
 }

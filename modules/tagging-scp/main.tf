@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "default" {
   }
 
   dynamic "statement" {
-    for_each   = {
+    for_each = {
       for item in var.tags_to_enforce :
       item.tag => item.valid_values
       if length(item.valid_values) > 0
@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "default" {
       condition {
         test     = "StringNotEquals"
         variable = "aws:RequestTag/${statement.key}"
-        values = statement.value
+        values   = statement.value
       }
     }
   }
