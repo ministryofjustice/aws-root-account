@@ -489,22 +489,22 @@ locals {
 
   mandatory_tags_group_2 = [
     {
-      tag = "is-production"
+      tag          = "is-production"
       valid_values = ["true", "false"]
     }
   ]
 
   mandatory_tags_group_3 = [
     {
-      tag = "service-area"
+      tag          = "service-area"
       valid_values = []
     },
     {
-      tag = "owner"
+      tag          = "owner"
       valid_values = []
     },
     {
-      tag = "application"
+      tag          = "application"
       valid_values = []
     }
   ]
@@ -600,23 +600,23 @@ locals {
 module "mandatory_tags_group_1_scp_staging_coat" {
   source = "../../modules/tagging-scp"
 
-  iam_actions = local.iam_actions_for_tagging_scp_staging
-  tags_to_enforce = local.mandatory_tags_group_1
+  iam_actions             = local.iam_actions_for_tagging_scp_staging
+  tags_to_enforce         = local.mandatory_tags_group_1
   organisational_unit_ids = [local.coat_ou_id]
 }
 
 module "mandatory_tags_group_2_scp_staging_coat" {
   source = "../../modules/tagging-scp"
 
-  iam_actions = local.iam_actions_for_tagging_scp_staging
-  tags_to_enforce = local.mandatory_tags_group_2
+  iam_actions             = local.iam_actions_for_tagging_scp_staging
+  tags_to_enforce         = local.mandatory_tags_group_2
   organisational_unit_ids = [local.coat_ou_id]
 }
 
 module "mandatory_tags_group_3_scp_staging_coat" {
   source = "../../modules/tagging-scp"
 
-  iam_actions = local.iam_actions_for_tagging_scp_staging
-  tags_to_enforce = local.mandatory_tags_group_3
+  iam_actions             = local.iam_actions_for_tagging_scp_staging
+  tags_to_enforce         = local.mandatory_tags_group_3
   organisational_unit_ids = [local.coat_ou_id]
 }
