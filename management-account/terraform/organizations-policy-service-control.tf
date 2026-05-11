@@ -521,7 +521,6 @@ locals {
     "lambda:CreateCodeSigningConfig",
     "lambda:CreateEventSourceMapping",
     "iam:CreateRole",
-
     "ecr:CreateRepository",
     "secretsmanager:CreateSecret",
     "logs:CreateLogGroup",
@@ -543,7 +542,6 @@ locals {
     "lambda:CreateCodeSigningConfig",
     "lambda:CreateEventSourceMapping",
     "iam:CreateRole",
-
     "ecr:CreateRepository",
     "secretsmanager:CreateSecret",
     "logs:CreateLogGroup",
