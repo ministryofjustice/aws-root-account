@@ -553,8 +553,6 @@ locals {
     "athena:CreateWorkGroup",
     "athena:CreateCapacityReservation",
     "athena:CreateDataCatalog",
-    "s3:CreateBucket",
-    "s3:CreateAccessPoint",
     "kms:CreateKey",
     "lambda:CreateFunction",
     "lambda:CreateCapacityProvider",
@@ -565,7 +563,6 @@ locals {
     "ecr:CreateRepository",
     "secretsmanager:CreateSecret",
     "logs:CreateLogGroup",
-    "elasticache:CreateReplicationGroup",
 
     "rds:CreateBlueGreenDeployment",
     "rds:CreateCustomDBEngineVersion",
