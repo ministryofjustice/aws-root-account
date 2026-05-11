@@ -509,7 +509,7 @@ locals {
     }
   ]
 
-  iam_actions_for_tagging_scp_staging = [
+  iam_actions_for_tagging_scps_staging_coat = [
     "athena:CreateWorkGroup",
     "athena:CreateCapacityReservation",
     "athena:CreateDataCatalog",
@@ -533,7 +533,7 @@ locals {
     "elasticloadbalancing:Create*"
   ]
 
-  iam_actions_for_tagging_scp_prod = [
+  iam_actions_for_tagging_scps_prod = [
     "athena:CreateWorkGroup",
     "athena:CreateCapacityReservation",
     "athena:CreateDataCatalog",
