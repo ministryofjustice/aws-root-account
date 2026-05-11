@@ -34,7 +34,8 @@ module "scim_slack_notifications" {
   slack_channel_id = "C02PFCG8M1R"
   sns_topic_arns = [
     module.entraid_scim.sns_topic_arn,
-    module.scim.sns_topic_arn
+    module.scim.sns_topic_arn,
+    aws_sns_topic.modernisation_platform_scp_change_alerts.arn
   ]
   tags = {}
 }

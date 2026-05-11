@@ -21,18 +21,18 @@ resource "aws_cloudwatch_event_rule" "modernisation_platform_scp_change_alerts" 
   description = "Alerts on AWS Organizations changes to Modernisation Platform SCPs."
 
   event_pattern = jsonencode({
-    "detail-type" : ["AWS API Call via CloudTrail"],
-    "source" : ["aws.organizations"],
-    "detail" : {
-      "eventSource" : ["organizations.amazonaws.com"],
-      "eventName" : [
+    "detail-type" = ["AWS API Call via CloudTrail"]
+    "source"      = ["aws.organizations"]
+    "detail" = {
+      "eventSource" = ["organizations.amazonaws.com"]
+      "eventName" = [
         "UpdatePolicy",
         "AttachPolicy",
         "DetachPolicy",
         "DeletePolicy"
-      ],
-      "requestParameters" : {
-        "policyId" : [
+      ]
+      "requestParameters" = {
+        "policyId" = [
           aws_organizations_policy.rds_guardrails.id,
           aws_organizations_policy.mp_deny_cloudtrail_delete_stop_update.id,
           aws_organizations_policy.mp_protect_core_s3_buckets.id,
@@ -66,27 +66,21 @@ data "aws_iam_policy_document" "modernisation_platform_scp_change_alerts_topic_p
       identifiers = ["events.amazonaws.com"]
     }
 
-    actions   = ["sns:Publish"]
-    resources = [aws_sns_topic.modernisation_platform_scp_change_alerts.arn]
+    actions = [
+      "sns:Publish"
+    ]
+
+    resources = [
+      aws_sns_topic.modernisation_platform_scp_change_alerts.arn
+    ]
 
     condition {
       test     = "ArnEquals"
       variable = "aws:SourceArn"
-      values   = [aws_cloudwatch_event_rule.modernisation_platform_scp_change_alerts.arn]
+      values = [
+        aws_cloudwatch_event_rule.modernisation_platform_scp_change_alerts.arn
+      ]
     }
-  }
-
-  statement {
-    sid    = "AllowAccountAdmin"
-    effect = "Allow"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
-
-    actions   = ["sns:*"]
-    resources = [aws_sns_topic.modernisation_platform_scp_change_alerts.arn]
   }
 }
 
@@ -95,19 +89,4 @@ resource "aws_sns_topic_policy" "modernisation_platform_scp_change_alerts" {
 
   arn    = aws_sns_topic.modernisation_platform_scp_change_alerts.arn
   policy = data.aws_iam_policy_document.modernisation_platform_scp_change_alerts_topic_policy.json
-}
-
-module "modernisation_platform_scp_slack_notifications" {
-  source = "github.com/ministryofjustice/modernisation-platform-terraform-aws-chatbot?ref=0ec33c7bfde5649af3c23d0834ea85c849edf3ac" # v3.0.0
-
-  providers = {
-    aws = aws.us-east-1
-  }
-
-  application_name = "modernisation-platform-scp-alerts"
-  slack_channel_id = "C02PFCG8M1R"
-  sns_topic_arns = [
-    aws_sns_topic.modernisation_platform_scp_change_alerts.arn
-  ]
-  tags = {}
 }
