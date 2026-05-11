@@ -579,7 +579,7 @@ locals {
 module "mandatory_tags_group_1_scp_staging_coat" {
   source = "../../modules/tagging-scp"
 
-  iam_actions             = local.iam_actions_for_tagging_scp_staging
+  iam_actions             = local.iam_actions_for_tagging_scps_staging_coat
   tags_to_enforce         = local.mandatory_tags_group_1
   organisational_unit_ids = [local.coat_ou_id]
 }
@@ -587,7 +587,7 @@ module "mandatory_tags_group_1_scp_staging_coat" {
 module "mandatory_tags_group_2_scp_staging_coat" {
   source = "../../modules/tagging-scp"
 
-  iam_actions             = local.iam_actions_for_tagging_scp_staging
+  iam_actions             = local.iam_actions_for_tagging_scps_staging_coat
   tags_to_enforce         = local.mandatory_tags_group_2
   organisational_unit_ids = [local.coat_ou_id]
 }
@@ -595,7 +595,7 @@ module "mandatory_tags_group_2_scp_staging_coat" {
 module "mandatory_tags_group_3_scp_staging_coat" {
   source = "../../modules/tagging-scp"
 
-  iam_actions             = local.iam_actions_for_tagging_scp_staging
+  iam_actions             = local.iam_actions_for_tagging_scps_staging_coat
   tags_to_enforce         = local.mandatory_tags_group_3
   organisational_unit_ids = [local.coat_ou_id]
 }
