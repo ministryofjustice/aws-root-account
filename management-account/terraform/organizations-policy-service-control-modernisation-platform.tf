@@ -296,6 +296,8 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       "guardduty:Delete*",
       "kms:Delete*",
       "kms:DisableKey",
+      "kms:ScheduleKeyDeletion",
+      "kms:CancelKeyDeletion",
       "logs:Delete*",
       "s3:Delete*",
       "s3:PutBucketPolicy",
