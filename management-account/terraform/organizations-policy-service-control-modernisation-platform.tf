@@ -163,7 +163,7 @@ data "aws_iam_policy_document" "mp_deny_cloudtrail_delete_stop_update" {
 
     # Exclusion of ModernisationPlatformAccess role for Terraform infrastructure automation
     condition {
-      test     = "StringNotLike"
+      test     = "ArnNotLike"
       variable = "aws:PrincipalArn"
       values   = ["arn:aws:iam::*:role/ModernisationPlatformAccess"]
     }
@@ -239,7 +239,7 @@ data "aws_iam_policy_document" "mp_protect_core_s3_buckets" {
 
     # Exclusion of automation roles for Terraform infrastructure automation
     condition {
-      test     = "StringNotLike"
+      test     = "ArnNotLike"
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::*:role/ModernisationPlatformAccess",
@@ -262,8 +262,7 @@ data "aws_iam_policy_document" "mp_protect_core_s3_buckets" {
     sid    = "DenyLifecycleChangesOnCoreBuckets"
     effect = "Deny"
     actions = [
-      "s3:PutLifecycleConfiguration",
-      "s3:DeleteLifecycleConfiguration"
+      "s3:PutLifecycleConfiguration"
     ]
     resources = local.mp_protected_core_s3_buckets
   }
