@@ -36,7 +36,8 @@ resource "aws_cloudwatch_event_rule" "modernisation_platform_scp_change_alerts" 
           aws_organizations_policy.rds_guardrails.id,
           aws_organizations_policy.mp_deny_cloudtrail_delete_stop_update.id,
           aws_organizations_policy.mp_protect_core_s3_buckets.id,
-          aws_organizations_policy.modernisation_platform_member_ou_scp.id
+          aws_organizations_policy.modernisation_platform_member_ou_scp.id,
+          aws_organizations_policy.mp_protect_secure_baselines.id
         ]
       }
     }
