@@ -71,6 +71,11 @@ locals {
       account_id
       if account_name == "sprinkler-development"
     ]
+    testing_test = [
+      for account_name, account_id in local.accounts.active_only :
+      account_id
+      if account_name == "testing-test"
+    ]
   }
 
   root_account = merge(local.tags_business_units.platforms, {

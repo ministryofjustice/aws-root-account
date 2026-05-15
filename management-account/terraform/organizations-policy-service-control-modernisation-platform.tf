@@ -320,6 +320,14 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
         "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
       ]
     }
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalAccount"
+      values = flatten([
+        local.modernisation_platform_accounts.testing_test
+      ])
+    }
   }
 }
 
