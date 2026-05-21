@@ -278,3 +278,126 @@ data "aws_iam_policy_document" "terraform_organisation_management_policy" {
     }
   }
 }
+
+################################
+# Enforce MFA Use by IAM Users #
+################################
+resource "aws_iam_policy" "enforce_mfa_use_policy" {
+  name        = "enforce-mfa-by-users"
+  description = "A policy that enforces the use of MFA by IAM Users"
+  path        = "/"
+  policy      = data.aws_iam_policy_document.enforce_mfa_use_policy.json
+  tags        = {}
+}
+
+# AWS IAM Policy Document for Force MFA, as taken from:
+# https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_my-sec-creds-self-manage.html
+data "aws_iam_policy_document" "enforce_mfa_use_policy" {
+  version = "2012-10-17"
+
+  statement {
+    sid    = "AllowViewAccountInfo"
+    effect = "Allow"
+    actions = [
+      "iam:GetAccountPasswordPolicy",
+      "iam:GetAccountSummary",
+      "iam:ListVirtualMFADevices"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowManageOwnPasswords"
+    effect = "Allow"
+    actions = [
+      "iam:ChangePassword",
+      "iam:GetUser"
+    ]
+    resources = ["arn:aws:iam::*:user/$${aws:username}"]
+  }
+  statement {
+    sid    = "AllowManageOwnAccessKeys"
+    effect = "Allow"
+    actions = [
+      "iam:CreateAccessKey",
+      "iam:DeleteAccessKey",
+      "iam:ListAccessKeys",
+      "iam:UpdateAccessKey"
+    ]
+    resources = ["arn:aws:iam::*:user/$${aws:username}"]
+  }
+  statement {
+    sid    = "AllowManageOwnSigningCertificates"
+    effect = "Allow"
+    actions = [
+      "iam:DeleteSigningCertificate",
+      "iam:ListSigningCertificates",
+      "iam:UpdateSigningCertificate",
+      "iam:UploadSigningCertificate"
+    ]
+    resources = ["arn:aws:iam::*:user/$${aws:username}"]
+  }
+  statement {
+    sid    = "AllowManageOwnSSHPublicKeys"
+    effect = "Allow"
+    actions = [
+      "iam:DeleteSSHPublicKey",
+      "iam:GetSSHPublicKey",
+      "iam:ListSSHPublicKeys",
+      "iam:UpdateSSHPublicKey",
+      "iam:UploadSSHPublicKey"
+    ]
+    resources = ["arn:aws:iam::*:user/$${aws:username}"]
+  }
+  statement {
+    sid    = "AllowManageOwnGitCredentials"
+    effect = "Allow"
+    actions = [
+      "iam:CreateServiceSpecificCredential",
+      "iam:DeleteServiceSpecificCredential",
+      "iam:ListServiceSpecificCredentials",
+      "iam:ResetServiceSpecificCredential",
+      "iam:UpdateServiceSpecificCredential"
+    ]
+    resources = ["arn:aws:iam::*:user/$${aws:username}"]
+  }
+  statement {
+    sid    = "AllowManageOwnVirtualMFADevice"
+    effect = "Allow"
+    actions = [
+      "iam:CreateVirtualMFADevice",
+      "iam:DeleteVirtualMFADevice"
+    ]
+    resources = ["arn:aws:iam::*:mfa/$${aws:username}"]
+  }
+  statement {
+    sid    = "AllowManageOwnUserMFA"
+    effect = "Allow"
+    actions = [
+      "iam:DeactivateMFADevice",
+      "iam:EnableMFADevice",
+      "iam:ListMFADevices",
+      "iam:ResyncMFADevice"
+    ]
+    resources = ["arn:aws:iam::*:user/$${aws:username}"]
+  }
+  statement {
+    sid    = "DenyAllExceptListedIfNoMFA"
+    effect = "Deny"
+    not_actions = [
+      "iam:CreateVirtualMFADevice",
+      "iam:EnableMFADevice",
+      "iam:GetUser",
+      "iam:ListMFADevices",
+      "iam:ListVirtualMFADevices",
+      "iam:ResyncMFADevice",
+      "sts:GetSessionToken",
+      "iam:ChangePassword"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "BoolIfExists"
+      variable = "aws:MultiFactorAuthPresent"
+      values   = ["false"]
+    }
+  }
+}
