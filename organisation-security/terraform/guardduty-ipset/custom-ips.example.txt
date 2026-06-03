@@ -1,0 +1,9 @@
+# Example custom IP ranges for GuardDuty IPSet
+# Add your trusted or internal IP ranges here, one CIDR per line
+#
+# Examples:
+# 203.0.113.0/24       # Corporate office network
+# 198.51.100.128/26    # VPN gateway
+# 192.0.2.0/24         # Partner integration IP
+
+# This file is optional - remove or rename if not needed

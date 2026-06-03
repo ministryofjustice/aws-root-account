@@ -1,0 +1,6 @@
+# Auto-generated files (GitHub Actions IP ranges)
+# These are regenerated on every terraform run
+github-actions-ranges.txt
+
+# Keep README.md tracked in git
+!README.md

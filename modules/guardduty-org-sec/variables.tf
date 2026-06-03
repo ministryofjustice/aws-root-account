@@ -42,6 +42,22 @@ variable "enable_threatintelset" {
   default     = false
 }
 
+variable "ipset_bucket" {
+  description = "GuardDuty IPSet bucket"
+  type        = string
+}
+
+variable "ipset_key" {
+  description = "GuardDuty IPSet key"
+  type        = string
+}
+
+variable "enable_ipset" {
+  description = "Whether to enable an IPSet for GuardDuty"
+  type        = bool
+  default     = false
+}
+
 variable "administrator_detector_id" {
   description = "Guardduty detector ID of the region administrator"
   type        = string

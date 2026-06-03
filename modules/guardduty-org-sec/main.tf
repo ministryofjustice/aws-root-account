@@ -84,3 +84,11 @@ resource "aws_guardduty_threatintelset" "default" {
   location    = "https://s3.amazonaws.com/${var.threatintelset_bucket}/${var.threatintelset_key}"
   name        = var.threatintelset_key
 }
+
+resource "aws_guardduty_ipset" "default" {
+  activate    = var.enable_ipset
+  detector_id = var.administrator_detector_id
+  format      = "TXT"
+  location    = "https://s3.amazonaws.com/${var.ipset_bucket}/${var.ipset_key}"
+  name        = var.ipset_key
+}
