@@ -152,4 +152,18 @@ locals {
       "arn:aws:s3:::${location}/*"
     ]
   ])
+
+  organizations_organization = data.terraform_remote_state.management_account.outputs.organizations_organization
+
+  moj_network_operations_centre_preproduction_account_id = coalesce([
+    for account in local.organizations_organization.accounts :
+    account.id
+    if account.name == "moj-network-operations-centre-preproduction"
+  ]...)
+
+  moj_network_operations_centre_production_account_id = coalesce([
+    for account in local.organizations_organization.accounts :
+    account.id
+    if account.name == "moj-network-operations-centre-production"
+  ]...)
 }
