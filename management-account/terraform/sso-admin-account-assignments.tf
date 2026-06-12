@@ -345,7 +345,7 @@ locals {
       ]
     },
     {
-      github_team        = "moj-official-techops-operator",
+      github_team        = "moj-official-techops-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
@@ -354,7 +354,7 @@ locals {
       ]
     },
     {
-      github_team        = "moj-official-techops-operator",
+      github_team        = "moj-official-techops-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
