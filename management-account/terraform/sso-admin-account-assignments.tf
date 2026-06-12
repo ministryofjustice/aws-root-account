@@ -356,7 +356,7 @@ locals {
     {
       github_team        = "moj-official-techops-engineers",
       permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
-      account_ids = [
+      account_ids = flatten([
         aws_organizations_account.moj_official_development.id,
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
@@ -365,9 +365,16 @@ locals {
         aws_organizations_account.moj_official_shared_services.id,
         aws_organizations_account.workplace_tech_proof_of_concept_development.id,
         aws_organizations_account.network_architecture.id,
-        local.moj_network_operations_centre_preproduction_account_id,
-        local.moj_network_operations_centre_production_account_id
-      ]
+        local.modernisation_platform_accounts.moj_network_operations_centre_preproduction_id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_production_id,
+      ])
+    },
+    {
+      github_team        = "moj-official-techops",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = flatten([
+        local.modernisation_platform_accounts.core_network_services_id,
+      ])
     },
     {
       github_team        = "eucs-idam-maintainers",
@@ -392,13 +399,6 @@ locals {
       account_ids = [
         aws_organizations_account.moj_official_shared_services.id,
       ]
-    },
-    {
-      github_team        = "moj-official-techops",
-      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = flatten([
-        local.modernisation_platform_accounts.core_network_services_id,
-      ])
     },
     {
       github_team        = "cloud-ops-alz-admins",
