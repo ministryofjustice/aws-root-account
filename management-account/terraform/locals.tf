@@ -76,6 +76,17 @@ locals {
       account_id
       if account_name == "testing-test"
     ]
+    moj_network_operations_centre_preproduction_id = [
+      for account_name, account_id in local.accounts.active_only :
+      account_id
+      if account_name == "moj-network-operations-centre-preproduction"
+    ]
+
+    moj_network_operations_centre_production_id = [
+      for account_name, account_id in local.accounts.active_only :
+      account_id
+      if account_name == "moj-network-operations-centre-production"
+    ]
   }
 
   root_account = merge(local.tags_business_units.platforms, {
