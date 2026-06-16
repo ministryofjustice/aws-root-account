@@ -303,7 +303,7 @@ locals {
       ]
     },
     {
-      github_team        = "nvvs-devops-admins",
+      github_team        = "network-automation-admins",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
@@ -311,6 +311,16 @@ locals {
         aws_organizations_account.moj_official_production.id,
         aws_organizations_account.moj_official_shared_services.id,
         aws_organizations_account.workplace_tech_proof_of_concept_development.id,
+      ]
+    },
+    {
+      github_team        = "network-automation-writers",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.moj_official_preproduction.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
       ]
     },
     {
@@ -411,16 +421,6 @@ locals {
       github_team        = "cloud-ops-alz-admins",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
-        aws_organizations_account.moj_official_preproduction.id,
-        aws_organizations_account.moj_official_production.id,
-        aws_organizations_account.moj_official_shared_services.id,
-      ]
-    },
-    {
-      github_team        = "nvvs-devops-writers",
-      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = [
-        aws_organizations_account.moj_official_development.id,
         aws_organizations_account.moj_official_preproduction.id,
         aws_organizations_account.moj_official_production.id,
         aws_organizations_account.moj_official_shared_services.id,
