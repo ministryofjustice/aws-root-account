@@ -1010,6 +1010,19 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     resources = ["*"]
   }
   statement {
+    sid    = "AllowPassAWSBackupServiceRole"
+    effect = "Allow"
+    actions = [
+      "iam:PassRole"
+    ]
+    resources = ["arn:aws:iam::${aws_organizations_account.laa_production.id}:role/service-role/AWSBackupDefaultServiceRole"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["backup.amazonaws.com"]
+    }
+  }
+  statement {
     sid    = "AllowKMSKeyUseForSnapshotCopy"
     effect = "Allow"
     actions = [
