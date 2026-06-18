@@ -770,6 +770,76 @@ data "aws_iam_policy_document" "techops_operator" {
 }
 
 #########################################
+# Network Automation permission sets #
+#########################################
+
+# Network Automation engineer
+# This role provides users with read-only access,
+# but with additional permissions to:
+# - create Route53 hosted zones and records
+# - create RDS snapshots and backups
+# - run CodePipelines
+# - access AWS Support
+
+resource "aws_ssoadmin_permission_set" "network_automation_engineer" {
+  name             = "network-automation-engineer"
+  description      = "Network Automation engineer access"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "network_automation_engineer_read_only" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_engineer.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "network_automation_engineer_support" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_engineer.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "network_automation_engineer" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.network_automation_engineer.json
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_engineer.arn
+}
+
+data "aws_iam_policy_document" "network_automation_engineer" {
+  statement {
+    sid    = "AllowNetworkAutomationActions"
+    effect = "Allow"
+
+    actions = [
+      "route53:CreateHostedZone",
+      "route53:ChangeResourceRecordSets",
+      "route53:GetChange",
+      "route53:ChangeTagsForResource",
+
+      "rds:CreateDBSnapshot",
+      "rds:CreateDBClusterSnapshot",
+      "rds:CopyDBSnapshot",
+      "rds:CopyDBClusterSnapshot",
+      "rds:AddTagsToResource",
+
+      "backup:StartBackupJob",
+      "backup:ListBackupVaults",
+      "backup:ListBackupPlans",
+
+      "codepipeline:StartPipelineExecution",
+      "codepipeline:StopPipelineExecution",
+      "codepipeline:RetryStageExecution",
+      "codepipeline:PutApprovalResult",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+
+#########################################
 # organisation-security permission sets #
 #########################################
 
