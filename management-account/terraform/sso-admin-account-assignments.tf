@@ -324,6 +324,18 @@ locals {
       ]
     },
     {
+      github_team        = "network-automation-engineers"
+      permission_set_arn = aws_ssoadmin_permission_set.network_automation_engineer.arn
+      account_ids = flatten([
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.moj_official_preproduction.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_preproduction_id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_production_id,
+      ])
+    },
+    {
       github_team        = "eucs-architects",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
