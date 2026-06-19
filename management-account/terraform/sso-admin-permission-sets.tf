@@ -993,6 +993,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "ec2:CreateImage",
       "ec2:RegisterImage",
       "ec2:ModifyImageAttribute",
+      "ec2:CopyImage",
       "ec2:CreateSnapshot",
       "ec2:CreateTags",
       "rds:CreateDBSnapshot",
@@ -1017,6 +1018,16 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "kms:CreateGrant"
     ]
     resources = ["arn:aws:kms:*:*:key/*"]
+  }
+    statement {
+    sid    = "AllowCloudWatchLogsExport"
+    effect = "Allow"
+    actions = [
+      "logs:CreateExportTask",
+      "logs:DescribeExportTasks",
+      "logs:CancelExportTask"
+    ]
+    resources = ["*"]
   }
   statement {
     sid    = "AllowPassAWSBackupServiceRole"
