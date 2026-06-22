@@ -982,7 +982,10 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "s3:PutObject",
     ]
     #tfsec:ignore:aws-iam-no-policy-wildcards
-    resources = ["*"]
+    not_resources = [
+      "arn:aws:s3:::laa-prod-cloudwatch-logs-backup",
+      "arn:aws:s3:::laa-prod-cloudwatch-logs-backup/*"
+    ]
   }
   statement {
     sid    = "AllowSnapshotCopy"
@@ -1025,7 +1028,9 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     actions = [
       "logs:CreateExportTask",
       "logs:DescribeExportTasks",
-      "logs:CancelExportTask"
+      "logs:CancelExportTask",
+      "logs:DescribeLogStreams",
+      "logs:DescribeLogGroups"
     ]
     resources = ["*"]
   }
@@ -1041,5 +1046,15 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       variable = "iam:PassedToService"
       values   = ["backup.amazonaws.com"]
     }
+  }
+  statement {
+    sid    = "AllowS3PutToCloudWatchBucket"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+  ]
+    resources = [
+      "arn:aws:s3:::laa-prod-cloudwatch-logs-backup/*"
+    ]
   }
 }
