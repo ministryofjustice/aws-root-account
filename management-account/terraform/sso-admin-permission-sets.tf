@@ -1036,7 +1036,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     ]
     resources = ["arn:aws:kms:*:*:key/*"]
   }
-    statement {
+  statement {
     sid    = "AllowCloudWatchLogsExport"
     effect = "Allow"
     actions = [
@@ -1066,7 +1066,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     effect = "Allow"
     actions = [
       "s3:PutObject"
-  ]
+    ]
     resources = [
       "arn:aws:s3:::laa-prod-cloudwatch-logs-backup/*"
     ]
