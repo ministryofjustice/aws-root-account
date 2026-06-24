@@ -1002,6 +1002,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "rds:CreateDBSnapshot",
       "rds:CopyDBSnapshot",
       "rds:ModifyDBSnapshotAttribute",
+      "rds:AddTagsToResource",
       "elasticfilesystem:Backup",
       "backup:ListRecoveryPoints",
       "backup:StartBackupJob",
