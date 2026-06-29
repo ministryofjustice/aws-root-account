@@ -80,6 +80,16 @@ data "aws_secretsmanager_secret_version" "github_app_private_key" {
   secret_id = aws_secretsmanager_secret.github_app_private_key.id
 }
 
+# GitHub App Private Key for the periodic GitHub team -> IAM Identity Center sync (v2 poller).
+# The value (PEM) is populated out-of-band when the GitHub App is created; no
+# secret_version is managed here, mirroring github_app_private_key above. The
+# consuming data source + module wiring are added once the value exists and the
+# moj-terraform-github-periodic-sync module has a tagged release.
+resource "aws_secretsmanager_secret" "github_periodic_sync_private_key" {
+  name        = "github_periodic_sync_private_key"
+  description = "GitHub App private key for the periodic GitHub team to IAM Identity Center sync"
+}
+
 # OIDC: Azure EntraID client ID and secrets
 resource "aws_secretsmanager_secret" "azure_entraid_oidc" {
   name        = "azure_entraid_oidc"
