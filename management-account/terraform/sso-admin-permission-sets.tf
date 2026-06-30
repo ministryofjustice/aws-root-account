@@ -1002,35 +1002,11 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "rds:CreateDBSnapshot",
       "rds:CopyDBSnapshot",
       "rds:ModifyDBSnapshotAttribute",
+      "rds:AddTagsToResource",
       "elasticfilesystem:Backup",
       "backup:ListRecoveryPoints",
       "backup:StartBackupJob",
       "backup:CopyRecoveryPoint"
-    ]
-    resources = ["*"]
-  }
-  statement {
-    sid    = "AllowKMSKeyUseForSnapshotCopy"
-    effect = "Allow"
-    actions = [
-      "kms:Decrypt",
-      "kms:Encrypt",
-      "kms:ReEncrypt*",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey",
-      "kms:CreateGrant"
-    ]
-    resources = ["arn:aws:kms:*:*:key/*"]
-  }
-    statement {
-    sid    = "AllowCloudWatchLogsExport"
-    effect = "Allow"
-    actions = [
-      "logs:CreateExportTask",
-      "logs:DescribeExportTasks",
-      "logs:CancelExportTask",
-      "logs:DescribeLogStreams",
-      "logs:DescribeLogGroups"
     ]
     resources = ["*"]
   }
@@ -1048,11 +1024,36 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     }
   }
   statement {
+    sid    = "AllowKMSKeyUseForSnapshotCopy"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "kms:Encrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+      "kms:CreateGrant"
+    ]
+    resources = ["arn:aws:kms:*:*:key/*"]
+  }
+  statement {
+    sid    = "AllowCloudWatchLogsExport"
+    effect = "Allow"
+    actions = [
+      "logs:CreateExportTask",
+      "logs:DescribeExportTasks",
+      "logs:CancelExportTask",
+      "logs:DescribeLogStreams",
+      "logs:DescribeLogGroups"
+    ]
+    resources = ["*"]
+  }
+  statement {
     sid    = "AllowS3PutToCloudWatchBucket"
     effect = "Allow"
     actions = [
       "s3:PutObject"
-  ]
+    ]
     resources = [
       "arn:aws:s3:::laa-prod-cloudwatch-logs-backup/*"
     ]
