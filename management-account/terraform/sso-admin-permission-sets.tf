@@ -1024,6 +1024,16 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     }
   }
   statement {
+    sid    = "AllowDeleteLAAFinalBackupDBSnapshots"
+    effect = "Allow"
+    actions = [
+      "rds:DeleteDBSnapshot"
+    ]
+    resources = [
+      "arn:aws:rds:eu-west-2:${aws_organizations_account.laa_production.id}:snapshot:lz-prod-rds-*-final-backup"
+    ]
+  }
+  statement {
     sid    = "AllowKMSKeyUseForSnapshotCopy"
     effect = "Allow"
     actions = [
