@@ -9,8 +9,8 @@ resource "aws_organizations_account" "justice_engineering_ai_services" {
     is-production          = true
     application            = "Justice Engineering AI Services"
     environment-name       = "justice-engineering-ai-landing-zone"
-    infrastructure-support = "Justice Engineering AI Services: modernisation-platform@digital.justice.gov.uk"
-    owner                  = "Justice Engineering AI Services: modernisation-platform@digital.justice.gov.uk"
+    infrastructure-support = "Justice Engineering AI Services: modernisation-platform+ai@digital.justice.gov.uk"
+    owner                  = "Justice Engineering AI Services: modernisation-platform+ai@digital.justice.gov.uk"
   })
 
   lifecycle {
