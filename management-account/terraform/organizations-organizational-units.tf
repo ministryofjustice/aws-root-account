@@ -249,3 +249,11 @@ resource "aws_organizations_organizational_unit" "technology_services" {
   tags      = {}
 }
 
+######################################
+# Modernisation Platform AI Services #
+######################################
+resource "aws_organizations_organizational_unit" "platforms_and_architecture_modernisation_platform_ai_services" {
+  name      = "Modernisation Platform AI Services"
+  parent_id = aws_organizations_organizational_unit.platforms_and_architecture.id
+  tags      = {}
+}
