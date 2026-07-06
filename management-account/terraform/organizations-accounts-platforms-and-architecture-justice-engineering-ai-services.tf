@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "justice_engineering_ai_services" {
   name                       = "Justice Engineering AI Services"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "modernisation-platform")
+  email                      = replace(local.aws_account_email_addresses_template, "{email}", "modernisation-platform+ai")
   iam_user_access_to_billing = "ALLOW"
   parent_id                  = aws_organizations_organizational_unit.platforms_and_architecture_justice_engineering_ai_services.id
   close_on_deletion          = true
@@ -22,4 +22,3 @@ resource "aws_organizations_account" "justice_engineering_ai_services" {
     ]
   }
 }
-
