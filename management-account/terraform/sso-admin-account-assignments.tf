@@ -271,7 +271,8 @@ locals {
       account_ids = [
         aws_organizations_account.modernisation_platform.id,
         aws_organizations_organization.default.master_account_id,
-        aws_organizations_account.organisation_security.id
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.justice_engineering_ai_services.id
       ]
     },
     {
@@ -279,6 +280,7 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.modernisation_platform.id,
+        aws_organizations_account.justice_engineering_ai_services.id
       ]
     },
     {
