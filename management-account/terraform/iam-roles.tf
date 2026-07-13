@@ -339,6 +339,12 @@ resource "aws_iam_role_policy_attachment" "container_platform_sso_administrator_
   policy_arn = aws_iam_policy.sso_administrator_policy.arn
 }
 
+resource "aws_iam_role_policy_attachment" "container_platform_sso_administrator" {
+  role       = aws_iam_role.container_platform_sso_administrator.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSSSOMemberAccountAdministrator"
+}
+
+
 #########################################
 # ContainerPlatformSSOReadOnly #
 #########################################
@@ -357,7 +363,7 @@ data "aws_iam_policy_document" "container_platform_sso_readonly" {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
 
-principals {
+    principals {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${local.accounts.active_only["cloud-platform-live"]}:root",
