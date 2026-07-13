@@ -309,3 +309,84 @@ resource "aws_iam_role_policy_attachment" "analytical_platform_identity_center" 
   role       = aws_iam_role.analytical_platform_identity_center.name
   policy_arn = aws_iam_policy.analytical_platform_identity_center.arn
 }
+
+#########################################
+# ContainerPlatformSSOAdministrator #
+#########################################
+resource "aws_iam_role" "container_platform_sso_administrator" {
+  name               = "ContainerPlatformSSOAdministrator"
+  assume_role_policy = data.aws_iam_policy_document.container_platform_sso_administrator.json
+}
+
+data "aws_iam_policy_document" "container_platform_sso_administrator" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${local.accounts.active_only["cloud-platform-live"]}:root",
+      ]
+    }
+  }
+}
+
+# Role policy attachments
+
+resource "aws_iam_role_policy_attachment" "container_platform_sso_administrator_custom" {
+  role       = aws_iam_role.container_platform_sso_administrator.name
+  policy_arn = aws_iam_policy.sso_administrator_policy.arn
+}
+
+#########################################
+# ContainerPlatformSSOReadOnly #
+#########################################
+resource "aws_iam_role" "container_platform_sso_readonly" {
+  name               = "ContainerPlatformSSOReadOnly"
+  assume_role_policy = data.aws_iam_policy_document.container_platform_sso_readonly.json
+}
+
+resource "aws_iam_policy" "container_platform_sso_readonly_additional" {
+  name   = "ContainerPlatformSSOReadOnlyAdditional"
+  policy = data.aws_iam_policy_document.container_platform_sso_readonly_additional.json
+}
+
+data "aws_iam_policy_document" "container_platform_sso_readonly" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${local.accounts.active_only["cloud-platform-live"]}:root",
+      ]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "container_platform_sso_readonly_additional" {
+  statement {
+    effect  = "Allow"
+    actions = ["identitystore:Get*"]
+
+    resources = ["arn:aws:identitystore::${data.aws_caller_identity.current.account_id}:identitystore/*"]
+  }
+}
+
+# Role policy attachments
+resource "aws_iam_role_policy_attachment" "container_platform_sso_readonly" {
+  role       = aws_iam_role.container_platform_sso_readonly.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSSSOReadOnly"
+}
+
+resource "aws_iam_role_policy_attachment" "container_platform_ssodirectory_readonly" {
+  role       = aws_iam_role.container_platform_sso_readonly.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSSSODirectoryReadOnly"
+}
+
+resource "aws_iam_role_policy_attachment" "container_platform_ssodirectory_readonly_additional" {
+  role       = aws_iam_role.container_platform_sso_readonly.name
+  policy_arn = aws_iam_policy.container_platform_sso_readonly_additional.arn
+}

@@ -249,3 +249,11 @@ resource "aws_organizations_organizational_unit" "technology_services" {
   tags      = {}
 }
 
+###################################
+# Justice Engineering AI Services #
+###################################
+resource "aws_organizations_organizational_unit" "platforms_and_architecture_justice_engineering_ai_services" {
+  name      = "Justice Engineering AI Services"
+  parent_id = aws_organizations_organizational_unit.platforms_and_architecture.id
+  tags      = {}
+}

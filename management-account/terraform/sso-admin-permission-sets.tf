@@ -832,6 +832,8 @@ data "aws_iam_policy_document" "network_automation_engineer" {
       "codepipeline:StopPipelineExecution",
       "codepipeline:RetryStageExecution",
       "codepipeline:PutApprovalResult",
+
+      "securityhub:BatchUpdateFindings",
     ]
 
     resources = ["*"]
