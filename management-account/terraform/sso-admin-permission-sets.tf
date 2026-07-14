@@ -1036,6 +1036,16 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     ]
   }
   statement {
+    sid    = "AllowLZDefaultVaultAccessPolicyUpdate"
+    effect = "Allow"
+    actions = [
+      "backup:PutBackupVaultAccessPolicy"
+    ]
+    resources = [
+      "arn:aws:backup:eu-west-2:${aws_organizations_account.laa_production.id}:backup-vault:Default"
+    ]
+  }
+  statement {
     sid    = "AllowKMSKeyUseForSnapshotCopy"
     effect = "Allow"
     actions = [
