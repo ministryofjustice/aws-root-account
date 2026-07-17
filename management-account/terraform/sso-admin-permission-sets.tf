@@ -1094,6 +1094,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "elasticfilesystem:Backup",
       "backup:ListRecoveryPoints",
       "backup:StartBackupJob",
+      "backup:StartCopyJob",
       "backup:CopyRecoveryPoint"
     ]
     resources = ["*"]
