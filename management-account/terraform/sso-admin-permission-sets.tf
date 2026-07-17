@@ -769,9 +769,9 @@ data "aws_iam_policy_document" "techops_operator" {
   }
 }
 
-#########################################
-# Network Automation permission sets #
-#########################################
+###############################################
+# Network Automation Engineer permission sets #
+###############################################
 
 # Network Automation engineer
 # This role provides users with read-only access,
@@ -780,6 +780,7 @@ data "aws_iam_policy_document" "techops_operator" {
 # - create RDS snapshots and backups
 # - run CodePipelines
 # - access AWS Support
+# - security Hub triage
 
 resource "aws_ssoadmin_permission_set" "network_automation_engineer" {
   name             = "network-automation-engineer"
@@ -834,6 +835,91 @@ data "aws_iam_policy_document" "network_automation_engineer" {
       "codepipeline:PutApprovalResult",
 
       "securityhub:BatchUpdateFindings",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+#######################################################
+# Network Automation Support Operator permission sets #
+#######################################################
+
+# Network Automation Support Operator
+# This role provides users with read-only access,
+# but with additional permissions to:
+# - launch temporary EC2 instances
+# - SSM Session Manager
+# - run CodePipelines
+# - access AWS Support
+# - AWS Cloudshell
+# - manage secrets
+# - S3 access
+
+resource "aws_ssoadmin_permission_set" "network_automation_support_operator" {
+  name             = "network-automation-support"
+  description      = "Network Automation operational support and troubleshooting access"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "network_automation_support_operator_read_only" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_support_operator.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "network_automation_support_operator_support" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_support_operator.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "network_automation_support_operator" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.network_automation_support_operator.json
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_support_operator.arn
+}
+
+data "aws_iam_policy_document" "network_automation_support_operator" {
+  statement {
+    sid    = "AllowSupportAndTroubleshootingActions"
+    effect = "Allow"
+
+    actions = [
+      "codepipeline:StartPipelineExecution",
+      "codepipeline:StopPipelineExecution",
+      "codepipeline:RetryStageExecution",
+      "codepipeline:PutApprovalResult",
+
+      "ec2:RunInstances",
+      "ec2:StartInstances",
+      "ec2:StopInstances",
+      "ec2:RebootInstances",
+      "ec2:TerminateInstances",
+      "ec2:CreateTags",
+
+      "ssm:StartSession",
+      "ssm:ResumeSession",
+      "ssm:TerminateSession",
+      "ssm:DescribeSessions",
+      "ssm:GetConnectionStatus",
+
+      "cloudshell:CreateSession",
+      "cloudshell:StartEnvironment",
+      "cloudshell:GetEnvironmentStatus",
+      "cloudshell:DescribeEnvironments",
+      "cloudshell:DeleteEnvironment",
+
+      "secretsmanager:CreateSecret",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:UpdateSecret",
+
+      "s3:GetObject",
+      "s3:GetObjectVersion",
     ]
 
     resources = ["*"]
