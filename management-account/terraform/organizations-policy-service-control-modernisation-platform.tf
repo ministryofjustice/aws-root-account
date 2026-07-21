@@ -281,7 +281,7 @@ resource "aws_organizations_policy_attachment" "mp_protect_core_s3_buckets" {
 
 data "aws_iam_policy_document" "mp_protect_secure_baselines" {
   statement {
-    sid    = "DenyDeleteSecureBaselinesResources"
+    sid    = "DenyDestructiveChangesToSecureBaselinesResources"
     effect = "Deny"
     actions = [
       "accessanalyzer:Delete*",
@@ -329,11 +329,87 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       ])
     }
   }
+
+  # Allow trusted platform automation to update baseline configuration while denying other principals
+  statement {
+    sid    = "DenyModificationOfSecureBaselinesResources"
+    effect = "Deny"
+    actions = [
+      "config:PutConfigurationRecorder",
+      "guardduty:UpdateDetector"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/component"
+      values   = ["secure-baselines"]
+    }
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalAccount"
+      values = flatten([
+        local.modernisation_platform_accounts.testing_test
+      ])
+    }
+  }
+
+  # Prevent removal or replacement of the tag used to identify protected resources
+  statement {
+    sid    = "DenyChangingSecureBaselinesComponentTag"
+    effect = "Deny"
+    actions = [
+      "config:TagResource",
+      "config:UntagResource",
+      "guardduty:TagResource",
+      "guardduty:UntagResource"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/component"
+      values   = ["secure-baselines"]
+    }
+
+    condition {
+      test     = "ForAnyValue:StringEquals"
+      variable = "aws:TagKeys"
+      values   = ["component"]
+    }
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalAccount"
+      values = flatten([
+        local.modernisation_platform_accounts.testing_test
+      ])
+    }
+  }
 }
 
 resource "aws_organizations_policy" "mp_protect_secure_baselines" {
   name        = "Modernisation Platform Protect Secure Baselines"
-  description = "Deny deletion or disabling of secure-baselines tagged resources in Modernisation Platform accounts, except AWSReservedSSO_AdministratorAccess roles."
+  description = "Deny destructive changes to secure-baselines tagged resources and restrict configuration or tag modifications to trusted platform automation and AWSReservedSSO_AdministratorAccess roles."
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
