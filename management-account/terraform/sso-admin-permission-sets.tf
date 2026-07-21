@@ -905,6 +905,7 @@ data "aws_iam_policy_document" "network_automation_support_operator" {
       "ssm:TerminateSession",
       "ssm:DescribeSessions",
       "ssm:GetConnectionStatus",
+      "ssm:PutParameter",
 
       "cloudshell:CreateSession",
       "cloudshell:StartEnvironment",
