@@ -188,9 +188,6 @@ locals {
     "arn:aws:s3:::modernisation-platform-logs-cloudtrail",
     "arn:aws:s3:::modernisation-platform-logs-cloudtrail-replication",
 
-    "arn:aws:s3:::modernisation-platform-logs-cloudtrail-logging",
-    "arn:aws:s3:::modernisation-platform-logs-cloudtrail-logging-replication",
-
     "arn:aws:s3:::modernisation-platform-logs-config",
     "arn:aws:s3:::modernisation-platform-logs-config-replication",
 
