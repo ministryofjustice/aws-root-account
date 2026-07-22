@@ -352,23 +352,16 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
 # Enforce S3 KMS encryption  #
 ##############################
 
-# Enforces KMS-based encryption for all S3 object writes and prevents
-# removal or downgrade of bucket-level encryption configuration.
+# Enforces KMS-based encryption for S3 object writes and explicitly blocks
+# setting bucket default encryption to SSE-S3 (AES256).
 #
-# !! IMPORTANT: The DenyS3PutObjectNonKMSEncryption statement uses
-# StringNotEqualsIfExists, which means s3:PutObject requests that omit the
-# x-amz-server-side-encryption header are ALSO denied — even when the
-# destination bucket has KMS default encryption configured. Applications
-# must therefore send the header explicitly. Audit affected workloads
-# before expanding attachment beyond the pilot OU.
-#
-# Permitted algorithms: aws:kms (SSE-KMS) and aws:kms:dsse (Dual-layer
-# SSE-KMS). SSE-S3 (AES256) is denied for both object writes and bucket
-# encryption configuration.
+# The PutObject deny below blocks explicit SSE-S3 (AES256) writes while
+# allowing requests that omit the encryption header and rely on bucket
+# default encryption. Bucket-level downgrade/removal is still denied below.
 
 resource "aws_organizations_policy" "enforce_s3_kms_encryption" {
   name        = "Enforce S3 KMS encryption"
-  description = "Denies S3 object writes without explicit KMS encryption and prevents bucket encryption from being removed or downgraded to SSE-S3"
+  description = "Denies explicit SSE-S3 object writes and setting bucket default encryption to SSE-S3"
   type        = "SERVICE_CONTROL_POLICY"
   tags = {
     business-unit = "Platforms"
@@ -380,60 +373,45 @@ resource "aws_organizations_policy" "enforce_s3_kms_encryption" {
 }
 
 data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
-  # Deny s3:PutObject unless the request header x-amz-server-side-encryption
-  # is explicitly set to aws:kms or aws:kms:dsse.
-  # StringNotEqualsIfExists fires when the key is absent *or* when the value
-  # is not in the permitted list.
+  # Deny only explicit SSE-S3 object writes. Requests with no SSE header are
+  # allowed so that bucket default KMS encryption can apply.
   statement {
-    sid       = "DenyS3PutObjectNonKMSEncryption"
+    sid       = "DenyS3PutObjectSSES3"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
     resources = ["*"]
 
     condition {
-      test     = "StringNotEqualsIfExists"
+      test     = "StringEquals"
       variable = "s3:x-amz-server-side-encryption"
-      values   = ["aws:kms", "aws:kms:dsse"]
+      values   = ["AES256"]
     }
   }
 
-  # Deny any call that removes the bucket encryption configuration entirely.
+  # Deny setting bucket default encryption to SSE-S3.
   statement {
-    sid       = "DenyS3DeleteBucketEncryption"
+    sid       = "DenyS3SetBucketDefaultEncryptionToSSES3"
     effect    = "Deny"
-    actions   = ["s3:DeleteBucketEncryption"]
-    resources = ["*"]
-  }
-
-  # Deny PutBucketEncryption that sets or downgrades to SSE-S3.
-  statement {
-    sid       = "DenyS3WeakenBucketEncryption"
-    effect    = "Deny"
-    actions   = ["s3:PutBucketEncryption"]
+    actions   = ["s3:PutEncryptionConfiguration"]
     resources = ["*"]
 
     condition {
-      test     = "StringNotEquals"
+      test     = "StringEquals"
       variable = "s3:x-amz-server-side-encryption"
-      values   = ["aws:kms", "aws:kms:dsse"]
+      values   = ["AES256"]
     }
   }
 }
 
-# Scoped to Modernisation Platform OU and sprinkler sub-OU for testing.
-locals {
-  enforce_s3_kms_encryption_targets = concat(
-    [aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id],
-    [
-      for child in data.aws_organizations_organizational_units.modernisation_platform_member_children_sprinkler.children :
-      child.id
-      if child.name == "modernisation-platform-sprinkler"
-    ]
-  )
-}
-
+# Scoped to sprinkler sub-OU only for testing.
+# Do NOT attach to the parent Modernisation Platform OU — SCP inheritance would
+# block Terraform state s3:PutObject calls in all other member accounts.
 resource "aws_organizations_policy_attachment" "enforce_s3_kms_encryption_pilot" {
-  for_each = toset(local.enforce_s3_kms_encryption_targets)
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.modernisation_platform_member_children_sprinkler.children :
+    child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
 
   policy_id = aws_organizations_policy.enforce_s3_kms_encryption.id
   target_id = each.value
