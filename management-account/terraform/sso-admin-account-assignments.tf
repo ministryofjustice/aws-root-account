@@ -48,14 +48,6 @@ locals {
     },
     {
       github_team        = "operations-engineering",
-      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
-      account_ids = [
-        aws_organizations_account.moj_digital_services.id,
-        aws_organizations_account.tacticalproducts.id,
-      ]
-    },
-    {
-      github_team        = "operations-engineering",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
         aws_organizations_account.moj_digital_services.id,
@@ -210,6 +202,30 @@ locals {
       ]
     },
     {
+      github_team        = "azure-aws-sso-jdsoc",
+      permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
+      account_ids = [
+        aws_organizations_organization.default.master_account_id,
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.cloud_platform.id
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-jdsoc",
+      permission_set_arn = aws_ssoadmin_permission_set.view_only_access.arn,
+      account_ids = [
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.cloud_platform.id
+      ]
+    },
+    {
+      github_team        = "azure-aws-sso-jdsoc",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = [
+        aws_organizations_account.organisation_security.id,
+      ]
+    },
+    {
       github_team        = "organisation-security-auditor",
       permission_set_arn = aws_ssoadmin_permission_set.security_audit.arn,
       account_ids = [
@@ -255,7 +271,8 @@ locals {
       account_ids = [
         aws_organizations_account.modernisation_platform.id,
         aws_organizations_organization.default.master_account_id,
-        aws_organizations_account.organisation_security.id
+        aws_organizations_account.organisation_security.id,
+        aws_organizations_account.justice_engineering_ai_services.id
       ]
     },
     {
@@ -263,6 +280,7 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.modernisation_platform.id,
+        aws_organizations_account.justice_engineering_ai_services.id
       ]
     },
     {
@@ -287,7 +305,7 @@ locals {
       ]
     },
     {
-      github_team        = "nvvs-devops-admins",
+      github_team        = "network-automation-admins",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.moj_official_development.id,
@@ -298,12 +316,38 @@ locals {
       ]
     },
     {
-      github_team        = "eucs-architects",
-      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      github_team        = "network-automation-readonly",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
-        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
-        aws_organizations_account.moj_official_public_key_infrastructure.id,
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.moj_official_preproduction.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
       ]
+    },
+    {
+      github_team        = "network-automation-engineers"
+      permission_set_arn = aws_ssoadmin_permission_set.network_automation_engineer.arn
+      account_ids = flatten([
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.moj_official_preproduction.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_preproduction_id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_production_id,
+      ])
+    },
+    {
+      github_team        = "network-automation-support-operator"
+      permission_set_arn = aws_ssoadmin_permission_set.network_automation_support_operator.arn
+      account_ids = flatten([
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.moj_official_preproduction.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_shared_services.id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_preproduction_id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_production_id,
+      ])
     },
     {
       github_team        = "moj-official-techops",
@@ -326,6 +370,46 @@ locals {
         aws_organizations_account.moj_official_shared_services.id,
         aws_organizations_account.workplace_tech_proof_of_concept_development.id,
         aws_organizations_account.network_architecture.id,
+      ]
+    },
+    {
+      github_team        = "moj-official-techops-engineers",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.workplace_tech_proof_of_concept_development.id,
+        aws_organizations_account.network_architecture.id
+      ]
+    },
+    {
+      github_team        = "moj-official-techops-engineers",
+      permission_set_arn = aws_ssoadmin_permission_set.techops_operator.arn,
+      account_ids = flatten([
+        aws_organizations_account.moj_official_development.id,
+        aws_organizations_account.moj_official_preproduction.id,
+        aws_organizations_account.moj_official_production.id,
+        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
+        aws_organizations_account.moj_official_public_key_infrastructure.id,
+        aws_organizations_account.moj_official_shared_services.id,
+        aws_organizations_account.workplace_tech_proof_of_concept_development.id,
+        aws_organizations_account.network_architecture.id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_preproduction_id,
+        local.modernisation_platform_accounts.moj_network_operations_centre_production_id,
+      ])
+    },
+    {
+      github_team        = "moj-official-techops",
+      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
+      account_ids = flatten([
+        local.modernisation_platform_accounts.core_network_services_id,
+      ])
+    },
+    {
+      github_team        = "eucs-architects",
+      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
+      account_ids = [
+        aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
+        aws_organizations_account.moj_official_public_key_infrastructure.id,
       ]
     },
     {
@@ -353,13 +437,6 @@ locals {
       ]
     },
     {
-      github_team        = "moj-official-techops",
-      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = flatten([
-        local.modernisation_platform_accounts.core_network_services_id,
-      ])
-    },
-    {
       github_team        = "cloud-ops-alz-admins",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
@@ -376,16 +453,6 @@ locals {
       ]
     },
     {
-      github_team        = "nvvs-devops-writers",
-      permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
-      account_ids = [
-        aws_organizations_account.moj_official_development.id,
-        aws_organizations_account.moj_official_preproduction.id,
-        aws_organizations_account.moj_official_production.id,
-        aws_organizations_account.moj_official_shared_services.id,
-      ]
-    },
-    {
       github_team        = "moj-eucs-identity",
       permission_set_arn = aws_ssoadmin_permission_set.read_only_access.arn,
       account_ids = [
@@ -394,13 +461,6 @@ locals {
         aws_organizations_account.moj_official_production.id,
         aws_organizations_account.moj_official_public_key_infrastructure_dev.id,
         aws_organizations_account.moj_official_public_key_infrastructure.id,
-        aws_organizations_account.moj_official_shared_services.id,
-      ]
-    },
-    {
-      github_team        = "moj-official-sharedservices-noc",
-      permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
-      account_ids = [
         aws_organizations_account.moj_official_shared_services.id,
       ]
     },
@@ -512,6 +572,7 @@ locals {
         aws_organizations_account.modernisation_platform.id,
         aws_organizations_organization.default.master_account_id,
         aws_organizations_account.organisation_security.id,
+        aws_organizations_account.justice_engineering_ai_services.id,
       ]
     },
     {
@@ -519,6 +580,7 @@ locals {
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
         aws_organizations_account.modernisation_platform.id,
+        aws_organizations_account.justice_engineering_ai_services.id,
       ]
     },
     {

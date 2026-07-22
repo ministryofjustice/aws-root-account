@@ -8,7 +8,7 @@ It provides shared services, centralized governance, and foundational security f
 This repository manages the following AWS accounts:
 
 - The Management Account (`MOJ Master` also referred to as `AWS Root Account`)
-- Supporting organizational accounts (`organisation-security`, `organisation-logging (to be added)`)
+- Supporting organizational accounts (`organisation-security`)
 - Lifecycle management of accounts that are not provided by the Modernisation Platform
 
 This repository also manages the following services:

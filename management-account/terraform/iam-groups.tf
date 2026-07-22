@@ -31,6 +31,11 @@ resource "aws_iam_group_policy_attachment" "aws_organisations_admin_custom" {
   policy_arn = aws_iam_policy.aws_organisations_admin.arn
 }
 
+resource "aws_iam_group_policy_attachment" "aws_organisations_admin_enforce_mfa" {
+  group      = aws_iam_group.aws_organisations_admin.name
+  policy_arn = aws_iam_policy.enforce_mfa_use_policy.arn
+}
+
 ################################
 # AWSOrganisationsListReadOnly #
 ################################
@@ -59,6 +64,11 @@ resource "aws_iam_group_policy_attachment" "billing_full_access" {
   policy_arn = aws_iam_policy.billing_full_access.arn
 }
 
+resource "aws_iam_group_policy_attachment" "billing_enforce_mfa" {
+  group      = aws_iam_group.billing_full_access.name
+  policy_arn = aws_iam_policy.enforce_mfa_use_policy.arn
+}
+
 #########################
 # IAMUserChangePassword #
 #########################
@@ -85,4 +95,9 @@ resource "aws_iam_group" "modernisation_platform_organisation_management" {
 resource "aws_iam_group_policy_attachment" "modernisation_platform_organisation_management" {
   group      = aws_iam_group.modernisation_platform_organisation_management.name
   policy_arn = aws_iam_policy.terraform_organisation_management_policy.arn
+}
+
+resource "aws_iam_group_policy_attachment" "modernisation_platform_organisation_enforce_mfa" {
+  group      = aws_iam_group.modernisation_platform_organisation_management.name
+  policy_arn = aws_iam_policy.enforce_mfa_use_policy.arn
 }

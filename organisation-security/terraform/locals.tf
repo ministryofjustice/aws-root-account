@@ -161,19 +161,6 @@ locals {
     if ou.name == "Technology Services"
   ]...)
 
-  # ous for license manager
-  ou_example  = coalesce([for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children : ou.id if ou.name == "modernisation-platform-example"]...)
-  ou_ccms_ebs = coalesce([for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children : ou.id if ou.name == "modernisation-platform-ccms-ebs"]...)
-  ou_oasys    = coalesce([for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children : ou.id if ou.name == "modernisation-platform-oasys"]...)
-
-  license_mamager_ous = [
-    local.ou_example,
-    local.ou_ccms_ebs,
-    local.ou_oasys
-  ]
-  license_manager_ous_string = join(",", local.license_mamager_ous)
-
-
   # modernisation_platform_member_ous = [
   #   for ou in data.aws_organizations_organizational_units.modernisation_platform_member.children :
   #   ou.id

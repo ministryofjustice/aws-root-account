@@ -769,6 +769,165 @@ data "aws_iam_policy_document" "techops_operator" {
   }
 }
 
+###############################################
+# Network Automation Engineer permission sets #
+###############################################
+
+# Network Automation engineer
+# This role provides users with read-only access,
+# but with additional permissions to:
+# - create Route53 hosted zones and records
+# - create RDS snapshots and backups
+# - run CodePipelines
+# - access AWS Support
+# - security Hub triage
+
+resource "aws_ssoadmin_permission_set" "network_automation_engineer" {
+  name             = "network-automation-engineer"
+  description      = "Network Automation engineer access"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "network_automation_engineer_read_only" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_engineer.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "network_automation_engineer_support" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_engineer.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "network_automation_engineer" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.network_automation_engineer.json
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_engineer.arn
+}
+
+data "aws_iam_policy_document" "network_automation_engineer" {
+  statement {
+    sid    = "AllowNetworkAutomationActions"
+    effect = "Allow"
+
+    actions = [
+      "route53:CreateHostedZone",
+      "route53:ChangeResourceRecordSets",
+      "route53:GetChange",
+      "route53:ChangeTagsForResource",
+
+      "rds:CreateDBSnapshot",
+      "rds:CreateDBClusterSnapshot",
+      "rds:CopyDBSnapshot",
+      "rds:CopyDBClusterSnapshot",
+      "rds:AddTagsToResource",
+
+      "backup:StartBackupJob",
+      "backup:ListBackupVaults",
+      "backup:ListBackupPlans",
+
+      "codepipeline:StartPipelineExecution",
+      "codepipeline:StopPipelineExecution",
+      "codepipeline:RetryStageExecution",
+      "codepipeline:PutApprovalResult",
+
+      "securityhub:BatchUpdateFindings",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+#######################################################
+# Network Automation Support Operator permission sets #
+#######################################################
+
+# Network Automation Support Operator
+# This role provides users with read-only access,
+# but with additional permissions to:
+# - launch temporary EC2 instances
+# - SSM Session Manager
+# - run CodePipelines
+# - access AWS Support
+# - AWS Cloudshell
+# - manage secrets
+# - S3 access
+
+resource "aws_ssoadmin_permission_set" "network_automation_support_operator" {
+  name             = "network-automation-support"
+  description      = "Network Automation operational support and troubleshooting access"
+  instance_arn     = local.sso_admin_instance_arn
+  session_duration = "PT8H"
+  tags             = {}
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "network_automation_support_operator_read_only" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_support_operator.arn
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "network_automation_support_operator_support" {
+  instance_arn       = local.sso_admin_instance_arn
+  managed_policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_support_operator.arn
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "network_automation_support_operator" {
+  instance_arn       = local.sso_admin_instance_arn
+  inline_policy      = data.aws_iam_policy_document.network_automation_support_operator.json
+  permission_set_arn = aws_ssoadmin_permission_set.network_automation_support_operator.arn
+}
+
+data "aws_iam_policy_document" "network_automation_support_operator" {
+  statement {
+    sid    = "AllowSupportAndTroubleshootingActions"
+    effect = "Allow"
+
+    actions = [
+      "codepipeline:StartPipelineExecution",
+      "codepipeline:StopPipelineExecution",
+      "codepipeline:RetryStageExecution",
+      "codepipeline:PutApprovalResult",
+
+      "ec2:RunInstances",
+      "ec2:StartInstances",
+      "ec2:StopInstances",
+      "ec2:RebootInstances",
+      "ec2:TerminateInstances",
+      "ec2:CreateTags",
+
+      "ssm:StartSession",
+      "ssm:ResumeSession",
+      "ssm:TerminateSession",
+      "ssm:DescribeSessions",
+      "ssm:GetConnectionStatus",
+      "ssm:PutParameter",
+
+      "cloudshell:CreateSession",
+      "cloudshell:StartEnvironment",
+      "cloudshell:GetEnvironmentStatus",
+      "cloudshell:DescribeEnvironments",
+      "cloudshell:DeleteEnvironment",
+
+      "secretsmanager:CreateSecret",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:UpdateSecret",
+
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+
 #########################################
 # organisation-security permission sets #
 #########################################
@@ -912,7 +1071,10 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "s3:PutObject",
     ]
     #tfsec:ignore:aws-iam-no-policy-wildcards
-    resources = ["*"]
+    not_resources = [
+      "arn:aws:s3:::laa-prod-cloudwatch-logs-backup",
+      "arn:aws:s3:::laa-prod-cloudwatch-logs-backup/*"
+    ]
   }
   statement {
     sid    = "AllowSnapshotCopy"
@@ -923,14 +1085,53 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "ec2:CreateImage",
       "ec2:RegisterImage",
       "ec2:ModifyImageAttribute",
+      "ec2:CopyImage",
       "ec2:CreateSnapshot",
       "ec2:CreateTags",
+      "rds:CreateDBSnapshot",
       "rds:CopyDBSnapshot",
       "rds:ModifyDBSnapshotAttribute",
+      "rds:AddTagsToResource",
+      "elasticfilesystem:Backup",
       "backup:ListRecoveryPoints",
+      "backup:StartBackupJob",
+      "backup:StartCopyJob",
       "backup:CopyRecoveryPoint"
     ]
     resources = ["*"]
+  }
+  statement {
+    sid    = "AllowPassAWSBackupServiceRole"
+    effect = "Allow"
+    actions = [
+      "iam:PassRole"
+    ]
+    resources = ["arn:aws:iam::${aws_organizations_account.laa_production.id}:role/service-role/AWSBackupDefaultServiceRole"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["backup.amazonaws.com"]
+    }
+  }
+  statement {
+    sid    = "AllowDeleteLAAFinalBackupDBSnapshots"
+    effect = "Allow"
+    actions = [
+      "rds:DeleteDBSnapshot"
+    ]
+    resources = [
+      "arn:aws:rds:eu-west-2:${aws_organizations_account.laa_production.id}:snapshot:lz-prod-rds-*-final-backup"
+    ]
+  }
+  statement {
+    sid    = "AllowLZDefaultVaultAccessPolicyUpdate"
+    effect = "Allow"
+    actions = [
+      "backup:PutBackupVaultAccessPolicy"
+    ]
+    resources = [
+      "arn:aws:backup:eu-west-2:${aws_organizations_account.laa_production.id}:backup-vault:Default"
+    ]
   }
   statement {
     sid    = "AllowKMSKeyUseForSnapshotCopy"
@@ -944,5 +1145,27 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "kms:CreateGrant"
     ]
     resources = ["arn:aws:kms:*:*:key/*"]
+  }
+  statement {
+    sid    = "AllowCloudWatchLogsExport"
+    effect = "Allow"
+    actions = [
+      "logs:CreateExportTask",
+      "logs:DescribeExportTasks",
+      "logs:CancelExportTask",
+      "logs:DescribeLogStreams",
+      "logs:DescribeLogGroups"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowS3PutToCloudWatchBucket"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::laa-prod-cloudwatch-logs-backup/*"
+    ]
   }
 }
