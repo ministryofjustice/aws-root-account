@@ -494,11 +494,14 @@ data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
 }
 
 # Scoped to sprinkler sub-OU only for testing.
+# "modernisation-platform-sprinkler" is nested under "Modernisation Platform
+# Member", not a direct child of the Modernisation Platform OU, so this must
+# use mp_member_children (not platforms_and_architecture_modernisation_platform_children).
 # Do NOT attach to the parent Modernisation Platform OU — SCP inheritance would
 # block Terraform state s3:PutObject calls in all other member accounts.
 resource "aws_organizations_policy_attachment" "enforce_s3_kms_encryption_pilot" {
   for_each = toset([
-    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
     if child.name == "modernisation-platform-sprinkler"
   ])
 
