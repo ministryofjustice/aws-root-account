@@ -131,6 +131,7 @@ data "aws_iam_policy_document" "modernisation_platform_sso_administrator" {
       type = "AWS"
       identifiers = [
         "arn:aws:iam::${aws_organizations_account.modernisation_platform.id}:root",
+        "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.core_shared_services_id...)}:root",
         "arn:aws:iam::${coalesce(local.modernisation_platform_accounts.sprinkler_id...)}:role/github-actions"
       ]
     }
