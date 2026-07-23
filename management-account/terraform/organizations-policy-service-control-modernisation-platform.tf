@@ -379,6 +379,19 @@ data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
     sid       = "DenyS3PutObjectSSES3"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
+###############################################################
+# Protect critical security services from modification
+# Sprinkler OU scope for testing
+###############################################################
+
+data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
+  statement {
+    sid    = "DenyModificationOfSecureBaselinesResources"
+    effect = "Deny"
+    actions = [
+      "config:PutConfigurationRecorder",
+      "guardduty:UpdateDetector"
+    ]
     resources = ["*"]
 
     condition {
@@ -567,5 +580,75 @@ resource "aws_organizations_policy_attachment" "deny_cloudtrail_delete_stop_upda
   ])
 
   policy_id = aws_organizations_policy.deny_cloudtrail_delete_stop_update_sprinkler.id
+      variable = "aws:ResourceTag/component"
+      values   = ["secure-baselines"]
+    }
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+  }
+
+  statement {
+    sid    = "DenyChangingSecureBaselinesComponentTag"
+    effect = "Deny"
+    actions = [
+      "config:TagResource",
+      "config:UntagResource",
+      "guardduty:TagResource",
+      "guardduty:UntagResource"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/component"
+      values   = ["secure-baselines"]
+    }
+
+    condition {
+      test     = "ForAnyValue:StringEquals"
+      variable = "aws:TagKeys"
+      values   = ["component"]
+    }
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+  }
+}
+
+resource "aws_organizations_policy" "mp_protect_security_services_pilot" {
+  name        = "Modernisation Platform Protect Security Services Pilot"
+  description = "Pilot protection against modification of secure-baselines AWS Config and GuardDuty resources in the Sprinkler OU."
+  type        = "SERVICE_CONTROL_POLICY"
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
+  }
+
+  content = data.aws_iam_policy_document.mp_protect_security_services_pilot.json
+}
+
+# Attach the pilot SCP to the Sprinkler OU only for testing before wider MP OU enforcement
+resource "aws_organizations_policy_attachment" "mp_protect_security_services_pilot" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
+
+  policy_id = aws_organizations_policy.mp_protect_security_services_pilot.id
   target_id = each.value
 }
