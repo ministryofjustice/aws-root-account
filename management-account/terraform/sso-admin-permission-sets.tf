@@ -1035,7 +1035,7 @@ data "aws_iam_policy_document" "laa_lz_s3_read_access" {
       "kms:DescribeKey"
     ]
     resources = [
-      "arn:aws:kms:eu-west-2:${aws_organizations_account.laa_production.id}:alias/s3"
+      "arn:aws:kms:eu-west-2:*:alias/s3"
     ]
   }
 }
@@ -1106,7 +1106,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
     actions = [
       "iam:PassRole"
     ]
-    resources = ["arn:aws:iam::${aws_organizations_account.laa_production.id}:role/service-role/AWSBackupDefaultServiceRole"]
+    resources = ["arn:aws:iam::*:role/service-role/AWSBackupDefaultServiceRole"]
     condition {
       test     = "StringEquals"
       variable = "iam:PassedToService"
@@ -1120,7 +1120,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "rds:DeleteDBSnapshot"
     ]
     resources = [
-      "arn:aws:rds:eu-west-2:${aws_organizations_account.laa_production.id}:snapshot:lz-prod-rds-*-final-backup"
+      "arn:aws:rds:eu-west-2:*:snapshot:lz-prod-rds-*-final-backup"
     ]
   }
   statement {
@@ -1130,7 +1130,7 @@ data "aws_iam_policy_document" "laa_read_only_additional" {
       "backup:PutBackupVaultAccessPolicy"
     ]
     resources = [
-      "arn:aws:backup:eu-west-2:${aws_organizations_account.laa_production.id}:backup-vault:Default"
+      "arn:aws:backup:eu-west-2:*:backup-vault:Default"
     ]
   }
   statement {

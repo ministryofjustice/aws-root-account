@@ -95,7 +95,6 @@ resource "aws_budgets_budget" "laa" {
     values = [
       aws_organizations_account.laa_cloudtrail.id,
       aws_organizations_account.laa_development.id,
-      aws_organizations_account.laa_production.id,
       aws_organizations_account.laa_shared_services.id,
       aws_organizations_account.laa_staging.id,
       aws_organizations_account.laa_test.id,

@@ -35,12 +35,12 @@ locals {
     active_only : {
       for account in aws_organizations_organization.default.accounts :
       account.name => account.id
-      if account.status == "ACTIVE"
+      if account.status == "ACTIVE" && account.name != "LAA Production"
     },
     active_only_account_ids : [
       for account in aws_organizations_organization.default.accounts :
       account.id
-      if account.status == "ACTIVE"
+      if account.status == "ACTIVE" && account.name != "LAA Production"
     ],
   }
 
