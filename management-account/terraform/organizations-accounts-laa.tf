@@ -40,25 +40,6 @@ resource "aws_organizations_account" "laa_development" {
   }
 }
 
-resource "aws_organizations_account" "laa_production" {
-  name                       = "LAA Production"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "LAA+Production")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.disabled_accounts.id
-  close_on_deletion          = true
-
-  tags = local.tags_laa
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "laa_shared_services" {
   name                       = "LAA Shared services"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "LAA+Shared+services")
