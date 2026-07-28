@@ -463,21 +463,6 @@ resource "aws_organizations_policy" "enforce_s3_kms_encryption" {
 }
 
 data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
-  # Deny only explicit SSE-S3 object writes. Requests with no SSE header are
-  # allowed so that bucket default KMS encryption can apply.
-  statement {
-    sid       = "DenyS3PutObjectSSES3"
-    effect    = "Deny"
-    actions   = ["s3:PutObject"]
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-server-side-encryption"
-      values   = ["AES256"]
-    }
-  }
-
   # Deny setting bucket default encryption to SSE-S3.
   statement {
     sid       = "DenyS3SetBucketDefaultEncryptionToSSES3"
