@@ -204,6 +204,89 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_r
   policy_arn = aws_iam_policy.modernisation_platform_sso_readonly_additional.arn
 }
 
+########################################################
+# ModernisationPlatformSSOApplicationAssignment        #
+########################################################
+/*
+provider "aws" {
+  alias = "sso-application-assignment"
+
+  assume_role {
+    role_arn = "arn:aws:iam::<management-account-id>:role/ModernisationPlatformSSOApplicationAssignment"
+    tags = {
+      ApplicationAccount = data.aws_caller_identity.original_session.account_id
+    }
+  }
+}
+*/
+resource "aws_iam_role" "modernisation_platform_sso_application_assignment" {
+  name               = "ModernisationPlatformSSOApplicationAssignment"
+  assume_role_policy = data.aws_iam_policy_document.modernisation_platform_sso_application_assignment.json
+}
+
+data "aws_iam_policy_document" "modernisation_platform_sso_application_assignment" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "ForAnyValue:StringLike"
+      values   = ["${data.aws_organizations_organization.root.id}/*/${aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id}/*"]
+      variable = "aws:PrincipalOrgPaths"
+    }
+
+    condition {
+      test     = "StringEquals"
+      values   = ["&{aws:PrincipalAccount}"]
+      variable = "aws:RequestTag/ApplicationAccount"
+    }
+
+    condition {
+      test     = "ForAllValues:StringEquals"
+      values   = ["ApplicationAccount"]
+      variable = "aws:TagKeys"
+    }
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["sts:TagSession"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "ForAnyValue:StringLike"
+      values   = ["${data.aws_organizations_organization.root.id}/*/${aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id}/*"]
+      variable = "aws:PrincipalOrgPaths"
+    }
+
+    condition {
+      test     = "StringEquals"
+      values   = ["&{aws:PrincipalAccount}"]
+      variable = "aws:RequestTag/ApplicationAccount"
+    }
+
+    condition {
+      test     = "ForAllValues:StringEquals"
+      values   = ["ApplicationAccount"]
+      variable = "aws:TagKeys"
+    }
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "modernisation_platform_sso_application_assignment" {
+  role       = aws_iam_role.modernisation_platform_sso_application_assignment.name
+  policy_arn = aws_iam_policy.modernisation_platform_sso_application_assignment.arn
+}
+
 ##########################################
 # ModernisationPlatformGithubActionsRole #
 ##########################################

@@ -152,6 +152,38 @@ data "aws_iam_policy_document" "sso_administrator_policy" {
   }
 }
 
+####################################################
+# ModernisationPlatformSSOApplicationAssignment    #
+####################################################
+resource "aws_iam_policy" "modernisation_platform_sso_application_assignment" {
+  name        = "ModernisationPlatformSSOApplicationAssignment"
+  description = "A policy to allow Modernisation Platform accounts to manage their SSO application assignments"
+  path        = "/"
+  policy      = data.aws_iam_policy_document.modernisation_platform_sso_application_assignment_permissions.json
+  tags        = {}
+}
+
+data "aws_iam_policy_document" "modernisation_platform_sso_application_assignment_permissions" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sso:CreateApplicationAssignment",
+      "sso:DeleteApplicationAssignment",
+      "sso:DescribeApplicationAssignment"
+    ]
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      values   = ["&{aws:PrincipalTag/ApplicationAccount}"]
+      variable = "sso:ApplicationAccount"
+    }
+  }
+}
+
 #########################################
 # TerraformOrganisationManagementPolicy #
 #########################################
