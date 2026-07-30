@@ -207,18 +207,18 @@ resource "aws_iam_role_policy_attachment" "modernisation_platform_ssodirectory_r
 ########################################################
 # ModernisationPlatformSSOApplicationAssignment        #
 ########################################################
-/*
-provider "aws" {
-  alias = "sso-application-assignment"
 
-  assume_role {
-    role_arn = "arn:aws:iam::<management-account-id>:role/ModernisationPlatformSSOApplicationAssignment"
-    tags = {
-      ApplicationAccount = data.aws_caller_identity.original_session.account_id
-    }
-  }
-}
-*/
+# provider "aws" {
+#   alias = "sso-application-assignment"
+#
+#   assume_role {
+#     role_arn = "arn:aws:iam::<management-account-id>:role/ModernisationPlatformSSOApplicationAssignment"
+#     tags = {
+#       ApplicationAccount = data.aws_caller_identity.original_session.account_id
+#     }
+#   }
+# }
+
 resource "aws_iam_role" "modernisation_platform_sso_application_assignment" {
   name               = "ModernisationPlatformSSOApplicationAssignment"
   assume_role_policy = data.aws_iam_policy_document.modernisation_platform_sso_application_assignment.json
