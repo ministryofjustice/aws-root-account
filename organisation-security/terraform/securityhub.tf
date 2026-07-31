@@ -10,6 +10,8 @@ module "securityhub_eu_west_2" {
   aggregation_region = true
 
   is_delegated_administrator = true
+
+  opg_config_1_suppress_account_ids = data.aws_organizations_organizational_unit_descendant_accounts.opg.accounts[*].id
 }
 
 module "securityhub_eu_west_1" {
