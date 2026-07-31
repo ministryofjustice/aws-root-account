@@ -912,6 +912,8 @@ data "aws_iam_policy_document" "network_automation_support_operator" {
       "cloudshell:GetEnvironmentStatus",
       "cloudshell:DescribeEnvironments",
       "cloudshell:DeleteEnvironment",
+      "cloudshell:CreateEnvironment",
+      "cloudshell:PutCredentials",
 
       "secretsmanager:CreateSecret",
       "secretsmanager:GetSecretValue",
