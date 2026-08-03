@@ -13,7 +13,7 @@ import {
 }
 
 import {
-  to = module.dsit_cost_integration.aws_bcmdataexports_export.focus["enabled"]
+  to = module.dsit_cost_integration.aws_bcmdataexports_export.focus
   id = "arn:aws:bcm-data-exports:us-east-1:${data.aws_caller_identity.current.account_id}:export/gds-focus-v1-cf913b7e-c6bb-4576-aaeb-2a6f6335f3e4"
 }
 
@@ -23,7 +23,7 @@ import {
 }
 
 import {
-  to = module.dsit_cost_integration.aws_costoptimizationhub_enrollment_status.this
+  to = module.dsit_cost_integration.aws_costoptimizationhub_enrollment_status.this[0]
   id = data.aws_caller_identity.current.account_id
 }
 
@@ -38,7 +38,7 @@ import {
 }
 
 import {
-  to = module.dsit_cost_integration.aws_iam_service_linked_role.bcm_data_exports
+  to = module.dsit_cost_integration.aws_iam_service_linked_role.bcm_data_exports[0]
   id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/bcm-data-exports.amazonaws.com/AWSServiceRoleForBCMDataExports"
 }
 
