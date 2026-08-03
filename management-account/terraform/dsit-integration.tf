@@ -8,17 +8,17 @@ module "dsit_cost_integration" {
 }
 
 import {
-  to = module.dsit_cost_integration.aws_bcmdataexports_export.carbon
+  to = module.dsit_cost_integration.aws_bcmdataexports_export.carbon["enabled"]
   id = "arn:aws:bcm-data-exports:us-east-1:${data.aws_caller_identity.current.account_id}:export/gds-carbon-v1-1b9ff508-81c4-497b-aae5-b617a4aece39"
 }
 
 import {
-  to = module.dsit_cost_integration.aws_bcmdataexports_export.focus
+  to = module.dsit_cost_integration.aws_bcmdataexports_export.focus["enabled"]
   id = "arn:aws:bcm-data-exports:us-east-1:${data.aws_caller_identity.current.account_id}:export/gds-focus-v1-cf913b7e-c6bb-4576-aaeb-2a6f6335f3e4"
 }
 
 import {
-  to = module.dsit_cost_integration.aws_bcmdataexports_export.recommendations
+  to = module.dsit_cost_integration.aws_bcmdataexports_export.recommendations["enabled"]
   id = "arn:aws:bcm-data-exports:us-east-1:${data.aws_caller_identity.current.account_id}:export/gds-recommendations-v1-4d32ddca-c357-494d-944f-60b775b26e33"
 }
 
