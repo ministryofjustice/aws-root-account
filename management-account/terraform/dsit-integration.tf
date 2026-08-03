@@ -34,7 +34,7 @@ import {
 
 import {
   to = module.dsit_cost_integration.aws_iam_role_policy.replicator
-  id = "GDSCloudConsumption:Replicator"
+  id = "GDSCloudConsumption:Replication"
 }
 
 import {
