@@ -46,6 +46,7 @@ locals {
 
   # Modernisation Platform account IDs
   modernisation_platform_accounts = {
+    integration_hub_file_transfer_development_id = local.accounts.active_only["integration-hub-file-transfer-development"]
     core_logging_id = [
       for account_name, account_id in local.accounts.active_only :
       account_id

@@ -292,7 +292,7 @@ module "guardduty_eu_north_1" {
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags_organisation_management, {
-      component = "Security"
+      component    = "Security"
       service-area = "Hosting"
   })
 }
@@ -311,7 +311,7 @@ module "guardduty_sa_east_1" {
   root_tags = local.root_account
   administrator_tags = merge(
     local.tags_organisation_management, {
-      component = "Security"
+      component    = "Security"
       service-area = "Hosting"
   })
 }
