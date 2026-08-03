@@ -29,7 +29,7 @@ import {
 
 import {
   to = module.dsit_cost_integration.aws_iam_role.this
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/GDSCloudConsumption"
+  id = "GDSCloudConsumption"
 }
 
 import {
@@ -44,7 +44,7 @@ import {
 
 import {
   to = module.dsit_cost_integration.aws_s3_bucket.this
-  id = "arn:aws:s3:::gds-export-${data.aws_caller_identity.current.account_id}"
+  id = "gds-export-${data.aws_caller_identity.current.account_id}"
 }
 
 import {
