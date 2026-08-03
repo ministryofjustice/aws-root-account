@@ -242,6 +242,12 @@ data "aws_iam_policy_document" "modernisation_platform_sso_application_assignmen
 
     condition {
       test     = "StringEquals"
+      values   = [local.modernisation_platform_accounts.integration_hub_file_transfer_development_id]
+      variable = "aws:PrincipalAccount"
+    }
+
+    condition {
+      test     = "StringEquals"
       values   = ["&{aws:PrincipalAccount}"]
       variable = "aws:RequestTag/ApplicationAccount"
     }
@@ -266,6 +272,12 @@ data "aws_iam_policy_document" "modernisation_platform_sso_application_assignmen
       test     = "ForAnyValue:StringLike"
       values   = ["${data.aws_organizations_organization.root.id}/*/${aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id}/*"]
       variable = "aws:PrincipalOrgPaths"
+    }
+
+    condition {
+      test     = "StringEquals"
+      values   = [local.modernisation_platform_accounts.integration_hub_file_transfer_development_id]
+      variable = "aws:PrincipalAccount"
     }
 
     condition {
