@@ -430,7 +430,7 @@ resource "aws_organizations_policy" "mp_protect_security_services_pilot" {
 # Attach the pilot SCP to the Sprinkler OU only for testing before wider MP OU enforcement
 resource "aws_organizations_policy_attachment" "mp_protect_security_services_pilot" {
   for_each = toset([
-    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
     if child.name == "modernisation-platform-sprinkler"
   ])
 
