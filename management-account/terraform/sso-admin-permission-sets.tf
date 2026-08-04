@@ -930,7 +930,7 @@ data "aws_iam_policy_document" "network_automation_support_operator" {
     resources = ["*"]
   }
   statement {
-    sid    = "AllowECSRunTask"
+    sid    = "AllowECSExecuteCommandInDevAndPreProd"
     effect = "Allow"
 
     actions = [
