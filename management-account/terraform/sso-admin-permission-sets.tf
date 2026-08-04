@@ -855,6 +855,7 @@ data "aws_iam_policy_document" "network_automation_engineer" {
 # - AWS Cloudshell
 # - manage secrets
 # - S3 access
+# - ECS ExecuteCommand in dev and pre-prod accounts
 
 resource "aws_ssoadmin_permission_set" "network_automation_support_operator" {
   name             = "network-automation-support"
@@ -914,6 +915,7 @@ data "aws_iam_policy_document" "network_automation_support_operator" {
       "cloudshell:DeleteEnvironment",
       "cloudshell:CreateEnvironment",
       "cloudshell:PutCredentials",
+      "cloudshell:ApproveCommand",
 
       "secretsmanager:CreateSecret",
       "secretsmanager:GetSecretValue",
@@ -927,7 +929,24 @@ data "aws_iam_policy_document" "network_automation_support_operator" {
 
     resources = ["*"]
   }
+  statement {
+    sid    = "AllowECSRunTask"
+    effect = "Allow"
+
+    actions = [
+      "ecs:ExecuteCommand",
+      "ecs:DescribeTasks"
+    ]
+    resources = [        
+      "arn:aws:ecs:eu-west-2:${aws_organizations_account.moj_official_development.id}:cluster/*",
+      "arn:aws:ecs:eu-west-2:${aws_organizations_account.moj_official_development.id}:task/*/*",
+      "arn:aws:ecs:eu-west-2:${aws_organizations_account.moj_official_preproduction.id}:cluster/*",
+      "arn:aws:ecs:eu-west-2:${aws_organizations_account.moj_official_preproduction.id}:task/*/*"
+    ]
+  }
 }
+
+
 
 
 #########################################
