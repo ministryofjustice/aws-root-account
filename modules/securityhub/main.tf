@@ -212,8 +212,9 @@ resource "aws_securityhub_automation_rule" "suppress_opg_config_1_inactive_regio
       }
     }
 
+    # TODO: restore var.opg_config_1_suppress_account_ids once testing is complete
     dynamic "aws_account_id" {
-      for_each = var.opg_config_1_suppress_account_ids
+      for_each = ["288342028542", "492687888235"]
       content {
         comparison = "EQUALS"
         value      = aws_account_id.value
