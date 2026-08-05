@@ -176,7 +176,7 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
 ############################################
 
 # Member accounts can't own automation rules
-# Supress Config.1 findings in non-active regions for OPG accounts and only create in home region
+# Suppress Config.1 findings in non-active regions for OPG accounts and only create in home region
 resource "aws_securityhub_automation_rule" "suppress_opg_config_1_inactive_regions" {
   count = (
     var.is_delegated_administrator &&
@@ -185,7 +185,7 @@ resource "aws_securityhub_automation_rule" "suppress_opg_config_1_inactive_regio
   ) ? 1 : 0
 
   rule_name   = "suppress-opg-config-1-inactive-regions"
-  rule_order  = 1
+  rule_order  = 2
   description = "Suppress Config.1 findings in non-active regions."
 
   criteria {
@@ -194,8 +194,8 @@ resource "aws_securityhub_automation_rule" "suppress_opg_config_1_inactive_regio
       value      = "Security Hub"
     }
 
-    generator_id {
-      comparison = "CONTAINS"
+    compliance_security_control_id {
+      comparison = "EQUALS"
       value      = "Config.1"
     }
 
