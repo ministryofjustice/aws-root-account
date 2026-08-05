@@ -17,3 +17,9 @@ variable "enrolled_accounts" {
   type    = map(any)
   default = {}
 }
+
+variable "opg_config_1_suppress_account_ids" {
+  description = "OPG account IDs for which Config.1 findings are suppressed outside the active regions."
+  type        = list(string)
+  default     = []
+}
