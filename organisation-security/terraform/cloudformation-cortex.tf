@@ -43,17 +43,18 @@ resource "aws_cloudformation_stack_set" "cortex_xdr_stack_set" {
 }
 
 resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
+  for_each = toset([
+    local.ou_central_digital_id,
+    local.ou_cica_id,
+    local.ou_hmcts_id,
+    local.ou_hmpps_id,
+    local.ou_laa,
+    local.ou_platforms_and_architecture_id,
+    local.ou_security_engineering_id,
+    local.ou_technology_services
+  ])
   deployment_targets {
-    organizational_unit_ids = [
-      local.ou_central_digital_id,
-      local.ou_cica_id,
-      local.ou_hmcts_id,
-      local.ou_hmpps_id,
-      local.ou_laa,
-      local.ou_platforms_and_architecture_id,
-      local.ou_security_engineering_id,
-      local.ou_technology_services
-    ]
+    organizational_unit_ids = [each.key]
   }
   operation_preferences {
     failure_tolerance_percentage = 100
@@ -61,7 +62,4 @@ resource "aws_cloudformation_stack_set_instance" "cortex_xdr_stack_set" {
   }
   call_as        = "DELEGATED_ADMIN"
   stack_set_name = aws_cloudformation_stack_set.cortex_xdr_stack_set.name
-  lifecycle {
-    ignore_changes = [deployment_targets]
-  }
 }
