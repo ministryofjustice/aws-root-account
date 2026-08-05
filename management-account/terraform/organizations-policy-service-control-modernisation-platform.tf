@@ -437,3 +437,59 @@ resource "aws_organizations_policy_attachment" "mp_protect_security_services_pil
   policy_id = aws_organizations_policy.mp_protect_security_services_pilot.id
   target_id = each.value
 }
+
+##############################
+# Enforce S3 KMS encryption  #
+##############################
+
+# Enforces KMS-based encryption for S3 object writes and explicitly blocks
+# setting bucket default encryption to SSE-S3 (AES256).
+#
+# The PutObject deny below blocks explicit SSE-S3 (AES256) writes while
+# allowing requests that omit the encryption header and rely on bucket
+# default encryption. Bucket-level downgrade/removal is still denied below.
+
+resource "aws_organizations_policy" "enforce_s3_kms_encryption" {
+  name        = "Enforce S3 KMS encryption"
+  description = "Denies explicit SSE-S3 object writes and setting bucket default encryption to SSE-S3"
+  type        = "SERVICE_CONTROL_POLICY"
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
+  }
+
+  content = data.aws_iam_policy_document.enforce_s3_kms_encryption.json
+}
+
+data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
+  # Deny setting bucket default encryption to SSE-S3.
+  statement {
+    sid       = "DenyS3SetBucketDefaultEncryptionToSSES3"
+    effect    = "Deny"
+    actions   = ["s3:PutEncryptionConfiguration"]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-server-side-encryption"
+      values   = ["AES256"]
+    }
+  }
+}
+
+# Scoped to sprinkler sub-OU only for testing.
+# "modernisation-platform-sprinkler" is nested under "Modernisation Platform
+# Member", not a direct child of the Modernisation Platform OU, so this must
+# use mp_member_children (not platforms_and_architecture_modernisation_platform_children).
+# Do NOT attach to the parent Modernisation Platform OU — SCP inheritance would
+# block Terraform state s3:PutObject calls in all other member accounts.
+resource "aws_organizations_policy_attachment" "enforce_s3_kms_encryption_pilot" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
+
+  policy_id = aws_organizations_policy.enforce_s3_kms_encryption.id
+  target_id = each.value
+}
