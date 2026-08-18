@@ -126,7 +126,7 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
   count = (
     var.is_delegated_administrator &&
     data.aws_region.current.region == "eu-west-2"
-    ) ? 1 : 0
+  ) ? 1 : 0
 
   rule_name   = "suppress-mp-tf-state-bucket-s3-6"
   rule_order  = 1
@@ -165,6 +165,73 @@ resource "aws_securityhub_automation_rule" "suppress_mp_tf_state_bucket_cross_ac
 
       note {
         text       = "Approved exception: Terraform backend requires controlled cross-account access."
+        updated_by = "terraform"
+      }
+    }
+  }
+}
+
+############################################
+# OPG Config.1 inactive-region suppression #
+############################################
+
+# Member accounts can't own automation rules
+# Suppress Config.1 findings in non-active regions for OPG accounts and only create in home region
+resource "aws_securityhub_automation_rule" "suppress_opg_config_1_inactive_regions" {
+  count = (
+    var.is_delegated_administrator &&
+    data.aws_region.current.region == "eu-west-2" &&
+    length(var.opg_config_1_suppress_account_ids) > 0
+  ) ? 1 : 0
+
+  rule_name   = "suppress-opg-config-1-inactive-regions"
+  rule_order  = 2
+  description = "Suppress Config.1 findings in non-active regions."
+
+  criteria {
+    product_name {
+      comparison = "EQUALS"
+      value      = "Security Hub"
+    }
+
+    compliance_security_control_id {
+      comparison = "EQUALS"
+      value      = "Config.1"
+    }
+
+    workflow_status {
+      comparison = "EQUALS"
+      value      = "NEW"
+    }
+
+    dynamic "resource_region" {
+      for_each = ["eu-west-1", "eu-west-2", "us-east-1"]
+      content {
+        comparison = "NOT_EQUALS"
+        value      = resource_region.value
+      }
+    }
+
+    # TODO: restore var.opg_config_1_suppress_account_ids once testing is complete
+    dynamic "aws_account_id" {
+      for_each = ["288342028542", "492687888235"]
+      content {
+        comparison = "EQUALS"
+        value      = aws_account_id.value
+      }
+    }
+  }
+
+  actions {
+    type = "FINDING_FIELDS_UPDATE"
+
+    finding_fields_update {
+      workflow {
+        status = "SUPPRESSED"
+      }
+
+      note {
+        text       = "Suppressed: not an active region for this account."
         updated_by = "terraform"
       }
     }
