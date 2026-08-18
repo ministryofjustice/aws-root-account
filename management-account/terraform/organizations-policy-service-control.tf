@@ -460,9 +460,3 @@ data "aws_iam_policy_document" "deny_all_actions_by_users" {
     }
   }
 }
-
-# Attach policy to laa production
-resource "aws_organizations_policy_attachment" "deny_all_actions_by_users" {
-  policy_id = aws_organizations_policy.deny_all_actions_by_users.id
-  target_id = aws_organizations_account.laa_production.id
-}
