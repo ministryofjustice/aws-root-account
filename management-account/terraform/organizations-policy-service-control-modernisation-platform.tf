@@ -354,7 +354,6 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
 ###############################################################
 
 data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
-  # These resources are not consistently tagged, so scope protection by OU and trusted principals.
   statement {
     sid    = "DenyChangesToSecurityServices"
     effect = "Deny"
