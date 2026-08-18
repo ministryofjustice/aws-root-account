@@ -356,10 +356,13 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
 data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
   # These resources are not consistently tagged, so scope protection by OU and trusted principals.
   statement {
-    sid    = "DenyModificationOfSecurityServices"
+    sid    = "DenyChangesToSecurityServices"
     effect = "Deny"
     actions = [
+      "config:Delete*",
       "config:PutConfigurationRecorder",
+      "config:StopConfigurationRecorder",
+      "guardduty:Delete*",
       "guardduty:UpdateDetector"
     ]
     resources = ["*"]
@@ -377,7 +380,7 @@ data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
 
 resource "aws_organizations_policy" "mp_protect_security_services_pilot" {
   name        = "Modernisation Platform Protect Security Services Pilot"
-  description = "Pilot protection against modification of AWS Config and GuardDuty resources in the Sprinkler OU."
+  description = "Pilot protection against modification, disabling, or deletion of AWS Config and GuardDuty resources in the Sprinkler OU."
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
