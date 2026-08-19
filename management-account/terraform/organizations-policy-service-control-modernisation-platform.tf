@@ -355,52 +355,16 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
 
 data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
   statement {
-    sid    = "DenyModificationOfSecureBaselinesResources"
+    sid    = "DenyChangesToConfigAndGuardDuty"
     effect = "Deny"
     actions = [
+      "config:Delete*",
       "config:PutConfigurationRecorder",
+      "config:StopConfigurationRecorder",
+      "guardduty:Delete*",
       "guardduty:UpdateDetector"
     ]
     resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/component"
-      values   = ["secure-baselines"]
-    }
-
-    condition {
-      test     = "ArnNotLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/ModernisationPlatformAccess",
-        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
-      ]
-    }
-  }
-
-  statement {
-    sid    = "DenyChangingSecureBaselinesComponentTag"
-    effect = "Deny"
-    actions = [
-      "config:TagResource",
-      "config:UntagResource",
-      "guardduty:TagResource",
-      "guardduty:UntagResource"
-    ]
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/component"
-      values   = ["secure-baselines"]
-    }
-
-    condition {
-      test     = "ForAnyValue:StringEquals"
-      variable = "aws:TagKeys"
-      values   = ["component"]
-    }
 
     condition {
       test     = "ArnNotLike"
@@ -415,7 +379,7 @@ data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
 
 resource "aws_organizations_policy" "mp_protect_security_services_pilot" {
   name        = "Modernisation Platform Protect Security Services Pilot"
-  description = "Pilot protection against modification of secure-baselines AWS Config and GuardDuty resources in the Sprinkler OU."
+  description = "Pilot protection against modification, disabling, or deletion of AWS Config and GuardDuty resources in the Sprinkler OU."
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
