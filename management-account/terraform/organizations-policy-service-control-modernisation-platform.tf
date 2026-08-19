@@ -355,7 +355,7 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
 
 data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
   statement {
-    sid    = "DenyChangesToSecurityServices"
+    sid    = "DenyChangesToConfigAndGuardDuty"
     effect = "Deny"
     actions = [
       "config:Delete*",
