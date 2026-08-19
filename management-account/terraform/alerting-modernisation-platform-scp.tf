@@ -37,8 +37,7 @@ resource "aws_cloudwatch_event_rule" "modernisation_platform_scp_change_alerts" 
           aws_organizations_policy.mp_deny_cloudtrail_delete_stop_update.id,
           aws_organizations_policy.mp_protect_core_s3_buckets.id,
           aws_organizations_policy.modernisation_platform_member_ou_scp.id,
-          # This SCP also contains the tag-independent AWS Config and GuardDuty protections.
-          aws_organizations_policy.mp_protect_secure_baselines.id
+          aws_organizations_policy.mp_protect_secure_baselines.id # Includes Config/GuardDuty protections due to the OU SCP limit.
         ]
       }
     }
