@@ -278,6 +278,29 @@ resource "aws_organizations_policy_attachment" "mp_protect_core_s3_buckets" {
 
 data "aws_iam_policy_document" "mp_protect_secure_baselines" {
   statement {
+    sid    = "DenyConfigRecorderAndGuardDutyDetectorChanges"
+    effect = "Deny"
+    actions = [
+      "config:Delete*",
+      "config:PutConfigurationRecorder",
+      "config:StopConfigurationRecorder",
+      "guardduty:Delete*",
+      "guardduty:UpdateDetector"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/github-actions",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+  }
+
+  statement {
     sid    = "DenyDeleteSecureBaselinesResources"
     effect = "Deny"
     actions = [
@@ -321,29 +344,6 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       values = flatten([
         local.modernisation_platform_accounts.testing_test
       ])
-    }
-  }
-
-  statement {
-    sid    = "DenyConfigRecorderAndGuardDutyDetectorChanges"
-    effect = "Deny"
-    actions = [
-      "config:Delete*",
-      "config:PutConfigurationRecorder",
-      "config:StopConfigurationRecorder",
-      "guardduty:Delete*",
-      "guardduty:UpdateDetector"
-    ]
-    resources = ["*"]
-
-    condition {
-      test     = "ArnNotLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/ModernisationPlatformAccess",
-        "arn:aws:iam::*:role/github-actions",
-        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
-      ]
     }
   }
 }
