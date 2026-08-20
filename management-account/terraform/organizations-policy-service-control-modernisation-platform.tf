@@ -442,8 +442,8 @@ resource "aws_organizations_policy_attachment" "mp_protect_security_services_pil
 # Enforce S3 KMS encryption  #
 ##############################
 
-# Enforces KMS-based encryption for S3 object writes and explicitly blocks
-# setting bucket default encryption to SSE-S3 (AES256).
+# Denies attempts to set bucket default encryption to SSE-S3 (AES256).
+# This is a low blast-radius pilot scoped via the attachment below.
 #
 # The PutObject deny below blocks explicit SSE-S3 (AES256) writes while
 # allowing requests that omit the encryption header and rely on bucket
