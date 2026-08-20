@@ -24,6 +24,10 @@ data "aws_organizations_organizational_units" "opg" {
   parent_id = local.ou_opg
 }
 
+data "aws_organizations_organizational_unit_descendant_accounts" "opg" {
+  parent_id = local.ou_opg
+}
+
 data "terraform_remote_state" "management_account" {
   backend = "s3"
   config = {

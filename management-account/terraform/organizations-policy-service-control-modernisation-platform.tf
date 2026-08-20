@@ -278,6 +278,29 @@ resource "aws_organizations_policy_attachment" "mp_protect_core_s3_buckets" {
 
 data "aws_iam_policy_document" "mp_protect_secure_baselines" {
   statement {
+    sid    = "DenyConfigRecorderAndGuardDutyDetectorChanges"
+    effect = "Deny"
+    actions = [
+      "config:Delete*",
+      "config:PutConfigurationRecorder",
+      "config:StopConfigurationRecorder",
+      "guardduty:Delete*",
+      "guardduty:UpdateDetector"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/github-actions",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+  }
+
+  statement {
     sid    = "DenyDeleteSecureBaselinesResources"
     effect = "Deny"
     actions = [
@@ -289,7 +312,6 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       "cloudwatch:DisableAlarmActions",
       "events:Delete*",
       "events:Remove*",
-      "guardduty:Delete*",
       "kms:Delete*",
       "kms:DisableKey",
       "kms:ScheduleKeyDeletion",
@@ -298,9 +320,7 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       "s3:Delete*",
       "s3:PutBucketPolicy",
       "sns:Delete*",
-      "securityhub:DisableSecurityHub",
-      "config:Delete*",
-      "config:StopConfigurationRecorder"
+      "securityhub:DisableSecurityHub"
     ]
     resources = ["*"]
 
@@ -330,7 +350,7 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
 
 resource "aws_organizations_policy" "mp_protect_secure_baselines" {
   name        = "Modernisation Platform Protect Secure Baselines"
-  description = "Deny deletion or disabling of secure-baselines tagged resources in Modernisation Platform accounts, except AWSReservedSSO_AdministratorAccess roles."
+  description = "Protect secure baseline resources and prevent untrusted principals from changing AWS Config recorders or GuardDuty detectors."
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
@@ -348,95 +368,9 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
   target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
 
-###############################################################
-# Protect critical security services from modification
-# Sprinkler OU scope for testing
-###############################################################
-
-data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
-  statement {
-    sid    = "DenyModificationOfSecureBaselinesResources"
-    effect = "Deny"
-    actions = [
-      "config:PutConfigurationRecorder",
-      "guardduty:UpdateDetector"
-    ]
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/component"
-      values   = ["secure-baselines"]
-    }
-
-    condition {
-      test     = "ArnNotLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/ModernisationPlatformAccess",
-        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
-      ]
-    }
-  }
-
-  statement {
-    sid    = "DenyChangingSecureBaselinesComponentTag"
-    effect = "Deny"
-    actions = [
-      "config:TagResource",
-      "config:UntagResource",
-      "guardduty:TagResource",
-      "guardduty:UntagResource"
-    ]
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/component"
-      values   = ["secure-baselines"]
-    }
-
-    condition {
-      test     = "ForAnyValue:StringEquals"
-      variable = "aws:TagKeys"
-      values   = ["component"]
-    }
-
-    condition {
-      test     = "ArnNotLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/ModernisationPlatformAccess",
-        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
-      ]
-    }
-  }
-}
-
-resource "aws_organizations_policy" "mp_protect_security_services_pilot" {
-  name        = "Modernisation Platform Protect Security Services Pilot"
-  description = "Pilot protection against modification of secure-baselines AWS Config and GuardDuty resources in the Sprinkler OU."
-  type        = "SERVICE_CONTROL_POLICY"
-
-  tags = {
-    business-unit = "Platforms"
-    component     = "SERVICE_CONTROL_POLICY"
-    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
-  }
-
-  content = data.aws_iam_policy_document.mp_protect_security_services_pilot.json
-}
-
-# Attach the pilot SCP to the Sprinkler OU only for testing before wider MP OU enforcement
-resource "aws_organizations_policy_attachment" "mp_protect_security_services_pilot" {
-  for_each = toset([
-    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
-    if child.name == "modernisation-platform-sprinkler"
-  ])
-
-  policy_id = aws_organizations_policy.mp_protect_security_services_pilot.id
-  target_id = each.value
-}
+# AWS Config recorder and GuardDuty detector protections are included in the existing secure-baselines SCP because
+# the Modernisation Platform OU is already at its SCP attachment limit. These controls use a separate statement
+# without a resource-tag condition because Config recorders and GuardDuty detectors are not consistently tagged.
 
 ##############################
 # Enforce S3 KMS encryption  #

@@ -59,26 +59,6 @@ resource "aws_iam_user_group_membership" "ewa_stempel" {
   ]
 }
 
-################
-# Connor Glynn #
-################
-resource "aws_iam_user" "connor_glynn" {
-  name          = "ConnorGlynn"
-  path          = "/"
-  force_destroy = true
-  tags          = {}
-}
-
-# User membership
-resource "aws_iam_user_group_membership" "connor_glynn" {
-  user = aws_iam_user.connor_glynn.name
-
-  groups = [
-    aws_iam_group.iam_user_change_password.name,
-    aws_iam_group.modernisation_platform_organisation_management.name,
-  ]
-}
-
 ##############
 # Sablu Miah #
 ##############
