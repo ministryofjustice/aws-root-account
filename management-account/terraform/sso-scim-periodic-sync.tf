@@ -17,3 +17,22 @@ resource "aws_ssm_parameter" "github_periodic_sync_audit_cursor" {
     ignore_changes = [value]
   }
 }
+
+# The poller: self-building Lambda + EventBridge schedule + least-privilege IAM.
+# Shadow mode (not_dry_run = false) logs the diff it would apply without writing;
+# flip to true only after CloudWatch confirms a clean plan. v1_lambda_name
+# defaults to the v1 Lambda inside the module, seeding the first-run window.
+module "github_periodic_sync" {
+  # tflint-ignore: terraform_module_pinned_source
+  source = "github.com/ministryofjustice/moj-terraform-github-periodic-sync?ref=fc7d604faafeabe978192fbe9727e0d467aba52a" # v0.1.1
+
+  github_organisation   = local.sso.github_organisation
+  github_app_secret_arn = aws_secretsmanager_secret.github_periodic_sync_private_key.arn
+  cursor_parameter_name = aws_ssm_parameter.github_periodic_sync_audit_cursor.name
+
+  sso_aws_region        = local.sso.region
+  sso_identity_store_id = local.sso_admin_identity_store_id
+  sso_email_suffix      = local.sso.email_suffix
+
+  not_dry_run = false
+}
