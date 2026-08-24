@@ -23,8 +23,8 @@ jobs:
       run:
         working-directory: ./organisation-security/terraform
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           role-to-assume: arn:aws:iam::${{secrets.AWS_SECURITY_ACCOUNT_ID}}:role/github-actions-plan
           role-session-name: GitHubActionsPlan
@@ -43,7 +43,7 @@ jobs:
 
       - name: Alert Slack if drift detected on scheduled run
         if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.plan.outputs.exitcode == '2' }}
-        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: webhook-trigger
