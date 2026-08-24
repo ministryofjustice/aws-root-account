@@ -24,7 +24,7 @@ resource "aws_ssm_parameter" "github_periodic_sync_audit_cursor" {
 # defaults to the v1 Lambda inside the module, seeding the first-run window.
 module "github_periodic_sync" {
   # tflint-ignore: terraform_module_pinned_source
-  source = "github.com/ministryofjustice/moj-terraform-github-periodic-sync?ref=fc7d604faafeabe978192fbe9727e0d467aba52a" # v0.1.1
+  source = "github.com/ministryofjustice/moj-terraform-github-periodic-sync?ref=51c329beb7b8f3639b8ce026be3f2577b17cab1b" # v0.1.2
 
   github_organisation   = local.sso.github_organisation
   github_app_secret_arn = aws_secretsmanager_secret.github_periodic_sync_private_key.arn
