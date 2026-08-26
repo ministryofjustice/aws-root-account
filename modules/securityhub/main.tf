@@ -194,9 +194,9 @@ resource "aws_securityhub_automation_rule" "suppress_opg_config_1_inactive_regio
       value      = "Security Hub"
     }
 
-    compliance_security_control_id {
+    generator_id {
       comparison = "EQUALS"
-      value      = "Config.1"
+      value      = "security-control/Config.1"
     }
 
     workflow_status {
