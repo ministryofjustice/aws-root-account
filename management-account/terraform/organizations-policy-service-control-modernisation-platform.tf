@@ -377,16 +377,15 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
 # Enforce S3 KMS encryption  #
 ##############################
 
-# Denies attempts to set bucket default encryption to SSE-S3 (AES256).
+# Denies attempts to set bucket default encryption to SSE-S3 (AES256), or to
+# anything other than an explicit customer-managed KMS key. This means any
+# bucket in scope must use an explicit kms_master_key_id (not the AWS-managed
+# default key) for its server_side_encryption_configuration.
 # This is a low blast-radius pilot scoped via the attachment below.
-#
-# The PutObject deny below blocks explicit SSE-S3 (AES256) writes while
-# allowing requests that omit the encryption header and rely on bucket
-# default encryption. Bucket-level downgrade/removal is still denied below.
 
 resource "aws_organizations_policy" "enforce_s3_kms_encryption" {
   name        = "Enforce S3 KMS encryption"
-  description = "Denies explicit SSE-S3 object writes and setting bucket default encryption to SSE-S3"
+  description = "Denies setting bucket default encryption to anything other than an explicit customer-managed KMS key"
   type        = "SERVICE_CONTROL_POLICY"
   tags = {
     business-unit = "Platforms"
@@ -398,7 +397,6 @@ resource "aws_organizations_policy" "enforce_s3_kms_encryption" {
 }
 
 data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
-  # Deny setting bucket default encryption to SSE-S3.
   statement {
     sid       = "DenyS3SetBucketDefaultEncryptionToSSES3"
     effect    = "Deny"
@@ -409,6 +407,19 @@ data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
       test     = "StringEquals"
       variable = "s3:x-amz-server-side-encryption"
       values   = ["AES256"]
+    }
+  }
+
+  statement {
+    sid       = "DenyS3SetBucketDefaultEncryptionWithoutExplicitKmsKey"
+    effect    = "Deny"
+    actions   = ["s3:PutEncryptionConfiguration"]
+    resources = ["*"]
+
+    condition {
+      test     = "Null"
+      variable = "s3:x-amz-server-side-encryption-aws-kms-key-id"
+      values   = ["true"]
     }
   }
 }
