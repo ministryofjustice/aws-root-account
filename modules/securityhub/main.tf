@@ -204,11 +204,11 @@ resource "aws_securityhub_automation_rule" "suppress_opg_config_1_inactive_regio
       value      = "NEW"
     }
 
-    dynamic "resource_region" {
+    dynamic "id" {
       for_each = ["eu-west-1", "eu-west-2", "us-east-1"]
       content {
-        comparison = "NOT_EQUALS"
-        value      = resource_region.value
+        comparison = "NOT_CONTAINS"
+        value      = ":${id.value}:"
       }
     }
 
