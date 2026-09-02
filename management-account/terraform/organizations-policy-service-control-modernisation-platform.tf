@@ -281,10 +281,10 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
     sid    = "DenyConfigRecorderAndGuardDutyDetectorChanges"
     effect = "Deny"
     actions = [
-      "config:Delete*",
+      "config:DeleteConfigurationRecorder",
       "config:PutConfigurationRecorder",
       "config:StopConfigurationRecorder",
-      "guardduty:Delete*",
+      "guardduty:DeleteDetector",
       "guardduty:UpdateDetector"
     ]
     resources = ["*"]
@@ -295,7 +295,6 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       values = [
         "arn:aws:iam::*:role/ModernisationPlatformAccess",
         "arn:aws:iam::*:role/github-actions",
-        "arn:aws:iam::*:role/MemberInfrastructureAccess",
         "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
       ]
     }
