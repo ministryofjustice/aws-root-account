@@ -298,6 +298,14 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
         "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
       ]
     }
+
+    # Sprinkler is protected by the narrower pilot statement below while the
+    # replacement actions are validated before wider OU enforcement.
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.modernisation_platform_accounts.sprinkler_id
+    }
   }
 
   statement {
@@ -371,6 +379,59 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
 # AWS Config recorder and GuardDuty detector protections are included in the existing secure-baselines SCP because
 # the Modernisation Platform OU is already at its SCP attachment limit. These controls use a separate statement
 # without a resource-tag condition because Config recorders and GuardDuty detectors are not consistently tagged.
+
+###############################################################
+# Pilot narrowed Config and GuardDuty protections in Sprinkler
+###############################################################
+
+data "aws_iam_policy_document" "mp_protect_config_guardduty_pilot" {
+  statement {
+    sid    = "DenyConfigRecorderAndGuardDutyDetectorChanges"
+    effect = "Deny"
+    actions = [
+      "config:DeleteConfigurationRecorder",
+      "config:PutConfigurationRecorder",
+      "config:StopConfigurationRecorder",
+      "guardduty:DeleteDetector",
+      "guardduty:UpdateDetector"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/github-actions",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+  }
+}
+
+resource "aws_organizations_policy" "mp_protect_config_guardduty_pilot" {
+  name        = "Modernisation Platform Protect Config and GuardDuty Pilot"
+  description = "Pilot narrowed protection for AWS Config recorders and GuardDuty detectors in Sprinkler."
+  type        = "SERVICE_CONTROL_POLICY"
+
+  tags = {
+    business-unit = "Platforms"
+    component     = "SERVICE_CONTROL_POLICY"
+    source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
+  }
+
+  content = data.aws_iam_policy_document.mp_protect_config_guardduty_pilot.json
+}
+
+resource "aws_organizations_policy_attachment" "mp_protect_config_guardduty_pilot" {
+  for_each = toset([
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
+    if child.name == "modernisation-platform-sprinkler"
+  ])
+
+  policy_id = aws_organizations_policy.mp_protect_config_guardduty_pilot.id
+  target_id = each.value
+}
 
 ##############################
 # Enforce S3 KMS encryption  #
