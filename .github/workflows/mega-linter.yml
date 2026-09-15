@@ -36,6 +36,10 @@ jobs:
 
       - name: Upload MegaLinter scan results to GitHub Security tab
         if: success() || failure()
+        # continue-on-error: SARIF is only emitted by linters that ran and support it, so a
+        # diff-only PR touching file types with no SARIF-capable linter produces an empty
+        # "runs" array, which GitHub's upload API rejects.
+        continue-on-error: true
         uses: github/codeql-action/upload-sarif@cf7e9f23492505046de9a37830c3711dd0f25bb3 # v2.16.2
         with:
           sarif_file: "megalinter-reports/megalinter-report.sarif"
