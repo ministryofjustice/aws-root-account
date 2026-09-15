@@ -58,11 +58,6 @@ resource "aws_ram_resource_share" "network_operations_centre_byoip" {
   ]
 }
 
-resource "aws_ram_principal_association" "network_operations_centre_byoip" {
-  principal          = local.workplace_tech_poc_development_account_id
-  resource_share_arn = aws_ram_resource_share.network_operations_centre_byoip.arn
-}
-
 resource "aws_ram_resource_association" "network_operations_centre_byoip" {
   resource_arn       = aws_vpc_ipam_pool.network_operations_centre.arn
   resource_share_arn = aws_ram_resource_share.network_operations_centre_byoip.arn
