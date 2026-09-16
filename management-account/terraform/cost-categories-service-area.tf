@@ -3,7 +3,6 @@ locals {
     for k, v in data.awscc_organizations_account.all :
     k => {
       id           = v.id
-      name         = v.linked_account_name
       service_area = coalesce(one(flatten([
         for tag in coalesce(v.tags, []) :
         tag.value if tag.key == "service-area"
@@ -15,7 +14,7 @@ locals {
     "Hosting" = {
       service_area_tag_values     = ["Hosting"]
       untagged_aws_account_names  = ["Cloud Platform", "Cloud Platform Ephemeral Test", "cloud-platform-development", "cloud-platform-live", "cloud-platform-live-development", "cloud-platform-live-preproduction", "cloud-platform-live-production", "cloud-platform-live-test", "cloud-platform-non-live-development", "cloud-platform-non-live-preproduction", "cloud-platform-non-live-production", "cloud-platform-non-live-test", "cloud-platform-nonlive", "cloud-platform-preproduction", "coat-development", "coat-production", "container-platform-cd-live", "container-platform-cd-nonlive", "container-platform-hmpps-live", "container-platform-hmpps-nonlive", "container-platform-laa-live", "container-platform-laa-nonlive", "container-platform-octo-live", "container-platform-octo-nonlive", "cooker-development", "core-logging", "core-network-services", "core-security", "core-shared-services", "core-shared-services-development", "core-vpc-development", "core-vpc-preproduction", "core-vpc-production", "core-vpc-sandbox", "core-vpc-test", "example-development", "Justice Engineering AI Services", "long-term-storage-production", "Modernisation Platform", "MoJ Digital Services", "MOJ Master", "observability-platform-development", "observability-platform-production", "octo-development", "octo-engineering-ai-enablement-development", "octo-engineering-ai-enablement-production", "sprinkler-development", "testing-test"]
-      tagged_aws_account_names    = [for k, v in local.all_aws_accounts_with_service_area_tag : v.name if contains(["Hosting"], v.service_area)]
+      tagged_aws_account_names    = [for k, v in local.all_aws_accounts_with_service_area_tag : v.id if contains(["Hosting"], v.service_area)]
     },
   }
 }
