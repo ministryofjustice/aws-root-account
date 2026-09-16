@@ -102,7 +102,7 @@ locals {
         aws_organizations_account.hmpps_cr_unpaid_work_production.id,
       ]
     },
-        {
+    {
       github_team        = "hmpps-jenkins-admin",
       permission_set_arn = aws_ssoadmin_permission_set.administrator_access.arn,
       account_ids = [
