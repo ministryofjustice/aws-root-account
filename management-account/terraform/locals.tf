@@ -28,6 +28,14 @@ locals {
       business-unit = "YJB"
     })
   }
+  tags_service_areas = {
+    hosting = merge(local.tags_default, {
+      service-area = "Hosting"
+    })
+    unallocated = merge(local.tags_default, {
+      service-area = "Unallocated"
+    })
+  }
   github_repository = "github.com/ministryofjustice/aws-root-account/blob/main"
 
   # Account maps
