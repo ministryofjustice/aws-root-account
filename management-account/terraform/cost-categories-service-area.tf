@@ -1,6 +1,6 @@
 locals {
   all_aws_accounts_with_service_area_tag = {
-    for k, v in local.all_accounts :
+    for k, v in data.awscc_organizations_account.all :
     k => {
       id           = v.id
       name         = v.name
