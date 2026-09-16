@@ -16,12 +16,6 @@ locals {
     if account.name == "organisation-security"
   ]...)
 
-  workplace_tech_poc_development_account_id = coalesce([
-    for account in local.organizations_organization.accounts :
-    account.id
-    if account.name == "Workplace Tech Proof Of Concept Development"
-  ]...)
-
   moj_network_operations_centre_preproduction_account_id = coalesce([
     for account in local.organizations_organization.accounts :
     account.id
