@@ -3,7 +3,7 @@ locals {
     for k, v in data.awscc_organizations_account.all :
     k => {
       id           = v.id
-      name         = v.name
+      name         = v.linked_account_name
       service_area = coalesce(one(flatten([
         for tag in coalesce(v.tags, []) :
         tag.value if tag.key == "service-area"
