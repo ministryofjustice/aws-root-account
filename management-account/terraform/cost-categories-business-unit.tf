@@ -1,13 +1,6 @@
-data "awscc_organizations_accounts" "all" {}
-
-data "awscc_organizations_account" "all" {
-  for_each = data.awscc_organizations_accounts.all.ids
-  id       = each.value
-}
-
 locals {
   all_aws_accounts_with_business_unit_tag = {
-    for k, v in data.awscc_organizations_account.all :
+    for k, v in local.all_accounts :
     k => {
       "id" = v.id
       "business_unit" = coalesce(one(flatten([
