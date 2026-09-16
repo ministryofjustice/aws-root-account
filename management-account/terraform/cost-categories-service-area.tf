@@ -67,7 +67,7 @@ resource "aws_ce_cost_category" "service_area" {
 
       rule {
         dimension {
-          key           = "LINKED_ACCOUNT_NAME"
+          key           = "LINKED_ACCOUNT"
           values        = rule.value.tagged_aws_account_names
           match_options = ["EQUALS"]
         }
