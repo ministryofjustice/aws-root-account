@@ -23,11 +23,6 @@ import {
 }
 
 import {
-  to = module.dsit_cost_integration.aws_costoptimizationhub_enrollment_status.this[0]
-  id = data.aws_caller_identity.current.account_id
-}
-
-import {
   to = module.dsit_cost_integration.aws_iam_role.this
   id = "GDSCloudConsumption"
 }
