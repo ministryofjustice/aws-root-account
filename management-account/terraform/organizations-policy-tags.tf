@@ -28,6 +28,7 @@ resource "aws_organizations_policy" "mandatory_tags" {
           "CICA",
           "HMCTS",
           "HMPPS",
+          "HQ",
           "LAA",
           "OCTO",
           "OPG",
@@ -95,6 +96,7 @@ resource "aws_organizations_policy" "mandatory_tags_with_alerting" {
           "CICA",
           "HMCTS",
           "HMPPS",
+          "HQ"
           "LAA",
           "OCTO",
           "OPG",
