@@ -18,16 +18,6 @@ import {
 }
 
 import {
-  to = module.dsit_cost_integration.aws_bcmdataexports_export.recommendations["enabled"]
-  id = "arn:aws:bcm-data-exports:us-east-1:${data.aws_caller_identity.current.account_id}:export/gds-recommendations-v1-4d32ddca-c357-494d-944f-60b775b26e33"
-}
-
-import {
-  to = module.dsit_cost_integration.aws_costoptimizationhub_enrollment_status.this[0]
-  id = data.aws_caller_identity.current.account_id
-}
-
-import {
   to = module.dsit_cost_integration.aws_iam_role.this
   id = "GDSCloudConsumption"
 }
