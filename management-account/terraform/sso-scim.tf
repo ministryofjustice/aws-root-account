@@ -39,3 +39,4 @@ module "scim_slack_notifications" {
   ]
   tags = {}
 }
+
