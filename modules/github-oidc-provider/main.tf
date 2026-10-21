@@ -204,6 +204,7 @@ data "aws_iam_policy_document" "extra_permissions_apply" {
       "secretsmanager:*",
       "securityhub:*",
       "sns:*",
+      "sqs:*",
       "ssm:AddTagsToResource",
       "ssm:DeleteParameter",
       "ssm:DescribeParameter",
