@@ -49,25 +49,6 @@ resource "aws_guardduty_detector_feature" "s3_logs" {
   status      = "ENABLED"
 }
 
-resource "aws_guardduty_detector_feature" "root_ai_protection" {
-  provider    = aws.root_account
-  detector_id = aws_guardduty_detector.default.id
-  name        = "AI_PROTECTION"
-  status      = "ENABLED"
-}
-
-resource "aws_guardduty_detector_feature" "root_rds_protection" {
-  provider    = aws.root_account
-  detector_id = aws_guardduty_detector.default.id
-  name        = "RDS_LOGIN_EVENTS"
-  status      = "ENABLED"
-
-  additional_configuration {
-    name   = "RDS_DATA_RISK"
-    status = "ENABLED"
-  }
-}
-
 resource "aws_guardduty_detector_feature" "administrator_ai_protection" {
   provider    = aws.delegated_administrator
   detector_id = aws_guardduty_detector.delegated_administrator.id
