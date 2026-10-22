@@ -23,7 +23,7 @@ module "xsiam_cloudtrail_topic" {
     deny_insecure_transport = {
       sid        = "DenyInsecureTransport"
       effect     = "Deny"
-      actions    = ["sns:*"]
+      actions    = ["sns:Publish"]
       principals = [{ type = "AWS", identifiers = ["*"] }]
       conditions = [{ test = "Bool", variable = "aws:SecureTransport", values = ["false"] }]
     }
