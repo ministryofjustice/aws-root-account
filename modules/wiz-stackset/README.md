@@ -12,21 +12,26 @@ an existing MoJ OU. Enabling the StackSet with this placeholder fails validation
   targeted member accounts, including descendant OUs and future accounts entering
   scope. Deployment uses one region, `eu-west-2`, because IAM is global.
 - `management-account/terraform/wiz.tf` calls `modules/wiz-management` to manage
-  the management-account role and policies directly in Terraform. AWS excludes
-  the management account from service-managed StackSets. A caller-account
-  precondition checks the provider against the organization's management account.
+   the management-account IAM resources through a guarded wrapper around the
+   official Wiz native Terraform module. AWS excludes the management account from
+   service-managed StackSets. The wrapper checks the provider account before
+   planning vendor resources. See the [source provenance and wrapper details](../wiz-management/README.md).
 - StackSets trusted access and delegated administration are already configured
   in `management-account/terraform/organizations.tf`; this trial does not change
   those settings or create a connector in Wiz.
 
 ## Vendor Defaults
 
-The supplied files use Wiz's `2026-10-21` standard AWS template:
+The member-account StackSet uses Wiz's `2026-10-21` standard AWS template:
 <https://wizio-public.s3.amazonaws.com/deployment-v2/aws/wiz-aws-standard.json>.
 The downloaded source SHA-256 is
 `4081ebae61dafe47db0f312d0681f6f95b71343038c8637277b35d41756f1ae7`.
 The template is embedded locally; Terraform does not fetch it at deployment time.
 Updates require a new source comparison and policy review.
+
+Management-account IAM uses a locally vendored copy of Wiz's native Terraform
+module, also version `2026-10-21`. The reviewed archive checksum and update
+procedure are recorded in the [management wrapper documentation](../wiz-management/README.md).
 
 Both roots retain the supplied vendor feature defaults:
 
@@ -112,9 +117,10 @@ terraform test
 Tests cover vendor feature defaults, trust restrictions, deployment targeting,
 rollout settings, invalid placeholder/reserved inputs, the management account
 guard, and IAM policy size limits with every optional feature enabled. StackSet
-tests use a mocked AWS provider. Management tests use the real local policy JSON
-generator, override account/partition lookups, and disable AWS authentication
-requests; they do not create resources or require AWS credentials.
+tests use a mocked AWS provider. Management wrapper tests override AWS data
+lookups and disable authentication requests; vendor-resource tests use a mocked
+provider while evaluating the vendor's `jsonencode` policies. They do not create
+resources or require AWS credentials.
 
 The embedded member template was compared structurally with the source above and
 renders to 39,336 bytes, below the 51,200-byte inline limit. The native management
