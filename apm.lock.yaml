@@ -1,0 +1,39 @@
+lockfile_version: '1'
+apm_version: 0.34.0
+dependencies:
+- repo_url: ministryofjustice/ai-toolkit
+  name: integration-hub-engineering
+  host: github.com
+  resolved_commit: ae0e74fd7b659819dd2eb6edaae771f2fe5eeecd
+  version: 1.0.1
+  virtual_path: toolkits/integration-hub/engineering
+  is_virtual: true
+  package_type: apm_package
+  deployed_files:
+  - .github/instructions/pull-request.instructions.md
+  - .github/instructions/terraform.instructions.md
+  deployed_file_hashes:
+    .github/instructions/pull-request.instructions.md: sha256:bfc831587a60892c97baa1f45102fff921211530af789d3627a9924a2134e9eb
+    .github/instructions/terraform.instructions.md: sha256:66889ba5b9744b97bf89bbef3f09e0bfc615e0f26b53978f36a5cee83fb7b4ec
+  content_hash: sha256:55b43ac6134c52dcb801f5d5721c79aebb54f31719bf67862c701207159f28b1
+  discovered_via: ministryofjustice
+  marketplace_plugin_name: integration-hub-engineering
+deployments:
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/pull-request.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - ministryofjustice/ai-toolkit/toolkits/integration-hub/engineering
+  active_owner: ministryofjustice/ai-toolkit/toolkits/integration-hub/engineering
+  content_hash: sha256:bfc831587a60892c97baa1f45102fff921211530af789d3627a9924a2134e9eb
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/terraform.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - ministryofjustice/ai-toolkit/toolkits/integration-hub/engineering
+  active_owner: ministryofjustice/ai-toolkit/toolkits/integration-hub/engineering
+  content_hash: sha256:66889ba5b9744b97bf89bbef3f09e0bfc615e0f26b53978f36a5cee83fb7b4ec

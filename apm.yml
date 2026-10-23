@@ -1,0 +1,15 @@
+name: aws-root-account
+version: 1.0.0
+description: APM project for aws-root-account
+author: David Sibley
+# Which agent platforms to deploy to.
+# Resolution order: --target flag > this field > auto-detect from filesystem.
+# Accepted values: agent-skills, antigravity, claude, codex, copilot, cursor, gemini, grok-bot, grok-build, hermes, kiro, opencode, vscode, windsurf
+targets:
+  - copilot
+dependencies:
+  apm:
+    - ministryofjustice/ai-toolkit/toolkits/integration-hub/engineering
+  mcp: []
+includes: auto
+scripts: {}

@@ -235,6 +235,7 @@ data "aws_iam_policy_document" "security_audit" {
       "aoss:BatchGet*",
       "aoss:Get*",
       "aoss:List*",
+      "apigateway:GET",
       "cloudwatch:Get*",
       "es:Describe*",
       "es:ESHttpGet",
