@@ -20,6 +20,13 @@ data "aws_iam_policy_document" "oidc_assume_role_plan" {
   }
 
   statement {
+    sid       = "AllowOIDCReadWizExternalId"
+    effect    = "Allow"
+    resources = [aws_secretsmanager_secret.wiz_external_id.arn]
+    actions   = ["secretsmanager:GetSecretValue"]
+  }
+
+  statement {
     sid       = "AllowOIDCReadState"
     effect    = "Allow"
     resources = ["arn:aws:s3:::moj-aws-root-account-terraform-state/*", "arn:aws:s3:::moj-aws-root-account-terraform-state/"]
