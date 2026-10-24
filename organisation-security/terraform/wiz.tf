@@ -11,7 +11,7 @@ data "aws_secretsmanager_secret_version" "wiz_external_id" {
 }
 
 locals {
-  wiz_connector = local.wiz_enabled ? sensitive(jsondecode(data.aws_secretsmanager_secret_version.wiz_external_id[0].secret_string)) : null
+  wiz_connector = local.wiz_enabled ? sensitive(jsondecode(data.aws_secretsmanager_secret_version.wiz_external_id[0].secret_string)) : { external_id = null, role_arn = null }
 }
 
 module "wiz_stackset" {
