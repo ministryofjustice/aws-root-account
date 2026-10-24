@@ -63,18 +63,20 @@ enabling.
 Before deployment, confirm the native role and connector discovery with Wiz,
 inventory existing Wiz roles/policies, and reconcile ownership of same-name
 resources. Obtain the tenant trust role ARN and connector external ID from Wiz.
-The external ID is sensitive but remains in Terraform state and IAM trust
-policies. Supply these settings through the management root's normal deployment
-environment:
+The management root reads both from the `wiz_external_id` Secrets Manager secret
+while `wiz_enabled` is true, so the secret must have a value first:
 
-```hcl
-wiz_enabled        = true
-wiz_trust_role_arn = "<Wiz tenant trust role ARN>"
-wiz_external_id    = "<Wiz connector external ID>"
+```json
+{
+  "external_id": "<Wiz connector external ID>",
+  "role_arn": "<Wiz tenant trust role ARN>"
+}
 ```
 
-These documentation placeholders are not valid inputs. Current workflows do not
-supply these settings, so the proposal remains disabled. Review an authenticated
+The external ID is sensitive but remains in Terraform state and IAM trust
+policies. `wiz_enabled` defaults to false and current workflows do not override
+it, so the proposal remains disabled until that default is changed in a reviewed
+pull request. Review an authenticated
 AWS plan and obtain approval before applying, then test connector role
 assumption. Setting `wiz_enabled` back to false after deployment destroys the
 role and policies; it does not pause scanning.

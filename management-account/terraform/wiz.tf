@@ -1,20 +1,18 @@
 variable "wiz_enabled" {
   type        = bool
   default     = false
-  description = "Enable the Wiz management-account trial after reviewing the plan and supplying connector settings."
+  description = "Enable the Wiz management-account trial after reviewing the plan and populating the wiz_external_id secret."
 }
 
-variable "wiz_trust_role_arn" {
-  type        = string
-  default     = ""
-  description = "Wiz tenant/data-centre trust role ARN from the connector settings; required when wiz_enabled is true."
+# Populated out-of-band as {"external_id": "<External ID>", "role_arn": "<Wiz trust role ARN>"}.
+# Only read while enabled: a secret without a value cannot be read.
+data "aws_secretsmanager_secret_version" "wiz_external_id" {
+  count     = var.wiz_enabled ? 1 : 0
+  secret_id = "wiz_external_id"
 }
 
-variable "wiz_external_id" {
-  type        = string
-  default     = ""
-  sensitive   = true
-  description = "External ID supplied by the Wiz connector; required when wiz_enabled is true."
+locals {
+  wiz_connector = var.wiz_enabled ? sensitive(jsondecode(data.aws_secretsmanager_secret_version.wiz_external_id[0].secret_string)) : null
 }
 
 module "wiz_management" {
@@ -22,8 +20,8 @@ module "wiz_management" {
   count  = var.wiz_enabled ? 1 : 0
 
   wiz_management_account_id = aws_organizations_organization.default.master_account_id
-  wiz_trust_role_arn        = var.wiz_trust_role_arn
-  wiz_external_id           = var.wiz_external_id
+  wiz_trust_role_arn        = local.wiz_connector.role_arn
+  wiz_external_id           = local.wiz_connector.external_id
   wiz_tags                  = local.tags_organisation_management
 }
 
