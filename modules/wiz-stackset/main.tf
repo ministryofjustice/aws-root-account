@@ -142,6 +142,16 @@ variable "wiz_max_concurrent_count" {
   }
 }
 
+variable "wiz_concurrency_mode" {
+  type        = string
+  default     = "STRICT_FAILURE_TOLERANCE"
+  description = "Stack instance deployment concurrency mode. STRICT_FAILURE_TOLERANCE caps concurrency at failure tolerance + 1; SOFT_FAILURE_TOLERANCE keeps max_concurrent_count."
+  validation {
+    condition     = contains(["STRICT_FAILURE_TOLERANCE", "SOFT_FAILURE_TOLERANCE"], var.wiz_concurrency_mode)
+    error_message = "Use STRICT_FAILURE_TOLERANCE or SOFT_FAILURE_TOLERANCE."
+  }
+}
+
 locals {
   wiz_default_parameters = {
     for name, spec in local.wiz_member_template.Parameters :
@@ -225,9 +235,17 @@ resource "aws_cloudformation_stack_set_instance" "wiz" {
   }
 
   operation_preferences {
+    concurrency_mode        = var.wiz_concurrency_mode
     failure_tolerance_count = var.wiz_failure_tolerance_count
     max_concurrent_count    = var.wiz_max_concurrent_count
     region_concurrency_type = "PARALLEL"
+  }
+
+  # Organisation-wide rollouts exceed the provider's 30-minute default.
+  timeouts {
+    create = "6h"
+    update = "6h"
+    delete = "6h"
   }
 }
 

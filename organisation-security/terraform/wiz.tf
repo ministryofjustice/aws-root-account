@@ -33,6 +33,11 @@ module "wiz_stackset" {
   wiz_target_ou_ids = local.wiz_connector == null ? null : local.wiz_target_ou_ids
   wiz_tags          = local.tags_organisation_management
 
+  # Deploy to 25 accounts at once; stop after more than 5 failures.
+  wiz_concurrency_mode        = "SOFT_FAILURE_TOLERANCE"
+  wiz_max_concurrent_count    = 50
+  wiz_failure_tolerance_count = 15
+
   wiz_template_parameters = {
     CloudCostScanning       = "Enabled"
     DataScanning            = "Disabled"
