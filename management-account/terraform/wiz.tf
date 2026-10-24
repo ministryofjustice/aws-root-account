@@ -16,17 +16,28 @@ locals {
   wiz_connector = local.wiz_secret == null ? null : sensitive(jsondecode(local.wiz_secret))
 }
 
-module "wiz_management" {
-  source = "../../modules/wiz-management"
+# Wiz's own module. The checksum pins the reviewed archive; init fails if it changes.
+module "wiz" {
+  source = "https://wizio-public.s3.amazonaws.com/deployment-v3/aws/terraform/2796/wiz-aws-native-terraform-terraform-module.zip?checksum=sha256:ada51284d49dd3e6e2f1862385acd725dbadec693335b5af4f458763b21fbd06"
   count  = local.wiz_enabled ? 1 : 0
 
-  wiz_management_account_id = aws_organizations_organization.default.master_account_id
-  wiz_trust_role_arn        = local.wiz_connector.role_arn
-  wiz_external_id           = local.wiz_connector.external_id
-  wiz_tags                  = local.tags_organisation_management
+  external-id               = local.wiz_connector.external_id
+  remote-arn                = local.wiz_connector.role_arn
+  data-scanning             = true
+  lightsail-scanning        = false
+  eks-scanning              = false
+  terraform-bucket-scanning = true
+  cloud-cost-scanning       = false
+  tags                      = local.tags_organisation_management
+}
+
+# The role was first applied through the removed modules/wiz-management wrapper.
+moved {
+  from = module.wiz_management[0].module.vendor
+  to   = module.wiz[0]
 }
 
 output "wiz_management_role_arn" {
-  value       = one(module.wiz_management[*].wiz_management_role_arn)
-  description = "Management-account role ARN for the Wiz connector; null while the trial is disabled."
+  value       = one(module.wiz[*].role_arn)
+  description = "Management-account role ARN for the Wiz connector; null while disabled."
 }

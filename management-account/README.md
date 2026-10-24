@@ -5,9 +5,9 @@ This directory holds the [Terraform](https://terraform.io) for the MOJ's
 
 ## Wiz CSPM Trial
 
-The Wiz management-account role is wired in but disabled by default. See the
-[trial assessment and deployment requirements](../modules/wiz-management/README.md)
-before supplying connector settings or enabling deployment.
+The Wiz management-account role is created by Wiz's own Terraform module in
+[wiz.tf](terraform/wiz.tf). The External ID and trust role ARN are read from the
+`wiz_external_id` secret.
 
 ## Closing an AWS Account
 
