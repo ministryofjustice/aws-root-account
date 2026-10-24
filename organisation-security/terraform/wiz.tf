@@ -116,7 +116,84 @@ module "posture_management_state_s3_bucket" {
   tags = local.tags_organisation_management
 }
 
+# GitHub Actions roles for ministryofjustice/cloud-security-posture-management-configuration.
+# Both only reach the state bucket and its key; Wiz API credentials are GitHub secrets, not AWS.
+locals {
+  posture_management_repo       = "ministryofjustice/cloud-security-posture-management-configuration"
+  posture_management_bucket_arn = module.posture_management_state_s3_bucket.s3_bucket_arn
+}
+
+# Pull requests: read state, and write/delete only the S3 lock file during plan.
+module "posture_management_plan_role" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "~> 6.8"
+
+  name               = "posture-management-plan"
+  enable_github_oidc = true
+  oidc_subjects      = ["repo:${local.posture_management_repo}:pull_request"]
+
+  create_inline_policy = true
+  inline_policy_permissions = {
+    ListStateBucket = {
+      actions   = ["s3:ListBucket"]
+      resources = [local.posture_management_bucket_arn]
+    }
+    ReadState = {
+      actions   = ["s3:GetObject"]
+      resources = ["${local.posture_management_bucket_arn}/*"]
+    }
+    WriteLockFile = {
+      actions   = ["s3:PutObject", "s3:DeleteObject"]
+      resources = ["${local.posture_management_bucket_arn}/*.tflock"]
+    }
+    UseStateKey = {
+      actions   = ["kms:Decrypt", "kms:GenerateDataKey"]
+      resources = [module.posture_management_state_kms.key_arn]
+    }
+  }
+
+  tags = local.tags_organisation_management
+}
+
+# main branch: read and write state.
+module "posture_management_apply_role" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "~> 6.8"
+
+  name               = "posture-management-apply"
+  enable_github_oidc = true
+  oidc_subjects      = ["repo:${local.posture_management_repo}:ref:refs/heads/main"]
+
+  create_inline_policy = true
+  inline_policy_permissions = {
+    ListStateBucket = {
+      actions   = ["s3:ListBucket"]
+      resources = [local.posture_management_bucket_arn]
+    }
+    ReadWriteState = {
+      actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
+      resources = ["${local.posture_management_bucket_arn}/*"]
+    }
+    UseStateKey = {
+      actions   = ["kms:Decrypt", "kms:Encrypt", "kms:GenerateDataKey"]
+      resources = [module.posture_management_state_kms.key_arn]
+    }
+  }
+
+  tags = local.tags_organisation_management
+}
+
 output "posture_management_state_bucket" {
   value       = module.posture_management_state_s3_bucket.s3_bucket_id
   description = "S3 bucket for Wiz-as-code (posture management) Terraform state"
+}
+
+output "posture_management_plan_role_arn" {
+  value       = module.posture_management_plan_role.arn
+  description = "Role for posture-management pull request plans"
+}
+
+output "posture_management_apply_role_arn" {
+  value       = module.posture_management_apply_role.arn
+  description = "Role for posture-management applies from main"
 }
