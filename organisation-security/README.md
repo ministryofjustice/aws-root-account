@@ -2,13 +2,6 @@
 
 This directory holds the [Terraform](https://terraform.io) for the AWS account named "organisation-security" in MOJ's [AWS Organizations](https://aws.amazon.com/organizations/) configuration.
 
-### Wiz CSPM Trial
-
-The Wiz member-account StackSet is wired in but disabled by default, with a
-deliberately invalid placeholder OU. See the
-[trial assessment and deployment requirements](../modules/wiz-stackset/README.md)
-before supplying connector settings or enabling deployment.
-
 ### IPAM BYOIP Guidance
 
 See guidance here on how to BYOIP to AWS - <https://docs.aws.amazon.com/vpc/latest/ipam/tutorials-byoip-ipam-ipv4.html>
