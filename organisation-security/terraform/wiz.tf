@@ -55,3 +55,68 @@ output "wiz_stackset_id" {
   value       = one(module.wiz_stackset[*].wiz_stackset_id)
   description = "Wiz StackSet identifier; null while the trial is disabled. Check individual stack instance health separately."
 }
+
+# Terraform state for managing Wiz itself as code (projects, policies, users).
+# Locking uses S3 native lock files (`use_lockfile = true` in the consumer's backend), so no DynamoDB table.
+module "posture_management_state_kms" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "~> 4.2"
+
+  description             = "Encrypts the posture-management Terraform state bucket"
+  enable_key_rotation     = true
+  deletion_window_in_days = 30
+  aliases                 = ["posture-management-state"]
+
+  tags = local.tags_organisation_management
+}
+
+module "posture_management_state_s3_bucket" {
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "~> 5.17"
+
+  bucket = "posture-management-${data.aws_caller_identity.current.account_id}"
+
+  versioning = {
+    enabled = true
+  }
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm     = "aws:kms"
+        kms_master_key_id = module.posture_management_state_kms.key_arn
+      }
+      bucket_key_enabled = true
+    }
+  }
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+  control_object_ownership = true
+  object_ownership         = "BucketOwnerEnforced"
+
+  attach_deny_insecure_transport_policy = true
+  attach_require_latest_tls_policy      = true
+
+  # Expire superseded state versions after 90 days; current state is never expired.
+  lifecycle_rule = [
+    {
+      id      = "expire-noncurrent-state"
+      enabled = true
+      noncurrent_version_expiration = {
+        days = 90
+      }
+      abort_incomplete_multipart_upload_days = 7
+    }
+  ]
+
+  tags = local.tags_organisation_management
+}
+
+output "posture_management_state_bucket" {
+  value       = module.posture_management_state_s3_bucket.s3_bucket_id
+  description = "S3 bucket for Wiz-as-code (posture management) Terraform state"
+}
