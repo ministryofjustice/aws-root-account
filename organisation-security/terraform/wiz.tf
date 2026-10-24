@@ -1,6 +1,13 @@
 locals {
-  wiz_enabled       = false
-  wiz_target_ou_ids = ["placeholder OU"]
+  wiz_enabled      = false
+  wiz_excluded_ous = ["OPG"]
+
+  # Every top-level OU except excluded ones, by name. StackSets also deploy to
+  # descendant OUs and to accounts that later join any targeted OU.
+  wiz_target_ou_ids = [
+    for ou in data.aws_organizations_organizational_units.organizational_units.children : ou.id
+    if !contains(local.wiz_excluded_ous, ou.name)
+  ]
 }
 
 # Populated out-of-band as {"external_id": "<External ID>", "role_arn": "<Wiz trust role ARN>"}.
