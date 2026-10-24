@@ -130,6 +130,7 @@ module "posture_management_plan_role" {
   version = "~> 6.8"
 
   name               = "posture-management-plan"
+  use_name_prefix    = false
   enable_github_oidc = true
   oidc_subjects      = ["repo:${local.posture_management_repo}:pull_request"]
 
@@ -162,6 +163,7 @@ module "posture_management_apply_role" {
   version = "~> 6.8"
 
   name               = "posture-management-apply"
+  use_name_prefix    = false
   enable_github_oidc = true
   oidc_subjects      = ["repo:${local.posture_management_repo}:ref:refs/heads/main"]
 
