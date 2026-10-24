@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "xsiam_cloudtrail" {
 
 module "xsiam_cloudtrail_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.8.0"
+  version = "6.8.2"
 
   name        = "xsiam-cloudtrail"
   description = "Read CloudTrail objects and consume the dedicated XSIAM notification queue"
