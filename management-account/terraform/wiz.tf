@@ -27,6 +27,9 @@ module "wiz" {
   lightsail-scanning        = false
   eks-scanning              = false
   terraform-bucket-scanning = true
+  s3-inventory-scanning     = true
+  wiz-defend-awslogs-policy = true
+  wiz-defend-s3-kms-policy  = true
   cloud-cost-scanning       = false
   tags                      = local.tags_organisation_management
 }
