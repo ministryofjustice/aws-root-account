@@ -34,7 +34,15 @@ module "wiz_stackset" {
   wiz_tags          = local.tags_organisation_management
 
   wiz_template_parameters = {
-    S3InventoryScanning = "Enabled"
+    CloudCostScanning       = "Enabled"
+    DataScanning            = "Disabled"
+    EKSScanning             = "Disabled"
+    LightsailScanning       = "Disabled"
+    RDSLogsScanning         = "Enabled"
+    S3AWSLogsScanning       = "Enabled"
+    S3InventoryScanning     = "Enabled"
+    S3KMSDecrypt            = "Enabled"
+    TerraformBucketScanning = "Enabled"
   }
 }
 
