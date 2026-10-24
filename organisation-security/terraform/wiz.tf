@@ -35,8 +35,8 @@ module "wiz_stackset" {
 
   # Deploy to 25 accounts at once; stop after more than 5 failures.
   wiz_concurrency_mode        = "SOFT_FAILURE_TOLERANCE"
-  wiz_max_concurrent_count    = 25
-  wiz_failure_tolerance_count = 5
+  wiz_max_concurrent_count    = 50
+  wiz_failure_tolerance_count = 15
 
   wiz_template_parameters = {
     CloudCostScanning       = "Enabled"
