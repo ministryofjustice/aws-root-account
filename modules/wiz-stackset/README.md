@@ -86,24 +86,29 @@ and a review of the unmanaged access that would remain.
    in every intended account. Reconcile ownership before deploying same-name
    resources; this code does not import or migrate existing resources.
 3. Obtain the tenant/data-centre trust role ARN and connector external ID from
-   Wiz. Neither is the MoJ deployment role. The external ID is marked sensitive,
-   but is still stored in Terraform state and IAM trust policies.
+   Wiz. Neither is the MoJ deployment role. Store both in the
+   organisation-security `wiz_external_id` Secrets Manager secret (format
+   below); the root reads it only while `wiz_enabled` is true. The external ID
+   is marked sensitive, but is still stored in Terraform state and IAM trust
+   policies.
 4. Replace `placeholder OU` with the approved trial OU ID. Descendant accounts
    are included automatically. Do not substitute the organization root without
    approval for organization-wide access.
-5. Supply the inputs through the normal deployment environment and review the
-   organisation-security plan. Current workflows do not supply these inputs,
-   so scheduled plans and existing CI runs leave the trial disabled.
+5. Set `wiz_enabled` and `wiz_target_ou_ids` in
+   `organisation-security/terraform/wiz.tf` in a reviewed pull request and
+   review the organisation-security plan. Current workflows do not override
+   these variables, so scheduled plans and existing CI runs leave the trial
+   disabled until then.
 6. Apply only after approval, then verify each member stack and test the Wiz
    connector's member-account discovery and role assumption.
 
-For the organisation-security root, supply:
+The `wiz_external_id` secret value is JSON:
 
-```hcl
-wiz_enabled        = true
-wiz_trust_role_arn = "<Wiz tenant trust role ARN>"
-wiz_external_id    = "<Wiz connector external ID>"
-wiz_target_ou_ids = ["<approved trial OU ID>"]
+```json
+{
+  "external_id": "<Wiz connector external ID>",
+  "role_arn": "<Wiz tenant trust role ARN>"
+}
 ```
 
 The angle-bracket values above are documentation placeholders, not valid inputs.
