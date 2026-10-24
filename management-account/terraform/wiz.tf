@@ -21,17 +21,20 @@ module "wiz" {
   source = "https://wizio-public.s3.amazonaws.com/deployment-v3/aws/terraform/2796/wiz-aws-native-terraform-terraform-module.zip?checksum=sha256:ada51284d49dd3e6e2f1862385acd725dbadec693335b5af4f458763b21fbd06"
   count  = local.wiz_enabled ? 1 : 0
 
-  external-id               = local.wiz_connector.external_id
-  remote-arn                = local.wiz_connector.role_arn
-  data-scanning             = true
-  lightsail-scanning        = false
-  eks-scanning              = false
-  terraform-bucket-scanning = true
-  s3-inventory-scanning     = true
-  wiz-defend-awslogs-policy = true
-  wiz-defend-s3-kms-policy  = true
+  external-id = local.wiz_connector.external_id
+  remote-arn  = local.wiz_connector.role_arn
+  tags        = local.tags_organisation_management
+
+  # Every feature switch is set explicitly rather than relying on Wiz's defaults.
   cloud-cost-scanning       = false
-  tags                      = local.tags_organisation_management
+  data-scanning             = false
+  eks-scanning              = false
+  lightsail-scanning        = false
+  s3-inventory-scanning     = true
+  terraform-bucket-scanning = true
+  wiz-defend-awslogs-policy = true
+  wiz-defend-rds-policy     = true
+  wiz-defend-s3-kms-policy  = true
 }
 
 # The role was first applied through the removed modules/wiz-management wrapper.
