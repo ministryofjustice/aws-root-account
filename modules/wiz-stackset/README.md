@@ -22,19 +22,27 @@ an existing MoJ OU. Enabling the StackSet with this placeholder fails validation
 
 The member-account StackSet uses Wiz's `2026-10-21` standard AWS template:
 <https://wizio-public.s3.amazonaws.com/deployment-v2/aws/wiz-aws-standard.json>.
-That file is committed unmodified as `wiz-aws-standard.json`, with SHA-256
-`4081ebae61dafe47db0f312d0681f6f95b71343038c8637277b35d41756f1ae7`.
-Plans fail if the committed file no longer matches that checksum, and
-MegaLinter's JSON formatting is disabled for it so the bytes stay unchanged.
+The deployed template is the HCL `wiz_member_template` local in `main.tf`. The
+vendor file is also committed unmodified as `wiz-aws-standard.json`, with SHA-256
+`4081ebae61dafe47db0f312d0681f6f95b71343038c8637277b35d41756f1ae7`. It is not
+deployed; it makes the HCL verifiable. Plans fail if:
 
-While the trial is enabled, plans also fetch the source URL and compare its
-`WizVersionLastUpdated` with the committed version. A difference is a warning,
-not an error: the deployed template only changes when the committed file is
-updated. The scheduled organisation-security plan posts the warning to Slack.
-An unreachable URL fails the plan; an unreadable response only warns.
+- the committed file no longer matches that checksum, or
+- the HCL does not decode to the same JSON as the committed file.
 
-To update, download the new file, review its diff (particularly IAM policy
-changes), update `wiz_template_sha256` in `main.tf`, and rerun the tests.
+MegaLinter's JSON formatting is disabled for the committed file so its bytes
+stay unchanged.
+
+While the trial is enabled, plans also fetch the source URL and compare it with
+the committed file. A difference is a warning, not an error: the deployed
+template only changes when the HCL is updated. The scheduled
+organisation-security plan posts the warning to Slack. An unreachable URL fails
+the plan; an unreadable response only warns. The comparison lives in
+`upstream-check/`, which has its own tests.
+
+To update, download the new file and review its diff (particularly IAM policy
+changes). Then update `wiz_template_sha256` in `main.tf`, regenerate the HCL to
+match, and rerun the tests in this directory and in `upstream-check/`.
 
 This module retains the supplied vendor feature defaults:
 
@@ -112,9 +120,10 @@ terraform test
 ```
 
 Tests cover vendor feature defaults, trust restrictions, deployment targeting,
-rollout settings, invalid placeholder/reserved inputs and the upstream version
-warning. Tests use mocked AWS and HTTP providers. They do not create resources,
-require AWS credentials or fetch the vendor URL.
+rollout settings and invalid placeholder/reserved inputs. They use a mocked AWS
+provider and replace `upstream-check`, so they do not create resources, require
+AWS credentials or fetch the vendor URL. Run `terraform test` in
+`upstream-check/` for the upstream comparison, which uses a mocked HTTP provider.
 
 The minified member template is 39,336 bytes, below the 51,200-byte inline
 limit. An isolated root-wrapper plan confirms that the default-disabled
