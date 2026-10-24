@@ -1,5 +1,5 @@
 locals {
-  wiz_enabled      = false
+  wiz_enabled      = true
   wiz_excluded_ous = [local.ou_opg]
 
   # Every top-level OU except excluded ones. StackSets also deploy to
@@ -32,6 +32,10 @@ module "wiz_stackset" {
   wiz_external_id   = local.wiz_connector.external_id
   wiz_target_ou_ids = local.wiz_connector == null ? null : local.wiz_target_ou_ids
   wiz_tags          = local.tags_organisation_management
+
+  wiz_template_parameters = {
+    S3InventoryScanning = "Enabled"
+  }
 }
 
 output "wiz_stackset_id" {
