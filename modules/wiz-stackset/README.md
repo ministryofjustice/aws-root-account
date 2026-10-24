@@ -22,10 +22,19 @@ an existing MoJ OU. Enabling the StackSet with this placeholder fails validation
 
 The member-account StackSet uses Wiz's `2026-10-21` standard AWS template:
 <https://wizio-public.s3.amazonaws.com/deployment-v2/aws/wiz-aws-standard.json>.
-The downloaded source SHA-256 is
+That file is committed unmodified as `wiz-aws-standard.json`, with SHA-256
 `4081ebae61dafe47db0f312d0681f6f95b71343038c8637277b35d41756f1ae7`.
-The template is embedded locally; Terraform does not fetch it at deployment time.
-Updates require a new source comparison and policy review.
+Plans fail if the committed file no longer matches that checksum, and
+MegaLinter's JSON formatting is disabled for it so the bytes stay unchanged.
+
+While the trial is enabled, plans also fetch the source URL and compare its
+`WizVersionLastUpdated` with the committed version. A difference is a warning,
+not an error: the deployed template only changes when the committed file is
+updated. The scheduled organisation-security plan posts the warning to Slack.
+An unreachable URL fails the plan; an unreadable response only warns.
+
+To update, download the new file, review its diff (particularly IAM policy
+changes), update `wiz_template_sha256` in `main.tf`, and rerun the tests.
 
 This module retains the supplied vendor feature defaults:
 
@@ -103,13 +112,13 @@ terraform test
 ```
 
 Tests cover vendor feature defaults, trust restrictions, deployment targeting,
-rollout settings and invalid placeholder/reserved inputs. Tests use a mocked AWS
-provider. They do not create resources or require AWS credentials.
+rollout settings, invalid placeholder/reserved inputs and the upstream version
+warning. Tests use mocked AWS and HTTP providers. They do not create resources,
+require AWS credentials or fetch the vendor URL.
 
-The embedded member template was compared structurally with the source above and
-renders to 39,336 bytes, below the 51,200-byte inline limit. An isolated root-wrapper
-plan confirms that the default-disabled integration does not instantiate the Wiz
-module.
+The minified member template is 39,336 bytes, below the 51,200-byte inline
+limit. An isolated root-wrapper plan confirms that the default-disabled
+integration does not instantiate the Wiz module.
 
 Local validation is not a substitute for an authenticated AWS plan, IAM-policy
 review, successful StackSet operations, or a working Wiz connector.

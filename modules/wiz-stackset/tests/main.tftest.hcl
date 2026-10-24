@@ -1,5 +1,14 @@
 mock_provider "aws" {}
 
+mock_provider "http" {
+  override_data {
+    target = data.http.wiz_upstream
+    values = {
+      response_body = "{\"Parameters\":{\"WizVersionLastUpdated\":{\"Default\":\"2026-10-21\"}}}"
+    }
+  }
+}
+
 variables {
   wiz_external_id   = "00000000-0000-0000-0000-000000000000"
   wiz_role_arn      = "arn:aws:iam::999999999999:role/Wiz"
@@ -114,4 +123,30 @@ run "reject_eks_with_role_path" {
     wiz_template_parameters = { EKSScanning = "Enabled", RolePath = "/trial/" }
   }
   expect_failures = [aws_cloudformation_stack_set.wiz]
+}
+
+run "warn_when_upstream_newer" {
+  command = plan
+
+  override_data {
+    target = data.http.wiz_upstream
+    values = {
+      response_body = "{\"Parameters\":{\"WizVersionLastUpdated\":{\"Default\":\"2099-01-01\"}}}"
+    }
+  }
+
+  expect_failures = [check.wiz_template_current]
+}
+
+run "warn_when_upstream_unreadable" {
+  command = plan
+
+  override_data {
+    target = data.http.wiz_upstream
+    values = {
+      response_body = "<Error>AccessDenied</Error>"
+    }
+  }
+
+  expect_failures = [check.wiz_template_current]
 }
