@@ -1,5 +1,5 @@
 locals {
-  wiz_enabled = false
+  wiz_enabled = true
 }
 
 # Populated out-of-band as {"external_id": "<External ID>", "role_arn": "<Wiz trust role ARN>"}.
