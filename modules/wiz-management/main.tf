@@ -101,7 +101,7 @@ data "aws_caller_identity" "wiz_management" {
 }
 
 module "vendor" {
-  source = "./vendor"
+  source = "https://wizio-public.s3.amazonaws.com/deployment-v3/aws/terraform/2796/wiz-aws-native-terraform-terraform-module.zip"
 
   external-id               = var.wiz_external_id
   remote-arn                = var.wiz_trust_role_arn
