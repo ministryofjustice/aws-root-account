@@ -74,7 +74,8 @@ module "posture_management_state_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 5.17"
 
-  bucket = "posture-management-${data.aws_caller_identity.current.account_id}"
+  # Fixed name (no account ID) so consumers can hard-code it in their backend block.
+  bucket = "moj-posture-management-terraform-state"
 
   versioning = {
     enabled = true
