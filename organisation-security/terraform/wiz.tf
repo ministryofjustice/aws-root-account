@@ -33,6 +33,9 @@ module "wiz_stackset" {
   wiz_target_ou_ids = local.wiz_connector == null ? null : local.wiz_target_ou_ids
   wiz_tags          = local.tags_organisation_management
 
+  # Keep member stacks if Terraform ever destroys an OU deployment target.
+  wiz_retain_on_target_destroy = true
+
   # Deploy to 25 accounts at once; stop after more than 5 failures.
   wiz_concurrency_mode        = "SOFT_FAILURE_TOLERANCE"
   wiz_max_concurrent_count    = 50
@@ -49,6 +52,16 @@ module "wiz_stackset" {
     S3KMSDecrypt            = "Enabled"
     TerraformBucketScanning = "Enabled"
   }
+}
+
+# One-off migration from the single all-OU stack set instance to one per OU.
+# The module's removed block forgets the old instance without deleting stacks;
+# these imports adopt each OU that was already targeted. OPG was excluded until
+# now, so it is created rather than imported. Remove once applied.
+import {
+  for_each = local.wiz_enabled ? setsubtract(toset(local.wiz_target_ou_ids), toset([local.ou_opg])) : toset([])
+  to       = module.wiz_stackset[0].aws_cloudformation_stack_set_instance.wiz_ou[each.key]
+  id       = "${module.wiz_stackset[0].wiz_stackset_name},${each.key},${module.wiz_stackset[0].wiz_deployment_region},DELEGATED_ADMIN"
 }
 
 output "wiz_stackset_id" {

@@ -7,7 +7,7 @@
 # the committed copy; the deployed template only changes when the HCL is updated.
 #
 # WHAT THIS CREATES
-# - Terraform owns one service-managed StackSet and its OU deployment target.
+# - Terraform owns one service-managed StackSet and one deployment target per OU.
 # - CloudFormation owns Wiz IAM resources inside each targeted member account.
 # - New accounts entering the targeted OUs enrol without another Terraform run.
 # - No outer org CloudFormation stack and no nested StackSet are created.
@@ -47,7 +47,7 @@
 # Review an authenticated Terraform plan before deploying.
 
 terraform {
-  required_version = ">= 1.5.0"
+  required_version = ">= 1.7.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -224,14 +224,18 @@ resource "aws_cloudformation_stack_set" "wiz" {
   }
 }
 
-resource "aws_cloudformation_stack_set_instance" "wiz" {
+# One deployment target per OU, so adding or removing an OU creates or destroys
+# only that OU's instance instead of replacing every target.
+resource "aws_cloudformation_stack_set_instance" "wiz_ou" {
+  for_each = var.wiz_target_ou_ids
+
   call_as                   = "DELEGATED_ADMIN"
   stack_set_name            = aws_cloudformation_stack_set.wiz.name
   stack_set_instance_region = var.wiz_deployment_region
   retain_stack              = var.wiz_retain_on_target_destroy
 
   deployment_targets {
-    organizational_unit_ids = sort(tolist(var.wiz_target_ou_ids))
+    organizational_unit_ids = [each.value]
   }
 
   operation_preferences {
@@ -247,11 +251,38 @@ resource "aws_cloudformation_stack_set_instance" "wiz" {
     update = "6h"
     delete = "6h"
   }
+
+  # The provider does not read deployment_targets back on import, and its update
+  # call for operation_preferences does not support OU targets. Ignoring both
+  # stops imported instances from being replaced; the OU is fixed by the key.
+  lifecycle {
+    ignore_changes = [deployment_targets, operation_preferences]
+  }
+}
+
+# The single all-OU instance was split into wiz_ou. Forget it without deleting
+# member stacks; the caller imports each existing OU target into wiz_ou.
+removed {
+  from = aws_cloudformation_stack_set_instance.wiz
+
+  lifecycle {
+    destroy = false
+  }
 }
 
 output "wiz_stackset_id" {
   value       = aws_cloudformation_stack_set.wiz.stack_set_id
   description = "StackSet identifier; not evidence that every target account is healthy."
+}
+
+output "wiz_stackset_name" {
+  value       = aws_cloudformation_stack_set.wiz.name
+  description = "StackSet name, for importing existing stack instances."
+}
+
+output "wiz_deployment_region" {
+  value       = var.wiz_deployment_region
+  description = "Stack instance region, for importing existing stack instances."
 }
 
 # Committed vendor source, byte-for-byte from the source URL. It is not deployed:
