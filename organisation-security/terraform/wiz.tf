@@ -17,7 +17,7 @@ data "aws_secretsmanager_secret_version" "wiz_external_id" {
   secret_id = "wiz_external_id"
 }
 
-# Derived from the data source so module inputs stay unknown during validate and
+# Derived from the data source so connector inputs stay unknown during validate and
 # null while disabled; module inputs are only evaluated while enabled.
 locals {
   wiz_secret    = one(data.aws_secretsmanager_secret_version.wiz_external_id[*].secret_string)
@@ -30,7 +30,7 @@ module "wiz_stackset" {
 
   wiz_role_arn      = local.wiz_connector.role_arn
   wiz_external_id   = local.wiz_connector.external_id
-  wiz_target_ou_ids = local.wiz_connector == null ? null : local.wiz_target_ou_ids
+  wiz_target_ou_ids = local.wiz_target_ou_ids
   wiz_tags          = local.tags_organisation_management
 
   # Keep member stacks if Terraform ever destroys an OU deployment target.
