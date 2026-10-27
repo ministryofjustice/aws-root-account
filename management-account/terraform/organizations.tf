@@ -4,6 +4,7 @@ resource "aws_organizations_organization" "default" {
     "account.amazonaws.com",
     "backup.amazonaws.com",
     "billing-cost-management.amazonaws.com",
+    "cloudtrail.amazonaws.com",
     "compute-optimizer.amazonaws.com",
     "config.amazonaws.com",
     "cost-optimization-hub.bcm.amazonaws.com",
