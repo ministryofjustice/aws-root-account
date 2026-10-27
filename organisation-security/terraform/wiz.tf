@@ -1,6 +1,6 @@
 locals {
   wiz_enabled      = true
-  wiz_excluded_ous = [local.ou_opg]
+  wiz_excluded_ous = []
 
   # Every top-level OU except excluded ones. StackSets also deploy to
   # descendant OUs and to accounts that later join any targeted OU.
