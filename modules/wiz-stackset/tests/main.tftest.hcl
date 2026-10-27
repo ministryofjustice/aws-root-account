@@ -36,9 +36,9 @@ run "vendor_defaults" {
       aws_cloudformation_stack_set.wiz.permission_model == "SERVICE_MANAGED" &&
       aws_cloudformation_stack_set.wiz.auto_deployment[0].enabled &&
       !aws_cloudformation_stack_set.wiz.auto_deployment[0].retain_stacks_on_account_removal &&
-      !aws_cloudformation_stack_set_instance.wiz.retain_stack &&
-      aws_cloudformation_stack_set_instance.wiz.stack_set_instance_region == "eu-west-2" &&
-      aws_cloudformation_stack_set_instance.wiz.deployment_targets[0].organizational_unit_ids == toset(["ou-abcd-12345678"])
+      !one(values(aws_cloudformation_stack_set_instance.wiz_ou)).retain_stack &&
+      one(values(aws_cloudformation_stack_set_instance.wiz_ou)).stack_set_instance_region == "eu-west-2" &&
+      one(values(aws_cloudformation_stack_set_instance.wiz_ou)).deployment_targets[0].organizational_unit_ids == var.wiz_target_ou_ids
     )
     error_message = "Deployment must use the delegated administrator, the specified OU, one region, and explicit deletion defaults."
   }
@@ -49,10 +49,10 @@ run "vendor_defaults" {
       aws_cloudformation_stack_set.wiz.operation_preferences[0].max_concurrent_count == 1 &&
       aws_cloudformation_stack_set.wiz.operation_preferences[0].failure_tolerance_percentage == null &&
       aws_cloudformation_stack_set.wiz.operation_preferences[0].max_concurrent_percentage == null &&
-      aws_cloudformation_stack_set_instance.wiz.operation_preferences[0].failure_tolerance_count == 0 &&
-      aws_cloudformation_stack_set_instance.wiz.operation_preferences[0].max_concurrent_count == 1 &&
-      aws_cloudformation_stack_set_instance.wiz.operation_preferences[0].failure_tolerance_percentage == null &&
-      aws_cloudformation_stack_set_instance.wiz.operation_preferences[0].max_concurrent_percentage == null
+      one(values(aws_cloudformation_stack_set_instance.wiz_ou)).operation_preferences[0].failure_tolerance_count == 0 &&
+      one(values(aws_cloudformation_stack_set_instance.wiz_ou)).operation_preferences[0].max_concurrent_count == 1 &&
+      one(values(aws_cloudformation_stack_set_instance.wiz_ou)).operation_preferences[0].failure_tolerance_percentage == null &&
+      one(values(aws_cloudformation_stack_set_instance.wiz_ou)).operation_preferences[0].max_concurrent_percentage == null
     )
     error_message = "Both rollout operations must tolerate zero failures and process one account at a time, using counts rather than percentages."
   }
