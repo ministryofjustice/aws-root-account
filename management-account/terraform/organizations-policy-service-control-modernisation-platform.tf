@@ -38,11 +38,26 @@ data "aws_iam_policy_document" "rds_guardrails" {
   }
 
   statement {
-    sid    = "DenyRdsUnencrypted"
+    sid       = "DenyRdsUnencryptedCreate"
+    effect    = "Deny"
+    actions   = ["rds:CreateDBInstance", "rds:CreateDBCluster"]
+    resources = ["*"]
+    condition {
+      test     = "BoolIfExists"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
+    }
+    condition {
+      test     = "StringNotLike" 
+      variable = "rds:DatabaseEngine"
+      values   = ["aurora*"]
+    }
+  }
+
+  statement {
+    sid    = "DenyRdsExplicitUnencryptedRestore"
     effect = "Deny"
     actions = [
-      "rds:CreateDBInstance",
-      "rds:CreateDBCluster",
       "rds:RestoreDBInstanceFromDBSnapshot",
       "rds:RestoreDBInstanceToPointInTime",
       "rds:RestoreDBClusterFromSnapshot",
@@ -50,7 +65,7 @@ data "aws_iam_policy_document" "rds_guardrails" {
     ]
     resources = ["*"]
     condition {
-      test     = "BoolIfExists"
+      test     = "Bool" 
       variable = "rds:StorageEncrypted"
       values   = ["false"]
     }
