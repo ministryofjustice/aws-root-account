@@ -136,7 +136,7 @@ resource "awscc_bcmdataexports_export" "coh_no_ri_sp_export" {
 
     destination_configurations = {
       s3_destination = {
-        s3_bucket = "cloud-platform-4e74939a04d400578bfbe3f3f707b07e"
+        s3_bucket = "cloud-platform-47acda159cc945d30f15523b714bbf8d"
         s3_region = "eu-west-2"
         s3_prefix = "coh-reports-auto-root-account"
         s3_bucket_owner = aws_organizations_account.cloud_platform.id
