@@ -68,7 +68,7 @@ module "inspector_sbom_export_s3_bucket" {
 
 module "inspector_sbom_export_kms" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.2.1"
+  version = "4.2.2"
 
   aliases                 = ["inspector/sbom-export"]
   description             = "KMS key for Amazon Inspector SBOM exports"
