@@ -3,11 +3,20 @@ output "bucket_name" {
 }
 
 output "bucket" {
-  value = aws_s3_bucket.default
+  value = {
+    arn    = aws_s3_bucket.default.arn
+    bucket = aws_s3_bucket.default.bucket
+  }
 }
 
 output "replication_configuration" {
-  value       = var.enable_replication ? aws_s3_bucket_replication_configuration.default : null
+  value = var.enable_replication ? {
+    for key, configuration in aws_s3_bucket_replication_configuration.default : key => {
+      id     = configuration.id
+      bucket = configuration.bucket
+      role   = configuration.role
+    }
+  } : null
   description = "Replication configuration for the S3 bucket"
 }
 

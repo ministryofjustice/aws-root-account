@@ -7,11 +7,11 @@ data "aws_organizations_organization" "current" {}
 
 # Local value to chunk accounts into batches of 100 (AWS API limit)
 locals {
-  all_member_accounts = [
+  all_member_accounts = sort([
     for account in data.aws_organizations_organization.current.accounts :
     account.id if account.id != local.root_account_id && account.id != data.aws_caller_identity.current.account_id &&
     account.status == "ACTIVE"
-  ]
+  ])
 
   # Split accounts into chunks of 100
   account_chunks = [
