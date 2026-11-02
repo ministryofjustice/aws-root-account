@@ -130,15 +130,16 @@ resource "awscc_bcmdataexports_export" "coh_no_ri_sp_export" {
       table_configurations = {
         COST_OPTIMIZATION_RECOMMENDATIONS = {
           INCLUDE_ALL_RECOMMENDATIONS = "FALSE"
+          FILTER                      = jsonencode({})
         }
       }
     }
 
     destination_configurations = {
       s3_destination = {
-        s3_bucket = "cloud-platform-47acda159cc945d30f15523b714bbf8d"
-        s3_region = "eu-west-2"
-        s3_prefix = "coh-reports-auto-root-account"
+        s3_bucket       = "cloud-platform-47acda159cc945d30f15523b714bbf8d"
+        s3_region       = "eu-west-2"
+        s3_prefix       = "coh-reports-auto-root-account"
         s3_bucket_owner = aws_organizations_account.cloud_platform.id
 
         s3_output_configurations = {
