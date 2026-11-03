@@ -17,3 +17,7 @@ updates:
     directory: "/organisation-security/terraform"
     schedule:
       interval: "monthly"
+  - package-ecosystem: "terraform"
+    directory: "/identity/terraform"
+    schedule:
+      interval: "monthly"
