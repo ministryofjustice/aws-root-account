@@ -242,7 +242,8 @@ data "aws_iam_policy_document" "security_audit" {
       "es:Get*",
       "es:List",
       "osis:Get",
-      "osis:List"
+      "osis:List",
+      "sns:GetSubscriptionAttributes"
     ]
     resources = ["*"]
   }

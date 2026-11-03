@@ -5,7 +5,4 @@
 .vscode
 .idea
 megalinter-reports
-
-
-# APM dependencies
-apm_modules/
+plan-output.txt

@@ -32,4 +32,6 @@ GITHUB_STATUS_REPORTER: true
 GITHUB_COMMENT_REPORTER: true
 VALIDATE_ALL_CODEBASE: false
 LOG_LEVEL: INFO
+# Vendor file committed byte-for-byte; reformatting would break its pinned checksum.
+JSON_PRETTIER_FILTER_REGEX_EXCLUDE: "modules/wiz-stackset/wiz-aws-standard\\.json"
 TERRAFORM_TFLINT_UNSECURED_ENV_VARIABLES: [GITHUB_TOKEN]

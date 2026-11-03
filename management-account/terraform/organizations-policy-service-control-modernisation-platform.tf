@@ -5,6 +5,10 @@
 # Prevents public RDS exposure, unencrypted RDS, and public snapshot sharing
 # for Modernisation Platform Member OU scope
 
+locals {
+  rds_guardrails_pilot_account_ids = [local.accounts.active_only["youth-justice-app-framework-preproduction"]]
+}
+
 resource "aws_organizations_policy" "rds_guardrails" {
   name        = "Modernisation Platform RDS Guardrails SCP"
   description = "Prevents public RDS exposure and public snapshot sharing for Modernisation Platform pilot scope"
@@ -53,6 +57,73 @@ data "aws_iam_policy_document" "rds_guardrails" {
       test     = "BoolIfExists"
       variable = "rds:StorageEncrypted"
       values   = ["false"]
+    }
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.rds_guardrails_pilot_account_ids
+    }
+  }
+
+  # Amended statements: apply only to the pilot account(s)
+  statement {
+    sid       = "DenyRdsUnencryptedClusterPilot"
+    effect    = "Deny"
+    actions   = ["rds:CreateDBCluster"]
+    resources = ["*"]
+    condition {
+      test     = "BoolIfExists"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.rds_guardrails_pilot_account_ids
+    }
+  }
+
+  statement {
+    sid       = "DenyRdsUnencryptedInstancePilot"
+    effect    = "Deny"
+    actions   = ["rds:CreateDBInstance"]
+    resources = ["*"]
+    condition {
+      test     = "BoolIfExists"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
+    }
+    condition {
+      test     = "StringNotLike" # cluster members inherit encryption from the cluster
+      variable = "rds:DatabaseEngine"
+      values   = ["aurora*", "docdb", "neptune"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.rds_guardrails_pilot_account_ids
+    }
+  }
+
+  statement {
+    sid    = "DenyRdsExplicitUnencryptedRestorePilot"
+    effect = "Deny"
+    actions = [
+      "rds:RestoreDBInstanceFromDBSnapshot",
+      "rds:RestoreDBInstanceToPointInTime",
+      "rds:RestoreDBClusterFromSnapshot",
+      "rds:RestoreDBClusterToPointInTime"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "Bool"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.rds_guardrails_pilot_account_ids
     }
   }
 
