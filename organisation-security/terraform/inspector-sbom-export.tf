@@ -37,7 +37,7 @@ module "inspector_sbom_export_s3_bucket" {
   #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
   #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.15.4"
+  version = "5.17.0"
 
   bucket = "moj-inspector-sbom-${data.aws_caller_identity.current.account_id}-eu-west-2"
 
