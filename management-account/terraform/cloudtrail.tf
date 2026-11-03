@@ -7,6 +7,7 @@ module "cloudtrail" {
 resource "aws_cloudtrail_organization_delegated_admin_account" "organisation_security" {
   account_id = aws_organizations_account.organisation_security.id
 
-  # Trusted access for cloudtrail.amazonaws.com must exist before a delegated administrator can be registered.
-  depends_on = [aws_organizations_organization.default]
+  # Trusted access for cloudtrail.amazonaws.com must exist before a delegated administrator can be registered,
+  # and the apply role needs organizations:RegisterDelegatedAdministrator (granted in module.github_oidc).
+  depends_on = [aws_organizations_organization.default, module.github_oidc]
 }
