@@ -36,3 +36,11 @@ data "terraform_remote_state" "management_account" {
     region = "eu-west-2"
   }
 }
+
+data "aws_region" "current" {}
+
+# WizAccess-Role, deployed into this account by the Wiz StackSet (wiz.tf)
+data "aws_iam_role" "wiz" {
+  count = local.wiz_enabled ? 1 : 0
+  name  = module.wiz_stackset[0].wiz_role_name
+}

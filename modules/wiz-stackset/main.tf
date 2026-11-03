@@ -285,6 +285,11 @@ output "wiz_deployment_region" {
   description = "Stack instance region, for importing existing stack instances."
 }
 
+output "wiz_role_name" {
+  value       = lookup(var.wiz_template_parameters, "WizRoleName", local.wiz_default_parameters.WizRoleName)
+  description = "Name of the Wiz access role each stack instance creates."
+}
+
 # Committed vendor source, byte-for-byte from the source URL. It is not deployed:
 # it verifies the HCL template below and detects upstream changes. To update:
 # download the new file, review its diff, update wiz_template_sha256, then

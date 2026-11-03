@@ -117,3 +117,130 @@ module "athena_results_s3_bucket" {
     }
   }
 }
+
+# organisation-cloudtrail
+# See: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-s3-bucket-policy-for-cloudtrail.html#org-trail-bucket-policy
+data "aws_iam_policy_document" "organisation_cloudtrail_s3_bucket" {
+  statement {
+    sid       = "CloudTrailAclCheck"
+    effect    = "Allow"
+    actions   = ["s3:GetBucketAcl"]
+    resources = [local.organisation_cloudtrail_bucket_arn]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
+      values   = [local.organisation_cloudtrail_arn]
+    }
+  }
+
+  statement {
+    sid     = "CloudTrailWrite"
+    effect  = "Allow"
+    actions = ["s3:PutObject"]
+    resources = [
+      "${local.organisation_cloudtrail_bucket_arn}/AWSLogs/${local.root_account_id}/*",
+      "${local.organisation_cloudtrail_bucket_arn}/AWSLogs/${local.organizations_organization.id}/*",
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
+      values   = [local.organisation_cloudtrail_arn]
+    }
+  }
+}
+
+module "organisation_cloudtrail_s3_bucket" {
+  #checkov:skip=CKV_TF_1:Module registry does not support commit hashes for versions
+  #checkov:skip=CKV_TF_2:Module registry does not support tags for versions
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "5.17.0"
+
+  # Fixed name (no account ID) so the Wiz connector can reference it.
+  bucket        = local.organisation_cloudtrail_bucket_name
+  force_destroy = false
+
+  control_object_ownership = true
+  object_ownership         = "BucketOwnerEnforced"
+
+  versioning = {
+    enabled = true
+  }
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm     = "aws:kms"
+        kms_master_key_id = module.organisation_cloudtrail_kms.key_arn
+      }
+      bucket_key_enabled = true
+    }
+  }
+
+  attach_deny_insecure_transport_policy = true
+  attach_require_latest_tls_policy      = true
+  attach_policy                         = true
+  policy                                = data.aws_iam_policy_document.organisation_cloudtrail_s3_bucket.json
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+  lifecycle_rule = [
+    {
+      id      = "organisation-cloudtrail-retention"
+      enabled = true
+      filter = {
+        prefix = local.organisation_cloudtrail_log_prefix
+      }
+      transition = [
+        {
+          days          = local.organisation_cloudtrail_transition_days
+          storage_class = "GLACIER_IR"
+        }
+      ]
+      expiration = {
+        days = local.organisation_cloudtrail_expiration_days
+      }
+      noncurrent_version_expiration = {
+        days = local.organisation_cloudtrail_noncurrent_expiry_days
+      }
+      abort_incomplete_multipart_upload_days = 7
+    }
+  ]
+
+  tags = local.organisation_cloudtrail_tags
+}
+
+# New log files -> SNS -> SQS (Wiz). One notification configuration per bucket.
+resource "aws_s3_bucket_notification" "organisation_cloudtrail" {
+  bucket = module.organisation_cloudtrail_s3_bucket.s3_bucket_id
+
+  topic {
+    id            = local.organisation_cloudtrail_sns_topic
+    topic_arn     = module.organisation_cloudtrail_sns.topic_arn
+    events        = ["s3:ObjectCreated:*"]
+    filter_prefix = local.organisation_cloudtrail_log_prefix
+    filter_suffix = ".json.gz"
+  }
+
+  depends_on = [module.organisation_cloudtrail_sns]
+}

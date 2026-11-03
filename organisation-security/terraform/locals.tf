@@ -220,4 +220,36 @@ locals {
 
 
   guardduty_administrator_detector_ids = data.terraform_remote_state.management_account.outputs.guardduty_administrator_detector_ids
+
+  # Organisation CloudTrail (S3 delivery, for Wiz)
+  # Created from this account as CloudTrail delegated administrator; the management account owns the trail,
+  # so its ARN and the AWSLogs/<management account>/ prefix use the management account ID.
+  organisation_cloudtrail_name        = "organisation-cloudtrail"
+  organisation_cloudtrail_bucket_name = "moj-organisation-cloudtrail"
+  organisation_cloudtrail_bucket_arn  = "arn:aws:s3:::${local.organisation_cloudtrail_bucket_name}"
+  organisation_cloudtrail_log_prefix  = "AWSLogs/"
+  organisation_cloudtrail_kms_alias   = "organisation-cloudtrail"
+
+  # Built from names, not resource attributes, to avoid dependency cycles between the key, bucket, topic and queue policies.
+  organisation_cloudtrail_arn           = "arn:aws:cloudtrail:${data.aws_region.current.region}:${local.root_account_id}:trail/${local.organisation_cloudtrail_name}"
+  organisation_cloudtrail_sns_topic     = "organisation-cloudtrail"
+  organisation_cloudtrail_sns_topic_arn = "arn:aws:sns:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${local.organisation_cloudtrail_sns_topic}"
+  organisation_cloudtrail_wiz_queue     = "wiz-cloudtrail"
+  organisation_cloudtrail_wiz_queue_arn = "arn:aws:sqs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${local.organisation_cloudtrail_wiz_queue}"
+  organisation_cloudtrail_wiz_dlq       = "wiz-cloudtrail-dlq"
+  organisation_cloudtrail_wiz_policy    = "WizCloudTrailRead"
+
+  # Log retention: GLACIER_IR after 90 days, expire after 365 days
+  organisation_cloudtrail_transition_days        = 90
+  organisation_cloudtrail_expiration_days        = 365
+  organisation_cloudtrail_noncurrent_expiry_days = 30
+  organisation_cloudtrail_sqs_retention_seconds  = 1209600 # 14 days
+  organisation_cloudtrail_sqs_visibility_seconds = 300
+  organisation_cloudtrail_sqs_max_receive_count  = 5
+
+  organisation_cloudtrail_tags = merge(
+    local.tags_organisation_management, {
+      component = "Security"
+    }
+  )
 }

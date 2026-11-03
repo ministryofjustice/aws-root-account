@@ -117,3 +117,60 @@ resource "aws_iam_user_policy_attachment" "xsiam_integration" {
   user       = aws_iam_user.xsiam_integration.name
   policy_arn = aws_iam_policy.xsiam_integration.arn
 }
+
+###########################################
+# Wiz read access to organisation trail   #
+###########################################
+# Extends the Wiz StackSet role in this account (wiz.tf) without editing the vendor template.
+data "aws_iam_policy_document" "wiz_organisation_cloudtrail" {
+  statement {
+    sid       = "ReadTrailLogs"
+    effect    = "Allow"
+    actions   = ["s3:GetObject", "s3:GetObjectVersion"]
+    resources = ["${local.organisation_cloudtrail_bucket_arn}/${local.organisation_cloudtrail_log_prefix}*"]
+  }
+
+  statement {
+    sid       = "ListTrailLogs"
+    effect    = "Allow"
+    actions   = ["s3:ListBucket", "s3:GetBucketLocation"]
+    resources = [local.organisation_cloudtrail_bucket_arn]
+  }
+
+  statement {
+    sid       = "Decrypt"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt", "kms:DescribeKey"]
+    resources = [module.organisation_cloudtrail_kms.key_arn]
+  }
+
+  statement {
+    sid    = "ConsumeNotificationQueue"
+    effect = "Allow"
+    actions = [
+      "sqs:ChangeMessageVisibility",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl",
+      "sqs:ReceiveMessage"
+    ]
+    resources = [module.organisation_cloudtrail_wiz_sqs.queue_arn]
+  }
+}
+
+resource "aws_iam_policy" "wiz_organisation_cloudtrail" {
+  count = local.wiz_enabled ? 1 : 0
+
+  name        = local.organisation_cloudtrail_wiz_policy
+  description = "Lets the Wiz role read organisation CloudTrail logs and consume their notification queue"
+  policy      = data.aws_iam_policy_document.wiz_organisation_cloudtrail.json
+
+  tags = local.organisation_cloudtrail_tags
+}
+
+resource "aws_iam_role_policy_attachment" "wiz_organisation_cloudtrail" {
+  count = local.wiz_enabled ? 1 : 0
+
+  role       = data.aws_iam_role.wiz[0].name
+  policy_arn = aws_iam_policy.wiz_organisation_cloudtrail[0].arn
+}
