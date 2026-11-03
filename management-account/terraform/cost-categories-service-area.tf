@@ -24,7 +24,7 @@ resource "aws_ce_cost_category" "service_area" {
   default_value = "Unallocated"
   rule_version  = "CostCategoryExpression.v1"
   effective_start = formatdate(
-    "YYYY-MM-'01'T'00:00:00Z",
+    "YYYY-MM-'01T00:00:00Z'",
     time_rotating.service_area_effective_start.rfc3339
   )
 
