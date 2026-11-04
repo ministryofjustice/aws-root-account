@@ -6,28 +6,22 @@ module "cloudtrail" {
 ###########################
 # Organisation CloudTrail #
 ###########################
-# Organisation-wide management events delivered to S3, for Wiz (which reads CloudTrail only from S3 via SQS).
-# The existing CloudWatch Logs collection is unchanged. Created from this account as CloudTrail delegated
-# administrator; the management account owns the trail.
-# See: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-delegated-administrator.html
-resource "aws_cloudtrail" "organisation" {
-  name           = local.organisation_cloudtrail_name
-  s3_bucket_name = module.organisation_cloudtrail_s3_bucket.s3_bucket_id
-  kms_key_id     = module.organisation_cloudtrail_kms.key_arn
+# The trail itself is managed in management-account/terraform/cloudtrail.tf; this account keeps its bucket, KMS key,
+# SNS topic, SQS queue and Wiz access.
+#
+# Why not here: this account created the trail as CloudTrail delegated administrator (3 Nov 2026), but Terraform cannot
+# manage it from here. The AWS provider reads a trail with DescribeTrails by ARN, an organisation trail's ARN always
+# carries the management account ID (the management account owns organisation trails, whoever creates them), and
+# CloudTrail rejects that read from any other account ("Account number does not match caller's account"). Every plan
+# here would fail. Managing it here via a provider that assumes a role in the management account would give this
+# account write access to the management account, so it is managed from there instead.
+#
+# This removed block hands the trail over without touching it (destroy = false); the matching import is in
+# management-account/terraform/imports.tf. Both can be deleted once applied.
+removed {
+  from = aws_cloudtrail.organisation
 
-  is_organization_trail         = true
-  is_multi_region_trail         = true
-  include_global_service_events = true
-  enable_log_file_validation    = true
-  enable_logging                = true
-
-  # Management events only (reads and writes); no data or Insights events.
-  event_selector {
-    read_write_type           = "All"
-    include_management_events = true
+  lifecycle {
+    destroy = false
   }
-
-  tags = local.organisation_cloudtrail_tags
-
-  depends_on = [module.organisation_cloudtrail_s3_bucket, module.organisation_cloudtrail_kms]
 }

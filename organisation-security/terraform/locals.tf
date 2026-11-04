@@ -222,8 +222,8 @@ locals {
   guardduty_administrator_detector_ids = data.terraform_remote_state.management_account.outputs.guardduty_administrator_detector_ids
 
   # Organisation CloudTrail (S3 delivery, for Wiz)
-  # Created from this account as CloudTrail delegated administrator; the management account owns the trail,
-  # so its ARN and the AWSLogs/<management account>/ prefix use the management account ID.
+  # The trail is managed in management-account, which owns it, so its ARN and the AWSLogs/<management account>/
+  # prefix use the management account ID.
   organisation_cloudtrail_name        = "organisation-cloudtrail"
   organisation_cloudtrail_bucket_name = "moj-organisation-cloudtrail"
   organisation_cloudtrail_bucket_arn  = "arn:aws:s3:::${local.organisation_cloudtrail_bucket_name}"

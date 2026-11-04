@@ -174,4 +174,14 @@ locals {
       "arn:aws:s3:::${location}/*"
     ]
   ])
+
+  # Organisation CloudTrail (S3 delivery to organisation-security, for Wiz)
+  organisation_cloudtrail_name        = "organisation-cloudtrail"
+  organisation_cloudtrail_bucket_name = "moj-organisation-cloudtrail"
+  organisation_cloudtrail_arn         = "arn:aws:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/${local.organisation_cloudtrail_name}"
+  organisation_cloudtrail_tags = merge(
+    local.tags_organisation_management, {
+      component = "Security"
+    }
+  )
 }
