@@ -4,7 +4,7 @@ locals {
 
 module "xsiam_cloudtrail_topic" {
   source  = "terraform-aws-modules/sns/aws"
-  version = "6.2.0"
+  version = "7.2.0"
 
   name                        = "xsiam-cloudtrail"
   kms_master_key_id           = aws_kms_key.xsiam_cloudtrail.arn
