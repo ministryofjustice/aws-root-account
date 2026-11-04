@@ -23,8 +23,8 @@ jobs:
       run:
         working-directory: ./organisation-security/terraform
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: arn:aws:iam::${{secrets.AWS_SECURITY_ACCOUNT_ID}}:role/github-actions-plan
           role-session-name: GitHubActionsPlan
@@ -39,14 +39,27 @@ jobs:
         id: plan
         run: |
           set -o pipefail
-          terraform plan -detailed-exitcode | ../../scripts/redaction.sh
+          terraform plan -detailed-exitcode | ../../scripts/redaction.sh | tee plan-output.txt
+
+      # The wiz_template_current check only warns, so it does not change the plan exit code.
+      - name: Check Wiz member template version
+        id: wiz_template
+        if: ${{ !cancelled() }}
+        run: |
+          if [ -f plan-output.txt ] && grep -q 'check "wiz_template_current"' plan-output.txt; then
+            upstream=$(grep -o 'published member template [^;]*' plan-output.txt | head -1 | sed 's/.* //' | tr -cd '[:alnum:]-')
+            upstream=${upstream:-unknown}
+            echo "::warning title=Wiz template update::Wiz member template ${upstream} differs from the version pinned in modules/wiz-stackset."
+            echo "upstream=${upstream}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Alert Slack if drift detected on scheduled run
         if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.plan.outputs.exitcode == '2' }}
-        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: webhook-trigger
+          retries: "0"
           payload: |
             {
               "blocks": [
@@ -76,6 +89,40 @@ jobs:
                         "text": "Apply organisation-security"
                       },
                       "url": "https://github.com/ministryofjustice/aws-root-account/actions/workflows/organisation-security-apply.yml"
+                    }
+                  ]
+                }
+              ]
+            }
+
+      - name: Alert Slack if Wiz has published a newer member template
+        if: ${{ !cancelled() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.wiz_template.outputs.upstream != '' }}
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+          retries: "0"
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":warning: *Wiz member template update available* \n\nWiz has published member template `${{ steps.wiz_template.outputs.upstream }}`, which differs from the version pinned in `modules/wiz-stackset/wiz-aws-standard.json`. Review the upstream changes before updating the committed file and its checksum.\n\n*Workflow:* `${{ github.workflow }}`"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Workflow"
+                      },
+                      "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                      "style": "primary"
                     }
                   ]
                 }

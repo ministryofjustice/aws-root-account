@@ -5,6 +5,10 @@
 # Prevents public RDS exposure, unencrypted RDS, and public snapshot sharing
 # for Modernisation Platform Member OU scope
 
+locals {
+  rds_guardrails_pilot_account_ids = [local.accounts.active_only["youth-justice-app-framework-preproduction"]]
+}
+
 resource "aws_organizations_policy" "rds_guardrails" {
   name        = "Modernisation Platform RDS Guardrails SCP"
   description = "Prevents public RDS exposure and public snapshot sharing for Modernisation Platform pilot scope"
@@ -53,6 +57,73 @@ data "aws_iam_policy_document" "rds_guardrails" {
       test     = "BoolIfExists"
       variable = "rds:StorageEncrypted"
       values   = ["false"]
+    }
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.rds_guardrails_pilot_account_ids
+    }
+  }
+
+  # Amended statements: apply only to the pilot account(s)
+  statement {
+    sid       = "DenyRdsUnencryptedClusterPilot"
+    effect    = "Deny"
+    actions   = ["rds:CreateDBCluster"]
+    resources = ["*"]
+    condition {
+      test     = "BoolIfExists"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.rds_guardrails_pilot_account_ids
+    }
+  }
+
+  statement {
+    sid       = "DenyRdsUnencryptedInstancePilot"
+    effect    = "Deny"
+    actions   = ["rds:CreateDBInstance"]
+    resources = ["*"]
+    condition {
+      test     = "BoolIfExists"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
+    }
+    condition {
+      test     = "StringNotLike" # cluster members inherit encryption from the cluster
+      variable = "rds:DatabaseEngine"
+      values   = ["aurora*", "docdb", "neptune"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.rds_guardrails_pilot_account_ids
+    }
+  }
+
+  statement {
+    sid    = "DenyRdsExplicitUnencryptedRestorePilot"
+    effect = "Deny"
+    actions = [
+      "rds:RestoreDBInstanceFromDBSnapshot",
+      "rds:RestoreDBInstanceToPointInTime",
+      "rds:RestoreDBClusterFromSnapshot",
+      "rds:RestoreDBClusterToPointInTime"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "Bool"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalAccount"
+      values   = local.rds_guardrails_pilot_account_ids
     }
   }
 
@@ -278,6 +349,29 @@ resource "aws_organizations_policy_attachment" "mp_protect_core_s3_buckets" {
 
 data "aws_iam_policy_document" "mp_protect_secure_baselines" {
   statement {
+    sid    = "DenyConfigRecorderAndGuardDutyDetectorChanges"
+    effect = "Deny"
+    actions = [
+      "config:DeleteConfigurationRecorder",
+      "config:PutConfigurationRecorder",
+      "config:StopConfigurationRecorder",
+      "guardduty:DeleteDetector",
+      "guardduty:UpdateDetector"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/github-actions",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+  }
+
+  statement {
     sid    = "DenyDeleteSecureBaselinesResources"
     effect = "Deny"
     actions = [
@@ -289,7 +383,6 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       "cloudwatch:DisableAlarmActions",
       "events:Delete*",
       "events:Remove*",
-      "guardduty:Delete*",
       "kms:Delete*",
       "kms:DisableKey",
       "kms:ScheduleKeyDeletion",
@@ -298,9 +391,7 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       "s3:Delete*",
       "s3:PutBucketPolicy",
       "sns:Delete*",
-      "securityhub:DisableSecurityHub",
-      "config:Delete*",
-      "config:StopConfigurationRecorder"
+      "securityhub:DisableSecurityHub"
     ]
     resources = ["*"]
 
@@ -330,7 +421,7 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
 
 resource "aws_organizations_policy" "mp_protect_secure_baselines" {
   name        = "Modernisation Platform Protect Secure Baselines"
-  description = "Deny deletion or disabling of secure-baselines tagged resources in Modernisation Platform accounts, except AWSReservedSSO_AdministratorAccess roles."
+  description = "Protect secure baseline resources and prevent untrusted principals from changing AWS Config recorders or GuardDuty detectors."
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
@@ -348,92 +439,62 @@ resource "aws_organizations_policy_attachment" "mp_protect_secure_baselines" {
   target_id = aws_organizations_organizational_unit.platforms_and_architecture_modernisation_platform.id
 }
 
-###############################################################
-# Protect critical security services from modification
-# Sprinkler OU scope for testing
-###############################################################
+# AWS Config recorder and GuardDuty detector protections are included in the existing secure-baselines SCP because
+# the Modernisation Platform OU is already at its SCP attachment limit. These controls use a separate statement
+# without a resource-tag condition because Config recorders and GuardDuty detectors are not consistently tagged.
 
-data "aws_iam_policy_document" "mp_protect_security_services_pilot" {
-  statement {
-    sid    = "DenyModificationOfSecureBaselinesResources"
-    effect = "Deny"
-    actions = [
-      "config:PutConfigurationRecorder",
-      "guardduty:UpdateDetector"
-    ]
-    resources = ["*"]
+##############################
+# Enforce S3 KMS encryption  #
+##############################
 
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/component"
-      values   = ["secure-baselines"]
-    }
+# Denies attempts to set bucket default encryption to SSE-S3 (AES256).
+# This is a low blast-radius pilot scoped via the attachment below.
+#
+# The PutObject deny below blocks explicit SSE-S3 (AES256) writes while
+# allowing requests that omit the encryption header and rely on bucket
+# default encryption. Bucket-level downgrade/removal is still denied below.
 
-    condition {
-      test     = "ArnNotLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/ModernisationPlatformAccess",
-        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
-      ]
-    }
-  }
-
-  statement {
-    sid    = "DenyChangingSecureBaselinesComponentTag"
-    effect = "Deny"
-    actions = [
-      "config:TagResource",
-      "config:UntagResource",
-      "guardduty:TagResource",
-      "guardduty:UntagResource"
-    ]
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/component"
-      values   = ["secure-baselines"]
-    }
-
-    condition {
-      test     = "ForAnyValue:StringEquals"
-      variable = "aws:TagKeys"
-      values   = ["component"]
-    }
-
-    condition {
-      test     = "ArnNotLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/ModernisationPlatformAccess",
-        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
-      ]
-    }
-  }
-}
-
-resource "aws_organizations_policy" "mp_protect_security_services_pilot" {
-  name        = "Modernisation Platform Protect Security Services Pilot"
-  description = "Pilot protection against modification of secure-baselines AWS Config and GuardDuty resources in the Sprinkler OU."
+resource "aws_organizations_policy" "enforce_s3_kms_encryption" {
+  name        = "Enforce S3 KMS encryption"
+  description = "Denies explicit SSE-S3 object writes and setting bucket default encryption to SSE-S3"
   type        = "SERVICE_CONTROL_POLICY"
-
   tags = {
     business-unit = "Platforms"
     component     = "SERVICE_CONTROL_POLICY"
     source-code   = join("", [local.github_repository, "/terraform/organizations-policy-service-control-modernisation-platform.tf"])
   }
 
-  content = data.aws_iam_policy_document.mp_protect_security_services_pilot.json
+  content = data.aws_iam_policy_document.enforce_s3_kms_encryption.json
 }
 
-# Attach the pilot SCP to the Sprinkler OU only for testing before wider MP OU enforcement
-resource "aws_organizations_policy_attachment" "mp_protect_security_services_pilot" {
+data "aws_iam_policy_document" "enforce_s3_kms_encryption" {
+  # Deny setting bucket default encryption to SSE-S3.
+  statement {
+    sid       = "DenyS3SetBucketDefaultEncryptionToSSES3"
+    effect    = "Deny"
+    actions   = ["s3:PutEncryptionConfiguration"]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-server-side-encryption"
+      values   = ["AES256"]
+    }
+  }
+}
+
+# Scoped to sprinkler sub-OU only for testing.
+# "modernisation-platform-sprinkler" is nested under "Modernisation Platform
+# Member", not a direct child of the Modernisation Platform OU, so this must
+# use mp_member_children (not platforms_and_architecture_modernisation_platform_children).
+# Do NOT attach to the parent Modernisation Platform OU — SCP inheritance would
+# block Terraform state s3:PutObject calls in all other member accounts.
+resource "aws_organizations_policy_attachment" "enforce_s3_kms_encryption_pilot" {
   for_each = toset([
-    for child in data.aws_organizations_organizational_units.platforms_and_architecture_modernisation_platform_children.children : child.id
+    for child in data.aws_organizations_organizational_units.mp_member_children.children : child.id
     if child.name == "modernisation-platform-sprinkler"
   ])
 
-  policy_id = aws_organizations_policy.mp_protect_security_services_pilot.id
+  policy_id = aws_organizations_policy.enforce_s3_kms_encryption.id
   target_id = each.value
 }

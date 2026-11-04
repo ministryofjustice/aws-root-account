@@ -241,8 +241,12 @@ data "aws_iam_policy_document" "modernisation_platform_sso_application_assignmen
     }
 
     condition {
-      test     = "StringEquals"
-      values   = [local.modernisation_platform_accounts.integration_hub_file_transfer_development_id]
+      test = "StringEquals"
+      values = [
+        local.modernisation_platform_accounts.integration_hub_file_transfer_development_id,
+        local.modernisation_platform_accounts.integration_hub_file_transfer_test_id,
+        local.modernisation_platform_accounts.integration_hub_file_transfer_production_id
+      ]
       variable = "aws:PrincipalAccount"
     }
 
@@ -275,8 +279,12 @@ data "aws_iam_policy_document" "modernisation_platform_sso_application_assignmen
     }
 
     condition {
-      test     = "StringEquals"
-      values   = [local.modernisation_platform_accounts.integration_hub_file_transfer_development_id]
+      test = "StringEquals"
+      values = [
+        local.modernisation_platform_accounts.integration_hub_file_transfer_development_id,
+        local.modernisation_platform_accounts.integration_hub_file_transfer_test_id,
+        local.modernisation_platform_accounts.integration_hub_file_transfer_production_id
+      ]
       variable = "aws:PrincipalAccount"
     }
 

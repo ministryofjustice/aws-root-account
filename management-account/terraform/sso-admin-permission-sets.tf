@@ -235,13 +235,15 @@ data "aws_iam_policy_document" "security_audit" {
       "aoss:BatchGet*",
       "aoss:Get*",
       "aoss:List*",
+      "apigateway:GET",
       "cloudwatch:Get*",
       "es:Describe*",
       "es:ESHttpGet",
       "es:Get*",
       "es:List",
       "osis:Get",
-      "osis:List"
+      "osis:List",
+      "sns:GetSubscriptionAttributes"
     ]
     resources = ["*"]
   }
@@ -400,7 +402,7 @@ data "aws_iam_policy_document" "modernisation_platform_engineer" {
       "rds:RebootDB*",
       "rhelkb:GetRhelURL",
       "q:*",
-      "s3:PutObject",
+      "s3:Put*",
       "s3:DeleteObject",
       "s3:DeleteObjectVersion",
       "s3:RestoreObject",
@@ -937,7 +939,7 @@ data "aws_iam_policy_document" "network_automation_support_operator" {
       "ecs:ExecuteCommand",
       "ecs:DescribeTasks"
     ]
-    resources = [        
+    resources = [
       "arn:aws:ecs:eu-west-2:${aws_organizations_account.moj_official_development.id}:cluster/*",
       "arn:aws:ecs:eu-west-2:${aws_organizations_account.moj_official_development.id}:task/*/*",
       "arn:aws:ecs:eu-west-2:${aws_organizations_account.moj_official_preproduction.id}:cluster/*",

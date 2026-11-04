@@ -28,6 +28,14 @@ locals {
       business-unit = "YJB"
     })
   }
+  tags_service_areas = {
+    hosting = merge(local.tags_default, {
+      service-area = "Hosting"
+    })
+    unallocated = merge(local.tags_default, {
+      service-area = "Unallocated"
+    })
+  }
   github_repository = "github.com/ministryofjustice/aws-root-account/blob/main"
 
   # Account maps
@@ -46,7 +54,9 @@ locals {
 
   # Modernisation Platform account IDs
   modernisation_platform_accounts = {
-    integration_hub_file_transfer_development_id = local.accounts.active_only["integration-hub-file-transfer-development"]
+    integration_hub_file_transfer_development_id = local.accounts.active_only["integration-hub-file-transfer-development"],
+    integration_hub_file_transfer_test_id        = local.accounts.active_only["integration-hub-file-transfer-test"],
+    integration_hub_file_transfer_production_id  = local.accounts.active_only["integration-hub-file-transfer-production"]
     core_logging_id = [
       for account_name, account_id in local.accounts.active_only :
       account_id
@@ -164,4 +174,14 @@ locals {
       "arn:aws:s3:::${location}/*"
     ]
   ])
+
+  # Organisation CloudTrail (S3 delivery to organisation-security, for Wiz)
+  organisation_cloudtrail_name        = "organisation-cloudtrail"
+  organisation_cloudtrail_bucket_name = "moj-organisation-cloudtrail"
+  organisation_cloudtrail_arn         = "arn:aws:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/${local.organisation_cloudtrail_name}"
+  organisation_cloudtrail_tags = merge(
+    local.tags_organisation_management, {
+      component = "Security"
+    }
+  )
 }

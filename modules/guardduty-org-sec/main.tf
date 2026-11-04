@@ -22,6 +22,29 @@ resource "aws_guardduty_organization_configuration_feature" "s3_logs" {
   auto_enable = "NEW"
 }
 
+resource "aws_guardduty_organization_configuration_feature" "ai_protection" {
+  provider    = aws.delegated_administrator
+  detector_id = var.administrator_detector_id
+  name        = "AI_PROTECTION"
+  auto_enable = "ALL"
+
+  depends_on = [aws_guardduty_organization_configuration.delegated_administrator]
+}
+
+resource "aws_guardduty_organization_configuration_feature" "rds_protection" {
+  provider    = aws.delegated_administrator
+  detector_id = var.administrator_detector_id
+  name        = "RDS_LOGIN_EVENTS"
+  auto_enable = "ALL"
+
+  additional_configuration {
+    name        = "RDS_DATA_RISK"
+    auto_enable = "ALL"
+  }
+
+  depends_on = [aws_guardduty_organization_configuration.delegated_administrator]
+}
+
 #######################################################################
 # Auto-enable EKS Monitoring for new accounts in the AWS Organization #
 #######################################################################

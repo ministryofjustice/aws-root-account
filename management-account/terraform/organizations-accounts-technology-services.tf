@@ -140,27 +140,6 @@ resource "aws_organizations_account" "moj_official_shared_services" {
   }
 }
 
-resource "aws_organizations_account" "workplace_tech_proof_of_concept_development" {
-  name                       = "Workplace Tech Proof Of Concept Development"
-  email                      = replace(local.aws_account_email_addresses_template, "{email}", "wptpocdev")
-  iam_user_access_to_billing = "ALLOW"
-  parent_id                  = aws_organizations_organizational_unit.technology_services.id
-  close_on_deletion          = true
-
-  tags = merge(local.tags_technology_services, {
-    application = "Workplace Technology"
-  })
-
-  lifecycle {
-    ignore_changes = [
-      email,
-      iam_user_access_to_billing,
-      name,
-      role_name,
-    ]
-  }
-}
-
 resource "aws_organizations_account" "network_architecture" {
   name                       = "Network Architecture"
   email                      = replace(local.aws_account_email_addresses_template, "{email}", "network-architecture")

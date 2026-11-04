@@ -1,0 +1,138 @@
+# Wiz CSPM Trial
+
+The member-account trial is **disabled by default**. No Wiz
+resources are created until `wiz_enabled = true` is explicitly supplied to the
+relevant root. The member-account target is deliberately `placeholder OU`, not
+an existing MoJ OU. Enabling the StackSet with this placeholder fails validation.
+
+## Deployment Split
+
+- `organisation-security/terraform/wiz.tf` calls this module through the existing
+  delegated-administrator provider. CloudFormation owns IAM resources in the
+  targeted member accounts, including descendant OUs and future accounts entering
+  scope. Deployment uses one region, `eu-west-2`, because IAM is global.
+- AWS excludes the management account from service-managed StackSets. Its native
+   Terraform deployment is a separate proposal; this module does not create
+   management-account resources and can be reviewed independently.
+- StackSets trusted access and delegated administration are already configured
+  in `management-account/terraform/organizations.tf`; this trial does not change
+  those settings or create a connector in Wiz.
+
+## Vendor Defaults
+
+The member-account StackSet uses Wiz's `2026-10-21` standard AWS template:
+<https://wizio-public.s3.amazonaws.com/deployment-v2/aws/wiz-aws-standard.json>.
+The deployed template is the HCL `wiz_member_template` local in `main.tf`. The
+vendor file is also committed unmodified as `wiz-aws-standard.json`, with SHA-256
+`4081ebae61dafe47db0f312d0681f6f95b71343038c8637277b35d41756f1ae7`. It is not
+deployed; it makes the HCL verifiable. Plans fail if:
+
+- the committed file no longer matches that checksum, or
+- the HCL does not decode to the same JSON as the committed file.
+
+MegaLinter's JSON formatting is disabled for the committed file so its bytes
+stay unchanged.
+
+While the trial is enabled, plans also fetch the source URL and compare it with
+the committed file. A difference is a warning, not an error: the deployed
+template only changes when the HCL is updated. The scheduled
+organisation-security plan posts the warning to Slack. An unreachable URL fails
+the plan; an unreadable response only warns. The comparison lives in
+`upstream-check/`, which has its own tests.
+
+To update, download the new file and review its diff (particularly IAM policy
+changes). Then update `wiz_template_sha256` in `main.tf`, regenerate the HCL to
+match, and rerun the tests in this directory and in `upstream-check/`.
+
+This module retains the supplied vendor feature defaults:
+
+| Feature | Default |
+| --- | --- |
+| Cloud cost scanning | Enabled |
+| RDS log scanning | Enabled |
+| S3 AWSLogs scanning | Enabled |
+| S3 KMS decrypt | Enabled |
+| Terraform-bucket scanning | Enabled |
+| Data scanning | Disabled |
+| EKS scanning | Disabled |
+| Lightsail scanning | Disabled |
+| S3 inventory scanning | Disabled |
+
+This is **not a read-only/configuration-only role**. The baseline policy also
+permits snapshot/volume creation, snapshot sharing and KMS operations, even when
+optional data scanning is disabled. Terraform-bucket access can expose state
+containing credentials and other sensitive values. Review this access in every
+account in the intended trial OU.
+
+Trial rollout deliberately differs from the supplied 50/50 settings: zero account
+failures are tolerated and at most one account is processed at a time. Both
+StackSet updates and target deployment use absolute counts, not percentages.
+Vendor scanning features and IAM permissions remain unchanged. Inspect every
+stack instance rather than treating a StackSet ID as evidence of success;
+stopping on a failure does not roll back accounts already deployed successfully.
+
+Both retention flags default to false. Accounts leaving scope lose their member
+stacks, and destroying the Terraform deployment target deletes the member stacks.
+Changing `wiz_enabled` back to false after deployment is a destroy operation,
+not a pause in scanning. Changing retention requires an explicit module argument
+and a review of the unmanaged access that would remain.
+
+## Before Enabling
+
+1. Confirm with Wiz that this tenant supports direct service-managed StackSets
+   without its outer organization stack. Organization connector discovery
+   and any updater behavior still need vendor confirmation.
+2. Inventory existing `WizAccess-Role` roles, `Wiz*Policy` policies and Wiz stacks
+   in every intended account. Reconcile ownership before deploying same-name
+   resources; this code does not import or migrate existing resources.
+3. Obtain the tenant/data-centre trust role ARN and connector external ID from
+   Wiz. Neither is the MoJ deployment role. Store both in the
+   organisation-security `wiz_external_id` Secrets Manager secret (format
+   below); the root reads it only while `wiz_enabled` is true. The external ID
+   is marked sensitive, but is still stored in Terraform state and IAM trust
+   policies.
+4. Replace `placeholder OU` with the approved trial OU ID. Descendant accounts
+   are included automatically. Do not substitute the organization root without
+   approval for organization-wide access.
+5. Set `wiz_enabled` and `wiz_target_ou_ids` in
+   `organisation-security/terraform/wiz.tf` in a reviewed pull request and
+   review the organisation-security plan. Current workflows do not override
+   these variables, so scheduled plans and existing CI runs leave the trial
+   disabled until then.
+6. Apply only after approval, then verify each member stack and test the Wiz
+   connector's member-account discovery and role assumption.
+
+The `wiz_external_id` secret value is JSON:
+
+```json
+{
+  "external_id": "<Wiz connector external ID>",
+  "role_arn": "<Wiz tenant trust role ARN>"
+}
+```
+
+The angle-bracket values above are documentation placeholders, not valid inputs.
+Use the matching external ID for the connector associated with each deployment.
+
+## Local Verification
+
+From this module directory, using Terraform 1.7 or later for test support:
+
+```shell
+terraform init -backend=false
+terraform validate
+terraform test
+```
+
+Tests cover vendor feature defaults, trust restrictions, deployment targeting,
+rollout settings and invalid placeholder/reserved inputs. They use a mocked AWS
+provider and replace `upstream-check`, so they do not create resources, require
+AWS credentials or fetch the vendor URL. Run `terraform test` in
+`upstream-check/` for the upstream comparison, which uses a mocked HTTP provider.
+
+The minified member template is 39,336 bytes, below the 51,200-byte inline
+limit. An isolated root-wrapper plan confirms that the default-disabled
+integration does not instantiate the Wiz module.
+
+Local validation is not a substitute for an authenticated AWS plan, IAM-policy
+review, successful StackSet operations, or a working Wiz connector.

@@ -35,3 +35,11 @@ data "aws_organizations_organizational_unit_descendant_accounts" "technology_ser
   parent_id = aws_organizations_organizational_unit.technology_services.id
 }
 
+#Fetch all AWS Organization accounts and their metadata (IDs, names, tags)
+# These are used by cost category rules to categorize spending
+data "awscc_organizations_accounts" "all" {}
+
+data "awscc_organizations_account" "all" {
+  for_each = data.awscc_organizations_accounts.all.ids
+  id       = each.value
+}
