@@ -23,11 +23,16 @@ This repository also manages the following services:
 ```sh
 .
 ├── .github/                            # Issue templates, workflows (CI/CD), CODEOWNERS, etc.
+├── identity/                           # Organisation Identity Center migration, currently dependency preparation only
 ├── management-account/                 # IaC for Managment Account. Contains configuration Organisations, Identity Centre, Cost and Billing etc.
 ├── modules/                            # Reusable Terraform modules for creating common AWS resources
 ├── organisation-security/              # IaC for Organisation Security Account. Contains configuration for GuardDuty, SecurityHub etc.
 └── scripts/                            # Utility scripts for managing AWS Organization
 ```
+
+Identity Center resources currently remain in `management-account`. The
+[staged migration](identity/README.md) starts by publishing dependencies for the
+identity root without moving resources or changing state ownership.
 
 ## 👥 Ownership & Support
 

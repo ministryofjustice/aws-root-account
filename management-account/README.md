@@ -3,6 +3,11 @@
 This directory holds the [Terraform](https://terraform.io) for the MOJ's
 [AWS Organizations](https://aws.amazon.com/organizations/) management account.
 
+Identity Center resources remain managed here during
+[Stage 1 of the identity migration](../identity/README.md#stage-1-prepare-dependencies).
+The `identity_center_dependencies` output prepares the identity root for later,
+separately reviewed ownership transfers; no resources move in this stage.
+
 ## Wiz CSPM Trial
 
 The Wiz management-account role is created by Wiz's own Terraform module in
