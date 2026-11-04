@@ -15,6 +15,6 @@ output "organisation_cloudtrail_sns_topic_arn" {
 }
 
 output "organisation_cloudtrail_arn" {
-  value       = aws_cloudtrail.organisation.arn
+  value       = local.organisation_cloudtrail_arn
   description = "Organisation CloudTrail ARN"
 }

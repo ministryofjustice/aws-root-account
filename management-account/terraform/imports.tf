@@ -14,3 +14,14 @@ import {
   to = aws_cloudtrail_organization_delegated_admin_account.organisation_security
   id = aws_organizations_account.organisation_security.id
 }
+
+# Organisation CloudTrail: adopted from organisation-security, which created it as CloudTrail delegated administrator
+# (3 Nov 2026) but cannot manage it with Terraform. The AWS provider reads a trail with DescribeTrails by ARN, and an
+# organisation trail's ARN always carries the management account ID (the management account owns it, whoever creates
+# it). CloudTrail rejects that read from any other account ("Account number does not match caller's account"), so
+# every plan in organisation-security would fail. Paired with the removed block in organisation-security/terraform/
+# cloudtrail.tf; both blocks can be deleted once applied.
+import {
+  to = aws_cloudtrail.organisation
+  id = local.organisation_cloudtrail_arn
+}
