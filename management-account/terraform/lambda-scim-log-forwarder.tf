@@ -1,9 +1,13 @@
 locals {
   scim_log_forwarder_name   = "scim-log-forwarder"
-  scim_log_forwarder_prefix = "AWSLogs/${data.aws_caller_identity.current.account_id}/SCIM/"
+  scim_log_forwarder_prefix = "SCIM/"
   scim_log_groups = {
     github  = module.scim.cloudwatch_log_group_name
     entraid = module.entraid_scim.cloudwatch_log_group_name
+  }
+  scim_log_function_names = {
+    (local.scim_log_groups.github)  = module.scim.lambda_function_name
+    (local.scim_log_groups.entraid) = module.entraid_scim.lambda_function_name
   }
 }
 
@@ -29,6 +33,7 @@ module "scim_log_forwarder" {
     DESTINATION_BUCKET      = module.cloudtrail_s3_bucket.bucket_name
     DESTINATION_PREFIX      = local.scim_log_forwarder_prefix
     DESTINATION_KMS_KEY_ARN = module.cloudtrail.kms_key_arn
+    SOURCE_LAMBDA_NAMES     = jsonencode(local.scim_log_function_names)
   }
 
   cloudwatch_logs_retention_in_days  = 30

@@ -25,6 +25,7 @@ s3 = boto3.client(
 DESTINATION_BUCKET = os.environ["DESTINATION_BUCKET"]
 DESTINATION_PREFIX = os.environ["DESTINATION_PREFIX"]
 DESTINATION_KMS_KEY_ARN = os.environ["DESTINATION_KMS_KEY_ARN"]
+SOURCE_LAMBDA_NAMES = json.loads(os.environ["SOURCE_LAMBDA_NAMES"])
 
 
 @logger.inject_lambda_context(log_event=False, clear_state=True)
@@ -42,6 +43,11 @@ def lambda_handler(event: CloudWatchLogsEvent, context: LambdaContext) -> None:
     if not events:
         logger.info("Received an empty CloudWatch Logs batch")
         return
+
+    try:
+        source_name = SOURCE_LAMBDA_NAMES[logs.log_group]
+    except KeyError as error:
+        raise ValueError(f"Unexpected CloudWatch log group: {logs.log_group}") from error
 
     body = "".join(
         json.dumps(
@@ -63,7 +69,10 @@ def lambda_handler(event: CloudWatchLogsEvent, context: LambdaContext) -> None:
     day = datetime.fromtimestamp(
         min(log_event.timestamp for log_event in events) / 1000, tz=timezone.utc
     )
-    key = f"{DESTINATION_PREFIX}{day:%Y/%m/%d}/{hashlib.sha256(body).hexdigest()}.json.gz"
+    key = (
+        f"{DESTINATION_PREFIX}{source_name}/AWSLogs/{logs.owner}/"
+        f"{day:%Y/%m/%d}/{hashlib.sha256(body).hexdigest()}.json.gz"
+    )
 
     try:
         s3.put_object(

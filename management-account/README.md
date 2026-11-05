@@ -19,20 +19,22 @@ Each data batch produces one gzip-compressed JSON-lines object in the existing
 CloudTrail bucket:
 
 ```text
-AWSLogs/<account-id>/SCIM/YYYY/MM/DD/<batch-sha256>.json.gz
+SCIM/<lambda-name>/AWSLogs/<account-id>/YYYY/MM/DD/<batch-sha256>.json.gz
 ```
 
+For example, the GitHub and Entra ID jobs write under
+`SCIM/aws-sso-scim-github/` and `SCIM/entra-id-scim-lambda/` respectively.
 The date is the earliest event's UTC date. Each line retains the original message,
 CloudWatch event ID, millisecond timestamp, account ID, log group and log stream.
 Multiline messages remain a single JSON record with escaped line breaks.
 CloudWatch control messages and empty batches produce no objects.
 
 Writes explicitly use the bucket's existing CloudTrail KMS key. The execution
-role can write only the SCIM prefix and its failed-invocation prefix; it has no
-permission to read log objects or write CloudTrail objects. No bucket lifecycle
-or retention settings are changed. SCIM objects contain identifying information,
-so access and retention must be agreed before enabling downstream collection.
-The forwarder never logs the source event or message contents.
+role can write only the two SCIM prefixes and its failed-invocation prefix; it
+has no permission to read log objects or write CloudTrail objects. No bucket
+lifecycle or retention settings are changed. SCIM objects contain identifying
+information, so access and retention must be agreed before enabling downstream
+collection. The forwarder never logs the source event or message contents.
 
 Conditional writes and content-derived keys prevent identical retried batches
 from creating additional object versions. Delivery is not exactly-once:

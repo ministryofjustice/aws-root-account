@@ -22,8 +22,14 @@ with patch.dict(
         "AWS_DEFAULT_REGION": "eu-west-2",
         "AWS_EC2_METADATA_DISABLED": "true",
         "DESTINATION_BUCKET": "test-cloudtrail-bucket",
-        "DESTINATION_PREFIX": "AWSLogs/123456789012/SCIM/",
+        "DESTINATION_PREFIX": "SCIM/",
         "DESTINATION_KMS_KEY_ARN": "arn:aws:kms:eu-west-2:123456789012:key/test-key",
+        "SOURCE_LAMBDA_NAMES": json.dumps(
+            {
+                "/aws/lambda/aws-sso-scim-github": "aws-sso-scim-github",
+                "/aws/lambda/entra-id-scim-lambda": "entra-id-scim-lambda",
+            }
+        ),
     },
 ):
     import handler
@@ -105,7 +111,8 @@ class ForwarderTests(unittest.TestCase):
                     self.assertEqual(len(body.splitlines()), 2)
                     self.assertEqual(
                         params["Key"],
-                        "AWSLogs/123456789012/SCIM/2026/01/01/"
+                        f"SCIM/{log_group.rsplit('/', 1)[-1]}/"
+                        "AWSLogs/123456789012/2026/01/01/"
                         + hashlib.sha256(body).hexdigest()
                         + ".json.gz",
                     )
@@ -178,6 +185,19 @@ class ForwarderTests(unittest.TestCase):
     def test_unknown_message_types_fail(self):
         with self.assertRaises(ValueError), Stubber(handler.s3):
             self.invoke({"messageType": "UNKNOWN"})
+
+    def test_unknown_log_groups_fail_without_writing(self):
+        for log_group in (
+            "/aws/lambda/unexpected-function",
+            "/aws/lambda/../unexpected",
+            "/unexpected",
+        ):
+            with self.subTest(log_group=log_group):
+                self.payload["logGroup"] = log_group
+                with self.assertRaisesRegex(
+                    ValueError, "Unexpected CloudWatch log group"
+                ), Stubber(handler.s3):
+                    self.invoke()
 
     def test_invalid_compressed_input_fails(self):
         event = {"awslogs": {"data": base64.b64encode(b"not gzip").decode()}}

@@ -3,10 +3,12 @@ data "aws_iam_policy_document" "scim_log_forwarder" {
     sid     = "WriteSCIMLogsAndFailedInvocations"
     effect  = "Allow"
     actions = ["s3:PutObject"]
-    resources = [
-      "${module.cloudtrail_s3_bucket.bucket.arn}/${local.scim_log_forwarder_prefix}*",
+    resources = concat([
+      for name in values(local.scim_log_function_names) :
+      "${module.cloudtrail_s3_bucket.bucket.arn}/${local.scim_log_forwarder_prefix}${name}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
+      ], [
       "${module.cloudtrail_s3_bucket.bucket.arn}/aws/lambda/async/${local.scim_log_forwarder_name}/*"
-    ]
+    ])
 
     condition {
       test     = "StringEquals"
