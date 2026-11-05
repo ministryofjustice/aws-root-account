@@ -68,23 +68,3 @@ resource "aws_cloudwatch_log_subscription_filter" "scim_log_forwarder" {
 
   depends_on = [module.scim_log_forwarder, module.cloudtrail_s3_bucket]
 }
-
-resource "aws_cloudwatch_metric_alarm" "scim_log_forwarder" {
-  for_each = toset(["Errors", "DestinationDeliveryFailures", "Throttles"])
-
-  alarm_name          = "${local.scim_log_forwarder_name}-${each.value}"
-  alarm_description   = "SCIM log forwarding reported ${each.value}; check delivery and retained source logs"
-  namespace           = "AWS/Lambda"
-  metric_name         = each.value
-  statistic           = "Sum"
-  period              = 300
-  evaluation_periods  = 1
-  comparison_operator = "GreaterThanThreshold"
-  threshold           = 0
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [module.scim.sns_topic_arn]
-
-  dimensions = {
-    FunctionName = module.scim_log_forwarder.lambda_function_name
-  }
-}
