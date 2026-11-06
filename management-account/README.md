@@ -3,6 +3,25 @@
 This directory holds the [Terraform](https://terraform.io) for the MOJ's
 [AWS Organizations](https://aws.amazon.com/organizations/) management account.
 
+## XSIAM Log Collection
+
+The management account's CloudTrail logs are configured for collection by XSIAM
+from the CloudTrail S3 bucket. CloudTrail redacts some Identity Center user and
+group details, so the [SCIM log forwarder](terraform/lambda-scim-log-forwarder.tf)
+also copies the GitHub and Entra ID SCIM jobs' CloudWatch logs to the bucket:
+
+- `SCIM/aws-sso-scim-github/AWSLogs/<account-id>/`
+- `SCIM/entra-id-scim-lambda/AWSLogs/<account-id>/`
+
+The jobs continue to log to CloudWatch. SCIM logs are gzip-compressed JSON lines
+and can contain identifying information. XSIAM's existing CloudTrail collector
+does not collect them; a separate S3 collector, notifications, and read and
+decrypt permissions are needed.
+
+After retries, Lambda sends failed forwarder invocations to
+`aws/lambda/async/scim-log-forwarder/`. If that delivery also fails, the
+original logs remain in CloudWatch until their retention expires.
+
 ## Wiz CSPM Trial
 
 The Wiz management-account role is created by Wiz's own Terraform module in
