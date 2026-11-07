@@ -38,6 +38,17 @@ data "aws_iam_policy_document" "terraform_state_s3_bucket_kms" {
   }
 }
 
+# SCIM log forwarder failure bucket key
+
+module "scim_log_forwarder_failures_kms" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "4.2.2"
+
+  aliases               = ["scim-log-forwarder-failures"]
+  description           = "Encrypts failed SCIM log forwarder invocations in S3"
+  enable_default_policy = true
+}
+
 # FOCUS bucket key
 
 module "focus_s3_kms" {
