@@ -46,7 +46,7 @@ module "scim_log_forwarder" {
   create_current_version_async_event_config = false
   maximum_event_age_in_seconds              = 21600
   maximum_retry_attempts                    = 2
-  destination_on_failure                    = module.cloudtrail_s3_bucket.bucket.arn
+  destination_on_failure                    = module.scim_log_forwarder_failures.bucket.arn
 
   create_current_version_allowed_triggers = false
   allowed_triggers = {
@@ -56,6 +56,8 @@ module "scim_log_forwarder" {
       source_arn     = "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:${log_group}:*"
     }
   }
+
+  depends_on = [module.scim_log_forwarder_failures]
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "scim_log_forwarder" {
