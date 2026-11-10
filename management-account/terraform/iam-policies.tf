@@ -173,36 +173,6 @@ data "aws_iam_policy_document" "scim_log_forwarder" {
   }
 
   statement {
-    sid     = "WriteFailedInvocations"
-    effect  = "Allow"
-    actions = ["s3:PutObject"]
-    resources = [
-      # Include the destination ARN for Lambda's permission validation, without granting bucket-wide object writes.
-      module.cloudtrail_s3_bucket.bucket.arn,
-      "${module.cloudtrail_s3_bucket.bucket.arn}/aws/lambda/async/${local.scim_log_forwarder_name}/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "s3:ResourceAccount"
-      values   = [data.aws_caller_identity.current.account_id]
-    }
-  }
-
-  statement {
-    sid       = "CheckFailedInvocationDestination"
-    effect    = "Allow"
-    actions   = ["s3:ListBucket"]
-    resources = [module.cloudtrail_s3_bucket.bucket.arn]
-
-    condition {
-      test     = "StringEquals"
-      variable = "s3:ResourceAccount"
-      values   = [data.aws_caller_identity.current.account_id]
-    }
-  }
-
-  statement {
     sid       = "EncryptSCIMLogs"
     effect    = "Allow"
     actions   = ["kms:GenerateDataKey"]
@@ -214,6 +184,7 @@ data "aws_iam_policy_document" "scim_log_forwarder" {
       values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
     }
   }
+
 }
 
 ####################################################

@@ -18,12 +18,11 @@ and can contain identifying information. XSIAM's existing CloudTrail collector
 does not collect them; a separate S3 collector, notifications, and read and
 decrypt permissions are needed.
 
-After retries, Lambda sends failed forwarder invocations to
-`aws/lambda/async/scim-log-forwarder/`. If that delivery also fails, the
-original logs remain in CloudWatch until their retention expires.
-The forwarder's S3 policy includes the destination bucket ARN for Lambda's
-permission check; object writes remain limited to the two SCIM prefixes and
-the failed-invocation prefix.
+The forwarder's own logs, including delivery errors, go to CloudWatch only.
+Lambda retries function errors twice, but there is no separate failed-invocation
+destination. After retries or event expiry, failed batches are discarded; the
+original SCIM logs remain in CloudWatch until their retention expires and are
+not automatically replayed. S3 writes remain limited to the two SCIM prefixes.
 
 ## Wiz CSPM Trial
 

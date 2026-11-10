@@ -46,7 +46,6 @@ module "scim_log_forwarder" {
   create_current_version_async_event_config = false
   maximum_event_age_in_seconds              = 21600
   maximum_retry_attempts                    = 2
-  destination_on_failure                    = module.cloudtrail_s3_bucket.bucket.arn
 
   create_current_version_allowed_triggers = false
   allowed_triggers = {
