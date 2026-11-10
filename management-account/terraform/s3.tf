@@ -92,23 +92,6 @@ data "aws_iam_policy_document" "cloudtrail_s3_bucket" {
   }
 }
 
-module "scim_log_forwarder_failures" {
-  source = "../../modules/s3"
-
-  bucket_name          = "${local.scim_log_forwarder_name}-failures-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.region}"
-  attach_policy        = true
-  require_ssl_requests = true
-
-  server_side_encryption_configuration = {
-    rule = {
-      apply_server_side_encryption_by_default = {
-        sse_algorithm     = "aws:kms"
-        kms_master_key_id = module.scim_log_forwarder_failures_kms.key_arn
-      }
-    }
-  }
-}
-
 # log-bucket-replication20210315101330747900000001
 module "log_bucket_replication_s3_bucket" {
   providers = {

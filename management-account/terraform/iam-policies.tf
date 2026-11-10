@@ -173,22 +173,6 @@ data "aws_iam_policy_document" "scim_log_forwarder" {
   }
 
   statement {
-    sid     = "WriteFailedInvocationsToDedicatedBucket"
-    effect  = "Allow"
-    actions = ["s3:PutObject", "s3:ListBucket"]
-    resources = [
-      module.scim_log_forwarder_failures.bucket.arn,
-      "${module.scim_log_forwarder_failures.bucket.arn}/*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "s3:ResourceAccount"
-      values   = [data.aws_caller_identity.current.account_id]
-    }
-  }
-
-  statement {
     sid       = "EncryptSCIMLogs"
     effect    = "Allow"
     actions   = ["kms:GenerateDataKey"]
@@ -201,18 +185,6 @@ data "aws_iam_policy_document" "scim_log_forwarder" {
     }
   }
 
-  statement {
-    sid       = "EncryptFailedInvocations"
-    effect    = "Allow"
-    actions   = ["kms:GenerateDataKey"]
-    resources = [module.scim_log_forwarder_failures_kms.key_arn]
-
-    condition {
-      test     = "StringEquals"
-      variable = "kms:ViaService"
-      values   = ["s3.${data.aws_region.current.region}.amazonaws.com"]
-    }
-  }
 }
 
 ####################################################
