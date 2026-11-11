@@ -783,6 +783,8 @@ data "aws_iam_policy_document" "techops_operator" {
 # - run CodePipelines
 # - access AWS Support
 # - security Hub triage
+# - create VPC flow logs and CloudWatch log groups, streams and deliveries
+# - create Route53 public and Resolver query logging configurations
 
 resource "aws_ssoadmin_permission_set" "network_automation_engineer" {
   name             = "network-automation-engineer"
@@ -811,6 +813,53 @@ resource "aws_ssoadmin_permission_set_inline_policy" "network_automation_enginee
 }
 
 data "aws_iam_policy_document" "network_automation_engineer" {
+  statement {
+    sid    = "AllowLogCreation"
+    effect = "Allow"
+
+    actions = [
+      "ec2:CreateFlowLogs",
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:CreateLogDelivery",
+      "route53:CreateQueryLoggingConfig",
+      "route53resolver:CreateResolverQueryLogConfig",
+      "route53resolver:AssociateResolverQueryLogConfig",
+    ]
+
+    resources = ["*"]
+  }
+
+  # Allow tags only as part of creating a flow log, not on existing resources.
+  statement {
+    sid       = "AllowTagFlowLogsOnCreation"
+    effect    = "Allow"
+    actions   = ["ec2:CreateTags"]
+    resources = ["arn:aws:ec2:*:*:vpc-flow-log/*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "ec2:CreateAction"
+      values   = ["CreateFlowLogs"]
+    }
+  }
+
+  # Delivery roles and destination resource policies must be provisioned separately.
+  # S3, ELB and Network Firewall logging require permissions that can also change
+  # or disable logging, so those permissions are excluded from create-only access.
+  statement {
+    sid       = "AllowPassRoleToVPCFlowLogs"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::*:role/*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["vpc-flow-logs.amazonaws.com"]
+    }
+  }
+
   statement {
     sid    = "AllowNetworkAutomationActions"
     effect = "Allow"
