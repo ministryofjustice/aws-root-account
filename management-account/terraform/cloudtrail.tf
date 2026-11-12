@@ -28,7 +28,7 @@ resource "aws_cloudtrail" "organisation" {
   is_multi_region_trail         = true
   include_global_service_events = true
   enable_log_file_validation    = true
-  enable_logging                = true
+  enable_logging                = false
 
   # Management events only (reads and writes); no data or Insights events.
   event_selector {

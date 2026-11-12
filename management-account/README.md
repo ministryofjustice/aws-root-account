@@ -3,6 +3,22 @@
 This directory holds the [Terraform](https://terraform.io) for the MOJ's
 [AWS Organizations](https://aws.amazon.com/organizations/) management account.
 
+## Organisation CloudTrail
+
+The organisation-wide CloudTrail trail is configured to pause logging on apply
+with `enable_logging = false` in [cloudtrail.tf](terraform/cloudtrail.tf). The
+trail and its organisation-security bucket, encryption key, SNS topic and SQS
+queue remain in place. While paused, the trail does not deliver new events
+to Wiz, and events missed during the pause are not backfilled when it resumes.
+Existing logs remain subject to their normal retention policy. The separate
+management-account CloudTrail is unaffected.
+
+To resume logging, set `enable_logging = true` on
+`aws_cloudtrail.organisation`, review the management-account Terraform plan
+and apply it. To pause it again, set it to `false` and apply. Review the plan
+before applying to confirm the intended in-place logging change and check for
+unrelated changes.
+
 ## XSIAM Log Collection
 
 The management account's CloudTrail logs are configured for collection by XSIAM
