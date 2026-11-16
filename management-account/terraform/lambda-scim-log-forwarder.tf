@@ -15,15 +15,16 @@ module "scim_log_forwarder" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.13.0"
 
-  function_name = local.scim_log_forwarder_name
-  description   = "Copies SCIM CloudWatch log batches to the CloudTrail S3 bucket"
-  handler       = "handler.lambda_handler"
-  runtime       = "python3.14"
-  architectures = ["arm64"]
-  memory_size   = 128
-  timeout       = 30
-  source_path   = "${path.module}/lambda/scim-log-forwarder/handler.py"
-  artifacts_dir = "${path.module}/.terraform/scim-log-forwarder"
+  function_name                = local.scim_log_forwarder_name
+  description                  = "Copies SCIM CloudWatch log batches to the CloudTrail S3 bucket"
+  handler                      = "handler.lambda_handler"
+  runtime                      = "python3.14"
+  architectures                = ["arm64"]
+  memory_size                  = 128
+  timeout                      = 30
+  source_path                  = "${path.module}/lambda/scim-log-forwarder/handler.py"
+  artifacts_dir                = "${path.module}/.terraform/scim-log-forwarder"
+  trigger_on_package_timestamp = false
 
   layers = [
     "arn:aws:lambda:${data.aws_region.current.region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python314-arm64:41"
