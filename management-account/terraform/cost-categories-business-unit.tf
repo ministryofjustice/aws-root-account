@@ -70,6 +70,12 @@ locals {
       untagged_aws_account_prefixes = []
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Justice AI Unit"], v.business_unit)]
     },
+    "HQ" = {
+      business_unit_tag_values      = ["Data and Analysis"]
+      aws_descendant_accounts       = []
+      untagged_aws_account_prefixes = []
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Data and Analysis"], v.business_unit)]
+    },
   }
 }
 
