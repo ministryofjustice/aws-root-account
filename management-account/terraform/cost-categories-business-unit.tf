@@ -13,7 +13,7 @@ locals {
     "Central Digital" = {
       business_unit_tag_values      = ["Central Digital", "central-digital", "CJSE", "pq-team", "transformed-department"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
-      untagged_aws_account_prefixes = ["cdpt-chaps-", "cdpt-ifs-", "genesys-call-centre-data-", "bichard7"]
+      untagged_aws_account_prefixes = ["cdpt-ifs-"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Central Digital", "central-digital", "CJSE"], v.business_unit)]
     },
     "CICA" = {
