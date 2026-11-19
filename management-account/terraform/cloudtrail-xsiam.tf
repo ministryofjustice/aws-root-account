@@ -32,7 +32,7 @@ module "xsiam_cloudtrail_topic" {
 
 module "xsiam_cloudtrail_queue" {
   source  = "terraform-aws-modules/sqs/aws"
-  version = "5.0.0"
+  version = "5.2.2"
 
   name                       = "xsiam-cloudtrail"
   create_queue_policy        = true
