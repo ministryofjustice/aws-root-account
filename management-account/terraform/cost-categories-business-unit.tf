@@ -124,7 +124,7 @@ resource "aws_ce_cost_category" "business_unit" {
     }
   }
 
-  # Rule 3: Temporary Correction: Assign Cost Category Based on Account Prefixes
+  # Rule 3: MP Shared Split Usage: Assign Cost Category Based on Account Prefixes
   # Due to organisational structure change some accounts currently have the wrong `business-unit` tag
   # and resource level BU tag for MP created accounts. This temporary rule allows us to correctly assign cost
   # and give teams time to correct their account `business-unit` tags.
