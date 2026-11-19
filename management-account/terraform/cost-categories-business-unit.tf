@@ -90,26 +90,6 @@ resource "aws_ce_cost_category" "business_unit" {
   rule_version    = "CostCategoryExpression.v1"
   effective_start = "2026-02-01T00:00:00Z"
 
-  # Rule 0: Temporary Correction: Assign Cost Category Based on Account Prefixes
-  # Due to organisational structure change some accounts currently have the wrong `business-unit` tag
-  # and resource level BU tag for MP created accounts. This temporary rule allows us to correctly assign cost
-  # and give teams time to correct their account `business-unit` tags.
-  dynamic "rule" {
-    for_each = { for k, v in local.business_units : k => v if length(v.untagged_aws_account_prefixes) > 0 }
-    content {
-      type  = "REGULAR"
-      value = rule.key
-
-      rule {
-        dimension {
-          key           = "LINKED_ACCOUNT_NAME"
-          values        = rule.value.untagged_aws_account_prefixes
-          match_options = ["STARTS_WITH"]
-        }
-      }
-    }
-  }
-
   # Rule 1: Use the Resource `business-unit` Cost Allocation Tag to assign cost
   dynamic "rule" {
     for_each = { for k, v in local.business_units : k => v if length(v.business_unit_tag_values) > 0 }
@@ -144,7 +124,27 @@ resource "aws_ce_cost_category" "business_unit" {
     }
   }
 
-  # Rule 3: If No Account `business-unit` Tag, Assign Cost Based on the Organizational Unit
+  # Rule 3: Temporary Correction: Assign Cost Category Based on Account Prefixes
+  # Due to organisational structure change some accounts currently have the wrong `business-unit` tag
+  # and resource level BU tag for MP created accounts. This temporary rule allows us to correctly assign cost
+  # and give teams time to correct their account `business-unit` tags.
+  dynamic "rule" {
+    for_each = { for k, v in local.business_units : k => v if length(v.untagged_aws_account_prefixes) > 0 }
+    content {
+      type  = "REGULAR"
+      value = rule.key
+
+      rule {
+        dimension {
+          key           = "LINKED_ACCOUNT_NAME"
+          values        = rule.value.untagged_aws_account_prefixes
+          match_options = ["STARTS_WITH"]
+        }
+      }
+    }
+  }
+
+  # Rule 4: If No Account `business-unit` Tag, Assign Cost Based on the Organizational Unit
   dynamic "rule" {
     for_each = { for k, v in local.business_units : k => v if length(v.aws_descendant_accounts) > 0 }
     content {
