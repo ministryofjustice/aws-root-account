@@ -11,7 +11,7 @@ locals {
   }
   business_units = {
     "Central Digital" = {
-      business_unit_tag_values      = ["Central Digital", "central-digital", "CJSE"]
+      business_unit_tag_values      = ["Central Digital", "central-digital", "CJSE", "pq-team", "transformed-department"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.central_digital.accounts[*].id
       untagged_aws_account_prefixes = ["cdpt-chaps-", "cdpt-ifs-", "genesys-call-centre-data-", "bichard7"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Central Digital", "central-digital", "CJSE"], v.business_unit)]
@@ -29,13 +29,13 @@ locals {
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMCTS"], v.business_unit)]
     },
     "HMPPS" = {
-      business_unit_tag_values      = ["HMPPS", "hmpps"]
+      business_unit_tag_values      = ["HMPPS", "hmpps", "Check My Diary", "Digitaland Technology"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.hmpps.accounts[*].id
       untagged_aws_account_prefixes = ["delius", "electronic-monitoring", "digital-prison", "nomis", "property-cafm-data-migration"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["HMPPS", "hmpps"], v.business_unit)]
     },
     "LAA" = {
-      business_unit_tag_values      = ["LAA", "laa", "legal-aid-agency"]
+      business_unit_tag_values      = ["LAA", "laa", "legal-aid-agency", "LAA Connect", "Crime Apps"]
       aws_descendant_accounts       = data.aws_organizations_organizational_unit_descendant_accounts.laa.accounts[*].id
       untagged_aws_account_prefixes = ["mlra", "ccms", "laa-ccms"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["LAA", "laa", "legal-aid-agency"], v.business_unit)]
@@ -63,6 +63,12 @@ locals {
       aws_descendant_accounts       = []
       untagged_aws_account_prefixes = ["youth-justice"]
       tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["YJB", "yjb"], v.business_unit)]
+    },
+    "Justice AI Unit" = {
+      business_unit_tag_values      = ["Justice AI Unit"]
+      aws_descendant_accounts       = []
+      untagged_aws_account_prefixes = []
+      tagged_aws_accounts           = [for k, v in local.all_aws_accounts_with_business_unit_tag : v.id if contains(["Justice AI Unit"], v.business_unit)]
     },
   }
 }
