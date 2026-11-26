@@ -343,9 +343,29 @@ resource "aws_organizations_policy_attachment" "mp_protect_core_s3_buckets" {
 
 
 ###############################################################
-# Protect baseline resources from deletion
+# Protect baseline resources and core CloudWatch log groups
 # Modernisation Platform OU scope
 ###############################################################
+
+locals {
+  mp_core_account_names = toset([
+    "core-logging",
+    "core-network-services",
+    "core-security",
+    "core-shared-services",
+    "core-shared-services-development",
+    "core-vpc-development",
+    "core-vpc-preproduction",
+    "core-vpc-production",
+    "core-vpc-sandbox",
+    "core-vpc-test"
+  ])
+
+  mp_core_account_ids = [
+    for account_name in sort(tolist(local.mp_core_account_names)) :
+    local.accounts.active_only[account_name]
+  ]
+}
 
 data "aws_iam_policy_document" "mp_protect_secure_baselines" {
   statement {
@@ -417,11 +437,49 @@ data "aws_iam_policy_document" "mp_protect_secure_baselines" {
       ])
     }
   }
+
+  statement {
+    sid    = "DenyUnauthorisedCoreLogGroupChanges"
+    effect = "Deny"
+    actions = [
+      "logs:AssociateKmsKey",
+      "logs:DeleteDataProtectionPolicy",
+      "logs:DeleteLogGroup",
+      "logs:DeleteLogStream",
+      "logs:DeleteMetricFilter",
+      "logs:DeleteResourcePolicy",
+      "logs:DeleteRetentionPolicy",
+      "logs:DeleteSubscriptionFilter",
+      "logs:DisassociateKmsKey",
+      "logs:PutDataProtectionPolicy",
+      "logs:PutMetricFilter",
+      "logs:PutResourcePolicy",
+      "logs:PutRetentionPolicy",
+      "logs:PutSubscriptionFilter"
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceAccount"
+      values   = local.mp_core_account_ids
+    }
+
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/ModernisationPlatformAccess",
+        "arn:aws:iam::*:role/github-actions",
+        "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AdministratorAccess*"
+      ]
+    }
+  }
 }
 
 resource "aws_organizations_policy" "mp_protect_secure_baselines" {
   name        = "Modernisation Platform Protect Secure Baselines"
-  description = "Protect secure baseline resources and prevent untrusted principals from changing AWS Config recorders or GuardDuty detectors."
+  description = "Protect secure baseline resources, core CloudWatch log groups, and prevent untrusted principals from changing AWS Config recorders or GuardDuty detectors."
   type        = "SERVICE_CONTROL_POLICY"
 
   tags = {
