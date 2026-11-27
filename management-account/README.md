@@ -46,6 +46,76 @@ The Wiz management-account role is created by Wiz's own Terraform module in
 [wiz.tf](terraform/wiz.tf). The External ID and trust role ARN are read from the
 `wiz_external_id` secret.
 
+## IAM-54: direct IAM user policy pilot
+
+`terraform/organizations-policy-iam-user-policies-pilot.tf` defines a separate
+SCP attached **only to the sprinkler-development account**, using its account ID
+from `local.accounts.active_only`. It does not change the parent MP OU policies
+or existing IAM alarms. The pilot policy is included in SCP-change monitoring.
+
+The pilot denies `iam:PutUserPolicy` (creation and updates) and
+`iam:AttachUserPolicy` on that account's IAM users, including users with paths.
+Existing policies are not removed. Group/role operations, user-policy deletion
+and detachment are outside this restriction. This controls direct identity
+policies; it is not a complete control over every way users receive permissions.
+
+| Caller in the pilot account | Inline user policy | Managed policy attached to user |
+| --- | --- | --- |
+| `ModernisationPlatformAccess` | Exempt | Exempt |
+| `MemberInfrastructureAccess` | Exempt | Exempt |
+| `github-actions` | Exempt | Exempt |
+| `github-actions-apply` | Exempt | Exempt |
+| `credential-responder-lambda` | Exempt for quarantine | Denied |
+| Other callers, including direct SSO administrator sessions | Denied | Denied |
+
+Exceptions use exact account-qualified IAM role ARNs, not session names or
+resource tags. Exempt means this SCP does not deny the operation, not that it
+grants access. Other policies still apply. Provisioning exceptions intentionally
+cover all user targets in this pilot, including authorised MP administration via
+`MemberInfrastructureAccess`. An administrator able to assume an exempt role
+can therefore perform these operations through it. Protect the exempt roles,
+their trust policies and the automation/Lambda code. IAM has no condition key
+to limit `PutUserPolicy` to the `EmergencyQuarantine` policy name or deny-only
+documents: the responder's inline exception is necessarily broader than that
+single document. Do not copy general administrator or Cloud Platform alarm
+exceptions into this pilot without a demonstrated requirement.
+
+Existing baseline detection remains unchanged. It excludes approved automation
+and suppresses notifications in Sprinkler, so **a denied pilot request is not
+expected to send the existing IAM alarm to Slack**. Verify the denial through
+CloudTrail. SCP-change monitoring is a separate notification path. Existing
+alarm testing is not evidence that this new preventive control works.
+
+### Validation and rollout
+
+Run `python3 -m unittest discover -s management-account/tests` from the repository
+root. These offline tests render the actual Terraform locals with a synthetic
+account ID and check the policy's restricted action/resource/exception subset.
+They do not simulate AWS's complete authorization engine or prove deployment.
+Run Terraform formatting/validation and review the management-account CI plan.
+
+Before applying, check live account SCP attachment capacity and effective parent
+policies. The intended plan adds one SCP and one account attachment and updates
+the existing SCP-change EventBridge pattern. Investigate unrelated changes.
+
+After an approved pilot apply, use disposable users without login profiles or
+access keys and a harmless explicit-deny policy. Record:
+
+- Both operations denied for a non-exempt caller (including a user with a path).
+- Both operations permitted by this SCP for approved provisioning/administration.
+- Quarantine inline writes preserved; responder managed attachments still denied.
+- Group/role policy management and cleanup unaffected.
+- CloudTrail events and completed Terraform provisioning, including role assumption
+  via the actual Sprinkler workflow. Do not trigger a real credential incident.
+
+Remove test policies/users and retain redacted results. If access is disrupted,
+detach the **pilot** policy through the management account's approved process;
+reconcile Terraform afterwards. Do not change unrelated parent protections.
+No broader enforcement is authorised by this pilot: promote only after reviewing
+results, account-specific role paths/exceptions, attachment capacity and rollout
+scope. Member-unrestricted production scope remains deferred. Sandbox alarm
+suppression does not automatically exempt an account from prevention.
+
 ## Closing an AWS Account
 
 1. Remove the account and references from code
